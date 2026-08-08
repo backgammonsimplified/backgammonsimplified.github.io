@@ -8,7 +8,7 @@
 
 <meta name="description" content="Explore OpenGammon player performance and skill data in the existing OpenGammon Skill Analytics dashboard.">
 
-<title>Match Predictor – Backgammon Made Simple</title>
+<title>Match Predictor – Backgammon Simplified</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -44,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-71c7b49c685e597d910cb795eccce780.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0afc15f06fc0d6d0814539d5fe22bd6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a8915aa26982f2aa87b37c986303974c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -86,37 +86,39 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<link rel="stylesheet" href="../assets/bms-shared.css">
-<link rel="stylesheet" href="../assets/bms-components.css">
-<link rel="stylesheet" href="../assets/bms-learn.css">
-<link rel="stylesheet" href="../assets/bms-lesson-analysis.css">
-<meta property="og:title" content="Match Predictor – Backgammon Made Simple">
+<link rel="stylesheet" href="../assets/bs-shared.css">
+<link rel="stylesheet" href="../assets/bs-components.css">
+<link rel="stylesheet" href="../assets/bs-learn.css">
+<link rel="stylesheet" href="../assets/bs-lesson-analysis.css">
+<meta property="og:title" content="Match Predictor – Backgammon Simplified">
 <meta property="og:description" content="Explore OpenGammon player performance and skill data in the existing OpenGammon Skill Analytics dashboard.">
-<meta property="og:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
-<meta property="og:site_name" content="Backgammon Made Simple">
+<meta property="og:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
+<meta property="og:site_name" content="Backgammon Simplified">
 <meta property="og:image:height" content="630">
 <meta property="og:image:width" content="1200">
-<meta name="twitter:title" content="Match Predictor – Backgammon Made Simple">
+<meta name="twitter:title" content="Match Predictor – Backgammon Simplified">
 <meta name="twitter:description" content="Explore OpenGammon player performance and skill data in the existing OpenGammon Skill Analytics dashboard.">
-<meta name="twitter:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
+<meta name="twitter:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="630">
 <meta name="twitter:image-width" content="1200">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://backgammonsimplified.github.io/match-predictor/index.html">
 </head>
 
-<body class="nav-fixed bms-match-predictor-page quarto-light">
+<body class="nav-fixed bs-match-predictor-page quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo light-content">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo dark-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Backgammon Made Simple</span>
+    <span class="navbar-title">Backgammon Simplified</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -195,16 +197,16 @@ ul.task-list li input[type="checkbox"] {
 
 
 <style>
-.bms-match-predictor {
+.bs-match-predictor {
   width: 100%;
   min-width: 0;
 }
 
-.bms-match-predictor__intro {
+.bs-match-predictor__intro {
   max-width: 72rem;
 }
 
-.bms-dashboard-actions {
+.bs-dashboard-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -212,17 +214,17 @@ ul.task-list li input[type="checkbox"] {
   margin: 1rem 0;
 }
 
-.bms-dashboard-link:focus-visible {
+.bs-dashboard-link:focus-visible {
   outline: 3px solid currentColor;
   outline-offset: 3px;
 }
 
-.bms-dashboard-note {
+.bs-dashboard-note {
   margin: 0;
   font-size: 0.95rem;
 }
 
-.bms-dashboard-frame {
+.bs-dashboard-frame {
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -233,7 +235,7 @@ ul.task-list li input[type="checkbox"] {
   background: #fff;
 }
 
-.bms-dashboard-frame iframe {
+.bs-dashboard-frame iframe {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -241,22 +243,22 @@ ul.task-list li input[type="checkbox"] {
   border: 0;
 }
 
-.bms-coming-soon {
+.bs-coming-soon {
   max-width: 72rem;
   margin-top: 2rem;
 }
 
 @media (max-width: 767.98px) {
-  .bms-dashboard-frame iframe {
+  .bs-dashboard-frame iframe {
     height: 900px;
   }
 }
 </style>
-<div class="bms-page-shell">
-<div class="bms-match-predictor">
-<section id="coming-soon" class="level2 bms-coming-soon">
+<div class="bs-page-shell">
+<div class="bs-match-predictor">
+<section id="coming-soon" class="level2 bs-coming-soon">
 <h2 class="anchored" data-anchor-id="coming-soon">Coming soon</h2>
-<p>A future Backgammon Made Simple Match Predictor is planned to add:</p>
+<p>A future Backgammon Simplified Match Predictor is planned to add:</p>
 <ul>
 <li>ER versus ER match predictions;</li>
 <li>OpenGammon profile comparisons;</li>
@@ -267,7 +269,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The application may take a moment to start, particularly after a period of inactivity.</p>
 </section>
 </div>
-<div class="bms-dashboard-frame">
+<div class="bs-dashboard-frame">
 <p><iframe src="https://martygale.shinyapps.io/open-gammon-skill-analytics/" title="OpenGammon Skill Analytics dashboard" referrerpolicy="strict-origin-when-cross-origin"></iframe></p>
 </div>
 </div>
@@ -275,15 +277,15 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
-<script src="../assets/bms-learn.js" defer=""></script>
+<script src="../assets/bs-learn.js" defer=""></script>
 
-<script src="../assets/bms-lesson-analysis.js" defer=""></script>
+<script src="../assets/bs-lesson-analysis.js" defer=""></script>
 
-<script src="../assets/bms-learn-scroll.js" defer=""></script>
+<script src="../assets/bs-learn-scroll.js" defer=""></script>
 
-<script src="../assets/bms-research-scroll.js" defer=""></script>
+<script src="../assets/bs-research-scroll.js" defer=""></script>
 
-<script src="../assets/bms-glossary.js" defer=""></script>
+<script src="../assets/bs-glossary.js" defer=""></script>
 
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -358,7 +360,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/backgammon-made-simple\.github\.io");
+        var filterRegex = new RegExp("https:\/\/backgammonsimplified\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -689,7 +691,7 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2026 Marty Gale - Backgammon Made Simple</p>
+<p>Copyright 2026 Marty Gale - Backgammon Simplified</p>
 </div>   
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">

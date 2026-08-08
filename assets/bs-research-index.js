@@ -1,9 +1,9 @@
 (function () {
   "use strict";
 
-  const CATEGORY_SELECTOR = "[data-bms-filter-category]";
-  const TAG_SELECTOR = "[data-bms-filter-tag]";
-  const ITEM_SELECTOR = "[data-bms-research-item]";
+  const CATEGORY_SELECTOR = "[data-bs-filter-category]";
+  const TAG_SELECTOR = "[data-bs-filter-tag]";
+  const ITEM_SELECTOR = "[data-bs-research-item]";
 
   function parseList(value) {
     if (!value) {
@@ -21,15 +21,15 @@
   function createTagButton(tag) {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "bms-research-filter bms-research-filter--tag";
-    button.dataset.bmsFilterTag = tag;
+    button.className = "bs-research-filter bs-research-filter--tag";
+    button.dataset.bsFilterTag = tag;
     button.setAttribute("aria-pressed", "false");
 
     const label = document.createElement("span");
     label.textContent = tag;
 
     const count = document.createElement("span");
-    count.className = "bms-research-filter-count";
+    count.className = "bs-research-filter-count";
     count.setAttribute("aria-hidden", "true");
     count.textContent = "×0";
 
@@ -38,8 +38,8 @@
   }
 
   function initializeResearchFilters() {
-    const panel = document.querySelector("[data-bms-research-filters]");
-    const list = document.querySelector("[data-bms-research-list]");
+    const panel = document.querySelector("[data-bs-research-filters]");
+    const list = document.querySelector("[data-bs-research-list]");
 
     if (!panel || !list) {
       return;
@@ -48,16 +48,16 @@
     const items = Array.from(list.querySelectorAll(ITEM_SELECTOR)).map(function (element) {
       return {
         element: element,
-        categories: parseList(element.dataset.bmsCategories),
-        tags: parseList(element.dataset.bmsTags)
+        categories: parseList(element.dataset.bsCategories),
+        tags: parseList(element.dataset.bsTags)
       };
     });
 
-    const tagContainer = panel.querySelector("[data-bms-tag-filters]");
-    const tagGroup = panel.querySelector("[data-bms-tag-group]");
-    const resultCount = panel.querySelector("[data-bms-result-count]");
-    const clearButton = panel.querySelector("[data-bms-clear-filters]");
-    const emptyState = document.querySelector("[data-bms-empty-state]");
+    const tagContainer = panel.querySelector("[data-bs-tag-filters]");
+    const tagGroup = panel.querySelector("[data-bs-tag-group]");
+    const resultCount = panel.querySelector("[data-bs-result-count]");
+    const clearButton = panel.querySelector("[data-bs-clear-filters]");
+    const emptyState = document.querySelector("[data-bs-empty-state]");
 
     const allTags = Array.from(
       new Set(items.flatMap(function (item) {
@@ -77,6 +77,8 @@
       tagGroup.hidden = true;
     }
 
+    const categoryButtons = Array.from(panel.querySelectorAll(CATEGORY_SELECTOR));
+    const tagButtons = Array.from(panel.querySelectorAll(TAG_SELECTOR));
     let activeCategory = "";
     let activeTag = "";
 
@@ -95,15 +97,12 @@
     }
 
     function updateCounts() {
-      const categoryButtons = Array.from(panel.querySelectorAll(CATEGORY_SELECTOR));
-      const tagButtons = Array.from(panel.querySelectorAll(TAG_SELECTOR));
-
       categoryButtons.forEach(function (button) {
-        const category = button.dataset.bmsFilterCategory || "";
+        const category = button.dataset.bsFilterCategory || "";
         const count = items.filter(function (item) {
           return itemMatches(item, category, activeTag);
         }).length;
-        const countElement = button.querySelector(".bms-research-filter-count");
+        const countElement = button.querySelector(".bs-research-filter-count");
 
         if (countElement) {
           countElement.textContent = "×" + count;
@@ -113,11 +112,11 @@
       });
 
       tagButtons.forEach(function (button) {
-        const tag = button.dataset.bmsFilterTag || "";
+        const tag = button.dataset.bsFilterTag || "";
         const count = items.filter(function (item) {
           return itemMatches(item, activeCategory, tag);
         }).length;
-        const countElement = button.querySelector(".bms-research-filter-count");
+        const countElement = button.querySelector(".bs-research-filter-count");
 
         if (countElement) {
           countElement.textContent = "×" + count;
@@ -138,11 +137,8 @@
         }
       });
 
-      const categoryButtons = Array.from(panel.querySelectorAll(CATEGORY_SELECTOR));
-      const tagButtons = Array.from(panel.querySelectorAll(TAG_SELECTOR));
-
-      setPressed(categoryButtons, activeCategory, "bmsFilterCategory");
-      setPressed(tagButtons, activeTag, "bmsFilterTag");
+      setPressed(categoryButtons, activeCategory, "bsFilterCategory");
+      setPressed(tagButtons, activeTag, "bsFilterTag");
       updateCounts();
 
       if (resultCount) {
@@ -164,17 +160,17 @@
     panel.addEventListener("click", function (event) {
       const categoryButton = event.target.closest(CATEGORY_SELECTOR);
       const tagButton = event.target.closest(TAG_SELECTOR);
-      const clear = event.target.closest("[data-bms-clear-filters]");
+      const clear = event.target.closest("[data-bs-clear-filters]");
 
       if (categoryButton) {
-        const category = categoryButton.dataset.bmsFilterCategory || "";
+        const category = categoryButton.dataset.bsFilterCategory || "";
         activeCategory = activeCategory === category ? "" : category;
         applyFilters();
         return;
       }
 
       if (tagButton) {
-        const tag = tagButton.dataset.bmsFilterTag || "";
+        const tag = tagButton.dataset.bsFilterTag || "";
         activeTag = activeTag === tag ? "" : tag;
         applyFilters();
         return;
@@ -188,18 +184,18 @@
     });
 
     list.addEventListener("click", function (event) {
-      const categoryButton = event.target.closest("[data-bms-card-category]");
-      const tagButton = event.target.closest("[data-bms-card-tag]");
+      const categoryButton = event.target.closest("[data-bs-card-category]");
+      const tagButton = event.target.closest("[data-bs-card-tag]");
 
       if (categoryButton) {
-        activeCategory = categoryButton.dataset.bmsCardCategory || "";
+        activeCategory = categoryButton.dataset.bsCardCategory || "";
         applyFilters();
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
         return;
       }
 
       if (tagButton) {
-        activeTag = tagButton.dataset.bmsCardTag || "";
+        activeTag = tagButton.dataset.bsCardTag || "";
         applyFilters();
         panel.scrollIntoView({ behavior: "smooth", block: "start" });
       }

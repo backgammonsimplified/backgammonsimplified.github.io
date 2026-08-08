@@ -8,7 +8,7 @@
 
 <meta name="description" content="Analyze a backgammon position, compare checker plays and cube decisions, and understand why the strongest choice is best.">
 
-<title>Backgammon Position Analyzer – Backgammon Made Simple</title>
+<title>Backgammon Position Analyzer – Backgammon Simplified</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -44,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-71c7b49c685e597d910cb795eccce780.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ccd5a00dc6e8596bccddf1cebaba4c1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8d450d615d30163466618d5f2985fcb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -86,37 +86,39 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<link rel="stylesheet" href="../assets/bms-shared.css">
-<link rel="stylesheet" href="../assets/bms-components.css">
-<link rel="stylesheet" href="../assets/bms-learn.css">
-<link rel="stylesheet" href="../assets/bms-lesson-analysis.css">
-<meta property="og:title" content="Backgammon Position Analyzer – Backgammon Made Simple">
+<link rel="stylesheet" href="../assets/bs-shared.css">
+<link rel="stylesheet" href="../assets/bs-components.css">
+<link rel="stylesheet" href="../assets/bs-learn.css">
+<link rel="stylesheet" href="../assets/bs-lesson-analysis.css">
+<meta property="og:title" content="Backgammon Position Analyzer – Backgammon Simplified">
 <meta property="og:description" content="Analyze a backgammon position, compare checker plays and cube decisions, and understand why the strongest choice is best.">
-<meta property="og:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
-<meta property="og:site_name" content="Backgammon Made Simple">
+<meta property="og:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
+<meta property="og:site_name" content="Backgammon Simplified">
 <meta property="og:image:height" content="630">
 <meta property="og:image:width" content="1200">
-<meta name="twitter:title" content="Backgammon Position Analyzer – Backgammon Made Simple">
+<meta name="twitter:title" content="Backgammon Position Analyzer – Backgammon Simplified">
 <meta name="twitter:description" content="Analyze a backgammon position, compare checker plays and cube decisions, and understand why the strongest choice is best.">
-<meta name="twitter:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
+<meta name="twitter:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="630">
 <meta name="twitter:image-width" content="1200">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://backgammonsimplified.github.io/analyze/index.html">
 </head>
 
-<body class="nav-fixed bms-editorial-page bms-title-eyebrow bms-analyze-page quarto-light">
+<body class="nav-fixed bs-editorial-page bs-title-eyebrow bs-analyze-page quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo light-content">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo dark-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Backgammon Made Simple</span>
+    <span class="navbar-title">Backgammon Simplified</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -193,37 +195,37 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="bms-page-shell">
-<div class="bms-reading-column">
-<div class="bms-status-panel">
-<p><span class="bms-status-label">CURRENT VERSION :: BOARD PREVIEW</span></p>
+<div class="bs-page-shell">
+<div class="bs-reading-column">
+<div class="bs-status-panel">
+<p><span class="bs-status-label">CURRENT VERSION :: BOARD PREVIEW</span></p>
 <p>Coming soon: Full engine analysis, best candidate move rankings. For now it just renders a board and match from an XGID.</p>
 </div>
-<div class="bms-step-row" aria-label="How to use the position preview">
-<div class="bms-step">
-<p><span class="bms-step-number">01</span></p>
+<div class="bs-step-row" aria-label="How to use the position preview">
+<div class="bs-step">
+<p><span class="bs-step-number">01</span></p>
 <p><strong>Paste an XGID</strong></p>
 <p>Use a complete XGID copied from your backgammon software or a shared position link.</p>
 </div>
-<div class="bms-step">
-<p><span class="bms-step-number">02</span></p>
+<div class="bs-step">
+<p><span class="bs-step-number">02</span></p>
 <p><strong>Check the position</strong></p>
 <p>From the board and match situation, view the best candidate move.</p>
 </div>
-<div class="bms-step">
-<p><span class="bms-step-number">03</span></p>
+<div class="bs-step">
+<p><span class="bs-step-number">03</span></p>
 <p><strong>Share the link</strong></p>
 <p>Open the preview directly or send the encoded position URL to another player.</p>
 </div>
 </div>
 </div>
-<div class="bms-tool-area">
+<div class="bs-tool-area">
 <script>
 (function () {
-  const allowedOrigin = "https://backgammon-made-simple.shinyapps.io";
-  const iframeId = "bms-position-preview-frame";
-  const heightMessageType = "bms-iframe-height";
-  const requestMessageType = "bms-request-height";
+  const allowedOrigin = "https://backgammon-simplified.shinyapps.io";
+  const iframeId = "bs-position-preview-frame";
+  const heightMessageType = "bs-iframe-height";
+  const requestMessageType = "bs-request-height";
 
   function getIframe() {
     return document.getElementById(iframeId);
@@ -273,11 +275,11 @@ ul.task-list li input[type="checkbox"] {
   });
 })();
 </script>
-<div class="bms-tool-frame">
-<iframe id="bms-position-preview-frame" src="https://backgammon-made-simple.shinyapps.io/position-dashboard/?position=XGID%3D-B-BBBF-------a----dccb-b-%3A1%3A-1%3A1%3A65%3A0%3A3%3A0%3A5%3A8" title="Backgammon Made Simple position preview" loading="eager" scrolling="no"></iframe>
+<div class="bs-tool-frame">
+<iframe id="bs-position-preview-frame" src="https://backgammon-simplified.shinyapps.io/position-dashboard/?position=XGID%3D-B-BBBF-------a----dccb-b-%3A1%3A-1%3A1%3A65%3A0%3A3%3A0%3A5%3A8" title="Backgammon Simplified position preview" loading="eager" scrolling="no"></iframe>
 </div>
-<div class="bms-external-link">
-<p><a href="https://backgammon-made-simple.shinyapps.io/position-dashboard/?position=XGID%3D-B-BBBF-------a----dccb-b-%3A1%3A-1%3A1%3A65%3A0%3A3%3A0%3A5%3A8">Open this position →</a></p>
+<div class="bs-external-link">
+<p><a href="https://backgammon-simplified.shinyapps.io/position-dashboard/?position=XGID%3D-B-BBBF-------a----dccb-b-%3A1%3A-1%3A1%3A65%3A0%3A3%3A0%3A5%3A8">Open this position →</a></p>
 </div>
 </div>
 </div>
@@ -285,15 +287,15 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
-<script src="../assets/bms-learn.js" defer=""></script>
+<script src="../assets/bs-learn.js" defer=""></script>
 
-<script src="../assets/bms-lesson-analysis.js" defer=""></script>
+<script src="../assets/bs-lesson-analysis.js" defer=""></script>
 
-<script src="../assets/bms-learn-scroll.js" defer=""></script>
+<script src="../assets/bs-learn-scroll.js" defer=""></script>
 
-<script src="../assets/bms-research-scroll.js" defer=""></script>
+<script src="../assets/bs-research-scroll.js" defer=""></script>
 
-<script src="../assets/bms-glossary.js" defer=""></script>
+<script src="../assets/bs-glossary.js" defer=""></script>
 
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -368,7 +370,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/backgammon-made-simple\.github\.io");
+        var filterRegex = new RegExp("https:\/\/backgammonsimplified\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -699,7 +701,7 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2026 Marty Gale - Backgammon Made Simple</p>
+<p>Copyright 2026 Marty Gale - Backgammon Simplified</p>
 </div>   
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">

@@ -1,12 +1,12 @@
 (function () {
   "use strict";
 
-  const MANIFEST_ROUTE = "/assets/bms-research-sequence.json";
+  const MANIFEST_ROUTE = "/assets/bs-research-sequence.json";
 
   function normalizeRoute(value) {
     let route = String(value || "").trim();
     try {
-      route = new URL(route, "https://bms.invalid/").pathname;
+      route = new URL(route, "https://bs.invalid/").pathname;
       route = decodeURI(route);
     } catch (_error) {
       route = route.split(/[?#]/, 1)[0];
@@ -61,7 +61,7 @@
       .replace(/[^a-z0-9]+/gi, "-")
       .replace(/^-|-$/g, "")
       .toLocaleLowerCase();
-    return "bms-research-scroll-" + (slug || "article") + "-";
+    return "bs-research-scroll-" + (slug || "article") + "-";
   }
 
   function captureArticleToc(toc, articleUrl) {
@@ -70,7 +70,7 @@
     }
     const clone = toc.cloneNode(true);
     clone
-      .querySelectorAll("[data-bms-toc-toggle-divider]")
+      .querySelectorAll("[data-bs-toc-toggle-divider]")
       .forEach(function (divider) {
         divider.remove();
       });
@@ -94,15 +94,15 @@
 
   function createMarker(article) {
     const marker = document.createElement("span");
-    marker.className = "bms-research-scroll-marker";
-    marker.dataset.bmsResearchScrollMarker = article.route;
+    marker.className = "bs-research-scroll-marker";
+    marker.dataset.bsResearchScrollMarker = article.route;
     marker.setAttribute("aria-hidden", "true");
     return marker;
   }
 
   function createDivider(article) {
     const divider = document.createElement("section");
-    divider.className = "bms-research-scroll-divider";
+    divider.className = "bs-research-scroll-divider";
     divider.setAttribute("aria-label", "Next research article");
     const label = document.createElement("span");
     label.textContent = "Continue reading";
@@ -114,8 +114,8 @@
 
   function createEndState() {
     const end = document.createElement("p");
-    end.className = "bms-research-scroll-end";
-    end.dataset.bmsResearchScrollEnd = "";
+    end.className = "bs-research-scroll-end";
+    end.dataset.bsResearchScrollEnd = "";
     end.textContent = "You have reached the end of the Research articles.";
     return end;
   }
@@ -123,13 +123,13 @@
   function initializeContinuousResearch() {
     if (
       !document.body ||
-      !document.body.classList.contains("bms-research-article") ||
+      !document.body.classList.contains("bs-research-article") ||
       !("IntersectionObserver" in window)
     ) {
       return;
     }
     const main = document.getElementById("quarto-document-content");
-    const shared = window.BMSLearnScroll;
+    const shared = window.BSLearnScroll;
     if (
       !main ||
       !shared ||
@@ -202,8 +202,8 @@
             return;
           }
           const sentinel = document.createElement("div");
-          sentinel.className = "bms-research-scroll-sentinel";
-          sentinel.dataset.bmsResearchScrollSentinel = following.route;
+          sentinel.className = "bs-research-scroll-sentinel";
+          sentinel.dataset.bsResearchScrollSentinel = following.route;
           sentinel.setAttribute("aria-live", "polite");
           main.appendChild(sentinel);
 
@@ -247,7 +247,7 @@
                 );
                 if (
                   !nextMain ||
-                  !nextDocument.body.classList.contains("bms-research-article")
+                  !nextDocument.body.classList.contains("bs-research-article")
                 ) {
                   throw new Error("Next Research content was not found");
                 }
@@ -259,8 +259,8 @@
                 nextMain
                   .querySelectorAll(
                     "script, style, link[rel='stylesheet'], " +
-                      "[data-bms-term-lookup], #bms-research-taxonomy-source, " +
-                      ".bms-post-taxonomy, .quarto-categories"
+                      "[data-bs-term-lookup], #bs-research-taxonomy-source, " +
+                      ".bs-post-taxonomy, .quarto-categories"
                   )
                   .forEach(function (element) {
                     element.remove();
@@ -281,10 +281,10 @@
                   fragment.appendChild(document.importNode(child, true));
                 });
                 if (
-                  window.BMSLearn &&
-                  typeof window.BMSLearn.mountLesson === "function"
+                  window.BSLearn &&
+                  typeof window.BSLearn.mountLesson === "function"
                 ) {
-                  window.BMSLearn.mountLesson(fragment);
+                  window.BSLearn.mountLesson(fragment);
                 }
                 sentinel.replaceWith(fragment);
                 records.push({
@@ -304,7 +304,7 @@
                   "The next Research article could not be loaded.";
                 const retry = document.createElement("button");
                 retry.type = "button";
-                retry.className = "bms-button-outline";
+                retry.className = "bs-button-outline";
                 retry.textContent = "Try again";
                 retry.addEventListener("click", loadNext);
                 sentinel.append(message, retry);

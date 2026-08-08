@@ -8,7 +8,7 @@
 
 <meta name="description" content="See how backgammon engines perform in controlled matches, how their decisions are reviewed, and what the results can and cannot tell us.">
 
-<title>Backgammon Engine Benchmark – Backgammon Made Simple</title>
+<title>Backgammon Engine Benchmark – Backgammon Simplified</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -44,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-71c7b49c685e597d910cb795eccce780.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ccd5a00dc6e8596bccddf1cebaba4c1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8d450d615d30163466618d5f2985fcb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -86,37 +86,39 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<link rel="stylesheet" href="../assets/bms-shared.css">
-<link rel="stylesheet" href="../assets/bms-components.css">
-<link rel="stylesheet" href="../assets/bms-learn.css">
-<link rel="stylesheet" href="../assets/bms-lesson-analysis.css">
-<meta property="og:title" content="Backgammon Engine Benchmark – Backgammon Made Simple">
+<link rel="stylesheet" href="../assets/bs-shared.css">
+<link rel="stylesheet" href="../assets/bs-components.css">
+<link rel="stylesheet" href="../assets/bs-learn.css">
+<link rel="stylesheet" href="../assets/bs-lesson-analysis.css">
+<meta property="og:title" content="Backgammon Engine Benchmark – Backgammon Simplified">
 <meta property="og:description" content="See how backgammon engines perform in controlled matches, how their decisions are reviewed, and what the results can and cannot tell us.">
-<meta property="og:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
-<meta property="og:site_name" content="Backgammon Made Simple">
+<meta property="og:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
+<meta property="og:site_name" content="Backgammon Simplified">
 <meta property="og:image:height" content="630">
 <meta property="og:image:width" content="1200">
-<meta name="twitter:title" content="Backgammon Engine Benchmark – Backgammon Made Simple">
+<meta name="twitter:title" content="Backgammon Engine Benchmark – Backgammon Simplified">
 <meta name="twitter:description" content="See how backgammon engines perform in controlled matches, how their decisions are reviewed, and what the results can and cannot tell us.">
-<meta name="twitter:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
+<meta name="twitter:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="630">
 <meta name="twitter:image-width" content="1200">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://backgammonsimplified.github.io/engine-benchmark/index.html">
 </head>
 
-<body class="nav-fixed bms-editorial-page bms-title-eyebrow bms-engine-benchmark-page quarto-light">
+<body class="nav-fixed bs-editorial-page bs-title-eyebrow bs-engine-benchmark-page quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo light-content">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo dark-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Backgammon Made Simple</span>
+    <span class="navbar-title">Backgammon Simplified</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -208,32 +210,32 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="bms-editorial-lead">
+<div class="bs-editorial-lead">
 <p>The Backgammon Engine Benchmark lets engines play under controlled conditions, then publishes the results and the evidence behind them.</p>
 </div>
 <p>We ran a <a href="../engine-benchmark/sage-vs-gnu-stage1/index.html">20 match pilot with Sage vs GNU</a>. After that pilot we wanted to release a robust way to fairly compare backgammon engines against each other. That’s why we built the Engine Benchmark tool.</p>
 <p>Before you have backgammon engines fight each other, you must record the plan, settings, and how the dice were generated. You also want to record the match files, settings used for review and futher analysis . We do this for the comparison can be fair, inspected and reproduced by others.</p>
 <p>The code and instructions to run your own tests is available in the public repository below, while the website has the stories of the battles we conducted and what it means for backgammon players like yourself.</p>
-<div class="bms-button-row">
-<p><a href="../engine-benchmark/sage-vs-gnu-stage1/index.html" class="bms-button-primary">Read Sage vs GNU 20 Match Pilot Results</a> <a href="../research/sage-vs-gnu-additional-details.html" class="bms-button-outline">Read the more details of the Pilot</a></p>
+<div class="bs-button-row">
+<p><a href="../engine-benchmark/sage-vs-gnu-stage1/index.html" class="bs-button-primary">Read Sage vs GNU 20 Match Pilot Results</a> <a href="../research/sage-vs-gnu-additional-details.html" class="bs-button-outline">Read the more details of the Pilot</a></p>
 </div>
 <section id="how-the-benchmark-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-the-benchmark-works">How the benchmark works</h2>
-<div class="bms-process" aria-label="Benchmark workflow">
-<div class="bms-process-step">
-<p><span class="bms-process-number">01</span> <strong>Choose the engines, rules, and settings</strong></p>
+<div class="bs-process" aria-label="Benchmark workflow">
+<div class="bs-process-step">
+<p><span class="bs-process-number">01</span> <strong>Choose the engines, rules, and settings</strong></p>
 </div>
-<div class="bms-process-step">
-<p><span class="bms-process-number">02</span> <strong>Publish the plan before play begins</strong></p>
+<div class="bs-process-step">
+<p><span class="bs-process-number">02</span> <strong>Publish the plan before play begins</strong></p>
 </div>
-<div class="bms-process-step">
-<p><span class="bms-process-number">04</span> <strong>Set Dice File then Play</strong></p>
+<div class="bs-process-step">
+<p><span class="bs-process-number">04</span> <strong>Set Dice File then Play</strong></p>
 </div>
-<div class="bms-process-step">
-<p><span class="bms-process-number">05</span> <strong>Review the matches and find disagreements</strong></p>
+<div class="bs-process-step">
+<p><span class="bs-process-number">05</span> <strong>Review the matches and find disagreements</strong></p>
 </div>
-<div class="bms-process-step">
-<p><span class="bms-process-number">06</span> <strong>Check and publish the evidence</strong></p>
+<div class="bs-process-step">
+<p><span class="bs-process-number">06</span> <strong>Check and publish the evidence</strong></p>
 </div>
 </div>
 <p>You can configure the methods and settings as they can change from one study to another. Engines do not all offer the same tools, as some can review a complete match (GNU CLI), while others can only examine one position at a time (Sage’s current Python package).</p>
@@ -255,7 +257,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Engine settings cannot always be matched by using the same ply number.</p>
 <p>Ply depth tells us how many decision layers an engine looks ahead. Different engines start count plying depth differently, use different types of search, or expose different analysis tools. Before a study begins, you want to documents what each setting does understand why the selected pair is the closest practical comparison.</p>
 <p>The goal is not to make the engines internally identical. That is impossible. The goal is to avoid an obvious mismatch in ply depth while keeping the live matches practical to run.</p>
-<p><a href="../research/sage-vs-gnu-additional-details.html#why-these-ply-depths-were-chosen" class="bms-button-outline">Read the more details of ply settings for the Pilot</a></p>
+<p><a href="../research/sage-vs-gnu-additional-details.html#why-these-ply-depths-were-chosen" class="bs-button-outline">Read the more details of ply settings for the Pilot</a></p>
 </section>
 <section id="how-are-the-results-judged" class="level2">
 <h2 class="anchored" data-anchor-id="how-are-the-results-judged">How are the results judged?</h2>
@@ -298,15 +300,15 @@ ul.task-list li input[type="checkbox"] {
 </section>
 
 </main> <!-- /main -->
-<script src="../assets/bms-learn.js" defer=""></script>
+<script src="../assets/bs-learn.js" defer=""></script>
 
-<script src="../assets/bms-lesson-analysis.js" defer=""></script>
+<script src="../assets/bs-lesson-analysis.js" defer=""></script>
 
-<script src="../assets/bms-learn-scroll.js" defer=""></script>
+<script src="../assets/bs-learn-scroll.js" defer=""></script>
 
-<script src="../assets/bms-research-scroll.js" defer=""></script>
+<script src="../assets/bs-research-scroll.js" defer=""></script>
 
-<script src="../assets/bms-glossary.js" defer=""></script>
+<script src="../assets/bs-glossary.js" defer=""></script>
 
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -381,7 +383,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/backgammon-made-simple\.github\.io");
+        var filterRegex = new RegExp("https:\/\/backgammonsimplified\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -712,7 +714,7 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2026 Marty Gale - Backgammon Made Simple</p>
+<p>Copyright 2026 Marty Gale - Backgammon Simplified</p>
 </div>   
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">

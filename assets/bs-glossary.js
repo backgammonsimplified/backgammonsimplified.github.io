@@ -1,9 +1,9 @@
 (function () {
   "use strict";
 
-  const ENTRY_SELECTOR = "[data-bms-glossary-entry]";
-  const CATEGORY_SELECTOR = "[data-bms-glossary-filter-category]";
-  const TRACK_SELECTOR = "[data-bms-glossary-filter-track]";
+  const ENTRY_SELECTOR = "[data-bs-glossary-entry]";
+  const CATEGORY_SELECTOR = "[data-bs-glossary-filter-category]";
+  const TRACK_SELECTOR = "[data-bs-glossary-filter-track]";
 
   function parseList(value) {
     if (!value) {
@@ -202,8 +202,8 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className =
-      "bms-glossary-filter bms-glossary-filter--category";
-    button.dataset.bmsGlossaryFilterCategory = category;
+      "bs-glossary-filter bs-glossary-filter--category";
+    button.dataset.bsGlossaryFilterCategory = category;
     button.setAttribute("aria-pressed", "false");
     button.textContent = displayCategory(category);
     return button;
@@ -330,13 +330,13 @@
     if (!item || !item.originalParent) {
       return null;
     }
-    return item.originalParent.closest("[data-bms-letter-group]");
+    return item.originalParent.closest("[data-bs-letter-group]");
   }
 
   function initializeGlossary() {
-    const panel = document.querySelector("[data-bms-glossary-filters]");
+    const panel = document.querySelector("[data-bs-glossary-filters]");
     const groupContainer = document.querySelector(
-      "[data-bms-glossary-groups]"
+      "[data-bs-glossary-groups]"
     );
 
     if (!panel || !groupContainer) {
@@ -346,64 +346,64 @@
     const items = Array.from(
       groupContainer.querySelectorAll(ENTRY_SELECTOR)
     ).map(function (element, originalIndex) {
-      const searchValues = parseList(element.dataset.bmsSearch);
+      const searchValues = parseList(element.dataset.bsSearch);
+      const categories = parseList(element.dataset.bsCategories);
       return {
         element: element,
-        slug: element.dataset.bmsSlug || "",
-        aliasSlugs: parseList(element.dataset.bmsAliases),
-        redirectSlugs: parseList(element.dataset.bmsRedirects),
-        letter: element.dataset.bmsLetter || "",
-        category: element.dataset.bmsCategory || "",
-        categories:
-          parseList(element.dataset.bmsCategories).length > 0
-            ? parseList(element.dataset.bmsCategories)
-            : element.dataset.bmsCategory
-              ? [element.dataset.bmsCategory]
-              : [],
-        tracks: parseList(element.dataset.bmsTracks),
+        slug: element.dataset.bsSlug || "",
+        aliasSlugs: parseList(element.dataset.bsAliases),
+        redirectSlugs: parseList(element.dataset.bsRedirects),
+        letter: element.dataset.bsLetter || "",
+        category: element.dataset.bsCategory || "",
+        categories: categories.length > 0
+          ? categories
+          : element.dataset.bsCategory
+            ? [element.dataset.bsCategory]
+            : [],
+        tracks: parseList(element.dataset.bsTracks),
         searchValues: searchValues,
         canonical: searchValues[0] || "",
-        aliases: parseList(element.dataset.bmsAliasNames),
+        aliases: parseList(element.dataset.bsAliasNames),
         originalParent: element.parentElement,
         originalIndex: originalIndex
       };
     });
     const groups = Array.from(
-      groupContainer.querySelectorAll("[data-bms-letter-group]")
+      groupContainer.querySelectorAll("[data-bs-letter-group]")
     );
-    const searchInput = panel.querySelector("[data-bms-glossary-search]");
+    const searchInput = panel.querySelector("[data-bs-glossary-search]");
     const categoryContainer = panel.querySelector(
-      "[data-bms-glossary-category-filters]"
+      "[data-bs-glossary-category-filters]"
     );
     const resultCount = panel.querySelector(
-      "[data-bms-glossary-result-count]"
+      "[data-bs-glossary-result-count]"
     );
-    const clearButton = panel.querySelector("[data-bms-glossary-clear]");
+    const clearButton = panel.querySelector("[data-bs-glossary-clear]");
     const categoryDisclosure = panel.querySelector(
-      "[data-bms-glossary-category-disclosure]"
+      "[data-bs-glossary-category-disclosure]"
     );
     const trackDisclosure = panel.querySelector(
-      "[data-bms-glossary-track-disclosure]"
+      "[data-bs-glossary-track-disclosure]"
     );
     const collapseControl = document.querySelector(
-      "[data-bms-glossary-collapse-all]"
+      "[data-bs-glossary-collapse-all]"
     );
     const expandControl = document.querySelector(
-      "[data-bms-glossary-expand-all]"
+      "[data-bs-glossary-expand-all]"
     );
-    const emptyState = document.querySelector("[data-bms-glossary-empty]");
-    const sidebar = document.querySelector("[data-bms-glossary-sidebar]");
+    const emptyState = document.querySelector("[data-bs-glossary-empty]");
+    const sidebar = document.querySelector("[data-bs-glossary-sidebar]");
     const sidebarTitle = sidebar
-      ? sidebar.querySelector("[data-bms-glossary-sidebar-title]")
+      ? sidebar.querySelector("[data-bs-glossary-sidebar-title]")
       : null;
     const sidebarContent = sidebar
-      ? sidebar.querySelector("[data-bms-glossary-sidebar-content]")
+      ? sidebar.querySelector("[data-bs-glossary-sidebar-content]")
       : null;
     const sidebarClose = sidebar
-      ? sidebar.querySelector("[data-bms-glossary-sidebar-close]")
+      ? sidebar.querySelector("[data-bs-glossary-sidebar-close]")
       : null;
     const sidebarEntryLink = sidebar
-      ? sidebar.querySelector("[data-bms-glossary-sidebar-entry-link]")
+      ? sidebar.querySelector("[data-bs-glossary-sidebar-entry-link]")
       : null;
     let sidebarReturnFocus = null;
     const selectedCategories = new Set();
@@ -411,8 +411,8 @@
     let activeLetterBrowse = "";
     let autoOpenedSearchItem = null;
     const rankedResults = document.createElement("div");
-    rankedResults.className = "bms-glossary-ranked-results";
-    rankedResults.dataset.bmsGlossaryRankedResults = "";
+    rankedResults.className = "bs-glossary-ranked-results";
+    rankedResults.dataset.bsGlossaryRankedResults = "";
     rankedResults.hidden = true;
     groupContainer.prepend(rankedResults);
 
@@ -423,9 +423,14 @@
     ).sort(function (left, right) {
       return left.localeCompare(right);
     });
-    categories.forEach(function (category) {
-      categoryContainer.appendChild(createCategoryButton(category));
+    const categoryButtons = categories.map(function (category) {
+      const button = createCategoryButton(category);
+      categoryContainer.appendChild(button);
+      return button;
     });
+    const cardCategoryButtons = Array.from(
+      groupContainer.querySelectorAll("[data-bs-card-category]")
+    );
 
     const initialState = glossaryStateFromSearch(
       window.location.search,
@@ -443,7 +448,7 @@
     initialState.tracks.forEach(function (value) {
       if (
         trackButtons.some(function (button) {
-          return button.dataset.bmsGlossaryFilterTrack === value;
+          return button.dataset.bsGlossaryFilterTrack === value;
         })
       ) {
         selectedTracks.add(value);
@@ -504,16 +509,13 @@
     }
 
     function updateAvailability() {
-      const categoryButtons = Array.from(
-        panel.querySelectorAll(CATEGORY_SELECTOR)
-      );
       const tracks = sortedValues(selectedTracks);
       const selectedCategoryValues = sortedValues(selectedCategories);
       const query = currentQuery();
 
       categoryButtons.forEach(function (button) {
         const category =
-          button.dataset.bmsGlossaryFilterCategory || "";
+          button.dataset.bsGlossaryFilterCategory || "";
         const count = items.filter(function (item) {
           return itemMatchesGlossary(item, query, [category], tracks);
         }).length;
@@ -522,7 +524,7 @@
         button.title = count + (count === 1 ? " matching term" : " matching terms");
       });
       trackButtons.forEach(function (button) {
-        const track = button.dataset.bmsGlossaryFilterTrack || "";
+        const track = button.dataset.bsGlossaryFilterTrack || "";
         const count = items.filter(function (item) {
           return itemMatchesGlossary(
             item,
@@ -621,7 +623,7 @@
         }
         if (activeLetterBrowse) {
           const selected =
-            group.dataset.bmsLetter === activeLetterBrowse;
+            group.dataset.bsLetter === activeLetterBrowse;
           group.hidden = !selected;
           if (selected) {
             group.open = true;
@@ -640,19 +642,19 @@
       });
 
       setPressed(
-        Array.from(panel.querySelectorAll(CATEGORY_SELECTOR)),
+        categoryButtons,
         selectedCategories,
-        "bmsGlossaryFilterCategory"
+        "bsGlossaryFilterCategory"
       );
       setPressed(
-        Array.from(groupContainer.querySelectorAll("[data-bms-card-category]")),
+        cardCategoryButtons,
         selectedCategories,
-        "bmsCardCategory"
+        "bsCardCategory"
       );
       setPressed(
         trackButtons,
         selectedTracks,
-        "bmsGlossaryFilterTrack"
+        "bsGlossaryFilterTrack"
       );
       updateAvailability();
 
@@ -717,7 +719,7 @@
         return false;
       }
       const sourceBody = selectedItem.element.querySelector(
-        ".bms-glossary-entry-body"
+        ".bs-glossary-entry-body"
       );
       if (!sourceBody) {
         return false;
@@ -805,7 +807,7 @@
     panel.addEventListener("click", function (event) {
       const categoryButton = event.target.closest(CATEGORY_SELECTOR);
       const trackButton = event.target.closest(TRACK_SELECTOR);
-      const clear = event.target.closest("[data-bms-glossary-clear]");
+      const clear = event.target.closest("[data-bs-glossary-clear]");
 
       if (categoryButton) {
         activeLetterBrowse = "";
@@ -814,7 +816,7 @@
         }
         toggleSelection(
           selectedCategories,
-          categoryButton.dataset.bmsGlossaryFilterCategory || ""
+          categoryButton.dataset.bsGlossaryFilterCategory || ""
         );
         applyFilters();
         return;
@@ -826,7 +828,7 @@
         }
         toggleSelection(
           selectedTracks,
-          trackButton.dataset.bmsGlossaryFilterTrack || ""
+          trackButton.dataset.bsGlossaryFilterTrack || ""
         );
         applyFilters();
         return;
@@ -881,7 +883,7 @@
 
     groupContainer.addEventListener("click", function (event) {
       const relatedLink = event.target.closest(
-        ".bms-glossary-related-terms a[href]"
+        ".bs-glossary-related-terms a[href]"
       );
       if (relatedLink) {
         const canonicalSlug = canonicalSlugForFragment(
@@ -893,18 +895,18 @@
         }
         event.preventDefault();
         document.dispatchEvent(
-          new CustomEvent("bms:open-glossary-term", {
+          new CustomEvent("bs:open-glossary-term", {
             detail: { slug: canonicalSlug, focusResult: true }
           })
         );
         return;
       }
-      const categoryButton = event.target.closest("[data-bms-card-category]");
+      const categoryButton = event.target.closest("[data-bs-card-category]");
       if (!categoryButton) {
         return;
       }
       selectedCategories.clear();
-      selectedCategories.add(categoryButton.dataset.bmsCardCategory || "");
+      selectedCategories.add(categoryButton.dataset.bsCardCategory || "");
       activeLetterBrowse = "";
       if (categoryDisclosure instanceof HTMLDetailsElement) {
         categoryDisclosure.open = true;
@@ -912,7 +914,7 @@
       applyFilters();
       expandCategoryMatches(
         items,
-        categoryButton.dataset.bmsCardCategory || ""
+        categoryButton.dataset.bsCardCategory || ""
       );
       panel.scrollIntoView({ behavior: "smooth", block: "start" });
     });
@@ -927,7 +929,7 @@
         !summary ||
         !(disclosure instanceof HTMLDetailsElement) ||
         (!disclosure.matches(ENTRY_SELECTOR) &&
-          !disclosure.matches("[data-bms-letter-group]"))
+          !disclosure.matches("[data-bs-letter-group]"))
       ) {
         return;
       }
@@ -935,10 +937,10 @@
       disclosure.open = !disclosure.open;
     });
 
-    document.addEventListener("bms:open-glossary-term", function (event) {
+    document.addEventListener("bs:open-glossary-term", function (event) {
       const slug = event && event.detail ? event.detail.slug : "";
       const pageTermLookup = document.querySelector(
-        "[data-bms-term-lookup-form]"
+        "[data-bs-term-lookup-form]"
       );
       if (slug && !pageTermLookup) {
         openSidebar(slug, { returnFocus: document.activeElement });
@@ -954,7 +956,7 @@
     if (sidebar) {
       sidebar.addEventListener("click", function (event) {
         const entryLink = event.target.closest(
-          "[data-bms-glossary-sidebar-entry-link]"
+          "[data-bs-glossary-sidebar-entry-link]"
         );
         if (entryLink) {
           const canonicalSlug = canonicalSlugForFragment(
@@ -985,14 +987,14 @@
           return;
         }
         const relatedLink = event.target.closest(
-          ".bms-inline-glossary[data-bms-glossary-slug], " +
-            ".bms-glossary-related-terms a[href]"
+          ".bs-inline-glossary[data-bs-glossary-slug], " +
+            ".bs-glossary-related-terms a[href]"
         );
         if (!relatedLink) {
           return;
         }
         const slug =
-          relatedLink.dataset.bmsGlossarySlug ||
+          relatedLink.dataset.bsGlossarySlug ||
           relatedLink.getAttribute("href") ||
           "";
         if (canonicalSlugForFragment(items, slug)) {
@@ -1016,7 +1018,7 @@
       });
     }
     document
-      .querySelectorAll("[data-bms-letter-link]")
+      .querySelectorAll("[data-bs-letter-link]")
       .forEach(function (link) {
         link.removeAttribute("target");
         link.removeAttribute("rel");
@@ -1033,7 +1035,7 @@
             searchInput.value = "";
           }
           activeLetterBrowse =
-            link.dataset.bmsLetterLink || "";
+            link.dataset.bsLetterLink || "";
           autoOpenedSearchItem = null;
           closeTermEntries(items);
           applyFilters({ updateUrl: false });
@@ -1062,9 +1064,9 @@
 
   function initializeBackToTop() {
     const control = document.querySelector(
-      "[data-bms-glossary-back-to-top]"
+      "[data-bs-glossary-back-to-top]"
     );
-    const target = document.getElementById("bms-glossary-top");
+    const target = document.getElementById("bs-glossary-top");
     if (!control || !target) {
       return;
     }

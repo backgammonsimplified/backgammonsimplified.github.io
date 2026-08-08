@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Made Simple.">
+<meta name="description" content="Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Simplified.">
 
-<title>Research – Backgammon Made Simple</title>
+<title>Research – Backgammon Simplified</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -46,7 +46,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-71c7b49c685e597d910cb795eccce780.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ccd5a00dc6e8596bccddf1cebaba4c1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8d450d615d30163466618d5f2985fcb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -83,9 +83,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-project','listing-filters','listing-website','listing-format','listing-execute','listing-editor','listing-engines','listing-language','listing-term-lookup','listing-title','listing-subtitle','listing-description','listing-terms','listing-path','listing-outputHref','listing-author','listing-filename','listing-file-modified','listing-reading-time','listing-word-count','listing-categories','listing-tags',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
+      valueNames: ['listing-project','listing-filters','listing-website','listing-format','listing-execute','listing-editor','listing-bs-publication','listing-engines','listing-language','listing-term-lookup','listing-title','listing-subtitle','listing-description','listing-terms','listing-path','listing-outputHref','listing-author','listing-filename','listing-file-modified','listing-reading-time','listing-word-count','listing-categories','listing-tags',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
       
-      searchColumns: ["listing-project","listing-filters","listing-website","listing-format","listing-execute","listing-editor","listing-engines","listing-language","listing-term-lookup","listing-title","listing-subtitle","listing-description","listing-terms","listing-path","listing-outputHref","listing-author","listing-filename","listing-file-modified","listing-reading-time","listing-word-count","listing-categories","listing-tags"],
+      searchColumns: ["listing-project","listing-filters","listing-website","listing-format","listing-execute","listing-editor","listing-bs-publication","listing-engines","listing-language","listing-term-lookup","listing-title","listing-subtitle","listing-description","listing-terms","listing-path","listing-outputHref","listing-author","listing-filename","listing-file-modified","listing-reading-time","listing-word-count","listing-categories","listing-tags"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -115,19 +115,19 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="manifest" href="../assets/icons/site.webmanifest">
 
-<style id="bms-research-taxonomy-styles">
+<style id="bs-research-taxonomy-styles">
 #title-block-header .quarto-categories {
   display: none;
 }
 
-.bms-post-taxonomy {
+.bs-post-taxonomy {
   position: relative;
   margin: 0 0 1.2rem;
   padding: 0 1.8rem 1.1rem 0;
-  border-bottom: 1px solid var(--bms-border, #d9d3c7);
+  border-bottom: 1px solid var(--bs-border, #d9d3c7);
 }
 
-.bms-post-taxonomy-toggle {
+.bs-post-taxonomy-toggle {
   position: absolute;
   top: 0;
   right: 0;
@@ -137,37 +137,37 @@ ul.task-list li input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 1px solid var(--bms-border, #d9d3c7);
+  border: 1px solid var(--bs-border, #d9d3c7);
   border-radius: 5px;
-  background: var(--bms-page-background, #faf7f2);
-  color: var(--bms-text-muted, #68625a);
+  background: var(--bs-page-background, #faf7f2);
+  color: var(--bs-text-muted, #68625a);
   cursor: pointer;
   font-size: 1rem;
   line-height: 1;
 }
 
-.bms-post-taxonomy-toggle:focus-visible {
-  outline: 2px solid var(--bms-link-hover, #6d3f27);
+.bs-post-taxonomy-toggle:focus-visible {
+  outline: 2px solid var(--bs-link-hover, #6d3f27);
   outline-offset: 2px;
 }
 
-.bms-post-taxonomy--collapsed {
+.bs-post-taxonomy--collapsed {
   min-height: 1.55rem;
   margin-bottom: 0.4rem;
   padding-bottom: 0.2rem;
 }
 
-.bms-post-taxonomy--collapsed .bms-post-taxonomy-content {
+.bs-post-taxonomy--collapsed .bs-post-taxonomy-content {
   display: none;
 }
 
-.bms-post-taxonomy-group + .bms-post-taxonomy-group {
+.bs-post-taxonomy-group + .bs-post-taxonomy-group {
   margin-top: 0.9rem;
 }
 
-.bms-post-taxonomy-label {
+.bs-post-taxonomy-label {
   margin: 0 0 0.45rem;
-  color: var(--bms-text-muted, #68625a);
+  color: var(--bs-text-muted, #68625a);
   font-family:
     "Source Code Pro",
     ui-monospace,
@@ -183,47 +183,47 @@ ul.task-list li input[type="checkbox"] {
   text-transform: uppercase;
 }
 
-.bms-post-taxonomy-links {
+.bs-post-taxonomy-links {
   display: flex;
   flex-wrap: wrap;
   gap: 0.38rem;
 }
 
-.bms-post-taxonomy-link {
+.bs-post-taxonomy-link {
   display: inline-flex;
   align-items: center;
   min-height: 1.9rem;
   padding: 0.3rem 0.52rem;
-  border: 1px solid var(--bms-border-strong, #bcb4a7);
-  background: var(--bms-surface, #fff);
-  color: var(--bms-text-secondary, #4c4841);
+  border: 1px solid var(--bs-border-strong, #bcb4a7);
+  background: var(--bs-surface, #fff);
+  color: var(--bs-text-secondary, #4c4841);
   font-size: 0.72rem;
   font-weight: 680;
   line-height: 1.15;
   text-decoration: none;
 }
 
-.bms-post-taxonomy-link--category {
+.bs-post-taxonomy-link--category {
   border-radius: 4px;
 }
 
-.bms-post-taxonomy-link--tag {
-  border-color: var(--bms-border, #d9d3c7);
+.bs-post-taxonomy-link--tag {
+  border-color: var(--bs-border, #d9d3c7);
   border-radius: 999px;
-  background: var(--bms-ivory, #f7f3ea);
-  color: var(--bms-copper-dark, #7a482d);
+  background: var(--bs-ivory, #f7f3ea);
+  color: var(--bs-copper-dark, #7a482d);
 }
 
-.bms-post-taxonomy-link:hover,
-.bms-post-taxonomy-link:focus-visible {
-  border-color: var(--bms-link-hover, #6d3f27);
-  color: var(--bms-link-hover, #6d3f27);
+.bs-post-taxonomy-link:hover,
+.bs-post-taxonomy-link:focus-visible {
+  border-color: var(--bs-link-hover, #6d3f27);
+  color: var(--bs-link-hover, #6d3f27);
   text-decoration: underline;
   text-underline-offset: 0.14em;
 }
 
 @media (max-width: 991.98px) {
-  .bms-post-taxonomy {
+  .bs-post-taxonomy {
     display: none;
   }
 }
@@ -259,37 +259,39 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../assets/bms-shared.css">
-<link rel="stylesheet" href="../assets/bms-components.css">
-<link rel="stylesheet" href="../assets/bms-learn.css">
-<link rel="stylesheet" href="../assets/bms-lesson-analysis.css">
-<meta property="og:title" content="Research – Backgammon Made Simple">
-<meta property="og:description" content="Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Made Simple.">
-<meta property="og:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
-<meta property="og:site_name" content="Backgammon Made Simple">
+<link rel="stylesheet" href="../assets/bs-shared.css">
+<link rel="stylesheet" href="../assets/bs-components.css">
+<link rel="stylesheet" href="../assets/bs-learn.css">
+<link rel="stylesheet" href="../assets/bs-lesson-analysis.css">
+<meta property="og:title" content="Research – Backgammon Simplified">
+<meta property="og:description" content="Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Simplified.">
+<meta property="og:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
+<meta property="og:site_name" content="Backgammon Simplified">
 <meta property="og:image:height" content="630">
 <meta property="og:image:width" content="1200">
-<meta name="twitter:title" content="Research – Backgammon Made Simple">
-<meta name="twitter:description" content="Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Made Simple.">
-<meta name="twitter:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
+<meta name="twitter:title" content="Research – Backgammon Simplified">
+<meta name="twitter:description" content="Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Simplified.">
+<meta name="twitter:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="630">
 <meta name="twitter:image-width" content="1200">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://backgammonsimplified.github.io/research/index.html">
 </head>
 
-<body class="nav-fixed bms-editorial-page bms-title-eyebrow bms-research-index fullcontent quarto-light">
+<body class="nav-fixed bs-editorial-page bs-title-eyebrow bs-research-index fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo light-content">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo dark-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Backgammon Made Simple</span>
+    <span class="navbar-title">Backgammon Simplified</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -349,7 +351,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    <p>Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Made Simple.</p>
+    <p>Research articles, supporting analysis, methods, and project updates from the work behind Backgammon Simplified.</p>
   </div>
 </div>
 
@@ -366,141 +368,141 @@ window.Quarto = {
 </header>
 
 
-<aside id="bms-term-lookup-panel" class="bms-term-lookup" data-bms-term-lookup="" hidden="">
-  <div class="bms-term-lookup-heading">
+<aside id="bs-term-lookup-panel" class="bs-term-lookup" data-bs-term-lookup="" hidden="">
+  <div class="bs-term-lookup-heading">
     <strong>Look Up a Term</strong>
-    <button type="button" class="bms-term-lookup-close" data-bms-term-lookup-close="" aria-controls="bms-term-lookup-panel" aria-expanded="true" aria-label="Collapse term lookup to the right"><span aria-hidden="true">→</span></button>
+    <button type="button" class="bs-term-lookup-close" data-bs-term-lookup-close="" aria-controls="bs-term-lookup-panel" aria-expanded="true" aria-label="Collapse term lookup to the right"><span aria-hidden="true">→</span></button>
   </div>
-  <form action="/glossary/" method="get" data-bms-term-lookup-form="">
-    <label class="visually-hidden" for="bms-term-lookup-input">Term or alias</label>
-    <div class="bms-term-lookup-controls">
-      <input id="bms-term-lookup-input" name="q" type="search" required="" autocomplete="off" spellcheck="false" placeholder="Enter Term">
+  <form action="/glossary/" method="get" data-bs-term-lookup-form="">
+    <label class="visually-hidden" for="bs-term-lookup-input">Term or alias</label>
+    <div class="bs-term-lookup-controls">
+      <input id="bs-term-lookup-input" name="q" type="search" required="" autocomplete="off" spellcheck="false" placeholder="Enter Term">
       <button type="submit">Search</button>
     </div>
   </form>
-  <div class="bms-term-lookup-result" data-bms-term-lookup-result="" aria-live="polite" hidden=""></div>
+  <div class="bs-term-lookup-result" data-bs-term-lookup-result="" aria-live="polite" hidden=""></div>
 </aside>
-<div class="bms-page-shell">
-<div class="bms-reading-column">
-<div class="bms-editorial-lead">
-<p>Research is where we publish the methods, supporting analysis, project notes, and reproducibility details behind Backgammon Made Simple.</p>
+<div class="bs-page-shell">
+<div class="bs-reading-column">
+<div class="bs-editorial-lead">
+<p>Research is where we publish the methods, supporting analysis, project notes, and reproducibility details behind Backgammon Simplified.</p>
 </div>
 </div>
-<section class="bms-research-filter-panel" data-bms-research-filters="" aria-label="Filter research articles">
+<section class="bs-research-filter-panel" data-bs-research-filters="" aria-label="Filter research articles">
   <p class="visually-hidden">
     Select a category or tag to filter the articles. Select an active filter again to clear it.
   </p>
 
-  <div class="bms-research-filter-group">
-    <p class="bms-research-filter-label">Categories</p>
-    <div class="bms-research-filter-options" role="group" aria-label="Filter by category">
-      <button type="button" class="bms-research-filter bms-research-filter--category" data-bms-filter-category="Learn" aria-pressed="false">
-        <span>Learn</span><span class="bms-research-filter-count" aria-hidden="true">×0</span>
+  <div class="bs-research-filter-group">
+    <p class="bs-research-filter-label">Categories</p>
+    <div class="bs-research-filter-options" role="group" aria-label="Filter by category">
+      <button type="button" class="bs-research-filter bs-research-filter--category" data-bs-filter-category="Learn" aria-pressed="false">
+        <span>Learn</span><span class="bs-research-filter-count" aria-hidden="true">×0</span>
       </button>
-      <button type="button" class="bms-research-filter bms-research-filter--category" data-bms-filter-category="Position Analyzer" aria-pressed="false">
-        <span>Position Analyzer</span><span class="bms-research-filter-count" aria-hidden="true">×0</span>
+      <button type="button" class="bs-research-filter bs-research-filter--category" data-bs-filter-category="Position Analyzer" aria-pressed="false">
+        <span>Position Analyzer</span><span class="bs-research-filter-count" aria-hidden="true">×0</span>
       </button>
-      <button type="button" class="bms-research-filter bms-research-filter--category" data-bms-filter-category="Match Predictor" aria-pressed="false">
-        <span>Match Predictor</span><span class="bms-research-filter-count" aria-hidden="true">×0</span>
+      <button type="button" class="bs-research-filter bs-research-filter--category" data-bs-filter-category="Match Predictor" aria-pressed="false">
+        <span>Match Predictor</span><span class="bs-research-filter-count" aria-hidden="true">×0</span>
       </button>
-      <button type="button" class="bms-research-filter bms-research-filter--category" data-bms-filter-category="Engine Benchmark" aria-pressed="false">
-        <span>Engine Benchmark</span><span class="bms-research-filter-count" aria-hidden="true">×0</span>
+      <button type="button" class="bs-research-filter bs-research-filter--category" data-bs-filter-category="Engine Benchmark" aria-pressed="false">
+        <span>Engine Benchmark</span><span class="bs-research-filter-count" aria-hidden="true">×0</span>
       </button>
-      <button type="button" class="bms-research-filter bms-research-filter--category" data-bms-filter-category="Research" aria-pressed="false">
-        <span>Research</span><span class="bms-research-filter-count" aria-hidden="true">×0</span>
+      <button type="button" class="bs-research-filter bs-research-filter--category" data-bs-filter-category="Research" aria-pressed="false">
+        <span>Research</span><span class="bs-research-filter-count" aria-hidden="true">×0</span>
       </button>
     </div>
   </div>
 
-  <div class="bms-research-filter-group" data-bms-tag-group="">
-    <p class="bms-research-filter-label">Tags</p>
-    <div class="bms-research-filter-options" role="group" aria-label="Filter by tag" data-bms-tag-filters=""></div>
+  <div class="bs-research-filter-group" data-bs-tag-group="">
+    <p class="bs-research-filter-label">Tags</p>
+    <div class="bs-research-filter-options" role="group" aria-label="Filter by tag" data-bs-tag-filters=""></div>
   </div>
 
-  <div class="bms-research-filter-footer">
-    <p class="bms-research-result-count" aria-live="polite" data-bms-result-count=""></p>
-    <button type="button" class="bms-research-clear" data-bms-clear-filters="" hidden="">
+  <div class="bs-research-filter-footer">
+    <p class="bs-research-result-count" aria-live="polite" data-bs-result-count=""></p>
+    <button type="button" class="bs-research-clear" data-bs-clear-filters="" hidden="">
       Clear filters
     </button>
   </div>
 </section>
 <div id="listing-research-posts" class="quarto-listing quarto-listing-container-custom">
 
-<div class="bms-research-list list" data-bms-research-list="">
+<div class="bs-research-list list" data-bs-research-list="">
 
-  <article class="bms-research-post" data-index="0" data-listing-file-modified-sort="1785627707965" data-listing-reading-time-sort="21" data-listing-word-count-sort="4048" data-bms-research-item="" data-bms-categories="[]" data-bms-tags="[]">
+  <article class="bs-research-post" data-index="0" data-listing-file-modified-sort="1786230376590" data-listing-reading-time-sort="21" data-listing-word-count-sort="4048" data-bs-research-item="" data-bs-categories="[]" data-bs-tags="[]">
 
-    <div class="bms-research-post-header">
+    <div class="bs-research-post-header">
       <div>
-        <h2 class="listing-title bms-research-post-title anchored">
+        <h2 class="listing-title bs-research-post-title anchored">
           <a href="../research/sage-vs-gnu-additional-details.html">Sage vs GNU: Additional Details</a>
         </h2>
         
-          <p class="listing-subtitle bms-research-post-subtitle">How Stage 1 was run, checked, and interpreted</p>
+          <p class="listing-subtitle bs-research-post-subtitle">How Stage 1 was run, checked, and interpreted</p>
         
       </div>
 
       
-        <p class="listing-reading-time bms-research-post-time">21 min read</p>
+        <p class="listing-reading-time bs-research-post-time">21 min read</p>
       
     </div>
 
     
-      <p class="listing-description bms-research-post-description">Methods, results, and evidence for the Sage versus GNU Stage 1 backgammon engine benchmark.
+      <p class="listing-description bs-research-post-description">Methods, results, and evidence for the Sage versus GNU Stage 1 backgammon engine benchmark.
 </p>
     
 
     
 
-    <p class="bms-research-post-action">
+    <p class="bs-research-post-action">
       <a href="../research/sage-vs-gnu-additional-details.html">Read article</a>
     </p>
   </article>
 
-  <article class="bms-research-post" data-index="1" data-categories="TGVhcm4lMkNQb3NpdGlvbiUyMEFuYWx5emVyJTJDTWF0Y2glMjBQcmVkaWN0b3IlMkNFbmdpbmUlMjBCZW5jaG1hcmslMkNSZXNlYXJjaA==" data-listing-file-modified-sort="1785414518228" data-listing-reading-time-sort="4" data-listing-word-count-sort="657" data-bms-research-item="" data-bms-categories="[&quot;Learn&quot;,&quot;Position Analyzer&quot;,&quot;Match Predictor&quot;,&quot;Engine Benchmark&quot;,&quot;Research&quot;]" data-bms-tags="[&quot;Project Updates&quot;,&quot;Open-source Tools&quot;,&quot;Site Development&quot;]">
+  <article class="bs-research-post" data-index="1" data-categories="TGVhcm4lMkNQb3NpdGlvbiUyMEFuYWx5emVyJTJDTWF0Y2glMjBQcmVkaWN0b3IlMkNFbmdpbmUlMjBCZW5jaG1hcmslMkNSZXNlYXJjaA==" data-listing-file-modified-sort="1786230376597" data-listing-reading-time-sort="4" data-listing-word-count-sort="656" data-bs-research-item="" data-bs-categories="[&quot;Learn&quot;,&quot;Position Analyzer&quot;,&quot;Match Predictor&quot;,&quot;Engine Benchmark&quot;,&quot;Research&quot;]" data-bs-tags="[&quot;Project Updates&quot;,&quot;Open-source Tools&quot;,&quot;Site Development&quot;]">
 
-    <div class="bms-research-post-header">
+    <div class="bs-research-post-header">
       <div>
-        <h2 class="listing-title bms-research-post-title anchored">
+        <h2 class="listing-title bs-research-post-title anchored">
           <a href="../research/what-we-are-building.html">What We Are Building</a>
         </h2>
         
-          <p class="listing-subtitle bms-research-post-subtitle">Backgammon Made Simple project update</p>
+          <p class="listing-subtitle bs-research-post-subtitle">Backgammon Simplified project update</p>
         
       </div>
 
       
-        <p class="listing-reading-time bms-research-post-time">4 min read</p>
+        <p class="listing-reading-time bs-research-post-time">4 min read</p>
       
     </div>
 
     
-      <p class="listing-description bms-research-post-description">How Backgammon Made Simple connects lessons, position analysis, match prediction, engine comparisons, research, and open-source tools.
+      <p class="listing-description bs-research-post-description">How Backgammon Simplified connects lessons, position analysis, match prediction, engine comparisons, research, and open-source tools.
 </p>
     
 
     
-      <div class="bms-research-post-taxonomy">
+      <div class="bs-research-post-taxonomy">
         
-          <div class="bms-research-post-taxonomy-group" aria-label="Article categories">
+          <div class="bs-research-post-taxonomy-group" aria-label="Article categories">
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--category" data-bms-card-category="Learn">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--category" data-bs-card-category="Learn">
                 Learn
               </button>
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--category" data-bms-card-category="Position Analyzer">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--category" data-bs-card-category="Position Analyzer">
                 Position Analyzer
               </button>
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--category" data-bms-card-category="Match Predictor">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--category" data-bs-card-category="Match Predictor">
                 Match Predictor
               </button>
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--category" data-bms-card-category="Engine Benchmark">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--category" data-bs-card-category="Engine Benchmark">
                 Engine Benchmark
               </button>
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--category" data-bms-card-category="Research">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--category" data-bs-card-category="Research">
                 Research
               </button>
             
@@ -508,17 +510,17 @@ window.Quarto = {
         
 
         
-          <div class="bms-research-post-taxonomy-group" aria-label="Article tags">
+          <div class="bs-research-post-taxonomy-group" aria-label="Article tags">
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--tag" data-bms-card-tag="Project Updates">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--tag" data-bs-card-tag="Project Updates">
                 Project Updates
               </button>
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--tag" data-bms-card-tag="Open-source Tools">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--tag" data-bs-card-tag="Open-source Tools">
                 Open-source Tools
               </button>
             
-              <button type="button" class="bms-research-card-taxonomy bms-research-card-taxonomy--tag" data-bms-card-tag="Site Development">
+              <button type="button" class="bs-research-card-taxonomy bs-research-card-taxonomy--tag" data-bs-card-tag="Site Development">
                 Site Development
               </button>
             
@@ -527,7 +529,7 @@ window.Quarto = {
       </div>
     
 
-    <p class="bms-research-post-action">
+    <p class="bs-research-post-action">
       <a href="../research/what-we-are-building.html">Read article</a>
     </p>
   </article>
@@ -535,25 +537,25 @@ window.Quarto = {
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
-<p class="bms-research-empty" data-bms-empty-state="" hidden="">
+<p class="bs-research-empty" data-bs-empty-state="" hidden="">
   No articles match the selected category and tag.
 </p>
 </div>
-<script src="../assets/bms-research-index.js" defer=""></script>
+<script src="../assets/bs-research-index.js" defer=""></script>
 
 
 
 
 </main> <!-- /main -->
-<script src="../assets/bms-learn.js" defer=""></script>
+<script src="../assets/bs-learn.js" defer=""></script>
 
-<script src="../assets/bms-lesson-analysis.js" defer=""></script>
+<script src="../assets/bs-lesson-analysis.js" defer=""></script>
 
-<script src="../assets/bms-learn-scroll.js" defer=""></script>
+<script src="../assets/bs-learn-scroll.js" defer=""></script>
 
-<script src="../assets/bms-research-scroll.js" defer=""></script>
+<script src="../assets/bs-research-scroll.js" defer=""></script>
 
-<script src="../assets/bms-glossary.js" defer=""></script>
+<script src="../assets/bs-glossary.js" defer=""></script>
 
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -628,7 +630,7 @@ window.Quarto = {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/backgammon-made-simple\.github\.io");
+        var filterRegex = new RegExp("https:\/\/backgammonsimplified\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -959,7 +961,7 @@ window.Quarto = {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2026 Marty Gale - Backgammon Made Simple</p>
+<p>Copyright 2026 Marty Gale - Backgammon Simplified</p>
 </div>   
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
@@ -981,18 +983,18 @@ window.Quarto = {
     </div>
   </div>
 </footer>
-<script id="bms-research-taxonomy-script">
+<script id="bs-research-taxonomy-script">
 (function () {
   "use strict";
 
   function moveResearchTaxonomy() {
-    var source = document.getElementById("bms-research-taxonomy-source");
+    var source = document.getElementById("bs-research-taxonomy-source");
 
     if (!source) {
       return;
     }
 
-    var taxonomy = source.querySelector(".bms-post-taxonomy");
+    var taxonomy = source.querySelector(".bs-post-taxonomy");
 
     if (!taxonomy) {
       source.remove();
@@ -1025,31 +1027,31 @@ window.Quarto = {
   }
 
   function initializeResearchTaxonomyToggle(taxonomy) {
-    if (!taxonomy || taxonomy.querySelector("[data-bms-research-taxonomy-toggle]")) {
+    if (!taxonomy || taxonomy.querySelector("[data-bs-research-taxonomy-toggle]")) {
       return;
     }
 
     var collapsed = false;
     var toggle = document.createElement("button");
-    var contentId = "bms-research-taxonomy-content";
+    var contentId = "bs-research-taxonomy-content";
     var groups = Array.from(
-      taxonomy.querySelectorAll(".bms-post-taxonomy-group")
+      taxonomy.querySelectorAll(".bs-post-taxonomy-group")
     );
     var content = document.createElement("div");
 
     content.id = contentId;
-    content.className = "bms-post-taxonomy-content";
+    content.className = "bs-post-taxonomy-content";
     groups.forEach(function (group) {
       content.appendChild(group);
     });
     taxonomy.appendChild(content);
     toggle.type = "button";
-    toggle.className = "bms-post-taxonomy-toggle";
-    toggle.dataset.bmsResearchTaxonomyToggle = "";
+    toggle.className = "bs-post-taxonomy-toggle";
+    toggle.dataset.bsResearchTaxonomyToggle = "";
     toggle.setAttribute("aria-controls", contentId);
 
     function update() {
-      taxonomy.classList.toggle("bms-post-taxonomy--collapsed", collapsed);
+      taxonomy.classList.toggle("bs-post-taxonomy--collapsed", collapsed);
       toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
       toggle.setAttribute(
         "aria-label",
@@ -1098,8 +1100,8 @@ window.Quarto = {
     window.setTimeout(function () {
       if (category) {
         var categoryButton = matchingButton(
-          "[data-bms-filter-category]",
-          "bmsFilterCategory",
+          "[data-bs-filter-category]",
+          "bsFilterCategory",
           category
         );
 
@@ -1113,8 +1115,8 @@ window.Quarto = {
 
       if (tag) {
         var tagButton = matchingButton(
-          "[data-bms-filter-tag]",
-          "bmsFilterTag",
+          "[data-bs-filter-tag]",
+          "bsFilterTag",
           tag
         );
 

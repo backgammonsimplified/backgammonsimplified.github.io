@@ -41,108 +41,108 @@
 }
 
 :root {
-  --bms-navy-dark: #11182F;
-  --bms-navy: #1B2040;
-  --bms-slate: #39415F;
+  --bs-navy-dark: #11182F;
+  --bs-navy: #1B2040;
+  --bs-slate: #39415F;
 
-  --bms-copper: #AC7652;
-  --bms-copper-dark: #915634;
+  --bs-copper: #AC7652;
+  --bs-copper-dark: #915634;
 
-  --bms-ivory: #F3E8DC;
-  --bms-page-background: #FAF7F2;
-  --bms-surface: #FFFDFC;
-  --bms-sidebar-background: #F3E8DC;
-  --bms-callout-surface: #F8F0E8;
+  --bs-ivory: #F3E8DC;
+  --bs-page-background: #FAF7F2;
+  --bs-surface: #FFFDFC;
+  --bs-sidebar-background: #F3E8DC;
+  --bs-callout-surface: #F8F0E8;
 
-  --bms-border: #D9CCC0;
-  --bms-border-subtle: #D9CCC0;
-  --bms-border-strong: #88786E;
+  --bs-border: #D9CCC0;
+  --bs-border-subtle: #D9CCC0;
+  --bs-border-strong: #88786E;
 
-  --bms-text: #1B2040;
-  --bms-text-secondary: #39415F;
-  --bms-text-muted: #5F626E;
-  --bms-placeholder: #686B78;
-  --bms-text-inverse: #FFFFFF;
-  --bms-text-on-accent: #FFFFFF;
+  --bs-text: #1B2040;
+  --bs-text-secondary: #39415F;
+  --bs-text-muted: #5F626E;
+  --bs-placeholder: #686B78;
+  --bs-text-inverse: #FFFFFF;
+  --bs-text-on-accent: #FFFFFF;
 
-  --bms-link: #915634;
-  --bms-link-on-warm: #6F3F28;
-  --bms-link-hover: #6F3F28;
+  --bs-link: #915634;
+  --bs-link-on-warm: #6F3F28;
+  --bs-link-hover: #6F3F28;
 
-  --bms-success: #2F6B4F;
-  --bms-info: #3D5F87;
-  --bms-close: #8A6A25;
-  --bms-warning: #A7611B;
-  --bms-warning-text: #915315;
-  --bms-mistake: #A54C35;
-  --bms-danger: #923B45;
+  --bs-success: #2F6B4F;
+  --bs-info: #3D5F87;
+  --bs-close: #8A6A25;
+  --bs-warning: #A7611B;
+  --bs-warning-text: #915315;
+  --bs-mistake: #A54C35;
+  --bs-danger: #923B45;
 
-  --bms-badge-text: #1B2040;
+  --bs-badge-text: #1B2040;
 
-  --bms-status-info-surface: #EAF4FA;
-  --bms-status-info-text: #005680;
-  --bms-status-info-border: #0072B2;
+  --bs-status-info-surface: #EAF4FA;
+  --bs-status-info-text: #005680;
+  --bs-status-info-border: #0072B2;
 
-  --bms-status-neutral-surface: #ECEEF0;
-  --bms-status-neutral-text: #4F5560;
-  --bms-status-neutral-border: #88786E;
+  --bs-status-neutral-surface: #ECEEF0;
+  --bs-status-neutral-text: #4F5560;
+  --bs-status-neutral-border: #88786E;
 
-  --bms-status-warning-surface: #FFF1CC;
-  --bms-status-warning-text: #915315;
-  --bms-status-warning-border: #915315;
+  --bs-status-warning-surface: #FFF1CC;
+  --bs-status-warning-text: #915315;
+  --bs-status-warning-border: #915315;
 
-  --bms-status-mistake-surface: #FBE5DD;
-  --bms-status-mistake-text: #8A3900;
-  --bms-status-mistake-border: #A54C35;
+  --bs-status-mistake-surface: #FBE5DD;
+  --bs-status-mistake-text: #8A3900;
+  --bs-status-mistake-border: #A54C35;
 
-  --bms-focus: #0072B2;
-  --bms-focus-halo: rgba(0, 114, 178, 0.18);
+  --bs-focus: #0072B2;
+  --bs-focus-halo: rgba(0, 114, 178, 0.18);
 
-  --bms-shadow-soft: 0 12px 32px rgba(17, 24, 47, 0.08);
+  --bs-shadow-soft: 0 12px 32px rgba(17, 24, 47, 0.08);
 }
 
 [data-theme="dark"],
 [data-bs-theme="dark"] {
-  --bms-page-background: #0D1327;
-  --bms-surface: #151D37;
-  --bms-sidebar-background: #11182F;
-  --bms-callout-surface: #11182F;
+  --bs-page-background: #0D1327;
+  --bs-surface: #151D37;
+  --bs-sidebar-background: #11182F;
+  --bs-callout-surface: #11182F;
 
-  --bms-border: #35405D;
-  --bms-border-subtle: #35405D;
-  --bms-border-strong: #697694;
+  --bs-border: #35405D;
+  --bs-border-subtle: #35405D;
+  --bs-border-strong: #697694;
 
-  --bms-text: #F5EDE6;
-  --bms-text-secondary: #D9D1CA;
-  --bms-text-muted: #C1B8B1;
-  --bms-placeholder: #C1B8B1;
-  --bms-text-inverse: #FFFFFF;
-  --bms-text-on-accent: #11182F;
+  --bs-text: #F5EDE6;
+  --bs-text-secondary: #D9D1CA;
+  --bs-text-muted: #C1B8B1;
+  --bs-placeholder: #C1B8B1;
+  --bs-text-inverse: #FFFFFF;
+  --bs-text-on-accent: #11182F;
 
-  --bms-copper: #E0AE88;
-  --bms-copper-dark: #C28A63;
+  --bs-copper: #E0AE88;
+  --bs-copper-dark: #C28A63;
 
-  --bms-link: #C28A63;
-  --bms-link-on-warm: #E0AE88;
-  --bms-link-hover: #E0AE88;
+  --bs-link: #C28A63;
+  --bs-link-on-warm: #E0AE88;
+  --bs-link-hover: #E0AE88;
 
-  --bms-badge-text: #F5EDE6;
+  --bs-badge-text: #F5EDE6;
 
-  --bms-focus: #A8C2DD;
-  --bms-focus-halo: rgba(168, 194, 221, 0.22);
+  --bs-focus: #A8C2DD;
+  --bs-focus-halo: rgba(168, 194, 221, 0.22);
 
-  --bms-info: #A8C2DD;
+  --bs-info: #A8C2DD;
 
-  --bms-shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.28);
+  --bs-shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.28);
 }
 
 html {
-  background: var(--bms-page-background);
+  background: var(--bs-page-background);
 }
 
 body {
-  background: var(--bms-page-background);
-  color: var(--bms-text);
+  background: var(--bs-page-background);
+  color: var(--bs-text);
   font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 17px;
   line-height: 1.68;
@@ -161,8 +161,8 @@ body {
 h1,
 h2,
 h3,
-.bms-serif {
-  color: var(--bms-navy-dark);
+.bs-serif {
+  color: var(--bs-navy-dark);
   font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   letter-spacing: 0;
 }
@@ -170,48 +170,48 @@ h3,
 code,
 kbd,
 pre,
-.bms-code,
-.bms-technical-label {
+.bs-code,
+.bs-technical-label {
   font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 [data-bs-theme="dark"] h1,
 [data-bs-theme="dark"] h2,
 [data-bs-theme="dark"] h3,
-[data-bs-theme="dark"] .bms-serif {
-  color: var(--bms-text);
+[data-bs-theme="dark"] .bs-serif {
+  color: var(--bs-text);
 }
 
 a {
-  color: var(--bms-link);
+  color: var(--bs-link);
 }
 
 a:hover {
-  color: var(--bms-link-hover);
+  color: var(--bs-link-hover);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.12em;
 }
 
 :focus-visible {
-  outline: 3px solid var(--bms-focus);
+  outline: 3px solid var(--bs-focus);
   outline-offset: 3px;
-  box-shadow: 0 0 0 4px var(--bms-focus-halo);
+  box-shadow: 0 0 0 4px var(--bs-focus-halo);
 }
 
-.bms-page-shell {
+.bs-page-shell {
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.bms-surface {
-  background: var(--bms-surface);
-  border: 1px solid var(--bms-border);
+.bs-surface {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-border);
   border-radius: 8px;
-  box-shadow: var(--bms-shadow-soft);
+  box-shadow: var(--bs-shadow-soft);
 }
 
-.bms-muted {
-  color: var(--bms-text-muted);
+.bs-muted {
+  color: var(--bs-text-muted);
 }
 
 .navbar .nav-link {
@@ -222,23 +222,23 @@ a:hover {
 
 .navbar-brand,
 .navbar-title {
-  color: var(--bms-navy-dark) !important;
+  color: var(--bs-navy-dark) !important;
   font-weight: 800;
 }
 
 .navbar .nav-link.active,
 .navbar-nav .show > .nav-link {
-  background: var(--bms-navy-dark);
-  color: var(--bms-text-inverse) !important;
+  background: var(--bs-navy-dark);
+  color: var(--bs-text-inverse) !important;
 }
 
 .navbar .nav-link:hover {
-  color: var(--bms-link-hover) !important;
+  color: var(--bs-link-hover) !important;
 }
 
 .navbar .nav-link.active:hover {
-  background: var(--bms-navy);
-  color: var(--bms-text-inverse) !important;
+  background: var(--bs-navy);
+  color: var(--bs-text-inverse) !important;
 }
 
 /*
@@ -249,7 +249,7 @@ a:hover {
       format:
         html:
           title-block-style: plain
-          body-classes: bms-editorial-page
+          body-classes: bs-editorial-page
 
   Reusable technical eyebrow above the title:
 
@@ -257,20 +257,20 @@ a:hover {
       format:
         html:
           title-block-style: plain
-          body-classes: "bms-editorial-page bms-title-eyebrow"
+          body-classes: "bs-editorial-page bs-title-eyebrow"
 
   The subtitle metadata is visually restyled as an eyebrow. It is not rendered
   as descriptive subtitle copy below the title.
 */
-:is(body.bms-about-page, body.bms-editorial-page) {
-  --bms-editorial-frame-width: 960px;
-  --bms-editorial-reading-width: 820px;
-  --bms-editorial-title: var(--bms-navy-dark);
-  --bms-editorial-subtitle: var(--bms-copper-dark);
-  --bms-editorial-rule: var(--bms-copper);
+:is(body.bs-about-page, body.bs-editorial-page) {
+  --bs-editorial-frame-width: 960px;
+  --bs-editorial-reading-width: 820px;
+  --bs-editorial-title: var(--bs-navy-dark);
+  --bs-editorial-subtitle: var(--bs-copper-dark);
+  --bs-editorial-rule: var(--bs-copper);
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) main#quarto-document-content {
+:is(body.bs-about-page, body.bs-editorial-page) main#quarto-document-content {
   width: 100%;
   max-width: none;
 }
@@ -279,9 +279,9 @@ a:hover {
   The eyebrow, title, optional subtitle, and rule share one centred reading width.
   About currently omits the subtitle; other editorial pages may still use one.
 */
-:is(body.bms-about-page, body.bms-editorial-page) #title-block-header {
+:is(body.bs-about-page, body.bs-editorial-page) #title-block-header {
   box-sizing: border-box;
-  width: min(calc(100% - 3rem), var(--bms-editorial-frame-width));
+  width: min(calc(100% - 3rem), var(--bs-editorial-frame-width));
   margin: 0 auto 2.6rem;
   padding: clamp(2.75rem, 5vw, 4.25rem) 0 0;
   border-bottom: 0;
@@ -289,12 +289,12 @@ a:hover {
 }
 
 /* About-only eyebrow. Other editorial pages receive the layout without this label. */
-body.bms-about-page #title-block-header::before {
-  content: "ABOUT  ::  BMS";
+body.bs-about-page #title-block-header::before {
+  content: "ABOUT  ::  BS";
   display: block;
-  width: min(100%, var(--bms-editorial-reading-width));
+  width: min(100%, var(--bs-editorial-reading-width));
   margin: 0 auto 0.7rem;
-  color: var(--bms-copper-dark);
+  color: var(--bs-copper-dark);
   font-family: "Source Code Pro", ui-monospace, monospace;
   font-size: 0.76rem;
   font-weight: 600;
@@ -308,22 +308,22 @@ body.bms-about-page #title-block-header::before {
   Generic title eyebrow. Quarto's subtitle field supplies the text, while this
   class moves it above the title and gives it the shared technical treatment.
 */
-body.bms-title-eyebrow #title-block-header .quarto-title {
+body.bs-title-eyebrow #title-block-header .quarto-title {
   display: flex;
   flex-direction: column;
 }
 
-body.bms-title-eyebrow #title-block-header .title {
+body.bs-title-eyebrow #title-block-header .title {
   order: 2;
 }
 
-body.bms-title-eyebrow #title-block-header .subtitle {
+body.bs-title-eyebrow #title-block-header .subtitle {
   order: 1;
   width: 100%;
   max-width: none;
   margin: 0 0 0.7rem;
   padding: 0;
-  color: var(--bms-copper-dark);
+  color: var(--bs-copper-dark);
   font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.76rem;
   font-weight: 600;
@@ -338,28 +338,28 @@ body.bms-title-eyebrow #title-block-header .subtitle {
   Constrain that element—not a nonexistent nested .quarto-title-block—so the
   title aligns exactly with the eyebrow, body copy, and section headings.
 */
-:is(body.bms-about-page, body.bms-editorial-page) #title-block-header .quarto-title {
+:is(body.bs-about-page, body.bs-editorial-page) #title-block-header .quarto-title {
   box-sizing: border-box;
-  width: min(100%, var(--bms-editorial-reading-width));
+  width: min(100%, var(--bs-editorial-reading-width));
   margin-inline: auto;
   padding: 0 0 1.35rem;
-  border-bottom: 2px solid var(--bms-editorial-rule);
+  border-bottom: 2px solid var(--bs-editorial-rule);
   text-align: left;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) #title-block-header .quarto-title-meta {
-  width: min(100%, var(--bms-editorial-reading-width));
+:is(body.bs-about-page, body.bs-editorial-page) #title-block-header .quarto-title-meta {
+  width: min(100%, var(--bs-editorial-reading-width));
   margin-inline: auto;
   padding: 0;
   text-align: left;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) #title-block-header .title {
+:is(body.bs-about-page, body.bs-editorial-page) #title-block-header .title {
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  color: var(--bms-editorial-title);
+  color: var(--bs-editorial-title);
   font-family: "Source Sans 3", system-ui, sans-serif;
   font-size: clamp(2.2rem, 3vw, 2.85rem);
   font-weight: 750;
@@ -369,13 +369,13 @@ body.bms-title-eyebrow #title-block-header .subtitle {
 }
 
 /* Optional on other editorial pages. About removes its description in YAML. */
-:is(body.bms-about-page, body.bms-editorial-page) #title-block-header .description {
+:is(body.bs-about-page, body.bs-editorial-page) #title-block-header .description {
   box-sizing: border-box;
-  width: min(100%, var(--bms-editorial-reading-width));
+  width: min(100%, var(--bs-editorial-reading-width));
   max-width: none;
   margin: 0.75rem auto 0;
   padding: 0;
-  color: var(--bms-editorial-subtitle);
+  color: var(--bs-editorial-subtitle);
   font-family: "Source Sans 3", system-ui, sans-serif;
   font-size: clamp(1.08rem, 1.35vw, 1.2rem);
   font-weight: 550;
@@ -383,53 +383,53 @@ body.bms-title-eyebrow #title-block-header .subtitle {
   text-align: left;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-page-shell {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-page-shell {
   box-sizing: border-box;
-  width: min(calc(100% - 3rem), var(--bms-editorial-frame-width));
+  width: min(calc(100% - 3rem), var(--bs-editorial-frame-width));
   max-width: none;
   margin-inline: auto;
   padding: 0 0 5rem;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column {
-  width: min(100%, var(--bms-editorial-reading-width));
+:is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column {
+  width: min(100%, var(--bs-editorial-reading-width));
   max-width: none;
   margin-inline: auto;
-  color: var(--bms-text-secondary);
+  color: var(--bs-text-secondary);
   font-size: 1.04rem;
   line-height: 1.72;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column > p:first-child {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column > p:first-child {
   margin-top: 0;
 }
 
 /*
-  Use .bms-about-lead on About or .bms-editorial-lead on another editorial page
+  Use .bs-about-lead on About or .bs-editorial-lead on another editorial page
   to distinguish the opening mission from ordinary body copy without using a card.
 */
-body.bms-about-page .bms-about-lead,
-body.bms-editorial-page .bms-editorial-lead {
+body.bs-about-page .bs-about-lead,
+body.bs-editorial-page .bs-editorial-lead {
   width: 100%;
   max-width: none;
   margin: 0 0 1.25rem;
 }
 
-body.bms-about-page .bms-about-lead p,
-body.bms-editorial-page .bms-editorial-lead p {
+body.bs-about-page .bs-about-lead p,
+body.bs-editorial-page .bs-editorial-lead p {
   margin: 0;
-  color: var(--bms-navy);
+  color: var(--bs-navy);
   font-size: 1.18rem;
   font-weight: 550;
   line-height: 1.62;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column h2 {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column h2 {
   margin-top: 3rem;
   margin-bottom: 1rem;
   padding-bottom: 0.55rem;
-  border-bottom: 1.5px solid var(--bms-border);
-  color: var(--bms-navy-dark);
+  border-bottom: 1.5px solid var(--bs-border);
+  color: var(--bs-navy-dark);
   font-family: "Source Sans 3", system-ui, sans-serif;
   font-size: clamp(1.65rem, 2.2vw, 2rem);
   font-weight: 700;
@@ -437,44 +437,44 @@ body.bms-editorial-page .bms-editorial-lead p {
   letter-spacing: -0.015em;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column blockquote {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column blockquote {
   margin: 1.8rem 0 2.9rem;
   padding: 0.85rem 0 0.85rem 1rem;
-  border-left: 3px solid var(--bms-copper);
-  color: var(--bms-navy);
+  border-left: 3px solid var(--bs-copper);
+  color: var(--bs-navy);
   font-size: 1.08rem;
   font-weight: 650;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column blockquote > :last-child {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column blockquote > :last-child {
   margin-bottom: 0;
 }
 
 /* Source Code Pro accents for question or evidence examples. */
-:is(body.bms-about-page, body.bms-editorial-page) .bms-question-examples {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-question-examples {
   margin: 0.9rem 0 1.45rem;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-question-examples p {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-question-examples p {
   display: flex;
   align-items: baseline;
   gap: 0.55rem;
   margin: 0.6rem 0;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-code-prefix {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-code-prefix {
   flex: 0 0 auto;
-  color: var(--bms-copper-dark);
+  color: var(--bs-copper-dark);
   font-family: "Source Code Pro", ui-monospace, monospace;
   font-size: 0.9em;
   font-style: normal;
   font-weight: 650;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-code-note {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-code-note {
   display: block;
   margin-top: 1rem;
-  color: var(--bms-copper-dark);
+  color: var(--bs-copper-dark);
   font-family: "Source Code Pro", ui-monospace, monospace;
   font-size: 0.82rem;
   font-weight: 500;
@@ -482,21 +482,21 @@ body.bms-editorial-page .bms-editorial-lead p {
 }
 
 /* Section heading with technical metadata carried on the rule. */
-:is(body.bms-about-page, body.bms-editorial-page) .bms-section-heading {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-section-heading {
   display: flex;
   align-items: baseline;
   gap: 1rem;
   margin-top: 3rem;
   margin-bottom: 1rem;
   padding-bottom: 0.55rem;
-  border-bottom: 1.5px solid var(--bms-border);
+  border-bottom: 1.5px solid var(--bs-border);
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-section-heading h2 {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-section-heading h2 {
   margin: 0;
   padding: 0;
   border: 0;
-  color: var(--bms-navy-dark);
+  color: var(--bs-navy-dark);
   font-family: "Source Sans 3", system-ui, sans-serif;
   font-size: clamp(1.65rem, 2.2vw, 2rem);
   font-weight: 700;
@@ -504,9 +504,9 @@ body.bms-editorial-page .bms-editorial-lead p {
   letter-spacing: -0.015em;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .bms-heading-meta {
+:is(body.bs-about-page, body.bs-editorial-page) .bs-heading-meta {
   margin-left: auto;
-  color: var(--bms-copper-dark);
+  color: var(--bs-copper-dark);
   font-family: "Source Code Pro", ui-monospace, monospace;
   font-size: 0.7rem;
   font-weight: 600;
@@ -516,28 +516,28 @@ body.bms-editorial-page .bms-editorial-lead p {
   white-space: nowrap;
 }
 
-:is(body.bms-about-page, body.bms-editorial-page) .footnotes {
-  width: min(calc(100% - 3rem), var(--bms-editorial-reading-width));
+:is(body.bs-about-page, body.bs-editorial-page) .footnotes {
+  width: min(calc(100% - 3rem), var(--bs-editorial-reading-width));
   margin-inline: auto;
   padding-bottom: 3rem;
-  color: var(--bms-text-muted);
+  color: var(--bs-text-muted);
   font-size: 0.92rem;
 }
 
-[data-bs-theme="dark"] :is(body.bms-about-page, body.bms-editorial-page) {
-  --bms-editorial-title: var(--bms-text);
-  --bms-editorial-subtitle: var(--bms-copper);
-  --bms-editorial-rule: var(--bms-copper);
+[data-bs-theme="dark"] :is(body.bs-about-page, body.bs-editorial-page) {
+  --bs-editorial-title: var(--bs-text);
+  --bs-editorial-subtitle: var(--bs-copper);
+  --bs-editorial-rule: var(--bs-copper);
 }
 
-[data-bs-theme="dark"] :is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column h2,
-[data-bs-theme="dark"] :is(body.bms-about-page, body.bms-editorial-page) .bms-section-heading h2 {
-  color: var(--bms-text);
+[data-bs-theme="dark"] :is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column h2,
+[data-bs-theme="dark"] :is(body.bs-about-page, body.bs-editorial-page) .bs-section-heading h2 {
+  color: var(--bs-text);
 }
 
-[data-bs-theme="dark"] body.bms-about-page .bms-about-lead p,
-[data-bs-theme="dark"] body.bms-editorial-page .bms-editorial-lead p {
-  color: var(--bms-text);
+[data-bs-theme="dark"] body.bs-about-page .bs-about-lead p,
+[data-bs-theme="dark"] body.bs-editorial-page .bs-editorial-lead p {
+  color: var(--bs-text);
 }
 
 @media (max-width: 767px) {
@@ -591,58 +591,58 @@ body.bms-editorial-page .bms-editorial-lead p {
     min-height: 42px;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) #title-block-header,
-  :is(body.bms-about-page, body.bms-editorial-page) .bms-page-shell,
-  :is(body.bms-about-page, body.bms-editorial-page) .footnotes {
-    width: min(calc(100% - 2rem), var(--bms-editorial-frame-width));
+  :is(body.bs-about-page, body.bs-editorial-page) #title-block-header,
+  :is(body.bs-about-page, body.bs-editorial-page) .bs-page-shell,
+  :is(body.bs-about-page, body.bs-editorial-page) .footnotes {
+    width: min(calc(100% - 2rem), var(--bs-editorial-frame-width));
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) #title-block-header {
+  :is(body.bs-about-page, body.bs-editorial-page) #title-block-header {
     margin-bottom: 2rem;
     padding-top: 2.25rem;
   }
 
-  body.bms-about-page #title-block-header::before {
+  body.bs-about-page #title-block-header::before {
     margin-bottom: 0.55rem;
     font-size: 0.7rem;
   }
 
-  body.bms-title-eyebrow #title-block-header .subtitle {
+  body.bs-title-eyebrow #title-block-header .subtitle {
     margin-bottom: 0.55rem;
     font-size: 0.7rem;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) #title-block-header .quarto-title {
+  :is(body.bs-about-page, body.bs-editorial-page) #title-block-header .quarto-title {
     padding-bottom: 1.15rem;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) #title-block-header .title {
+  :is(body.bs-about-page, body.bs-editorial-page) #title-block-header .title {
     font-size: clamp(2rem, 9vw, 2.45rem);
     line-height: 1.05;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) #title-block-header .description {
+  :is(body.bs-about-page, body.bs-editorial-page) #title-block-header .description {
     margin-top: 0.6rem;
     font-size: 1.04rem;
   }
 
-  body.bms-about-page .bms-about-lead p,
-  body.bms-editorial-page .bms-editorial-lead p {
+  body.bs-about-page .bs-about-lead p,
+  body.bs-editorial-page .bs-editorial-lead p {
     font-size: 1.1rem;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) .bms-reading-column h2 {
+  :is(body.bs-about-page, body.bs-editorial-page) .bs-reading-column h2 {
     margin-top: 2.5rem;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) .bms-section-heading {
+  :is(body.bs-about-page, body.bs-editorial-page) .bs-section-heading {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.35rem;
     margin-top: 2.5rem;
   }
 
-  :is(body.bms-about-page, body.bms-editorial-page) .bms-heading-meta {
+  :is(body.bs-about-page, body.bs-editorial-page) .bs-heading-meta {
     margin-left: 0;
     white-space: normal;
   }
@@ -662,7 +662,7 @@ body.bms-editorial-page .bms-editorial-lead p {
   }
 
   .navbar-title::after {
-    content: "BMS";
+    content: "BS";
     font-size: 0.9rem;
   }
 }

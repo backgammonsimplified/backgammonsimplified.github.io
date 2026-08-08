@@ -1,11 +1,11 @@
 (function () {
   "use strict";
 
-  const DIFFICULTY_SELECTOR = "[data-bms-filter-difficulty]";
-  const TRACK_SELECTOR = "[data-bms-filter-track]";
-  const TERM_SELECTOR = "[data-bms-filter-term]";
-  const LESSON_SELECTOR = "[data-bms-learn-item]";
-  const GROUP_SELECTOR = "[data-bms-learn-group]";
+  const DIFFICULTY_SELECTOR = "[data-bs-filter-difficulty]";
+  const TRACK_SELECTOR = "[data-bs-filter-track]";
+  const TERM_SELECTOR = "[data-bs-filter-term]";
+  const LESSON_SELECTOR = "[data-bs-learn-item]";
+  const GROUP_SELECTOR = "[data-bs-learn-group]";
   let glossaryLookupEntriesPromise = null;
 
   function parseList(value) {
@@ -252,7 +252,7 @@
   function loadGlossaryLookupEntries() {
     if (!glossaryLookupEntriesPromise) {
       glossaryLookupEntriesPromise = fetch(
-        "/assets/bms-glossary-lookup.json",
+        "/assets/bs-glossary-lookup.json",
         { credentials: "same-origin" }
       )
         .then(function (response) {
@@ -305,7 +305,7 @@
   function initializeInlineGlossary() {
     const links = Array.from(
       document.querySelectorAll(
-        ".bms-inline-glossary[data-bms-glossary-slug]"
+        ".bs-inline-glossary[data-bs-glossary-slug]"
       )
     );
     if (links.length === 0) {
@@ -313,8 +313,8 @@
     }
 
     const tooltip = document.createElement("aside");
-    tooltip.className = "bms-inline-glossary-tooltip";
-    tooltip.id = "bms-inline-glossary-tooltip";
+    tooltip.className = "bs-inline-glossary-tooltip";
+    tooltip.id = "bs-inline-glossary-tooltip";
     tooltip.setAttribute("role", "tooltip");
     tooltip.hidden = true;
     document.body.appendChild(tooltip);
@@ -344,7 +344,7 @@
 
     const showTooltip = function (link) {
       activeLink = link;
-      const slug = link.dataset.bmsGlossarySlug;
+      const slug = link.dataset.bsGlossarySlug;
       loadGlossaryLookupEntries()
         .then(function (entries) {
           if (activeLink !== link) {
@@ -361,7 +361,7 @@
           const definition = document.createElement("span");
           definition.textContent = summary;
           const instruction = document.createElement("span");
-          instruction.className = "bms-inline-glossary-tooltip-action";
+          instruction.className = "bs-inline-glossary-tooltip-action";
           instruction.textContent = "Click for full definition";
           tooltip.replaceChildren(heading, definition, instruction);
           tooltip.hidden = false;
@@ -390,8 +390,8 @@
         event.preventDefault();
         hideTooltip(link);
         document.dispatchEvent(
-          new CustomEvent("bms:open-glossary-term", {
-            detail: { slug: link.dataset.bmsGlossarySlug }
+          new CustomEvent("bs:open-glossary-term", {
+            detail: { slug: link.dataset.bsGlossarySlug }
           })
         );
       });
@@ -433,8 +433,8 @@
   }
 
   function initializeLearnFilters() {
-    const panel = document.querySelector("[data-bms-learn-filters]");
-    const list = document.querySelector("[data-bms-learn-list]");
+    const panel = document.querySelector("[data-bs-learn-filters]");
+    const list = document.querySelector("[data-bs-learn-list]");
 
     if (!panel || !list) {
       return;
@@ -444,33 +444,38 @@
       function (element, originalIndex) {
         return {
           element: element,
-          difficulties: parseList(element.dataset.bmsDifficulties),
-          track: element.dataset.bmsTrack || "",
-          terms: parseList(element.dataset.bmsTerms),
-          primarySearchValues: parseList(element.dataset.bmsSearchPrimary),
-          bodySearchValues: parseList(element.dataset.bmsSearchBody),
+          difficulties: parseList(element.dataset.bsDifficulties),
+          track: element.dataset.bsTrack || "",
+          terms: parseList(element.dataset.bsTerms),
+          primarySearchValues: parseList(element.dataset.bsSearchPrimary),
+          bodySearchValues: parseList(element.dataset.bsSearchBody),
           originalIndex: originalIndex,
           originalParent: element.parentElement
         };
       }
     );
     const groups = Array.from(list.querySelectorAll(GROUP_SELECTOR));
-    const groupOrder = new Map(
-      groups.map(function (group, index) {
-        return [group, index];
-      })
-    );
+    const groupRecords = groups.map(function (group, originalIndex) {
+      return {
+        element: group,
+        items: items.filter(function (item) {
+          return group.contains(item.element);
+        }),
+        count: group.querySelector("[data-bs-learn-group-count]"),
+        originalIndex: originalIndex
+      };
+    });
     const difficultyButtons = Array.from(
       panel.querySelectorAll(DIFFICULTY_SELECTOR)
     );
     const trackButtons = Array.from(panel.querySelectorAll(TRACK_SELECTOR));
     const termButtons = Array.from(panel.querySelectorAll(TERM_SELECTOR));
-    const searchInput = panel.querySelector("[data-bms-learn-search]");
-    const resultCount = panel.querySelector("[data-bms-learn-result-count]");
-    const clearButton = panel.querySelector("[data-bms-learn-clear]");
-    const emptyState = document.querySelector("[data-bms-learn-empty]");
-    const collapseAll = document.querySelector("[data-bms-learn-collapse-all]");
-    const expandAll = document.querySelector("[data-bms-learn-expand-all]");
+    const searchInput = panel.querySelector("[data-bs-learn-search]");
+    const resultCount = panel.querySelector("[data-bs-learn-result-count]");
+    const clearButton = panel.querySelector("[data-bs-learn-clear]");
+    const emptyState = document.querySelector("[data-bs-learn-empty]");
+    const collapseAll = document.querySelector("[data-bs-learn-collapse-all]");
+    const expandAll = document.querySelector("[data-bs-learn-expand-all]");
     const selectedDifficulties = new Set();
     const selectedTerms = new Set();
     let selectedTrack = "";
@@ -482,7 +487,7 @@
     parameters.getAll("difficulty").forEach(function (value) {
       if (
         difficultyButtons.some(function (button) {
-          return button.dataset.bmsFilterDifficulty === value;
+          return button.dataset.bsFilterDifficulty === value;
         })
       ) {
         selectedDifficulties.add(value);
@@ -491,7 +496,7 @@
     parameters.getAll("track").forEach(function (value) {
       if (
         trackButtons.some(function (button) {
-          return button.dataset.bmsFilterTrack === value;
+          return button.dataset.bsFilterTrack === value;
         })
       ) {
         selectedTrack = value;
@@ -500,7 +505,7 @@
     parameters.getAll("term").forEach(function (value) {
       if (
         termButtons.some(function (button) {
-          return button.dataset.bmsFilterTerm === value;
+          return button.dataset.bsFilterTerm === value;
         })
       ) {
         selectedTerms.add(value);
@@ -552,14 +557,14 @@
       const difficulties = sortedValues(selectedDifficulties);
       const terms = sortedValues(selectedTerms);
       difficultyButtons.forEach(function (button) {
-        const value = button.dataset.bmsFilterDifficulty || "";
+        const value = button.dataset.bsFilterDifficulty || "";
         const count = items.filter(function (item) {
           return (
             item.difficulties.includes(value) &&
             itemMatchesLesson(item, query, [], terms)
           );
         }).length;
-        const countElement = button.querySelector(".bms-learn-filter-count");
+        const countElement = button.querySelector(".bs-learn-filter-count");
         if (countElement) {
           countElement.textContent = "\u00d7" + count;
         }
@@ -568,14 +573,14 @@
       });
 
       trackButtons.forEach(function (button) {
-        const value = button.dataset.bmsFilterTrack || "";
+        const value = button.dataset.bsFilterTrack || "";
         const count = items.filter(function (item) {
           return (
             item.track === value &&
             itemMatchesLesson(item, query, difficulties, terms)
           );
         }).length;
-        const countElement = button.querySelector(".bms-learn-filter-count");
+        const countElement = button.querySelector(".bs-learn-filter-count");
         if (countElement) {
           countElement.textContent = "\u00d7" + count;
         }
@@ -583,14 +588,14 @@
       });
 
       termButtons.forEach(function (button) {
-        const value = button.dataset.bmsFilterTerm || "";
+        const value = button.dataset.bsFilterTerm || "";
         const count = items.filter(function (item) {
           return (
             item.terms.includes(value) &&
             itemMatchesLesson(item, query, difficulties, [])
           );
         }).length;
-        const countElement = button.querySelector(".bms-learn-filter-count");
+        const countElement = button.querySelector(".bs-learn-filter-count");
         if (countElement) {
           countElement.textContent = "\u00d7" + count;
         }
@@ -618,21 +623,17 @@
         }
       });
 
-      groups.forEach(function (group) {
-        const groupItems = Array.from(
-          group.querySelectorAll(LESSON_SELECTOR)
-        );
-        const groupVisibleCount = groupItems.filter(function (element) {
-          return !element.hidden;
+      groupRecords.forEach(function (groupRecord) {
+        const groupVisibleCount = groupRecord.items.filter(function (item) {
+          return !item.element.hidden;
         }).length;
-        const totalCount = Number(group.dataset.bmsTotalLessons || "0");
-        group.hidden =
-          totalCount > 0 && groupVisibleCount === 0;
-        const groupCount = group.querySelector(
-          "[data-bms-learn-group-count]"
+        const totalCount = Number(
+          groupRecord.element.dataset.bsTotalLessons || "0"
         );
-        if (groupCount) {
-          groupCount.textContent =
+        groupRecord.element.hidden =
+          totalCount > 0 && groupVisibleCount === 0;
+        if (groupRecord.count) {
+          groupRecord.count.textContent =
             groupVisibleCount +
             (groupVisibleCount === 1 ? " lesson" : " lessons");
         }
@@ -640,46 +641,42 @@
 
       const groupParent = groups[0] ? groups[0].parentElement : null;
       if (groupParent) {
-        Array.from(groups)
+        Array.from(groupRecords)
           .sort(function (left, right) {
             const leftRank = lessonGroupSearchRank(
-              items.filter(function (item) {
-                return left.contains(item.element);
-              }),
+              left.items,
               query
             );
             const rightRank = lessonGroupSearchRank(
-              items.filter(function (item) {
-                return right.contains(item.element);
-              }),
+              right.items,
               query
             );
             return (
               leftRank - rightRank ||
-              groupOrder.get(left) - groupOrder.get(right)
+              left.originalIndex - right.originalIndex
             );
           })
-          .forEach(function (group) {
-            groupParent.appendChild(group);
+          .forEach(function (groupRecord) {
+            groupParent.appendChild(groupRecord.element);
           });
       }
 
       setPressed(
         difficultyButtons,
         selectedDifficulties,
-        "bmsFilterDifficulty"
+        "bsFilterDifficulty"
       );
       setPressed(
         trackButtons,
         new Set(selectedTrack ? [selectedTrack] : []),
-        "bmsFilterTrack"
+        "bsFilterTrack"
       );
-      setPressed(termButtons, selectedTerms, "bmsFilterTerm");
+      setPressed(termButtons, selectedTerms, "bsFilterTerm");
       updateCounts();
 
       if (selectedTrack) {
         groups.forEach(function (group) {
-          group.open = group.dataset.bmsTrackId === selectedTrack;
+          group.open = group.dataset.bsTrackId === selectedTrack;
         });
       }
       updateGroupControls();
@@ -717,18 +714,18 @@
       const difficultyButton = event.target.closest(DIFFICULTY_SELECTOR);
       const trackButton = event.target.closest(TRACK_SELECTOR);
       const termButton = event.target.closest(TERM_SELECTOR);
-      const clear = event.target.closest("[data-bms-learn-clear]");
+      const clear = event.target.closest("[data-bs-learn-clear]");
 
       if (difficultyButton) {
         toggleSelection(
           selectedDifficulties,
-          difficultyButton.dataset.bmsFilterDifficulty || ""
+          difficultyButton.dataset.bsFilterDifficulty || ""
         );
         applyFilters();
         return;
       }
       if (trackButton) {
-        const value = trackButton.dataset.bmsFilterTrack || "";
+        const value = trackButton.dataset.bsFilterTrack || "";
         selectedTrack = selectedTrack === value ? "" : value;
         if (!selectedTrack) {
           setAllGroupsExpanded(groups, true);
@@ -739,7 +736,7 @@
       if (termButton) {
         toggleSelection(
           selectedTerms,
-          termButton.dataset.bmsFilterTerm || ""
+          termButton.dataset.bsFilterTerm || ""
         );
         applyFilters();
         return;
@@ -763,7 +760,7 @@
     }
 
     list.addEventListener("click", function (event) {
-      if (event.target.closest(".bms-learn-catalogue-link")) {
+      if (event.target.closest(".bs-learn-catalogue-link")) {
         event.stopPropagation();
       }
     });
@@ -772,7 +769,7 @@
       collapseAll.addEventListener("click", function () {
         selectedTrack = "";
         setAllGroupsExpanded(groups, false);
-        setPressed(trackButtons, new Set(), "bmsFilterTrack");
+        setPressed(trackButtons, new Set(), "bsFilterTrack");
         updateGroupControls();
         updateUrl();
       });
@@ -781,7 +778,7 @@
       expandAll.addEventListener("click", function () {
         selectedTrack = "";
         setAllGroupsExpanded(groups, true);
-        setPressed(trackButtons, new Set(), "bmsFilterTrack");
+        setPressed(trackButtons, new Set(), "bsFilterTrack");
         updateGroupControls();
         updateUrl();
       });
@@ -806,15 +803,15 @@
     }
 
     const controls = document.createElement("div");
-    controls.className = "bms-learn-sidebar-actions";
+    controls.className = "bs-learn-sidebar-actions";
     controls.setAttribute("role", "group");
     controls.setAttribute("aria-label", "Learn sidebar sections");
     controls.innerHTML =
-      '<button type="button" data-bms-sidebar-collapse-all>Collapse all</button>' +
-      '<button type="button" data-bms-sidebar-expand-all>Expand all</button>';
+      '<button type="button" data-bs-sidebar-collapse-all>Collapse all</button>' +
+      '<button type="button" data-bs-sidebar-expand-all>Expand all</button>';
     menu.prepend(controls);
-    const collapse = controls.querySelector("[data-bms-sidebar-collapse-all]");
-    const expand = controls.querySelector("[data-bms-sidebar-expand-all]");
+    const collapse = controls.querySelector("[data-bs-sidebar-collapse-all]");
+    const expand = controls.querySelector("[data-bs-sidebar-expand-all]");
 
     function toggles() {
       return sections
@@ -870,10 +867,10 @@
 
   function placeLessonTrackLinks() {
     document
-      .querySelectorAll("[data-bms-lesson-taxonomy]")
+      .querySelectorAll("[data-bs-lesson-taxonomy]")
       .forEach(function (taxonomy) {
         const trackNav = taxonomy.querySelector(
-          "[data-bms-lesson-track-nav]"
+          "[data-bs-lesson-track-nav]"
         );
 
         if (!trackNav) {
@@ -882,14 +879,14 @@
 
         const desktopQuery = window.matchMedia("(min-width: 992px)");
         const lessonPage =
-          document.body.classList.contains("bms-learn-article") &&
-          !document.body.classList.contains("bms-learn-track-index");
+          document.body.classList.contains("bs-learn-article") &&
+          !document.body.classList.contains("bs-learn-track-index");
         let trackContent = null;
 
         if (lessonPage) {
           trackContent = document.createElement("div");
-          trackContent.className = "bms-lesson-track-content";
-          trackContent.id = "bms-lesson-track-content";
+          trackContent.className = "bs-lesson-track-content";
+          trackContent.id = "bs-lesson-track-content";
           while (trackNav.firstChild) {
             trackContent.appendChild(trackNav.firstChild);
           }
@@ -922,10 +919,10 @@
           if (trackContent) {
             const collapsed =
               desktopRailActive &&
-              sidebar.classList.contains("bms-toc-collapsed");
+              sidebar.classList.contains("bs-toc-collapsed");
             trackContent.hidden = collapsed;
             trackNav.classList.toggle(
-              "bms-lesson-track-collapsed",
+              "bs-lesson-track-collapsed",
               collapsed
             );
           }
@@ -938,14 +935,14 @@
 
   function placeLessonRightRailCards() {
     const lessonPage =
-      document.body.classList.contains("bms-learn-article") &&
-      !document.body.classList.contains("bms-learn-track-index");
+      document.body.classList.contains("bs-learn-article") &&
+      !document.body.classList.contains("bs-learn-track-index");
     if (!lessonPage) {
       return;
     }
 
     const placements = Array.from(
-      document.querySelectorAll(".column-margin .bms-right-rail-card")
+      document.querySelectorAll(".column-margin .bs-right-rail-card")
     ).map(function (card) {
       return {
         card: card,
@@ -968,7 +965,7 @@
         if (useSidebar) {
           sidebar.appendChild(placement.card);
           placement.margin.hidden = true;
-          placement.card.classList.add("bms-right-rail-card--stacked");
+          placement.card.classList.add("bs-right-rail-card--stacked");
           return;
         }
 
@@ -984,7 +981,7 @@
         } else {
           placement.source.appendChild(placement.card);
         }
-        placement.card.classList.remove("bms-right-rail-card--stacked");
+        placement.card.classList.remove("bs-right-rail-card--stacked");
       });
     }
 
@@ -999,28 +996,28 @@
 
   function createTermLookup() {
     const lookup = document.createElement("aside");
-    lookup.className = "bms-term-lookup";
-    lookup.id = "bms-term-lookup-panel";
-    lookup.dataset.bmsTermLookup = "";
+    lookup.className = "bs-term-lookup";
+    lookup.id = "bs-term-lookup-panel";
+    lookup.dataset.bsTermLookup = "";
     lookup.hidden = true;
     lookup.innerHTML =
-      '<div class="bms-term-lookup-heading">' +
+      '<div class="bs-term-lookup-heading">' +
       "<strong>Look Up a Term</strong>" +
-      '<button type="button" class="bms-term-lookup-close" ' +
-      'data-bms-term-lookup-close aria-controls="bms-term-lookup-panel" ' +
+      '<button type="button" class="bs-term-lookup-close" ' +
+      'data-bs-term-lookup-close aria-controls="bs-term-lookup-panel" ' +
       'aria-expanded="true" aria-label="Collapse term lookup">' +
       '<span aria-hidden="true">&rarr;</span></button>' +
       "</div>" +
-      '<form action="/glossary/" method="get" data-bms-term-lookup-form>' +
-      '<label class="visually-hidden" for="bms-term-lookup-input">' +
+      '<form action="/glossary/" method="get" data-bs-term-lookup-form>' +
+      '<label class="visually-hidden" for="bs-term-lookup-input">' +
       "Term or alias</label>" +
-      '<div class="bms-term-lookup-controls">' +
-      '<input id="bms-term-lookup-input" name="q" type="search" required ' +
+      '<div class="bs-term-lookup-controls">' +
+      '<input id="bs-term-lookup-input" name="q" type="search" required ' +
       'autocomplete="off" spellcheck="false" ' +
       'placeholder="Enter Term">' +
       '<button type="submit">Search</button>' +
       "</div></form>" +
-      '<div class="bms-term-lookup-result" data-bms-term-lookup-result ' +
+      '<div class="bs-term-lookup-result" data-bs-term-lookup-result ' +
       'aria-live="polite" hidden></div>';
     return lookup;
   }
@@ -1033,7 +1030,7 @@
       const message = document.createElement("p");
       message.textContent = "No matching glossary term was found.";
       const fullSearch = document.createElement("a");
-      fullSearch.className = "bms-term-lookup-full";
+      fullSearch.className = "bs-term-lookup-full";
       fullSearch.href =
         "/glossary/?q=" + encodeURIComponent(query);
       fullSearch.textContent = "Search the Full Glossary \u2192";
@@ -1048,24 +1045,24 @@
 
     if (Array.isArray(entry.aliases) && entry.aliases.length > 0) {
       const aliases = document.createElement("p");
-      aliases.className = "bms-term-lookup-aliases";
+      aliases.className = "bs-term-lookup-aliases";
       aliases.textContent = "Otherwise known as: " + entry.aliases.join(", ");
       container.appendChild(aliases);
     }
 
     const shortDefinition = document.createElement("p");
-    shortDefinition.className = "bms-term-lookup-short-definition";
+    shortDefinition.className = "bs-term-lookup-short-definition";
     shortDefinition.textContent = entry.short_definition;
     container.appendChild(shortDefinition);
 
     const definition = document.createElement("p");
-    definition.className = "bms-term-lookup-definition";
+    definition.className = "bs-term-lookup-definition";
     definition.textContent = entry.definition;
     container.appendChild(definition);
 
     if (Array.isArray(entry.categories) && entry.categories.length > 0) {
       const categories = document.createElement("p");
-      categories.className = "bms-term-lookup-categories";
+      categories.className = "bs-term-lookup-categories";
       categories.textContent =
         (entry.categories.length === 1 ? "Category: " : "Categories: ") +
         entry.categories.join(", ");
@@ -1079,16 +1076,16 @@
       : [];
     if (resolvedRelated.length > 0) {
       const relatedTermsHeading = document.createElement("p");
-      relatedTermsHeading.className = "bms-term-lookup-related-heading";
+      relatedTermsHeading.className = "bs-term-lookup-related-heading";
       relatedTermsHeading.textContent = "Related terms";
       const relatedTermsList = document.createElement("ul");
-      relatedTermsList.className = "bms-term-lookup-related";
+      relatedTermsList.className = "bs-term-lookup-related";
       resolvedRelated.forEach(function (related) {
         const item = document.createElement("li");
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "bms-term-lookup-related-term";
-        button.dataset.bmsTermLookupRelated = related.slug;
+        button.className = "bs-term-lookup-related-term";
+        button.dataset.bsTermLookupRelated = related.slug;
         button.textContent = related.term;
         item.appendChild(button);
         relatedTermsList.appendChild(item);
@@ -1101,10 +1098,10 @@
       entry.related_lessons.length > 0
     ) {
       const relatedHeading = document.createElement("p");
-      relatedHeading.className = "bms-term-lookup-related-heading";
+      relatedHeading.className = "bs-term-lookup-related-heading";
       relatedHeading.textContent = "Related lessons";
       const relatedList = document.createElement("ul");
-      relatedList.className = "bms-term-lookup-related";
+      relatedList.className = "bs-term-lookup-related";
       entry.related_lessons.forEach(function (lesson) {
         const item = document.createElement("li");
         const link = document.createElement("a");
@@ -1117,7 +1114,7 @@
     }
 
     const fullEntry = document.createElement("a");
-    fullEntry.className = "bms-term-lookup-full";
+    fullEntry.className = "bs-term-lookup-full";
     fullEntry.href = "/glossary/#" + encodeURIComponent(entry.slug);
     fullEntry.textContent = "Go to glossary entry";
     container.appendChild(fullEntry);
@@ -1125,20 +1122,20 @@
 
   function initializeTermLookup() {
     const glossaryIndexPage = document.body.classList.contains(
-      "bms-glossary-index"
+      "bs-glossary-index"
     );
     const lookupDisabled =
       isMainSiteIndex() ||
-      document.body.classList.contains("bms-learn-index") ||
-      document.body.classList.contains("bms-learn-track-index") ||
-      document.body.classList.contains("bms-analyze-page") ||
-      document.body.classList.contains("bms-match-predictor-page");
+      document.body.classList.contains("bs-learn-index") ||
+      document.body.classList.contains("bs-learn-track-index") ||
+      document.body.classList.contains("bs-analyze-page") ||
+      document.body.classList.contains("bs-match-predictor-page");
     const glossarySearch = document.querySelector(
-      "[data-bms-glossary-search]"
+      "[data-bs-glossary-search]"
     );
     const lookupCandidates = lookupDisabled
       ? []
-      : Array.from(document.querySelectorAll("[data-bms-term-lookup]"));
+      : Array.from(document.querySelectorAll("[data-bs-term-lookup]"));
     let lookup =
       lookupCandidates.find(function (candidate) {
         return !candidate.closest(".quarto-sidebar-toggle-contents");
@@ -1151,56 +1148,60 @@
       lookup = createTermLookup();
     }
     if (lookup) {
-      lookup.classList.add("bms-term-lookup--site");
-      lookup.id = lookup.id || "bms-term-lookup-panel";
+      lookup.classList.add("bs-term-lookup--site");
+      lookup.id = lookup.id || "bs-term-lookup-panel";
       lookup.hidden = true;
     }
+    const engineBenchmarkPage = document.body.classList.contains(
+      "bs-engine-benchmark-page"
+    );
     const refinedRightRailPage =
-      (document.body.classList.contains("bms-learn-article") &&
-        !document.body.classList.contains("bms-learn-track-index")) ||
-      document.body.classList.contains("bms-research-article");
+      (document.body.classList.contains("bs-learn-article") &&
+        !document.body.classList.contains("bs-learn-track-index")) ||
+      document.body.classList.contains("bs-research-article") ||
+      engineBenchmarkPage;
 
     const tools = document.createElement("div");
-    tools.className = "bms-site-tools";
+    tools.className = "bs-site-tools";
     tools.setAttribute("role", "group");
     tools.setAttribute("aria-label", "Page tools");
     tools.innerHTML =
-      '<button type="button" class="bms-term-lookup-reveal" ' +
-      'data-bms-site-term-toggle aria-controls="bms-term-lookup-panel" ' +
+      '<button type="button" class="bs-term-lookup-reveal" ' +
+      'data-bs-site-term-toggle aria-controls="bs-term-lookup-panel" ' +
       'aria-expanded="false" aria-label="Open term lookup">' +
       '<span aria-hidden="true">&larr;</span> Term Search</button>' +
       (refinedRightRailPage
         ? ""
-        : '<button type="button" class="bms-toc-toggle" ' +
-          'data-bms-toc-toggle aria-controls="TOC" aria-expanded="true" ' +
+        : '<button type="button" class="bs-toc-toggle" ' +
+          'data-bs-toc-toggle aria-controls="TOC" aria-expanded="true" ' +
           'aria-label="Collapse table of contents" hidden>Collapse TOC</button>' +
-          '<button type="button" class="bms-margin-sidebar-toggle" ' +
-          'data-bms-margin-sidebar-toggle aria-controls="quarto-margin-sidebar" ' +
+          '<button type="button" class="bs-margin-sidebar-toggle" ' +
+          'data-bs-margin-sidebar-toggle aria-controls="quarto-margin-sidebar" ' +
           'aria-expanded="true" aria-label="Collapse all right sidebar content" hidden>' +
           'Collapse All <span aria-hidden="true">&#9652;</span></button>') +
-      '<button type="button" class="bms-site-back-to-top" ' +
-      'data-bms-site-back-to-top hidden>Back to top ' +
+      '<button type="button" class="bs-site-back-to-top" ' +
+      'data-bs-site-back-to-top hidden>Back to top ' +
       '<span aria-hidden="true">\u25b4</span></button>';
 
-    let termToggle = tools.querySelector("[data-bms-site-term-toggle]");
-    const tocToggle = tools.querySelector("[data-bms-toc-toggle]");
+    let termToggle = tools.querySelector("[data-bs-site-term-toggle]");
+    const tocToggle = tools.querySelector("[data-bs-toc-toggle]");
     const marginSidebarToggle = tools.querySelector(
-      "[data-bms-margin-sidebar-toggle]"
+      "[data-bs-margin-sidebar-toggle]"
     );
-    const backToTop = tools.querySelector("[data-bms-site-back-to-top]");
+    const backToTop = tools.querySelector("[data-bs-site-back-to-top]");
     if (termToggle && !lookup && !glossarySearch) {
       termToggle.remove();
       termToggle = null;
     }
     const form = lookup
-      ? lookup.querySelector("[data-bms-term-lookup-form]")
+      ? lookup.querySelector("[data-bs-term-lookup-form]")
       : null;
     const input = form ? form.querySelector('input[name="q"]') : null;
     const result = lookup
-      ? lookup.querySelector("[data-bms-term-lookup-result]")
+      ? lookup.querySelector("[data-bs-term-lookup-result]")
       : null;
     const close = lookup
-      ? lookup.querySelector("[data-bms-term-lookup-close]")
+      ? lookup.querySelector("[data-bs-term-lookup-close]")
       : null;
     const desktopQuery = window.matchMedia("(min-width: 992px)");
     let marginSidebar =
@@ -1217,6 +1218,7 @@
     let marginSidebarCollapsed = false;
     let rightRailScrollCollapsed = false;
     let lastRightRailScrollY = window.scrollY;
+    let lastGlossaryScrollY = window.scrollY;
     let suppressRightRailAutoCollapse = false;
     let mobileDrawerOpen = false;
     let mobileTouchStart = null;
@@ -1229,9 +1231,9 @@
     if (refinedRightRailPage) {
       mobileDrawerEdge = document.createElement("button");
       mobileDrawerEdge.type = "button";
-      mobileDrawerEdge.className = "bms-mobile-tools-edge";
-      mobileDrawerEdge.dataset.bmsMobileToolsEdge = "";
-      mobileDrawerEdge.setAttribute("aria-controls", "bms-mobile-tools-drawer");
+      mobileDrawerEdge.className = "bs-mobile-tools-edge";
+      mobileDrawerEdge.dataset.bsMobileToolsEdge = "";
+      mobileDrawerEdge.setAttribute("aria-controls", "bs-mobile-tools-drawer");
       mobileDrawerEdge.setAttribute("aria-expanded", "false");
       mobileDrawerEdge.setAttribute(
         "aria-label",
@@ -1239,31 +1241,31 @@
       );
 
       mobileDrawer = document.createElement("aside");
-      mobileDrawer.id = "bms-mobile-tools-drawer";
-      mobileDrawer.className = "bms-mobile-tools-drawer";
-      mobileDrawer.dataset.bmsMobileToolsDrawer = "";
+      mobileDrawer.id = "bs-mobile-tools-drawer";
+      mobileDrawer.className = "bs-mobile-tools-drawer";
+      mobileDrawer.dataset.bsMobileToolsDrawer = "";
       mobileDrawer.setAttribute("aria-label", "Page contents and term search");
       mobileDrawer.setAttribute("aria-hidden", "true");
       mobileDrawer.innerHTML =
-        '<div class="bms-mobile-tools-heading">' +
+        '<div class="bs-mobile-tools-heading">' +
         "<strong>Page tools</strong>" +
-        '<button type="button" data-bms-mobile-tools-close>Close</button>' +
+        '<button type="button" data-bs-mobile-tools-close>Close</button>' +
         "</div>" +
-        '<nav class="bms-mobile-tools-toc" aria-label="On this page" ' +
-        "data-bms-mobile-tools-toc></nav>" +
-        '<div class="bms-mobile-tools-lookup" ' +
-        "data-bms-mobile-tools-lookup></div>";
+        '<nav class="bs-mobile-tools-toc" aria-label="On this page" ' +
+        "data-bs-mobile-tools-toc></nav>" +
+        '<div class="bs-mobile-tools-lookup" ' +
+        "data-bs-mobile-tools-lookup></div>";
       mobileDrawerToc = mobileDrawer.querySelector(
-        "[data-bms-mobile-tools-toc]"
+        "[data-bs-mobile-tools-toc]"
       );
       mobileDrawerLookup = mobileDrawer.querySelector(
-        "[data-bms-mobile-tools-lookup]"
+        "[data-bs-mobile-tools-lookup]"
       );
 
       mobileDrawerBackdrop = document.createElement("button");
       mobileDrawerBackdrop.type = "button";
-      mobileDrawerBackdrop.className = "bms-mobile-tools-backdrop";
-      mobileDrawerBackdrop.dataset.bmsMobileToolsBackdrop = "";
+      mobileDrawerBackdrop.className = "bs-mobile-tools-backdrop";
+      mobileDrawerBackdrop.dataset.bsMobileToolsBackdrop = "";
       mobileDrawerBackdrop.setAttribute("aria-label", "Close page tools");
       mobileDrawerBackdrop.hidden = true;
       document.body.append(
@@ -1305,22 +1307,22 @@
         }
         if (marginSidebar) {
           marginSidebar.classList.remove(
-            "bms-refined-right-rail-scroll-collapsed"
+            "bs-refined-right-rail-scroll-collapsed"
           );
         }
         preservePagePosition(function () {
           updateToc();
           positionRefinedRightTools();
           document
-            .querySelectorAll("[data-bms-lesson-track-nav]")
+            .querySelectorAll("[data-bs-lesson-track-nav]")
             .forEach(function (trackNav) {
               const trackContent = trackNav.querySelector(
-                ".bms-lesson-track-content"
+                ".bs-lesson-track-content"
               );
               if (trackContent) {
                 trackContent.hidden = tocCollapsed;
                 trackNav.classList.toggle(
-                  "bms-lesson-track-collapsed",
+                  "bs-lesson-track-collapsed",
                   tocCollapsed
                 );
               }
@@ -1337,7 +1339,7 @@
         return;
       }
       boundTocHeadingToggles.add(toggle);
-      toggle.dataset.bmsTocToggleBound = "true";
+      toggle.dataset.bsTocToggleBound = "true";
       toggle.addEventListener("click", function () {
         activateTocHeadingToggle(toggle);
       });
@@ -1347,11 +1349,11 @@
       if (!toc || !toggle) {
         return;
       }
-      let divider = toggle.closest(".bms-toc-toggle-divider");
+      let divider = toggle.closest(".bs-toc-toggle-divider");
       if (!divider) {
         divider = document.createElement("div");
-        divider.className = "bms-toc-toggle-divider";
-        divider.dataset.bmsTocToggleDivider = "";
+        divider.className = "bs-toc-toggle-divider";
+        divider.dataset.bsTocToggleDivider = "";
         toggle.replaceWith(divider);
         divider.appendChild(toggle);
       }
@@ -1382,7 +1384,7 @@
         return false;
       }
       const existingToggle = toc.querySelector(
-        "[data-bms-toc-heading-toggle]"
+        "[data-bs-toc-heading-toggle]"
       );
       if (existingToggle) {
         tocHeadingToggle = existingToggle;
@@ -1392,17 +1394,17 @@
       }
       const tocLinks = toc.querySelector(":scope > ul");
       if (tocLinks) {
-        tocLinks.id = tocLinks.id || "bms-toc-links";
+        tocLinks.id = tocLinks.id || "bs-toc-links";
         tocHeadingToggle = document.createElement("button");
         tocHeadingToggle.type = "button";
-        tocHeadingToggle.className = "bms-toc-heading-toggle";
-        tocHeadingToggle.dataset.bmsTocHeadingToggle = "";
+        tocHeadingToggle.className = "bs-toc-heading-toggle";
+        tocHeadingToggle.dataset.bsTocHeadingToggle = "";
         tocHeadingToggle.setAttribute("aria-controls", tocLinks.id);
         tocHeadingToggle.hidden = true;
         bindTocHeadingToggle(tocHeadingToggle);
         const divider = document.createElement("div");
-        divider.className = "bms-toc-toggle-divider";
-        divider.dataset.bmsTocToggleDivider = "";
+        divider.className = "bs-toc-toggle-divider";
+        divider.dataset.bsTocToggleDivider = "";
         divider.appendChild(tocHeadingToggle);
         toc.insertBefore(divider, tocLinks);
         return true;
@@ -1412,10 +1414,10 @@
     mountTocHeadingToggle();
 
     if (lookup && refinedRightRailPage) {
-      const formElement = lookup.querySelector("[data-bms-term-lookup-form]");
-      if (formElement && !lookup.querySelector(".bms-term-lookup-browse")) {
+      const formElement = lookup.querySelector("[data-bs-term-lookup-form]");
+      if (formElement && !lookup.querySelector(".bs-term-lookup-browse")) {
         const browseGlossary = document.createElement("a");
-        browseGlossary.className = "bms-term-lookup-browse";
+        browseGlossary.className = "bs-term-lookup-browse";
         browseGlossary.href = "/glossary/";
         browseGlossary.textContent = "Browse the full glossary";
         formElement.insertAdjacentElement("afterend", browseGlossary);
@@ -1438,7 +1440,7 @@
       return (
         desktopQuery.matches &&
         !marginSidebar &&
-        document.body.classList.contains("bms-research-index")
+        document.body.classList.contains("bs-research-index")
       );
     };
 
@@ -1464,7 +1466,7 @@
         return;
       }
       const heading = document.createElement("strong");
-      heading.className = "bms-mobile-tools-toc-title";
+      heading.className = "bs-mobile-tools-toc-title";
       heading.textContent = "On this page";
       const links = sourceLinks.cloneNode(true);
       links.removeAttribute("id");
@@ -1486,14 +1488,14 @@
       if (expanded) {
         refreshMobileDrawerToc();
       }
-      mobileDrawer.classList.toggle("bms-mobile-tools-drawer--open", expanded);
+      mobileDrawer.classList.toggle("bs-mobile-tools-drawer--open", expanded);
       mobileDrawer.setAttribute("aria-hidden", expanded ? "false" : "true");
       mobileDrawerEdge.setAttribute(
         "aria-expanded",
         expanded ? "true" : "false"
       );
       mobileDrawerBackdrop.hidden = !expanded;
-      document.body.classList.toggle("bms-mobile-tools-open", expanded);
+      document.body.classList.toggle("bs-mobile-tools-open", expanded);
       if (expanded && (!options || options.focus !== false)) {
         const firstLink = mobileDrawer.querySelector("a[href]");
         const target = firstLink || input;
@@ -1511,7 +1513,7 @@
         setMobileDrawerOpen(false);
       });
       const drawerClose = mobileDrawer.querySelector(
-        "[data-bms-mobile-tools-close]"
+        "[data-bs-mobile-tools-close]"
       );
       if (drawerClose) {
         drawerClose.addEventListener("click", function () {
@@ -1592,9 +1594,9 @@
       if (close) {
         close.setAttribute("aria-expanded", "true");
       }
-      document.body.classList.add("bms-term-lookup-open");
+      document.body.classList.add("bs-term-lookup-open");
       document
-        .querySelectorAll("[data-bms-site-term-toggle], [data-bms-mobile-term-toggle]")
+        .querySelectorAll("[data-bs-site-term-toggle], [data-bs-mobile-term-toggle]")
         .forEach(function (button) {
           button.setAttribute("aria-expanded", "true");
         });
@@ -1618,9 +1620,9 @@
       if (close) {
         close.setAttribute("aria-expanded", "false");
       }
-      document.body.classList.remove("bms-term-lookup-open");
+      document.body.classList.remove("bs-term-lookup-open");
       document
-        .querySelectorAll("[data-bms-site-term-toggle], [data-bms-mobile-term-toggle]")
+        .querySelectorAll("[data-bs-site-term-toggle], [data-bs-mobile-term-toggle]")
         .forEach(function (button) {
           button.setAttribute("aria-expanded", "false");
         });
@@ -1635,13 +1637,13 @@
       }
       if (inRefinedRightRail()) {
         marginSidebarCollapsed = false;
-        marginSidebar.classList.remove("bms-margin-sidebar-collapsed");
+        marginSidebar.classList.remove("bs-margin-sidebar-collapsed");
         marginSidebarToggle.hidden = true;
         return;
       }
       const collapsed = inDesktopSidebar() && marginSidebarCollapsed;
       marginSidebar.classList.toggle(
-        "bms-margin-sidebar-collapsed",
+        "bs-margin-sidebar-collapsed",
         collapsed
       );
       marginSidebarToggle.hidden = !inDesktopSidebar();
@@ -1665,12 +1667,12 @@
         return;
       }
       const refined = inRefinedRightRail() && Boolean(tocHeadingToggle);
-      marginSidebar.classList.toggle("bms-refined-right-rail", refined);
+      marginSidebar.classList.toggle("bs-refined-right-rail", refined);
       if (refined) {
         const effectivelyCollapsed =
           tocCollapsed || rightRailScrollCollapsed;
         marginSidebar.classList.toggle(
-          "bms-toc-collapsed",
+          "bs-toc-collapsed",
           effectivelyCollapsed
         );
         if (tocToggle) {
@@ -1687,9 +1689,13 @@
             ? "Expand table of contents"
             : "Collapse table of contents"
         );
-        tocHeadingToggle.textContent = effectivelyCollapsed
-          ? "Table of Contents \u25be"
-          : "\u25b4";
+        tocHeadingToggle.textContent = engineBenchmarkPage
+          ? effectivelyCollapsed
+            ? "Expand TOC"
+            : "Collapse TOC"
+          : effectivelyCollapsed
+            ? "Table of Contents \u25be"
+            : "\u25b4";
         return;
       }
       if (tocHeadingToggle) {
@@ -1700,7 +1706,7 @@
       }
       const available = inDesktopSidebar() && Boolean(toc);
       const collapsed = available && tocCollapsed;
-      marginSidebar.classList.toggle("bms-toc-collapsed", collapsed);
+      marginSidebar.classList.toggle("bs-toc-collapsed", collapsed);
       tocToggle.hidden = !available;
       tocToggle.setAttribute(
         "aria-expanded",
@@ -1715,11 +1721,11 @@
 
     const positionRefinedRightTools = function () {
       if (!inRefinedRightRail()) {
-        tools.style.removeProperty("--bms-refined-tools-left");
-        tools.style.removeProperty("--bms-refined-tools-width");
-        tools.style.removeProperty("--bms-refined-tools-top");
+        tools.style.removeProperty("--bs-refined-tools-left");
+        tools.style.removeProperty("--bs-refined-tools-width");
+        tools.style.removeProperty("--bs-refined-tools-top");
         if (backToTop) {
-          backToTop.style.removeProperty("--bms-refined-tools-right");
+          backToTop.style.removeProperty("--bs-refined-tools-right");
         }
         return;
       }
@@ -1734,20 +1740,20 @@
           ? toc.getBoundingClientRect()
           : sidebarBounds;
       tools.style.setProperty(
-        "--bms-refined-tools-left",
+        "--bs-refined-tools-left",
         Math.max(16, sidebarBounds.right - toolsWidth) + "px"
       );
       tools.style.setProperty(
-        "--bms-refined-tools-width",
+        "--bs-refined-tools-width",
         toolsWidth + "px"
       );
       tools.style.setProperty(
-        "--bms-refined-tools-top",
+        "--bs-refined-tools-top",
         Math.max(sidebarBounds.top, tocBounds.bottom) + 4 + "px"
       );
       if (backToTop) {
         backToTop.style.setProperty(
-          "--bms-refined-tools-right",
+          "--bs-refined-tools-right",
           Math.max(8, viewportWidth - sidebarBounds.right) + "px"
         );
       }
@@ -1758,7 +1764,7 @@
         return;
       }
       const refined = inRefinedRightRail();
-      backToTop.classList.toggle("bms-refined-back-to-top", refined);
+      backToTop.classList.toggle("bs-refined-back-to-top", refined);
       if (refined) {
         document.body.appendChild(backToTop);
       } else if (backToTop.parentElement !== tools) {
@@ -1771,7 +1777,7 @@
         rightRailScrollCollapsed = false;
         if (marginSidebar) {
           marginSidebar.classList.remove(
-            "bms-refined-right-rail-scroll-collapsed"
+            "bs-refined-right-rail-scroll-collapsed"
           );
         }
         lastRightRailScrollY = window.scrollY;
@@ -1782,7 +1788,7 @@
       if (suppressRightRailAutoCollapse) {
         rightRailScrollCollapsed = false;
         marginSidebar.classList.remove(
-          "bms-refined-right-rail-scroll-collapsed"
+          "bs-refined-right-rail-scroll-collapsed"
         );
         lastRightRailScrollY = currentScrollY;
         return;
@@ -1793,7 +1799,7 @@
         rightRailScrollCollapsed = currentScrollY > lastRightRailScrollY;
       }
       marginSidebar.classList.toggle(
-        "bms-refined-right-rail-scroll-collapsed",
+        "bs-refined-right-rail-scroll-collapsed",
         rightRailScrollCollapsed
       );
       updateToc();
@@ -1809,11 +1815,11 @@
         if (lookup && lookup.parentElement !== tools) {
           tools.insertBefore(lookup, marginSidebarToggle || backToTop);
         }
-        tools.classList.add("bms-site-tools--sidebar");
-        tools.classList.remove("bms-site-tools--editorial-dock");
-        tools.classList.remove("bms-site-tools--floating");
+        tools.classList.add("bs-site-tools--sidebar");
+        tools.classList.remove("bs-site-tools--editorial-dock");
+        tools.classList.remove("bs-site-tools--floating");
         if (lookup) {
-          lookup.classList.remove("bms-term-lookup--floating");
+          lookup.classList.remove("bs-term-lookup--floating");
         }
         if (inRefinedRightRail()) {
           document.body.appendChild(tools);
@@ -1843,12 +1849,12 @@
           tools.insertBefore(lookup, marginSidebarToggle || backToTop);
         }
         tools.classList.add(
-          "bms-site-tools--sidebar",
-          "bms-site-tools--editorial-dock"
+          "bs-site-tools--sidebar",
+          "bs-site-tools--editorial-dock"
         );
-        tools.classList.remove("bms-site-tools--floating");
+        tools.classList.remove("bs-site-tools--floating");
         if (lookup) {
-          lookup.classList.remove("bms-term-lookup--floating");
+          lookup.classList.remove("bs-term-lookup--floating");
         }
         document.body.appendChild(tools);
         if (lookup && !desktopCollapsed) {
@@ -1861,12 +1867,12 @@
         mobileDrawer &&
         mobileDrawerLookup
       ) {
-        tools.classList.remove("bms-site-tools--sidebar");
-        tools.classList.remove("bms-site-tools--editorial-dock");
-        tools.classList.add("bms-site-tools--floating");
+        tools.classList.remove("bs-site-tools--sidebar");
+        tools.classList.remove("bs-site-tools--editorial-dock");
+        tools.classList.add("bs-site-tools--floating");
         document.body.appendChild(tools);
         if (lookup) {
-          lookup.classList.remove("bms-term-lookup--floating");
+          lookup.classList.remove("bs-term-lookup--floating");
           mobileDrawerLookup.appendChild(lookup);
           lookup.hidden = false;
         }
@@ -1875,11 +1881,11 @@
         }
         refreshMobileDrawerToc();
       } else {
-        tools.classList.remove("bms-site-tools--sidebar");
-        tools.classList.remove("bms-site-tools--editorial-dock");
-        tools.classList.add("bms-site-tools--floating");
+        tools.classList.remove("bs-site-tools--sidebar");
+        tools.classList.remove("bs-site-tools--editorial-dock");
+        tools.classList.add("bs-site-tools--floating");
         if (lookup) {
-          lookup.classList.add("bms-term-lookup--floating");
+          lookup.classList.add("bs-term-lookup--floating");
         }
         document.body.appendChild(tools);
         if (lookup) {
@@ -1914,7 +1920,7 @@
     if (refinedRightRailPage && "MutationObserver" in window) {
       tocCloneObserver = new MutationObserver(function () {
         document
-          .querySelectorAll("[data-bms-toc-heading-toggle]")
+          .querySelectorAll("[data-bs-toc-heading-toggle]")
           .forEach(bindTocHeadingToggle);
         positionRefinedRightTools();
       });
@@ -1923,7 +1929,7 @@
         subtree: true
       });
       document
-        .querySelectorAll("[data-bms-toc-heading-toggle]")
+        .querySelectorAll("[data-bs-toc-heading-toggle]")
         .forEach(bindTocHeadingToggle);
     }
 
@@ -2014,20 +2020,18 @@
       if (!glossaryIndexPage || !lookup) {
         return;
       }
-      if (!desktopQuery.matches || window.scrollY <= 32) {
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastGlossaryScrollY) > 4) {
         if (!lookup.hidden) {
           closeLookup();
         }
-      } else if (lookup.hidden) {
-        open({ focusInput: false });
+        lastGlossaryScrollY = currentScrollY;
       }
     };
     if (glossaryIndexPage) {
       window.addEventListener("scroll", updateGlossaryLookupForScroll, {
         passive: true
       });
-      desktopQuery.addEventListener("change", updateGlossaryLookupForScroll);
-      updateGlossaryLookupForScroll();
     }
 
     if (form && input && result) {
@@ -2060,25 +2064,25 @@
       result.addEventListener("click", function (event) {
         const target =
           event.target && typeof event.target.closest === "function"
-            ? event.target.closest("[data-bms-term-lookup-related]")
+            ? event.target.closest("[data-bs-term-lookup-related]")
             : null;
         if (!target || !result.contains(target)) {
           return;
         }
-        const slug = target.dataset.bmsTermLookupRelated;
+        const slug = target.dataset.bsTermLookupRelated;
         if (!slug) {
           return;
         }
         event.preventDefault();
         document.dispatchEvent(
-          new CustomEvent("bms:open-glossary-term", {
+          new CustomEvent("bs:open-glossary-term", {
             detail: { slug: slug, focusResult: true }
           })
         );
       });
     }
 
-    document.addEventListener("bms:open-glossary-term", function (event) {
+    document.addEventListener("bs:open-glossary-term", function (event) {
       const slug = event && event.detail ? event.detail.slug : "";
       if (!slug || !lookup || !result) {
         return;
@@ -2087,7 +2091,7 @@
       rightRailScrollCollapsed = false;
       if (marginSidebar) {
         marginSidebar.classList.remove(
-          "bms-refined-right-rail-scroll-collapsed"
+          "bs-refined-right-rail-scroll-collapsed"
         );
       }
       if (!desktopQuery.matches && mobileDrawer) {
@@ -2124,7 +2128,7 @@
     });
 
     const legacyBackToTop = document.querySelector(
-      "[data-bms-glossary-back-to-top]"
+      "[data-bs-glossary-back-to-top]"
     );
     if (legacyBackToTop) {
       legacyBackToTop.remove();
@@ -2164,9 +2168,9 @@
 
   function initializeMobileLessonBar(termLookup) {
     if (
-      !document.body.classList.contains("bms-learn-article") ||
-      document.body.classList.contains("bms-learn-index") ||
-      document.body.classList.contains("bms-learn-track-index")
+      !document.body.classList.contains("bs-learn-article") ||
+      document.body.classList.contains("bs-learn-index") ||
+      document.body.classList.contains("bs-learn-track-index")
     ) {
       return;
     }
@@ -2183,23 +2187,23 @@
       return;
     }
 
-    indexToggle.classList.add("bms-mobile-lesson-index-toggle");
+    indexToggle.classList.add("bs-mobile-lesson-index-toggle");
     indexToggle.setAttribute("aria-label", "Expand Lesson Index");
     const label = document.createElement("span");
-    label.className = "bms-mobile-lesson-index-label";
+    label.className = "bs-mobile-lesson-index-label";
     label.textContent = "\u2190 Expand Lesson Index";
     indexToggle.appendChild(label);
     if (breadcrumbs) {
-      breadcrumbs.classList.add("bms-mobile-lesson-breadcrumbs");
+      breadcrumbs.classList.add("bs-mobile-lesson-breadcrumbs");
     }
     if (filler) {
-      filler.classList.add("bms-mobile-lesson-filler");
+      filler.classList.add("bs-mobile-lesson-filler");
     }
 
     const termButton = document.createElement("button");
     termButton.type = "button";
-    termButton.className = "bms-mobile-term-toggle";
-    termButton.dataset.bmsMobileTermToggle = "";
+    termButton.className = "bs-mobile-term-toggle";
+    termButton.dataset.bsMobileTermToggle = "";
     termButton.setAttribute("aria-expanded", "false");
     termButton.textContent = "Look Up a Term \u2192";
     termButton.addEventListener("click", function () {
@@ -2212,15 +2216,18 @@
 
   function initializeLearnLeftSidebarToggle() {
     const learnPage =
-      document.body.classList.contains("bms-learn-article") ||
-      document.body.classList.contains("bms-learn-index") ||
-      document.body.classList.contains("bms-learn-track-index");
+      document.body.classList.contains("bs-learn-article") ||
+      document.body.classList.contains("bs-learn-index") ||
+      document.body.classList.contains("bs-learn-track-index");
     const sidebar = document.getElementById("quarto-sidebar");
     if (!learnPage || !sidebar) {
       return;
     }
 
     const desktopQuery = window.matchMedia("(min-width: 992px)");
+    const keepExpandedWhileScrolling =
+      document.body.classList.contains("bs-learn-index") ||
+      document.body.classList.contains("bs-learn-track-index");
     const sidebarScroller =
       sidebar.querySelector(".sidebar-menu-container") || sidebar;
     const pageHeader = document.getElementById("quarto-header");
@@ -2232,8 +2239,8 @@
     let pageScrollingDown = false;
     let autoCollapsePending = window.scrollY <= 32;
     toggle.type = "button";
-    toggle.className = "bms-learn-left-sidebar-toggle";
-    toggle.dataset.bmsLearnLeftSidebarToggle = "";
+    toggle.className = "bs-learn-left-sidebar-toggle";
+    toggle.dataset.bsLearnLeftSidebarToggle = "";
     toggle.setAttribute("aria-controls", sidebar.id);
     document.body.appendChild(toggle);
 
@@ -2248,7 +2255,7 @@
         pageHeader && pageHeader.classList.contains("headroom--unpinned")
       );
       toggle.classList.toggle(
-        "bms-learn-left-sidebar-toggle--nav-hidden",
+        "bs-learn-left-sidebar-toggle--nav-hidden",
         desktopQuery.matches &&
           window.scrollY > 32 &&
           (pageScrollingDown || navbarHidden)
@@ -2256,6 +2263,7 @@
       toggle.hidden =
         !desktopQuery.matches ||
         (!collapsed &&
+          !keepExpandedWhileScrolling &&
           scrollingDown &&
           (window.scrollY > 32 || sidebarScroller.scrollTop > 4));
       if (!toggle.hidden && !collapsed) {
@@ -2266,7 +2274,7 @@
     const update = function () {
       const active = desktopQuery.matches && collapsed;
       sidebar.hidden = active;
-      document.body.classList.toggle("bms-learn-left-sidebar-collapsed", active);
+      document.body.classList.toggle("bs-learn-left-sidebar-collapsed", active);
       updateVisibility();
       toggle.setAttribute("aria-expanded", active ? "false" : "true");
       toggle.setAttribute(
@@ -2292,12 +2300,21 @@
         const currentScrollY = window.scrollY;
         if (currentScrollY <= 32) {
           autoCollapsePending = true;
+          if (!keepExpandedWhileScrolling && collapsed) {
+            collapsed = false;
+            pageScrollingDown = false;
+            scrollingDown = false;
+            lastScrollY = currentScrollY;
+            update();
+            return;
+          }
         }
         if (Math.abs(currentScrollY - lastScrollY) > 4) {
           pageScrollingDown = currentScrollY > lastScrollY;
           scrollingDown = pageScrollingDown;
           lastScrollY = currentScrollY;
           if (
+            !keepExpandedWhileScrolling &&
             autoCollapsePending &&
             scrollingDown &&
             currentScrollY > 32
@@ -2352,17 +2369,17 @@
   }
 
   function initializeAnswerChoices(root) {
-    root.querySelectorAll(".bms-decision-prompt").forEach(function (prompt) {
-      if (prompt.dataset.bmsAnswerChoicesMounted === "true") {
+    root.querySelectorAll(".bs-decision-prompt").forEach(function (prompt) {
+      if (prompt.dataset.bsAnswerChoicesMounted === "true") {
         return;
       }
-      prompt.dataset.bmsAnswerChoicesMounted = "true";
+      prompt.dataset.bsAnswerChoicesMounted = "true";
       const panelId = prompt.dataset.answerPanel;
       const panel = panelId ? findIdWithinRoot(root, panelId) : null;
       const buttons = Array.from(
-        prompt.querySelectorAll(".bms-answer-choice")
+        prompt.querySelectorAll(".bs-answer-choice")
       );
-      const status = prompt.querySelector(".bms-choice-status");
+      const status = prompt.querySelector(".bs-choice-status");
 
       buttons.forEach(function (button) {
         button.addEventListener("click", function () {
@@ -2391,12 +2408,12 @@
 
   function initializeLazyAnalyzerFrames(root) {
     root
-      .querySelectorAll("details.bms-analyzer-embed")
+      .querySelectorAll("details.bs-analyzer-embed")
       .forEach(function (details) {
-        if (details.dataset.bmsLazyAnalyzerMounted === "true") {
+        if (details.dataset.bsLazyAnalyzerMounted === "true") {
           return;
         }
-        details.dataset.bmsLazyAnalyzerMounted = "true";
+        details.dataset.bsLazyAnalyzerMounted = "true";
         details.addEventListener("toggle", function () {
           if (!details.open) {
             return;
@@ -2414,7 +2431,7 @@
             return;
           }
 
-          const status = details.querySelector(".bms-analyzer-status");
+          const status = details.querySelector(".bs-analyzer-status");
 
           if (status) {
             status.textContent = "Loading the analyzer…";
@@ -2474,15 +2491,15 @@
   }
 
   if (typeof window !== "undefined") {
-    window.BMSLearn = Object.assign(window.BMSLearn || {}, publicApi);
+    window.BSLearn = Object.assign(window.BSLearn || {}, publicApi);
   }
 
   if (typeof document !== "undefined") {
     document.addEventListener("DOMContentLoaded", function () {
-      if (document.documentElement.dataset.bmsLearnInitialized === "true") {
+      if (document.documentElement.dataset.bsLearnInitialized === "true") {
         return;
       }
-      document.documentElement.dataset.bmsLearnInitialized = "true";
+      document.documentElement.dataset.bsLearnInitialized = "true";
       initializeLearnFilters();
       initializeLearnSidebarControls();
       initializeInlineGlossary();

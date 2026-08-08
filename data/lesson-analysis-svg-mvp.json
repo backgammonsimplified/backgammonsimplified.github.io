@@ -1,5 +1,5 @@
 {
-  "schema_version": "bms-lesson-analysis-fixture-v1",
+  "schema_version": "bs-lesson-analysis-fixture-v1",
   "fixture_status": {
     "kind": "fixture-only",
     "label": "Fixture analysis",

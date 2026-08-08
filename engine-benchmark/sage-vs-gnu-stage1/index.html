@@ -8,7 +8,7 @@
 
 <meta name="description" content="Results from 20 seven-point matches between Sage and GNU, including match wins, 4ply review, luck estimates, and selected Sage rollouts.">
 
-<title>Sage vs GNU: Stage 1 – Backgammon Made Simple</title>
+<title>Sage vs GNU: Stage 1 – Backgammon Simplified</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -44,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-71c7b49c685e597d910cb795eccce780.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ccd5a00dc6e8596bccddf1cebaba4c1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8d450d615d30163466618d5f2985fcb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -115,37 +115,39 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../../assets/bms-shared.css">
-<link rel="stylesheet" href="../../assets/bms-components.css">
-<link rel="stylesheet" href="../../assets/bms-learn.css">
-<link rel="stylesheet" href="../../assets/bms-lesson-analysis.css">
-<meta property="og:title" content="Sage vs GNU: Stage 1 – Backgammon Made Simple">
+<link rel="stylesheet" href="../../assets/bs-shared.css">
+<link rel="stylesheet" href="../../assets/bs-components.css">
+<link rel="stylesheet" href="../../assets/bs-learn.css">
+<link rel="stylesheet" href="../../assets/bs-lesson-analysis.css">
+<meta property="og:title" content="Sage vs GNU: Stage 1 – Backgammon Simplified">
 <meta property="og:description" content="Results from 20 seven-point matches between Sage and GNU, including match wins, 4ply review, luck estimates, and selected Sage rollouts.">
-<meta property="og:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
-<meta property="og:site_name" content="Backgammon Made Simple">
+<meta property="og:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
+<meta property="og:site_name" content="Backgammon Simplified">
 <meta property="og:image:height" content="630">
 <meta property="og:image:width" content="1200">
-<meta name="twitter:title" content="Sage vs GNU: Stage 1 – Backgammon Made Simple">
+<meta name="twitter:title" content="Sage vs GNU: Stage 1 – Backgammon Simplified">
 <meta name="twitter:description" content="Results from 20 seven-point matches between Sage and GNU, including match wins, 4ply review, luck estimates, and selected Sage rollouts.">
-<meta name="twitter:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
+<meta name="twitter:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="630">
 <meta name="twitter:image-width" content="1200">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://backgammonsimplified.github.io/engine-benchmark/sage-vs-gnu-stage1/index.html">
 </head>
 
-<body class="nav-fixed bms-editorial-page bms-title-eyebrow quarto-light">
+<body class="nav-fixed bs-editorial-page bs-title-eyebrow bs-engine-benchmark-page quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo light-content">
-    <img src="../../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo dark-content">
+    <img src="../../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo light-content">
+    <img src="../../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Backgammon Made Simple</span>
+    <span class="navbar-title">Backgammon Simplified</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -245,14 +247,14 @@ window.Quarto = {
 </header>
 
 
-<div class="bms-editorial-lead">
+<div class="bs-editorial-lead">
 <p>Sage and GNU played 20 seven-point matches using fixed ply depths and dice files prepared before play. Guess who won?</p>
 </div>
-<section id="skeptical-of-our-approach-or-results" class="level4 bms-status-panel">
+<section id="skeptical-of-our-approach-or-results" class="level4 bs-status-panel">
 <h4 class="anchored" data-anchor-id="skeptical-of-our-approach-or-results">Skeptical of our approach or results?</h4>
 <p>As you read, you may think it was unfair or unscientific, we have a dedicated page for our research method with details. This article summarizes the findings and briefly talks about the methods.</p>
-<div class="bms-button-row">
-<p><a href="../../research/sage-vs-gnu-additional-details.html" class="bms-button-primary">Read research method details</a></p>
+<div class="bs-button-row">
+<p><a href="../../research/sage-vs-gnu-additional-details.html" class="bs-button-primary">Read research method details</a></p>
 </div>
 </section>
 <section id="at-a-glance" class="level2">
@@ -281,8 +283,8 @@ What do you mean statistically insignificant? What test did you run?
 <p>Using a two sided binomial test, the answer is about 26% of the time. Statisticians would say the study results show a <strong>p-value of 0.263</strong>. For the result to be significant, we would expect 5% or a p-value of 0.05. Therefore the 13-7 result is statistically insignificant. This does not mean there is a 26% chance that luck caused the result. It means the score, by itself, is not unusual enough to rule out an even matchup.</p>
 <p>The TODO <a href="../../research/sage-vs-gnu-additional-details.html#how-strong-was-the-13-7-result">research page</a> explains the test and shows the full distribution. You can also use this <a href="https://www.socscistatistics.com/tests/binomial/calculator/">binomial-test calculator</a> or watch this <a href="https://youtu.be/J8jNoF-K8E8">introduction to the binomial test</a> if you are interested.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Match score and twenty-match tile strip placeholder">
-<p><span class="bms-figure-slot-label">PENDING VALIDATED FIGURE :: MATCH SCORE AND 20-MATCH TILE STRIP</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Match score and twenty-match tile strip placeholder">
+<p><span class="bs-figure-slot-label">PENDING VALIDATED FIGURE :: MATCH SCORE AND 20-MATCH TILE STRIP</span></p>
 <p>Show GNU with 13 wins and Sage with 7 wins. Add one chronological tile for each public match identifier. Do not use pair labels or A/B labels.</p>
 </div>
 <!--
@@ -303,16 +305,16 @@ How was luck measured? And what would the result be after a luck adjustment?
 <p>The adjustment also estimates whether that roll advantage was large enough to affect which engine appeared ahead. All 7 of Sage’s wins still showed Sage ahead. Of GNU’s 13 wins, 8 still showed GNU ahead, 3 became nearly even, and 2 showed Sage ahead.</p>
 <p>This adjustment is an estimate, not a replacement match score.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Observed and GNU-adjusted result summary placeholder">
-<p><span class="bms-figure-slot-label">PENDING VALIDATED FIGURE :: WHAT CHANGED AFTER GNU’S ROLL ADJUSTMENT</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Observed and GNU-adjusted result summary placeholder">
+<p><span class="bs-figure-slot-label">PENDING VALIDATED FIGURE :: WHAT CHANGED AFTER GNU’S ROLL ADJUSTMENT</span></p>
 <p>Keep the two observed groups separate: the 7 Sage wins all still show Sage ahead; among the 13 GNU wins, 8 still show GNU ahead, 3 become nearly even, and 2 show Sage ahead. Do not combine them under a label such as <strong>winner remained ahead</strong>.</p>
 </div>
 <!--
 figure-id: fig-main-luck-summary
 expected inputs: public_match_results.csv or authoritative public luck summary
 -->
-<div class="bms-inline-note">
-<p><span class="bms-technical-label">IMPORTANT LIMITATION</span></p>
+<div class="bs-inline-note">
+<p><span class="bs-technical-label">IMPORTANT LIMITATION</span></p>
 <p>We used GNU 4 ply to review the matches and then a Sage rollout to resolve the arguments. GNU 4ply will of course favour GNU’s lower ply decisions.</p>
 </div>
 </section>
@@ -327,14 +329,14 @@ How is that fair? Isn’t it biased? What about rollouts?
 <p>Sage Python Package doesn’t offer a match review function, only evaluate positions. We decided not to implement a match review as it could be error prone. Instead we just replied on GNU 4 ply to evaluate matches, and compare the differences using a Sage rollout.</p>
 <p>We ideally would be able to BGBlitz or XG, and will be future work if we can get permission from the developers. This is always a challenge with open-source projects unfortunately. This doesn’t stop you from reviewing the match files we publish in bulk and letting us know what you find! We can publish your results too!</p>
 </details>
-<section id="want-to-run-your-own-analysis" class="level4 bms-status-panel">
+<section id="want-to-run-your-own-analysis" class="level4 bs-status-panel">
 <h4 class="anchored" data-anchor-id="want-to-run-your-own-analysis">Want to run your own analysis?</h4>
 <p>Here are the match files, reviewed analysis and data we parsed used for the figures.</p>
 <p>TODO</p>
-<div class="bms-button-row">
-<p><a href="../../research/sage-vs-gnu-additional-details.html" class="bms-button-primary">Read research method details</a></p>
-<p><a href="../../engine-benchmark/index.html" class="bms-button-outline">Read about Engine Benchmark</a></p>
-<p><a href="https://github.com/backgammon-made-simple/backgammon-engine-kit" class="bms-button-outline">Read Github Repo</a></p>
+<div class="bs-button-row">
+<p><a href="../../research/sage-vs-gnu-additional-details.html" class="bs-button-primary">Read research method details</a></p>
+<p><a href="../../engine-benchmark/index.html" class="bs-button-outline">Read about Engine Benchmark</a></p>
+<p><a href="https://github.com/backgammonsimplified/backgammon-engine-kit" class="bs-button-outline">Read Github Repo</a></p>
 </div>
 </section>
 <section id="how-did-the-review-rate-the-decisions" class="level2">
@@ -381,8 +383,8 @@ How do you calculate ER?
 0.154
 \]</span></p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Pooled overall ER comparison placeholder">
-<p><span class="bms-figure-slot-label">PENDING VALIDATED FIGURE :: POOLED OVERALL ER</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Pooled overall ER comparison placeholder">
+<p><span class="bs-figure-slot-label">PENDING VALIDATED FIGURE :: POOLED OVERALL ER</span></p>
 <p>Show one directly labelled value for each engine, include a visible zero baseline, and state that lower is better. Equity loss and eligible-decision totals may appear as supporting text.</p>
 </div>
 <!--
@@ -416,8 +418,8 @@ expected inputs: public_pooled_performance.csv
 </table>
 <p>GNU’s review found a relatively small difference in checker play and a much larger difference in cube decisions. Sage’s reviewed cube losses therefore account for most of its overall ER.</p>
 <p>This does not prove that every disputed Sage cube decision was wrong. GNU made the judgment, and the separate Sage rollout study examines selected disagreements more deeply.</p>
-<div class="bms-figure-slot" role="group" aria-label="Checker and cube pooled ER placeholder">
-<p><span class="bms-figure-slot-label">PENDING VALIDATED FIGURE :: CHECKER-PLAY AND CUBE-DECISION ER</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Checker and cube pooled ER placeholder">
+<p><span class="bs-figure-slot-label">PENDING VALIDATED FIGURE :: CHECKER-PLAY AND CUBE-DECISION ER</span></p>
 <p>Use separate panels and separate, clearly labelled scales. Show checker play as Sage 0.291 and GNU 0.177, and cube decisions as Sage 9.652 and GNU 0.021. State that lower is better.</p>
 </div>
 <!--
@@ -453,8 +455,8 @@ expected inputs: public_pooled_performance.csv
 </table>
 <p>Both engines were close to 4 ply’s preferred move on the great majority of eligible checker decisions. This is not objective accuracy. It measures closeness to 4ply’s judgment.</p>
 <p>A checker decision with zero reviewed loss stays in the total and counts as close. Zero-loss decisions may be left out of a separate plot of non-zero mistakes so the visible errors are easier to compare, but they are not removed from these percentages.</p>
-<div class="bms-figure-slot" role="group" aria-label="Checker decision closeness placeholder">
-<p><span class="bms-figure-slot-label">PENDING VALIDATED FIGURE :: CHECKER DECISIONS CLOSE TO GNU’S PREFERRED MOVE</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Checker decision closeness placeholder">
+<p><span class="bs-figure-slot-label">PENDING VALIDATED FIGURE :: CHECKER DECISIONS CLOSE TO GNU’S PREFERRED MOVE</span></p>
 <p>Title the figure <strong>Checker decisions close to GNU’s preferred move</strong>. Show the percentages and raw counts, define the 0.010 EMG threshold, and avoid the words <strong>correct</strong>, <strong>incorrect</strong>, and <strong>accuracy</strong>.</p>
 </div>
 <!--
@@ -466,8 +468,8 @@ expected inputs: public_checker_decision_summary.csv
 <h2 class="anchored" data-anchor-id="what-about-cube-decisions">What about cube decisions?</h2>
 <p>Cube decisions need a separate calculation. There are far fewer eligible cube decisions, and routine no-double positions are not all included in the same way.</p>
 <p>The final figure uses the same 0.010 equity EMG closeness threshold.</p>
-<div class="bms-figure-slot" role="group" aria-label="Cube decision closeness placeholder">
-<p><span class="bms-figure-slot-label">PENDING AUDITED FIGURE :: CUBE DECISIONS CLOSE TO GNU’S REVIEW</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Cube decision closeness placeholder">
+<p><span class="bs-figure-slot-label">PENDING AUDITED FIGURE :: CUBE DECISIONS CLOSE TO GNU’S REVIEW</span></p>
 <p>Show the share within 0.010 EMG and the share more than 0.010 EMG away, with percentages, raw counts, and the accepted eligible-decision total. State the zero rule in the subtitle or caption.</p>
 </div>
 <!--
@@ -480,12 +482,12 @@ publication gate: audited W2 output required
 <h2 class="anchored" data-anchor-id="what-happens-when-sage-and-gnu-disagree-on-the-cube">What happens when Sage and GNU disagree on the cube?</h2>
 <p>GNU’s review found selected cube decisions where Sage’s original action differed from GNU’s recommendation.</p>
 <p>Those positions are being examined with a deeper Sage <strong>rollout</strong>. In a rollout, Sage repeatedly plays forward from the same position to compare how the two actions perform over many continuations. Stage 1 compares only Sage’s original action with GNU’s recommendation. A rollout may support GNU, support Sage’s original action, or remain too close to call.</p>
-<div class="bms-status-panel">
-<p><span class="bms-status-label">PENDING AUDITED SAGE ROLLOUT RESULTS</span></p>
+<div class="bs-status-panel">
+<p><span class="bs-status-label">PENDING AUDITED SAGE ROLLOUT RESULTS</span></p>
 <p>The public summary will be added after the audited rollout release is available. It will report completed and valid rollouts, results supporting each action, unresolved results, point-estimate-only results, and exclusions.</p>
 </div>
-<div class="bms-figure-slot" role="group" aria-label="Sage rollout summary placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: SELECTED SAGE CUBE ROLLOUT RESULTS</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Sage rollout summary placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: SELECTED SAGE CUBE ROLLOUT RESULTS</span></p>
 <p>Use only the audited two-action rollout release. Each published result must link to the position, match context, two actions, rollout settings, paired difference, valid uncertainty range when available, and any exclusion reason.</p>
 </div>
 <!--
@@ -527,10 +529,10 @@ Sage: 3-ply</code></pre>
 <p>In these 20 matches, GNU won more often and received the lower ER under GNU’s own post-match review. Most of the reviewed ER gap came from cube decisions. The checker plays of both engines were very often close to GNU’s preferred move.</p>
 <p>GNU’s roll estimates suggest that the official 13-7 score may make the contest look more one-sided than it was. The adjusted result is still an estimate, not a corrected score. The cube-closeness percentage and Sage rollout conclusions also remain pending until their audited releases are ready.</p>
 <p>This is evidence about these 20 matches, these engine versions, and these ply depths. It does not establish a permanent ranking between Sage and GNU.</p>
-<div class="bms-button-row">
-<p><a href="../../research/sage-vs-gnu-additional-details.html" class="bms-button-primary">Read the research details</a></p>
-<p><a href="../../engine-benchmark/index.html" class="bms-button-outline">Read about the benchmark tool kit</a></p>
-<p><a href="https://github.com/backgammon-made-simple/backgammon-engine-benchmark" class="bms-button-outline">View the benchmark repo on Github</a></p>
+<div class="bs-button-row">
+<p><a href="../../research/sage-vs-gnu-additional-details.html" class="bs-button-primary">Read the research details</a></p>
+<p><a href="../../engine-benchmark/index.html" class="bs-button-outline">Read about the benchmark tool kit</a></p>
+<p><a href="https://github.com/backgammonsimplified/backgammon-engine-benchmark" class="bs-button-outline">View the benchmark repo on Github</a></p>
 </div>
 
 
@@ -538,15 +540,15 @@ Sage: 3-ply</code></pre>
 </section>
 
 </main> <!-- /main -->
-<script src="../../assets/bms-learn.js" defer=""></script>
+<script src="../../assets/bs-learn.js" defer=""></script>
 
-<script src="../../assets/bms-lesson-analysis.js" defer=""></script>
+<script src="../../assets/bs-lesson-analysis.js" defer=""></script>
 
-<script src="../../assets/bms-learn-scroll.js" defer=""></script>
+<script src="../../assets/bs-learn-scroll.js" defer=""></script>
 
-<script src="../../assets/bms-research-scroll.js" defer=""></script>
+<script src="../../assets/bs-research-scroll.js" defer=""></script>
 
-<script src="../../assets/bms-glossary.js" defer=""></script>
+<script src="../../assets/bs-glossary.js" defer=""></script>
 
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -621,7 +623,7 @@ Sage: 3-ply</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/backgammon-made-simple\.github\.io");
+        var filterRegex = new RegExp("https:\/\/backgammonsimplified\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -952,7 +954,7 @@ Sage: 3-ply</code></pre>
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2026 Marty Gale - Backgammon Made Simple</p>
+<p>Copyright 2026 Marty Gale - Backgammon Simplified</p>
 </div>   
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">

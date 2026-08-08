@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
-    <title>Backgammon Made Simple Updates</title>
-    <link>https://backgammon-made-simple.github.io/updates/</link>
-    <atom:link href="https://backgammon-made-simple.github.io/updates/index.xml" rel="self" type="application/rss+xml" />
+    <title>Backgammon Simplified Updates</title>
+    <link>https://backgammonsimplified.github.io/updates/</link>
+    <atom:link href="https://backgammonsimplified.github.io/updates/index.xml" rel="self" type="application/rss+xml" />
     <description>Dated public lessons, Research articles, studies, benchmark reports, and glossary definitions.</description>
     <image>
-      <url>https://backgammon-made-simple.github.io/assets/social/generated/social-default.png</url>
-      <title>Backgammon Made Simple Updates</title>
-      <link>https://backgammon-made-simple.github.io/updates/</link>
+      <url>https://backgammonsimplified.github.io/assets/social/generated/social-default.png</url>
+      <title>Backgammon Simplified Updates</title>
+      <link>https://backgammonsimplified.github.io/updates/</link>
     </image>
     <generator>quarto-1.10.15</generator>
-    <lastBuildDate>Sun, 02 Aug 2026 00:58:54 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 08 Aug 2026 23:07:13 GMT</lastBuildDate>
     <item>
       <title>Glossary: 10 in the Zone</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#10-in-the-zone</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#10-in-the-zone</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#10-in-the-zone</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#10-in-the-zone</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>The zone is your side of the board, consisting of your home board and outer board. At the start of the game, you have eight checkers in the attacking zone. Bringing two active builders down from the mid-point increases that number to ten.
@@ -25,8 +25,8 @@ With ten checkers in the zone, you have strong blitzing potential. Nine checkers
     </item>
     <item>
       <title>Glossary: 25 Percent Rule</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#25-percent-rule</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#25-percent-rule</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#25-percent-rule</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#25-percent-rule</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>The 25 Percent Rule is a simplified baseline for cube decisions. In a holding game or other positions, if future cube actions are ignored, you need roughly a 25 percent winning chance to take a double. If the cube remains live and you may be able to recube later, you might correctly take with less than 25 percent.</description>
@@ -34,8 +34,8 @@ With ten checkers in the zone, you have strong blitzing potential. Nine checkers
     </item>
     <item>
       <title>Glossary: 8-9-12 Doubling Rule</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#8-9-12-doubling-rule</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#8-9-12-doubling-rule</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#8-9-12-doubling-rule</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#8-9-12-doubling-rule</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>In a pure race, the 8-9-12 Doubling Rule helps guide cube decisions. The percentage is calculated by dividing the difference between the two pip counts by the leader's pip count. The leader considers doubling at about 8 percent, the middle of the doubling window is around 9 percent, and the trailer can usually take when behind by up to about 12 percent.
@@ -45,8 +45,8 @@ For example, if the leader has a pip count of 60 and the trailer has 66, the dif
     </item>
     <item>
       <title>Glossary: ABT</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#abt</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#abt</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#abt</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#abt</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>The American Backgammon Tour is a series of backgammon tournaments held across the United States. Players compete in multiple events and earn points toward the overall ABT standings.</description>
@@ -54,8 +54,8 @@ For example, if the leader has a pip count of 60 and the trailer has 66, the dif
     </item>
     <item>
       <title>Glossary: Ace</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#ace</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#ace</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#ace</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#ace</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>In backgammon, ace means one. It can describe rolling a one or refer to the one-point, which is also called the ace-point.</description>
@@ -63,8 +63,8 @@ For example, if the leader has a pip count of 60 and the trailer has 66, the dif
     </item>
     <item>
       <title>Glossary: Ace-Point Game</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#ace-point-game</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#ace-point-game</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#ace-point-game</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#ace-point-game</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>An ace-point game is a holding game in which you hold an anchor on your opponent's one-point. While your opponent bears in, you have about a 50 percent chance of getting a shot.
@@ -74,8 +74,8 @@ It is stronger than a two-point or three-point holding game because those anchor
     </item>
     <item>
       <title>Glossary: Acting Captain</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#acting-captain</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#acting-captain</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#acting-captain</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#acting-captain</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>In a chouette, every team member controls their own cube. The captain makes the checker plays against the box.
@@ -85,8 +85,8 @@ For example, the captain may offer a double that the box passes. If the box stil
     </item>
     <item>
       <title>Glossary: Action Play</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#action-play</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#action-play</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#action-play</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#action-play</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>An action play is a bold move made when you want to complicate the position, often when you are behind. It increases contact or volatility to create chances to turn the game around.</description>
@@ -94,8 +94,8 @@ For example, the captain may offer a double that the box passes. If the box stil
     </item>
     <item>
       <title>Glossary: Action Position</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#action-position</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#action-position</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#action-position</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#action-position</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>An action position is a volatile position with multiple hitting or exchange possibilities. These positions can lead to large swings in equity and require careful evaluation, especially because they may create strong doubling opportunities.</description>
@@ -103,8 +103,8 @@ For example, the captain may offer a double that the box passes. If the box stil
     </item>
     <item>
       <title>Glossary: Active Builder</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#active-builder</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#active-builder</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#active-builder</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#active-builder</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>An active builder is a blot or spare checker in your outer board that can help you make a new point in your home board on a future roll. It is positioned to help you build a stronger board.</description>
@@ -112,8 +112,8 @@ For example, the captain may offer a double that the box passes. If the box stil
     </item>
     <item>
       <title>Glossary: Advanced Anchor</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#advanced-anchor</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#advanced-anchor</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#advanced-anchor</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#advanced-anchor</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>An advanced anchor is an anchor on your opponent's four-point or five-point. It gives you outfield control and helps your back checkers escape. It is particularly useful in holding games, and you generally try not to break it until late in the middlegame or endgame.</description>
@@ -121,8 +121,8 @@ For example, the captain may offer a double that the box passes. If the box stil
     </item>
     <item>
       <title>Glossary: Ahead in the Count</title>
-      <link>https://backgammon-made-simple.github.io/glossary/#ahead-in-the-count</link>
-      <guid isPermaLink="true">https://backgammon-made-simple.github.io/glossary/#ahead-in-the-count</guid>
+      <link>https://backgammonsimplified.github.io/glossary/#ahead-in-the-count</link>
+      <guid isPermaLink="true">https://backgammonsimplified.github.io/glossary/#ahead-in-the-count</guid>
       <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
       <category>Glossary</category>
       <description>Ahead in the Count means you have a lower pip count than your opponent, meaning you have fewer pips remaining to bring your checkers home and bear them off.

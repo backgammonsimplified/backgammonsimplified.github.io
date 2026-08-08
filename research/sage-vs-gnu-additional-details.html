@@ -8,7 +8,7 @@
 
 <meta name="description" content="Methods, results, and evidence for the Sage versus GNU Stage 1 backgammon engine benchmark.">
 
-<title>Sage vs GNU: Additional Details – Backgammon Made Simple</title>
+<title>Sage vs GNU: Additional Details – Backgammon Simplified</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -44,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-71c7b49c685e597d910cb795eccce780.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ccd5a00dc6e8596bccddf1cebaba4c1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8d450d615d30163466618d5f2985fcb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -84,19 +84,19 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="manifest" href="../assets/icons/site.webmanifest">
 
-<style id="bms-research-taxonomy-styles">
+<style id="bs-research-taxonomy-styles">
 #title-block-header .quarto-categories {
   display: none;
 }
 
-.bms-post-taxonomy {
+.bs-post-taxonomy {
   position: relative;
   margin: 0 0 1.2rem;
   padding: 0 1.8rem 1.1rem 0;
-  border-bottom: 1px solid var(--bms-border, #d9d3c7);
+  border-bottom: 1px solid var(--bs-border, #d9d3c7);
 }
 
-.bms-post-taxonomy-toggle {
+.bs-post-taxonomy-toggle {
   position: absolute;
   top: 0;
   right: 0;
@@ -106,37 +106,37 @@ ul.task-list li input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 1px solid var(--bms-border, #d9d3c7);
+  border: 1px solid var(--bs-border, #d9d3c7);
   border-radius: 5px;
-  background: var(--bms-page-background, #faf7f2);
-  color: var(--bms-text-muted, #68625a);
+  background: var(--bs-page-background, #faf7f2);
+  color: var(--bs-text-muted, #68625a);
   cursor: pointer;
   font-size: 1rem;
   line-height: 1;
 }
 
-.bms-post-taxonomy-toggle:focus-visible {
-  outline: 2px solid var(--bms-link-hover, #6d3f27);
+.bs-post-taxonomy-toggle:focus-visible {
+  outline: 2px solid var(--bs-link-hover, #6d3f27);
   outline-offset: 2px;
 }
 
-.bms-post-taxonomy--collapsed {
+.bs-post-taxonomy--collapsed {
   min-height: 1.55rem;
   margin-bottom: 0.4rem;
   padding-bottom: 0.2rem;
 }
 
-.bms-post-taxonomy--collapsed .bms-post-taxonomy-content {
+.bs-post-taxonomy--collapsed .bs-post-taxonomy-content {
   display: none;
 }
 
-.bms-post-taxonomy-group + .bms-post-taxonomy-group {
+.bs-post-taxonomy-group + .bs-post-taxonomy-group {
   margin-top: 0.9rem;
 }
 
-.bms-post-taxonomy-label {
+.bs-post-taxonomy-label {
   margin: 0 0 0.45rem;
-  color: var(--bms-text-muted, #68625a);
+  color: var(--bs-text-muted, #68625a);
   font-family:
     "Source Code Pro",
     ui-monospace,
@@ -152,47 +152,47 @@ ul.task-list li input[type="checkbox"] {
   text-transform: uppercase;
 }
 
-.bms-post-taxonomy-links {
+.bs-post-taxonomy-links {
   display: flex;
   flex-wrap: wrap;
   gap: 0.38rem;
 }
 
-.bms-post-taxonomy-link {
+.bs-post-taxonomy-link {
   display: inline-flex;
   align-items: center;
   min-height: 1.9rem;
   padding: 0.3rem 0.52rem;
-  border: 1px solid var(--bms-border-strong, #bcb4a7);
-  background: var(--bms-surface, #fff);
-  color: var(--bms-text-secondary, #4c4841);
+  border: 1px solid var(--bs-border-strong, #bcb4a7);
+  background: var(--bs-surface, #fff);
+  color: var(--bs-text-secondary, #4c4841);
   font-size: 0.72rem;
   font-weight: 680;
   line-height: 1.15;
   text-decoration: none;
 }
 
-.bms-post-taxonomy-link--category {
+.bs-post-taxonomy-link--category {
   border-radius: 4px;
 }
 
-.bms-post-taxonomy-link--tag {
-  border-color: var(--bms-border, #d9d3c7);
+.bs-post-taxonomy-link--tag {
+  border-color: var(--bs-border, #d9d3c7);
   border-radius: 999px;
-  background: var(--bms-ivory, #f7f3ea);
-  color: var(--bms-copper-dark, #7a482d);
+  background: var(--bs-ivory, #f7f3ea);
+  color: var(--bs-copper-dark, #7a482d);
 }
 
-.bms-post-taxonomy-link:hover,
-.bms-post-taxonomy-link:focus-visible {
-  border-color: var(--bms-link-hover, #6d3f27);
-  color: var(--bms-link-hover, #6d3f27);
+.bs-post-taxonomy-link:hover,
+.bs-post-taxonomy-link:focus-visible {
+  border-color: var(--bs-link-hover, #6d3f27);
+  color: var(--bs-link-hover, #6d3f27);
   text-decoration: underline;
   text-underline-offset: 0.14em;
 }
 
 @media (max-width: 991.98px) {
-  .bms-post-taxonomy {
+  .bs-post-taxonomy {
     display: none;
   }
 }
@@ -228,37 +228,39 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../assets/bms-shared.css">
-<link rel="stylesheet" href="../assets/bms-components.css">
-<link rel="stylesheet" href="../assets/bms-learn.css">
-<link rel="stylesheet" href="../assets/bms-lesson-analysis.css">
-<meta property="og:title" content="Sage vs GNU: Additional Details – Backgammon Made Simple">
+<link rel="stylesheet" href="../assets/bs-shared.css">
+<link rel="stylesheet" href="../assets/bs-components.css">
+<link rel="stylesheet" href="../assets/bs-learn.css">
+<link rel="stylesheet" href="../assets/bs-lesson-analysis.css">
+<meta property="og:title" content="Sage vs GNU: Additional Details – Backgammon Simplified">
 <meta property="og:description" content="Methods, results, and evidence for the Sage versus GNU Stage 1 backgammon engine benchmark.">
-<meta property="og:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
-<meta property="og:site_name" content="Backgammon Made Simple">
+<meta property="og:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
+<meta property="og:site_name" content="Backgammon Simplified">
 <meta property="og:image:height" content="630">
 <meta property="og:image:width" content="1200">
-<meta name="twitter:title" content="Sage vs GNU: Additional Details – Backgammon Made Simple">
+<meta name="twitter:title" content="Sage vs GNU: Additional Details – Backgammon Simplified">
 <meta name="twitter:description" content="Methods, results, and evidence for the Sage versus GNU Stage 1 backgammon engine benchmark.">
-<meta name="twitter:image" content="https://backgammon-made-simple.github.io/assets/social/generated/social-default.png">
+<meta name="twitter:image" content="https://backgammonsimplified.github.io/assets/social/generated/social-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image-height" content="630">
 <meta name="twitter:image-width" content="1200">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://backgammonsimplified.github.io/research/sage-vs-gnu-additional-details.html">
 </head>
 
-<body class="nav-fixed bms-editorial-page bms-title-eyebrow bms-research-article quarto-light">
+<body class="nav-fixed bs-editorial-page bs-title-eyebrow bs-research-article quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo light-content">
-    <img src="../assets/logo.svg" alt="Backgammon Made Simple" class="navbar-logo dark-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="Backgammon Simplified" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Backgammon Made Simple</span>
+    <span class="navbar-title">Backgammon Simplified</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -353,30 +355,30 @@ window.Quarto = {
 </header>
 
 
-<aside id="bms-term-lookup-panel" class="bms-term-lookup" data-bms-term-lookup="" hidden="">
-  <div class="bms-term-lookup-heading">
+<aside id="bs-term-lookup-panel" class="bs-term-lookup" data-bs-term-lookup="" hidden="">
+  <div class="bs-term-lookup-heading">
     <strong>Look Up a Term</strong>
-    <button type="button" class="bms-term-lookup-close" data-bms-term-lookup-close="" aria-controls="bms-term-lookup-panel" aria-expanded="true" aria-label="Collapse term lookup to the right"><span aria-hidden="true">→</span></button>
+    <button type="button" class="bs-term-lookup-close" data-bs-term-lookup-close="" aria-controls="bs-term-lookup-panel" aria-expanded="true" aria-label="Collapse term lookup to the right"><span aria-hidden="true">→</span></button>
   </div>
-  <form action="/glossary/" method="get" data-bms-term-lookup-form="">
-    <label class="visually-hidden" for="bms-term-lookup-input">Term or alias</label>
-    <div class="bms-term-lookup-controls">
-      <input id="bms-term-lookup-input" name="q" type="search" required="" autocomplete="off" spellcheck="false" placeholder="Enter Term">
+  <form action="/glossary/" method="get" data-bs-term-lookup-form="">
+    <label class="visually-hidden" for="bs-term-lookup-input">Term or alias</label>
+    <div class="bs-term-lookup-controls">
+      <input id="bs-term-lookup-input" name="q" type="search" required="" autocomplete="off" spellcheck="false" placeholder="Enter Term">
       <button type="submit">Search</button>
     </div>
   </form>
-  <div class="bms-term-lookup-result" data-bms-term-lookup-result="" aria-live="polite" hidden=""></div>
+  <div class="bs-term-lookup-result" data-bs-term-lookup-result="" aria-live="polite" hidden=""></div>
 </aside>
-<div class="bms-editorial-lead">
+<div class="bs-editorial-lead">
 <p>This page explains how Stage 1 was run, how the results were calculated, and what the evidence can and cannot show. It is the detailed companion to the main results page.</p>
 </div>
-<div class="bms-button-row">
-<p><a href="../engine-benchmark/sage-vs-gnu-stage1/index.html" class="bms-button-primary">Back to the main results</a></p>
-<p><a href="../engine-benchmark/index.html" class="bms-button-outline">View the benchmark method</a></p>
-<p><a href="https://github.com/backgammon-made-simple/backgammon-engine-benchmark" class="bms-button-outline">View the public repository</a></p>
+<div class="bs-button-row">
+<p><a href="../engine-benchmark/sage-vs-gnu-stage1/index.html" class="bs-button-primary">Back to the main results</a></p>
+<p><a href="../engine-benchmark/index.html" class="bs-button-outline">View the benchmark method</a></p>
+<p><a href="https://github.com/backgammonsimplified/backgammon-engine-benchmark" class="bs-button-outline">View the public repository</a></p>
 </div>
-<div class="bms-inline-note">
-<p><span class="bms-technical-label">IMPORTANT REVIEWER LIMITATION</span></p>
+<div class="bs-inline-note">
+<p><span class="bs-technical-label">IMPORTANT REVIEWER LIMITATION</span></p>
 <p>GNU reviewed the decisions made by both engines. Using the same reviewer keeps the scoring consistent, but GNU was also one of the competitors. The error rates, equity losses, roll estimates, and adjusted results on this page are GNU’s estimates. They are not neutral proof of perfect play.</p>
 </div>
 <section id="how-the-study-was-set-up" class="level2">
@@ -532,8 +534,8 @@ Why not use a shallower or deeper cube pairing?
 <p>The next deeper pairing, GNU 3-ply and Sage 4-ply, gives the original player two examined turns but gives the opponent only one. GNU 4-ply would give both players two turns, but Sage did not offer a matching regular 5-ply live option.</p>
 <p>GNU 2-ply and Sage 3-ply were therefore the least uneven practical pairing for live cube decisions.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Ply depth comparison placeholder">
-<p><span class="bms-figure-slot-label">PENDING TABLE OR DIAGRAM :: GNU AND SAGE PLY-DEPTH COMPARISON</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Ply depth comparison placeholder">
+<p><span class="bs-figure-slot-label">PENDING TABLE OR DIAGRAM :: GNU AND SAGE PLY-DEPTH COMPARISON</span></p>
 <p>Show the comparison above, while keeping the live checker depths, live cube depths, and deeper GNU post-match review clearly separate.</p>
 </div>
 <!--
@@ -546,8 +548,8 @@ figure-id: fig-research-search-depth
 <section id="who-won" class="level3">
 <h3 class="anchored" data-anchor-id="who-won">Who won?</h3>
 <p>GNU won 13 of the 20 matches. Sage won 7.</p>
-<div class="bms-figure-slot" role="group" aria-label="Match score and tile strip placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: MATCH SCORE AND 20-MATCH TILE STRIP</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Match score and tile strip placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: MATCH SCORE AND 20-MATCH TILE STRIP</span></p>
 <p>Show GNU with 13 wins and Sage with 7 wins. Add one chronological tile for each public match identifier, with no A/B or pair labels.</p>
 </div>
 <!--
@@ -572,8 +574,8 @@ p-value: 0.26317596435546875
 Study threshold: 0.05</code></pre>
 <p>Fifteen GNU wins is the first result on that side to fall below the 0.05 threshold. Its two-sided p-value is about 0.041. The threshold is a research convention, not a point at which a result becomes certain.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Two-sided binomial distribution placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: TWO-SIDED BINOMIAL DISTRIBUTION</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Two-sided binomial distribution placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: TWO-SIDED BINOMIAL DISTRIBUTION</span></p>
 <p>Show GNU win totals from 0 through 20 under a 50% win probability. Mark the observed 13 wins and both tails used for the p-value. Also mark 15 wins as the first GNU total below the 0.05 threshold.</p>
 </div>
 <!--
@@ -607,12 +609,12 @@ Zero:          neutral adjusted result</code></pre>
 <p>These are analytical values centered on zero. They are not literal final match-winning chances of 100% and 0%.</p>
 <p>The report labels an adjusted result within plus or minus 1 match-winning-chance percentage point as nearly even. This is an editorial band, not a confidence interval or a statistical test.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Observed to reviewer-adjusted result placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: OBSERVED RESULT TO GNU-ADJUSTED RESULT</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Observed to reviewer-adjusted result placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: OBSERVED RESULT TO GNU-ADJUSTED RESULT</span></p>
 <p>Show all 20 matches: 7 Sage wins that still show Sage ahead, 8 GNU wins that still show GNU ahead, 3 GNU wins that become nearly even, and 2 GNU wins that show Sage ahead after adjustment. Use only the direct GNU centered adjusted result.</p>
 </div>
-<div class="bms-figure-slot" role="group" aria-label="Match-level rolls and adjusted result table placeholder">
-<p><span class="bms-figure-slot-label">PENDING TABLE :: MATCH-LEVEL ROLLS AND ADJUSTED RESULTS</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Match-level rolls and adjusted result table placeholder">
+<p><span class="bs-figure-slot-label">PENDING TABLE :: MATCH-LEVEL ROLLS AND ADJUSTED RESULTS</span></p>
 <p>Include the public match identifier, observed winner, both match ER values, both roll estimates, the net Sage-oriented roll advantage, the direct GNU centered adjusted result, its category, and the source-validation status.</p>
 </div>
 <!--
@@ -628,8 +630,8 @@ publication gate: all 20 direct GNU adjusted values must be valid
 <p>After each match, GNU reviewed the checker plays and cube decisions made by both engines. For each decision that counted under the review rules, GNU compared the action taken with the action it preferred and estimated how much equity was lost.</p>
 <p><strong>Equity</strong> is the value of a position or decision after accounting for the possible match outcomes. An <strong>error rate</strong>, or ER, summarizes the estimated equity lost per eligible decision. Lower is better.</p>
 <p>The same reviewer and review configuration were used for both engines, which keeps the calculation consistent. GNU still remains both competitor and reviewer.</p>
-<div class="bms-status-panel">
-<p><span class="bms-status-label">GNU REVIEW CONFIGURATION :: INSERT VERIFIED WORDING</span></p>
+<div class="bs-status-panel">
+<p><span class="bs-status-label">GNU REVIEW CONFIGURATION :: INSERT VERIFIED WORDING</span></p>
 <p>Call the review <strong>GNU 4-ply</strong> only when the audited release verifies the requested and actual checker and cube review depths. Otherwise, describe only the configuration that the evidence verifies.</p>
 </div>
 </section>
@@ -725,15 +727,15 @@ How is pooled ER calculated?
 <p>An eligible checker decision is a played checker move that GNU scored under the accepted review rules. Eligible cube decisions include doubles, takes, passes, and no-double decisions that GNU considered close enough to matter. Routine no-double positions are not all included.</p>
 <p>Because there are far fewer eligible cube decisions, one large cube error can affect cube ER much more than one checker error affects checker ER.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Pooled ER inputs placeholder">
-<p><span class="bms-figure-slot-label">PENDING TABLE OR FIGURE :: POOLED ER AND ITS INPUTS</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Pooled ER inputs placeholder">
+<p><span class="bs-figure-slot-label">PENDING TABLE OR FIGURE :: POOLED ER AND ITS INPUTS</span></p>
 <p>Show ER first, then the authoritative equity loss and eligible-decision count used to calculate it. Also retain the source-reported total, reconstructed total, rounded display value, and reconciliation status.</p>
 </div>
 <!--
 figure-id: fig-research-pooled-er-inputs
 -->
-<div class="bms-figure-slot" role="group" aria-label="Checker and cube pooled ER placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: CHECKER-PLAY AND CUBE-DECISION ER</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Checker and cube pooled ER placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: CHECKER-PLAY AND CUBE-DECISION ER</span></p>
 <p>Use separate panels and separate scales for checker play and cube decisions. Label each panel <strong>Lower is better</strong> and include the eligible-decision counts.</p>
 </div>
 <!--
@@ -743,16 +745,16 @@ figure-id: fig-research-component-er
 <section id="how-much-did-er-vary-from-match-to-match" class="level3">
 <h3 class="anchored" data-anchor-id="how-much-did-er-vary-from-match-to-match">How much did ER vary from match to match?</h3>
 <p>Match-level ER helps show which matches were ordinary and which contained unusually large reviewed losses. It is descriptive. It is not the official combined estimate, and the 20 match values are not treated as independent observations for a significance test.</p>
-<div class="bms-figure-slot" role="group" aria-label="Match-level checker ER dot plot placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: CHECKER-PLAY ER BY MATCH</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Match-level checker ER dot plot placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: CHECKER-PLAY ER BY MATCH</span></p>
 <p>Plot one point per engine per match. Keep all 20 matches and all zero values. Use slight jitter only when needed to reveal overlap. Provide exact values and match identifiers by hover or a supporting table. Label <strong>Lower is better</strong> and do not add confidence intervals or significance tests.</p>
 </div>
 <!--
 figure-id: fig-research-checker-match-er
 -->
 <p>Many cube ER values may be exactly zero. Showing them all at one coordinate can look like a single thick line, so the figure must state how many matches each zero represents.</p>
-<div class="bms-figure-slot" role="group" aria-label="Match-level cube ER dot plot placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: CUBE-DECISION ER BY MATCH</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Match-level cube ER dot plot placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: CUBE-DECISION ER BY MATCH</span></p>
 <p>Keep all exact-zero values, state the number of zero-ER matches for each engine, and show non-zero values clearly. Provide exact values and match identifiers by hover or table. Label <strong>Lower is better</strong>.</p>
 </div>
 <!--
@@ -784,15 +786,15 @@ figure-id: fig-research-cube-match-er
 </tbody>
 </table>
 <p>Zero-loss decisions stay in the denominator and count as within the threshold. These percentages describe closeness to GNU’s reviewed choice. They are not objective accuracy rates.</p>
-<div class="bms-figure-slot" role="group" aria-label="Checker closeness stacked bars placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: CHECKER DECISIONS CLOSE TO GNU’S PREFERRED MOVE</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Checker closeness stacked bars placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: CHECKER DECISIONS CLOSE TO GNU’S PREFERRED MOVE</span></p>
 <p>Show the share and raw count within 0.010 EMG and more than 0.010 EMG away. Do not label the categories correct, incorrect, or accuracy.</p>
 </div>
 <!--
 figure-id: fig-research-checker-closeness
 -->
-<div class="bms-figure-slot" role="group" aria-label="Checker errors above threshold placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: CHECKER DECISIONS MORE THAN 0.010 EMG AWAY</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Checker errors above threshold placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: CHECKER DECISIONS MORE THAN 0.010 EMG AWAY</span></p>
 <p>Plot one point for each eligible checker decision more than 0.010 EMG from GNU’s preferred move. Include the equity loss, engine, match and decision identifiers, and the two actions when space permits.</p>
 </div>
 <!--
@@ -804,16 +806,16 @@ figure-id: fig-research-checker-errors
 <p>The cube percentage needs an audited list of all eligible cube opportunities, including valid zero-loss decisions. It cannot be calculated from a table that contains only positive errors.</p>
 <p>The current threshold is an absolute GNU-reviewed loss of 0.010 EMG or less. A valid zero remains in the denominator and counts as within the threshold. A missing, unparsed, or unscored opportunity is not changed to zero.</p>
 <p>The final percentage and counts remain pending until the audited cube-opportunity summary is available.</p>
-<div class="bms-figure-slot" role="group" aria-label="Cube closeness stacked bars placeholder">
-<p><span class="bms-figure-slot-label">PENDING AUDITED FIGURE :: CUBE DECISIONS CLOSE TO GNU’S REVIEW</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Cube closeness stacked bars placeholder">
+<p><span class="bs-figure-slot-label">PENDING AUDITED FIGURE :: CUBE DECISIONS CLOSE TO GNU’S REVIEW</span></p>
 <p>Show percentages, raw counts, accepted denominators, the 0.010 EMG threshold, and the zero and missing-value rules for each engine. Do not derive the percentage from positive errors alone unless the audited release explicitly validates that method.</p>
 </div>
 <!--
 figure-id: fig-research-cube-closeness
 required output: authoritative audited cube-closeness summary
 -->
-<div class="bms-figure-slot" role="group" aria-label="Positive cube errors dot plot placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: GNU-SCORED POSITIVE CUBE LOSSES</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Positive cube errors dot plot placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: GNU-SCORED POSITIVE CUBE LOSSES</span></p>
 <p>Plot one point per positive cube error, with the engine, decision role or error type, equity loss, and public match and decision identifiers. State directly that this is GNU’s scoring. This figure shows error size and is not the denominator for the closeness percentage.</p>
 </div>
 <!--
@@ -827,8 +829,8 @@ figure-id: fig-research-cube-errors
 <p>Those positions are examined with a deeper Sage <strong>rollout</strong>. A rollout repeatedly plays forward from the same position to compare how two actions perform across many possible continuations.</p>
 <p>Stage 1 compares exactly two actions: Sage’s original cube action and GNU’s recommendation. A valid uncertainty range entirely on GNU’s side supports GNU. A range entirely on Sage’s side supports Sage’s original action. A range that includes zero is unresolved. A point estimate without a valid paired uncertainty range is reported separately and is not called resolved.</p>
 <p>No conclusion is made about a third action.</p>
-<div class="bms-status-panel">
-<p><span class="bms-status-label">PENDING AUDITED SAGE ROLLOUT RELEASE</span></p>
+<div class="bs-status-panel">
+<p><span class="bs-status-label">PENDING AUDITED SAGE ROLLOUT RELEASE</span></p>
 <p>Do not publish rollout verdicts, counts, or representative positions until the audited rollout release is available. Pending does not mean zero.</p>
 </div>
 <details>
@@ -839,8 +841,8 @@ What must the audited rollout section include?
 <p>Each published position must include the exact match context, the two actions, the paired Sage difference in EMG, its valid uncertainty range when available, the classification, the rollout settings and trial count, and a link to the retained evidence.</p>
 <p>The interpretation must stay within the selected positions. It must not claim that Sage’s neural evaluator is generally weaker unless a separate experiment isolates that cause.</p>
 </details>
-<div class="bms-figure-slot" role="group" aria-label="Sage rollout research section placeholder">
-<p><span class="bms-figure-slot-label">PENDING RESEARCH COPY AND FIGURES :: SAGE CUBE ROLLOUTS</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Sage rollout research section placeholder">
+<p><span class="bs-figure-slot-label">PENDING RESEARCH COPY AND FIGURES :: SAGE CUBE ROLLOUTS</span></p>
 <p>Replace this block with the audited selection funnel, result summary, per-position evidence, exclusions, and interpretation.</p>
 </div>
 <!--
@@ -888,8 +890,8 @@ publication gate: audited rollout-results release required
 <p>The match times were grouped fairly closely together. In technical terms, they had lower variance, meaning there was less difference between the shorter and longer runs.</p>
 <p>The 4-ply review times were much more spread out. Although the average was just under 68 minutes, one review could take from just over 32 minutes to almost 2.5 hours. This made the review time much less predictable.</p>
 <p>These runtimes describe the hardware and setup used for this pilot. We ran the live matches one at a time to reduce the risk of errors. We ran several completed-match reviews in parallel, so adding all individual review times does not give the wall-clock time for the whole study.</p>
-<div class="bms-figure-slot" role="group" aria-label="Runtime distributions placeholder">
-<p><span class="bms-figure-slot-label">PENDING FIGURE :: RUNTIME BY COMPUTATIONAL STAGE</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Runtime distributions placeholder">
+<p><span class="bs-figure-slot-label">PENDING FIGURE :: RUNTIME BY COMPUTATIONAL STAGE</span></p>
 <p>Use <code>public_runtime_jobs.csv</code> and show separate runtime distributions for live matches, GNU reviews, and Sage rollouts when available. For each stage, report the job count, median, mean when useful, minimum, maximum, machine, and whether the jobs ran one at a time or in parallel.</p>
 </div>
 <!--
@@ -902,8 +904,8 @@ required output: public_runtime_jobs.csv
 <section id="one-audited-analytical-release" class="level3">
 <h3 class="anchored" data-anchor-id="one-audited-analytical-release">One audited analytical release</h3>
 <p>Every public figure and number should come from the same accepted analytical release. This prevents a page from accidentally mixing tables produced at different stages of the work.</p>
-<div class="bms-figure-slot" role="group" aria-label="Release manifest placeholder">
-<p><span class="bms-figure-slot-label">PENDING TABLE :: AUDITED RELEASE MANIFEST</span></p>
+<div class="bs-figure-slot" role="group" aria-label="Release manifest placeholder">
+<p><span class="bs-figure-slot-label">PENDING TABLE :: AUDITED RELEASE MANIFEST</span></p>
 <p>Show the release and schema versions, producing repository and commit, source releases, table names and row counts, file checksums, audit status, and any unresolved issues.</p>
 </div>
 </section>
@@ -922,10 +924,10 @@ What is kept so the study can be repeated?
 </summary>
 <p>The public record should include the source-code commits, engine versions and models, ply depths, match rules, cube settings, dice-generation inputs, retained stream evidence, run commands, environment details, original match and review files, the audited analytical release, Sage rollout evidence, figure-to-table mappings, validation reports, retries, exclusions, manifests, and checksums.</p>
 </details>
-<div class="bms-button-row">
-<p><a href="https://github.com/backgammon-made-simple/backgammon-engine-benchmark" class="bms-button-outline">Public benchmark repository</a></p>
-<p><span class="bms-button-outline" role="link" aria-disabled="true">Audited data release link pending</span></p>
-<p><span class="bms-button-outline" role="link" aria-disabled="true">Evidence archive link pending</span></p>
+<div class="bs-button-row">
+<p><a href="https://github.com/backgammonsimplified/backgammon-engine-benchmark" class="bs-button-outline">Public benchmark repository</a></p>
+<p><span class="bs-button-outline" role="link" aria-disabled="true">Audited data release link pending</span></p>
+<p><span class="bs-button-outline" role="link" aria-disabled="true">Evidence archive link pending</span></p>
 </div>
 </section>
 </section>
@@ -992,25 +994,25 @@ What is kept so the study can be repeated?
 </section>
 <section id="related-pages" class="level2">
 <h2 class="anchored" data-anchor-id="related-pages">Related pages</h2>
-<div class="bms-button-row">
-<p><a href="../engine-benchmark/sage-vs-gnu-stage1/index.html" class="bms-button-primary">Back to the main results</a></p>
-<p><a href="../engine-benchmark/index.html" class="bms-button-outline">View the benchmark method</a></p>
-<p><a href="https://github.com/backgammon-made-simple/backgammon-engine-benchmark" class="bms-button-outline">View the public repository</a></p>
+<div class="bs-button-row">
+<p><a href="../engine-benchmark/sage-vs-gnu-stage1/index.html" class="bs-button-primary">Back to the main results</a></p>
+<p><a href="../engine-benchmark/index.html" class="bs-button-outline">View the benchmark method</a></p>
+<p><a href="https://github.com/backgammonsimplified/backgammon-engine-benchmark" class="bs-button-outline">View the public repository</a></p>
 </div>
 
 
 </section>
 
 </main> <!-- /main -->
-<script src="../assets/bms-learn.js" defer=""></script>
+<script src="../assets/bs-learn.js" defer=""></script>
 
-<script src="../assets/bms-lesson-analysis.js" defer=""></script>
+<script src="../assets/bs-lesson-analysis.js" defer=""></script>
 
-<script src="../assets/bms-learn-scroll.js" defer=""></script>
+<script src="../assets/bs-learn-scroll.js" defer=""></script>
 
-<script src="../assets/bms-research-scroll.js" defer=""></script>
+<script src="../assets/bs-research-scroll.js" defer=""></script>
 
-<script src="../assets/bms-glossary.js" defer=""></script>
+<script src="../assets/bs-glossary.js" defer=""></script>
 
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1085,7 +1087,7 @@ What is kept so the study can be repeated?
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/backgammon-made-simple\.github\.io");
+        var filterRegex = new RegExp("https:\/\/backgammonsimplified\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1416,7 +1418,7 @@ What is kept so the study can be repeated?
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2026 Marty Gale - Backgammon Made Simple</p>
+<p>Copyright 2026 Marty Gale - Backgammon Simplified</p>
 </div>   
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
@@ -1438,18 +1440,18 @@ What is kept so the study can be repeated?
     </div>
   </div>
 </footer>
-<script id="bms-research-taxonomy-script">
+<script id="bs-research-taxonomy-script">
 (function () {
   "use strict";
 
   function moveResearchTaxonomy() {
-    var source = document.getElementById("bms-research-taxonomy-source");
+    var source = document.getElementById("bs-research-taxonomy-source");
 
     if (!source) {
       return;
     }
 
-    var taxonomy = source.querySelector(".bms-post-taxonomy");
+    var taxonomy = source.querySelector(".bs-post-taxonomy");
 
     if (!taxonomy) {
       source.remove();
@@ -1482,31 +1484,31 @@ What is kept so the study can be repeated?
   }
 
   function initializeResearchTaxonomyToggle(taxonomy) {
-    if (!taxonomy || taxonomy.querySelector("[data-bms-research-taxonomy-toggle]")) {
+    if (!taxonomy || taxonomy.querySelector("[data-bs-research-taxonomy-toggle]")) {
       return;
     }
 
     var collapsed = false;
     var toggle = document.createElement("button");
-    var contentId = "bms-research-taxonomy-content";
+    var contentId = "bs-research-taxonomy-content";
     var groups = Array.from(
-      taxonomy.querySelectorAll(".bms-post-taxonomy-group")
+      taxonomy.querySelectorAll(".bs-post-taxonomy-group")
     );
     var content = document.createElement("div");
 
     content.id = contentId;
-    content.className = "bms-post-taxonomy-content";
+    content.className = "bs-post-taxonomy-content";
     groups.forEach(function (group) {
       content.appendChild(group);
     });
     taxonomy.appendChild(content);
     toggle.type = "button";
-    toggle.className = "bms-post-taxonomy-toggle";
-    toggle.dataset.bmsResearchTaxonomyToggle = "";
+    toggle.className = "bs-post-taxonomy-toggle";
+    toggle.dataset.bsResearchTaxonomyToggle = "";
     toggle.setAttribute("aria-controls", contentId);
 
     function update() {
-      taxonomy.classList.toggle("bms-post-taxonomy--collapsed", collapsed);
+      taxonomy.classList.toggle("bs-post-taxonomy--collapsed", collapsed);
       toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
       toggle.setAttribute(
         "aria-label",
@@ -1555,8 +1557,8 @@ What is kept so the study can be repeated?
     window.setTimeout(function () {
       if (category) {
         var categoryButton = matchingButton(
-          "[data-bms-filter-category]",
-          "bmsFilterCategory",
+          "[data-bs-filter-category]",
+          "bsFilterCategory",
           category
         );
 
@@ -1570,8 +1572,8 @@ What is kept so the study can be repeated?
 
       if (tag) {
         var tagButton = matchingButton(
-          "[data-bms-filter-tag]",
-          "bmsFilterTag",
+          "[data-bs-filter-tag]",
+          "bsFilterTag",
           tag
         );
 

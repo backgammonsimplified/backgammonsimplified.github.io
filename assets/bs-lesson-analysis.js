@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const FIXTURE_SCHEMA = "bms-lesson-analysis-fixture-v1";
+  const FIXTURE_SCHEMA = "bs-lesson-analysis-fixture-v1";
   const FIRST_ACTIONS = ["double", "roll"];
   const RESPONSES = ["pass", "take"];
   const fixtureRequests = new Map();
@@ -17,7 +17,7 @@
   function nextInstanceId(kind, fixtureId) {
     instanceCounter += 1;
     return [
-      "bms-analysis",
+      "bs-analysis",
       cleanToken(kind),
       cleanToken(fixtureId),
       String(instanceCounter)
@@ -188,9 +188,9 @@
   }
 
   function disclosure(id, summaryText, className) {
-    const details = element("details", className || "bms-analysis-disclosure");
+    const details = element("details", className || "bs-analysis-disclosure");
     const summary = element("summary", "", summaryText);
-    const content = element("div", "bms-analysis-disclosure-content");
+    const content = element("div", "bs-analysis-disclosure-content");
     details.id = id;
     content.id = id + "-content";
     summary.setAttribute("aria-controls", content.id);
@@ -207,8 +207,8 @@
   }
 
   function figureFor(image, assetRoot, className) {
-    const figure = element("figure", className || "bms-analysis-position");
-    const img = element("img", "bms-analysis-position-image");
+    const figure = element("figure", className || "bs-analysis-position");
+    const img = element("img", "bs-analysis-position-image");
     img.src = assetUrl(assetRoot, image.image);
     img.alt = optionalText(image.alt || image.image_alt, "Fixture position");
     img.width = 1200;
@@ -220,7 +220,7 @@
   }
 
   function definitionList(rows, className) {
-    const list = element("dl", className || "bms-analysis-metrics");
+    const list = element("dl", className || "bs-analysis-metrics");
     rows.forEach(function (row) {
       list.append(
         element("dt", "", row[0]),
@@ -260,18 +260,18 @@
     const section = disclosure(
       id,
       summaryText || "Show fixture analysis",
-      "bms-analysis-disclosure bms-analysis-disclosure--nested"
+      "bs-analysis-disclosure bs-analysis-disclosure--nested"
     );
     section.content.append(
       definitionList(analysisRows(analysis)),
       element(
         "p",
-        "bms-analysis-explanation",
+        "bs-analysis-explanation",
         optionalText(analysis && analysis.explanation)
       ),
       element(
         "p",
-        "bms-analysis-fixture-note",
+        "bs-analysis-fixture-note",
         fixtureStatus.message
       )
     );
@@ -282,22 +282,22 @@
   function choiceButton(label, value) {
     const button = element(
       "button",
-      "bms-button-outline bms-analysis-choice",
+      "bs-button-outline bs-analysis-choice",
       label
     );
     button.type = "button";
-    button.dataset.bmsAnalysisChoice = value;
+    button.dataset.bsAnalysisChoice = value;
     button.setAttribute("aria-pressed", "false");
     return button;
   }
 
   function setPressed(group, selected) {
     group
-      .querySelectorAll("[data-bms-analysis-choice]")
+      .querySelectorAll("[data-bs-analysis-choice]")
       .forEach(function (button) {
         button.setAttribute(
           "aria-pressed",
-          button.dataset.bmsAnalysisChoice === selected ? "true" : "false"
+          button.dataset.bsAnalysisChoice === selected ? "true" : "false"
         );
       });
   }
@@ -309,27 +309,27 @@
     }
 
     const instanceId = nextInstanceId("cube", fixtureId);
-    const article = element("article", "bms-lesson-analysis bms-cube-analysis");
-    const heading = element("h3", "bms-analysis-title", fixture.title);
+    const article = element("article", "bs-lesson-analysis bs-cube-analysis");
+    const heading = element("h3", "bs-analysis-title", fixture.title);
     const initialFigure = figureFor(fixture.initial, fixtures.asset_root);
-    const prompt = element("p", "bms-analysis-prompt", fixture.prompt);
-    const group = element("div", "bms-analysis-choice-row");
+    const prompt = element("p", "bs-analysis-prompt", fixture.prompt);
+    const group = element("div", "bs-analysis-choice-row");
     const status = element(
       "p",
-      "bms-analysis-choice-status",
+      "bs-analysis-choice-status",
       "Choose Double or Roll to reveal the fixture answer."
     );
     const firstAnswer = disclosure(
       instanceId + "-first-answer",
       "Answer",
-      "bms-analysis-disclosure bms-analysis-answer"
+      "bs-analysis-disclosure bs-analysis-answer"
     );
     const doubleButton = choiceButton("Double", "double");
     const rollButton = choiceButton("Roll", "roll");
 
     heading.id = instanceId + "-title";
     article.setAttribute("aria-labelledby", heading.id);
-    article.dataset.bmsAnalysisInstance = instanceId;
+    article.dataset.bsAnalysisInstance = instanceId;
     group.setAttribute("role", "group");
     group.setAttribute("aria-label", fixture.prompt);
     group.append(doubleButton, rollButton);
@@ -342,7 +342,7 @@
         "#" + instanceId + "-response-answer"
       );
       const responseGroup = article.querySelector(
-        "[data-bms-cube-response-group]"
+        "[data-bs-cube-response-group]"
       );
       if (!responseAnswer || !responseGroup) {
         return;
@@ -350,7 +350,7 @@
       setPressed(responseGroup, response);
       const responseSummary = responseAnswer.querySelector(":scope > summary");
       const responseContent = responseAnswer.querySelector(
-        ":scope > .bms-analysis-disclosure-content"
+        ":scope > .bs-analysis-disclosure-content"
       );
       responseSummary.textContent =
         humanize(response) +
@@ -359,7 +359,7 @@
       responseContent.replaceChildren(
         element(
           "p",
-          "bms-analysis-answer-summary",
+          "bs-analysis-answer-summary",
           state.responseData.summary
         )
       );
@@ -390,7 +390,7 @@
       firstAnswer.content.replaceChildren(
         element(
           "p",
-          "bms-analysis-answer-summary",
+          "bs-analysis-answer-summary",
           state.actionData.summary
         )
       );
@@ -408,11 +408,11 @@
       if (state.responder) {
         const responderSection = element(
           "section",
-          "bms-analysis-responder"
+          "bs-analysis-responder"
         );
         const responderHeading = element(
           "h4",
-          "bms-analysis-responder-title",
+          "bs-analysis-responder-title",
           "Responder decision"
         );
         const responderFigure = figureFor(
@@ -421,23 +421,23 @@
             alt: state.responder.alt
           },
           fixtures.asset_root,
-          "bms-analysis-position bms-analysis-position--responder"
+          "bs-analysis-position bs-analysis-position--responder"
         );
         const responderPrompt = element(
           "p",
-          "bms-analysis-prompt",
+          "bs-analysis-prompt",
           state.responder.prompt
         );
         const responseGroup = element(
           "div",
-          "bms-analysis-choice-row"
+          "bs-analysis-choice-row"
         );
         const passButton = choiceButton("Pass", "pass");
         const takeButton = choiceButton("Take", "take");
         const responseAnswer = disclosure(
           instanceId + "-response-answer",
           "Response answer",
-          "bms-analysis-disclosure bms-analysis-answer bms-analysis-answer--response"
+          "bs-analysis-disclosure bs-analysis-answer bs-analysis-answer--response"
         );
 
         responderHeading.id = instanceId + "-responder-title";
@@ -445,7 +445,7 @@
           "aria-labelledby",
           responderHeading.id
         );
-        responseGroup.dataset.bmsCubeResponseGroup = "";
+        responseGroup.dataset.bsCubeResponseGroup = "";
         responseGroup.setAttribute("role", "group");
         responseGroup.setAttribute("aria-label", state.responder.prompt);
         responseGroup.append(passButton, takeButton);
@@ -521,22 +521,22 @@
     const instanceId = nextInstanceId("checker", fixtureId);
     const article = element(
       "article",
-      "bms-lesson-analysis bms-checker-analysis"
+      "bs-lesson-analysis bs-checker-analysis"
     );
-    const heading = element("h3", "bms-analysis-title", fixture.title);
+    const heading = element("h3", "bs-analysis-title", fixture.title);
     const position = figureFor(fixture.initial, fixtures.asset_root);
-    const prompt = element("p", "bms-analysis-prompt", fixture.prompt);
-    const group = element("div", "bms-analysis-choice-row");
+    const prompt = element("p", "bs-analysis-prompt", fixture.prompt);
+    const group = element("div", "bs-analysis-choice-row");
     const status = element(
       "p",
-      "bms-analysis-choice-status",
+      "bs-analysis-choice-status",
       "Choose a supplied candidate to update the position and metrics."
     );
-    const metrics = element("div", "bms-analysis-candidate-result");
+    const metrics = element("div", "bs-analysis-candidate-result");
 
     heading.id = instanceId + "-title";
     article.setAttribute("aria-labelledby", heading.id);
-    article.dataset.bmsAnalysisInstance = instanceId;
+    article.dataset.bsAnalysisInstance = instanceId;
     article.dataset.positionId = optionalText(fixture.position_id, "");
     article.dataset.stateHash = optionalText(fixture.state_hash, "");
     article.dataset.analysisId = optionalText(fixture.analysis_id, "");
@@ -546,7 +546,7 @@
     metrics.appendChild(
       element(
         "p",
-        "bms-analysis-empty",
+        "bs-analysis-empty",
         "No candidate selected. The shared starting SVG remains visible."
       )
     );
@@ -568,7 +568,7 @@
           definitionList(candidateMetricRows(selected)),
           element(
             "p",
-            "bms-analysis-explanation",
+            "bs-analysis-explanation",
             optionalText(selected.explanation)
           )
         );
@@ -585,7 +585,7 @@
         fixture.analysis && fixture.analysis.label,
         "Show engine analysis"
       ),
-      "bms-analysis-disclosure"
+      "bs-analysis-disclosure"
     );
     engineAnalysis.content.append(
       definitionList([
@@ -601,12 +601,12 @@
       ]),
       element(
         "p",
-        "bms-analysis-explanation",
+        "bs-analysis-explanation",
         optionalText(fixture.analysis && fixture.analysis.explanation)
       ),
       element(
         "p",
-        "bms-analysis-fixture-note",
+        "bs-analysis-fixture-note",
         fixtures.fixture_status.message
       )
     );
@@ -626,7 +626,7 @@
   function showMountError(host, error) {
     const message = element(
       "p",
-      "bms-analysis-error",
+      "bs-analysis-error",
       "This lesson analysis fixture could not be loaded."
     );
     message.setAttribute("role", "alert");
@@ -635,12 +635,12 @@
   }
 
   function mountHost(host) {
-    if (!host || host.dataset.bmsAnalysisMounted === "true") {
+    if (!host || host.dataset.bsAnalysisMounted === "true") {
       return Promise.resolve();
     }
-    host.dataset.bmsAnalysisMounted = "true";
-    const url = host.dataset.bmsFixtureSrc;
-    const fixtureId = host.dataset.bmsFixtureId;
+    host.dataset.bsAnalysisMounted = "true";
+    const url = host.dataset.bsFixtureSrc;
+    const fixtureId = host.dataset.bsFixtureId;
     if (!url || !fixtureId) {
       showMountError(host, new Error("Fixture source and ID are required."));
       return Promise.resolve();
@@ -648,9 +648,9 @@
     host.setAttribute("aria-busy", "true");
     return loadFixtures(url)
       .then(function (fixtures) {
-        if (host.hasAttribute("data-bms-cube-decision")) {
+        if (host.hasAttribute("data-bs-cube-decision")) {
           mountCube(host, fixtures, fixtureId);
-        } else if (host.hasAttribute("data-bms-checker-decision")) {
+        } else if (host.hasAttribute("data-bs-checker-decision")) {
           mountChecker(host, fixtures, fixtureId);
         } else {
           throw new Error("Unknown lesson analysis component type.");
@@ -669,7 +669,7 @@
       return [];
     }
     const selector =
-      "[data-bms-cube-decision], [data-bms-checker-decision]";
+      "[data-bs-cube-decision], [data-bs-checker-decision]";
     const hosts = [];
     if (
       typeof rootElement.matches === "function" &&
@@ -692,19 +692,19 @@
   function hookContinuousLessons() {
     if (
       typeof window === "undefined" ||
-      !window.BMSLearn ||
-      typeof window.BMSLearn.mountLesson !== "function" ||
-      window.BMSLearn.bmsLessonAnalysisHooked
+      !window.BSLearn ||
+      typeof window.BSLearn.mountLesson !== "function" ||
+      window.BSLearn.bsLessonAnalysisHooked
     ) {
       return;
     }
-    const originalMount = window.BMSLearn.mountLesson;
-    window.BMSLearn.mountLesson = function (rootElement) {
+    const originalMount = window.BSLearn.mountLesson;
+    window.BSLearn.mountLesson = function (rootElement) {
       const result = originalMount(rootElement);
       mount(rootElement);
       return result;
     };
-    window.BMSLearn.bmsLessonAnalysisHooked = true;
+    window.BSLearn.bsLessonAnalysisHooked = true;
   }
 
   const publicApi = {
@@ -725,8 +725,8 @@
   }
 
   if (typeof window !== "undefined") {
-    window.BMSLessonAnalysis = Object.assign(
-      window.BMSLessonAnalysis || {},
+    window.BSLessonAnalysis = Object.assign(
+      window.BSLessonAnalysis || {},
       publicApi
     );
     hookContinuousLessons();

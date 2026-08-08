@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const MANIFEST_ROUTE = "/assets/bms-learn-sequence.json";
+  const MANIFEST_ROUTE = "/assets/bs-learn-sequence.json";
   let bootstrapToc = null;
   const ID_TOKEN_ATTRIBUTES = [
     "for",
@@ -112,7 +112,7 @@
       .toLocaleLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
-    return "bms-learn-scroll-" + (slug || "lesson") + "-";
+    return "bs-learn-scroll-" + (slug || "lesson") + "-";
   }
 
   function rewriteIdReferences(root, prefix, existingIdMap) {
@@ -434,7 +434,7 @@
     }
     const clone = toc.cloneNode(true);
     clone
-      .querySelectorAll("[data-bms-toc-toggle-divider]")
+      .querySelectorAll("[data-bs-toc-toggle-divider]")
       .forEach(function (divider) {
         divider.remove();
       });
@@ -470,10 +470,10 @@
       return false;
     }
     const headingToggle = globalToc.querySelector(
-      "[data-bms-toc-heading-toggle]"
+      "[data-bs-toc-heading-toggle]"
     );
     const toggleDivider = headingToggle
-      ? headingToggle.closest("[data-bms-toc-toggle-divider]")
+      ? headingToggle.closest("[data-bs-toc-toggle-divider]")
       : null;
     const controlledLinksId = headingToggle
       ? headingToggle.getAttribute("aria-controls")
@@ -502,8 +502,8 @@
 
   function createLessonMarker(lesson) {
     const marker = document.createElement("section");
-    marker.className = "bms-learn-scroll-lesson-marker";
-    marker.dataset.bmsLearnScrollLessonRoute = lesson.route;
+    marker.className = "bs-learn-scroll-lesson-marker";
+    marker.dataset.bsLearnScrollLessonRoute = lesson.route;
     marker.setAttribute("aria-hidden", "true");
     return marker;
   }
@@ -539,17 +539,17 @@
     const track = document.createElement("span");
     const visibleTitle = fetchedTitle || lesson.title;
 
-    divider.className = "bms-learn-scroll-divider";
+    divider.className = "bs-learn-scroll-divider";
     if (trackBoundary) {
       divider.classList.add("is-track-boundary");
     }
-    divider.dataset.bmsLearnScrollDivider = lesson.route;
+    divider.dataset.bsLearnScrollDivider = lesson.route;
     divider.setAttribute("aria-label", "Next lesson: " + visibleTitle);
-    label.className = "bms-learn-scroll-divider-label";
+    label.className = "bs-learn-scroll-divider-label";
     label.textContent = trackBoundary ? "Next track" : "Next lesson";
-    title.className = "bms-learn-scroll-divider-title";
+    title.className = "bs-learn-scroll-divider-title";
     title.textContent = visibleTitle;
-    track.className = "bms-learn-scroll-divider-track";
+    track.className = "bs-learn-scroll-divider-track";
     track.textContent = lesson.track_title;
     divider.append(label, title, track);
     return divider;
@@ -559,8 +559,8 @@
     const end = document.createElement("section");
     const message = document.createElement("p");
     const link = document.createElement("a");
-    end.className = "bms-learn-scroll-end";
-    end.dataset.bmsLearnScrollEnd = "";
+    end.className = "bs-learn-scroll-end";
+    end.dataset.bsLearnScrollEnd = "";
     message.textContent = "You have reached the end of the current lessons.";
     link.href = "/learn/";
     link.textContent = "Return to Learn Home";
@@ -575,14 +575,14 @@
     const link = document.createElement("a");
     const button = document.createElement("button");
 
-    container.className = "bms-learn-scroll-error";
+    container.className = "bs-learn-scroll-error";
     container.setAttribute("role", "status");
     container.setAttribute("aria-live", "polite");
     message.textContent = state.message + " ";
     link.href = state.route;
     link.textContent = "Open it as a normal page.";
     button.type = "button";
-    button.className = "bms-button-outline bms-learn-scroll-retry";
+    button.className = "bs-button-outline bs-learn-scroll-retry";
     button.textContent = "Retry";
     button.addEventListener("click", retry, { once: true });
     message.appendChild(link);
@@ -656,8 +656,8 @@
   function initializeContinuousLearn() {
     if (
       !document.body ||
-      !document.body.classList.contains("bms-learn-article") ||
-      document.body.classList.contains("bms-learn-track-index") ||
+      !document.body.classList.contains("bs-learn-article") ||
+      document.body.classList.contains("bs-learn-track-index") ||
       !("IntersectionObserver" in window) ||
       !document.getElementById("quarto-document-content")
     ) {
@@ -841,7 +841,7 @@
         synchronizeActiveLesson(lessonRecords[0]);
 
         function showEndState() {
-          if (!main.querySelector("[data-bms-learn-scroll-end]")) {
+          if (!main.querySelector("[data-bs-learn-scroll-end]")) {
             main.appendChild(createEndState());
           }
         }
@@ -854,8 +854,8 @@
           }
 
           const sentinel = document.createElement("div");
-          sentinel.className = "bms-learn-scroll-sentinel";
-          sentinel.dataset.bmsLearnScrollSentinel = followingLesson.route;
+          sentinel.className = "bs-learn-scroll-sentinel";
+          sentinel.dataset.bsLearnScrollSentinel = followingLesson.route;
           sentinel.setAttribute("aria-live", "polite");
           main.appendChild(sentinel);
 
@@ -908,7 +908,7 @@
                 if (
                   !nextMain ||
                   !nextDocument.body ||
-                  !nextDocument.body.classList.contains("bms-learn-article")
+                  !nextDocument.body.classList.contains("bs-learn-article")
                 ) {
                   throw new Error("Next lesson content was not found");
                 }
@@ -922,7 +922,7 @@
                 nextMain
                   .querySelectorAll(
                     "script, style, link[rel='stylesheet'], " +
-                      "[data-bms-term-lookup], [data-bms-lesson-track-nav], " +
+                      "[data-bs-term-lookup], [data-bs-lesson-track-nav], " +
                       ".quarto-title-breadcrumbs, .quarto-categories"
                   )
                   .forEach(function (element) {
@@ -930,7 +930,7 @@
                   });
                 nextMain.querySelectorAll(".column-margin").forEach(
                   function (margin) {
-                    margin.classList.add("bms-learn-scroll-inline-margin");
+                    margin.classList.add("bs-learn-scroll-inline-margin");
                   }
                 );
 
@@ -944,7 +944,7 @@
                 const headingIds = headingIdsFromToc(storedNextToc);
                 const header = nextMain.querySelector(".quarto-title-block");
                 if (header) {
-                  header.dataset.bmsLearnScrollLesson = followingLesson.route;
+                  header.dataset.bsLearnScrollLesson = followingLesson.route;
                 }
 
                 const marker = createLessonMarker(followingLesson);
@@ -961,10 +961,10 @@
                   fragment.appendChild(document.importNode(child, true));
                 });
                 if (
-                  window.BMSLearn &&
-                  typeof window.BMSLearn.mountLesson === "function"
+                  window.BSLearn &&
+                  typeof window.BSLearn.mountLesson === "function"
                 ) {
-                  window.BMSLearn.mountLesson(fragment);
+                  window.BSLearn.mountLesson(fragment);
                 }
                 sentinel.replaceWith(fragment);
                 lessonRecords.push(
@@ -1047,8 +1047,8 @@
   }
 
   if (typeof window !== "undefined") {
-    window.BMSLearnScroll = Object.assign(
-      window.BMSLearnScroll || {},
+    window.BSLearnScroll = Object.assign(
+      window.BSLearnScroll || {},
       publicApi
     );
   }
