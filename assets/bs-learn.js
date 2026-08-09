@@ -1226,7 +1226,6 @@
     let mobileDrawerEdge = null;
     let mobileDrawerBackdrop = null;
     let mobileDrawerToc = null;
-    let mobileDrawerLookup = null;
 
     if (refinedRightRailPage) {
       mobileDrawerEdge = document.createElement("button");
@@ -1237,14 +1236,14 @@
       mobileDrawerEdge.setAttribute("aria-expanded", "false");
       mobileDrawerEdge.setAttribute(
         "aria-label",
-        "Open table of contents and term search"
+        "Open table of contents"
       );
 
       mobileDrawer = document.createElement("aside");
       mobileDrawer.id = "bs-mobile-tools-drawer";
       mobileDrawer.className = "bs-mobile-tools-drawer";
       mobileDrawer.dataset.bsMobileToolsDrawer = "";
-      mobileDrawer.setAttribute("aria-label", "Page contents and term search");
+      mobileDrawer.setAttribute("aria-label", "Page contents");
       mobileDrawer.setAttribute("aria-hidden", "true");
       mobileDrawer.innerHTML =
         '<div class="bs-mobile-tools-heading">' +
@@ -1252,14 +1251,9 @@
         '<button type="button" data-bs-mobile-tools-close>Close</button>' +
         "</div>" +
         '<nav class="bs-mobile-tools-toc" aria-label="On this page" ' +
-        "data-bs-mobile-tools-toc></nav>" +
-        '<div class="bs-mobile-tools-lookup" ' +
-        "data-bs-mobile-tools-lookup></div>";
+        "data-bs-mobile-tools-toc></nav>";
       mobileDrawerToc = mobileDrawer.querySelector(
         "[data-bs-mobile-tools-toc]"
-      );
-      mobileDrawerLookup = mobileDrawer.querySelector(
-        "[data-bs-mobile-tools-lookup]"
       );
 
       mobileDrawerBackdrop = document.createElement("button");
@@ -1470,6 +1464,12 @@
       heading.textContent = "On this page";
       const links = sourceLinks.cloneNode(true);
       links.removeAttribute("id");
+      [links]
+        .concat(Array.from(links.querySelectorAll(".collapse, .collapsing")))
+        .forEach(function (list) {
+          list.classList.remove("collapse", "collapsing", "show");
+          list.removeAttribute("hidden");
+        });
       links.querySelectorAll("[id]").forEach(function (element) {
         element.removeAttribute("id");
       });
@@ -1497,8 +1497,9 @@
       mobileDrawerBackdrop.hidden = !expanded;
       document.body.classList.toggle("bs-mobile-tools-open", expanded);
       if (expanded && (!options || options.focus !== false)) {
-        const firstLink = mobileDrawer.querySelector("a[href]");
-        const target = firstLink || input;
+        const target = mobileDrawer.querySelector(
+          "a[href], [data-bs-mobile-tools-close]"
+        );
         if (target) {
           target.focus({ preventScroll: true });
         }
@@ -1596,7 +1597,7 @@
       }
       document.body.classList.add("bs-term-lookup-open");
       document
-        .querySelectorAll("[data-bs-site-term-toggle], [data-bs-mobile-term-toggle]")
+        .querySelectorAll("[data-bs-site-term-toggle]")
         .forEach(function (button) {
           button.setAttribute("aria-expanded", "true");
         });
@@ -1622,13 +1623,31 @@
       }
       document.body.classList.remove("bs-term-lookup-open");
       document
-        .querySelectorAll("[data-bs-site-term-toggle], [data-bs-mobile-term-toggle]")
+        .querySelectorAll("[data-bs-site-term-toggle]")
         .forEach(function (button) {
           button.setAttribute("aria-expanded", "false");
         });
       if (settings.returnFocus && termToggle && !termToggle.hidden) {
         termToggle.focus();
       }
+    };
+
+    const hideLookupOnMobile = function () {
+      if (lookup) {
+        if (lookup.parentElement !== tools) {
+          tools.insertBefore(lookup, marginSidebarToggle || backToTop);
+        }
+        lookup.classList.remove("bs-term-lookup--floating");
+        lookup.hidden = true;
+      }
+      if (termToggle) {
+        termToggle.hidden = true;
+        termToggle.setAttribute("aria-expanded", "false");
+      }
+      if (close) {
+        close.setAttribute("aria-expanded", "false");
+      }
+      document.body.classList.remove("bs-term-lookup-open");
     };
 
     const updateMarginSidebar = function () {
@@ -1862,34 +1881,23 @@
         } else if (lookup) {
           closeLookup();
         }
-      } else if (
-        refinedRightRailPage &&
-        mobileDrawer &&
-        mobileDrawerLookup
-      ) {
+      } else if (refinedRightRailPage && mobileDrawer) {
         tools.classList.remove("bs-site-tools--sidebar");
         tools.classList.remove("bs-site-tools--editorial-dock");
         tools.classList.add("bs-site-tools--floating");
         document.body.appendChild(tools);
-        if (lookup) {
-          lookup.classList.remove("bs-term-lookup--floating");
-          mobileDrawerLookup.appendChild(lookup);
-          lookup.hidden = false;
-        }
-        if (termToggle) {
-          termToggle.hidden = true;
-        }
+        hideLookupOnMobile();
         refreshMobileDrawerToc();
       } else {
         tools.classList.remove("bs-site-tools--sidebar");
         tools.classList.remove("bs-site-tools--editorial-dock");
         tools.classList.add("bs-site-tools--floating");
-        if (lookup) {
-          lookup.classList.add("bs-term-lookup--floating");
-        }
         document.body.appendChild(tools);
-        if (lookup) {
+        if (desktopQuery.matches && lookup) {
+          lookup.classList.add("bs-term-lookup--floating");
           closeLookup();
+        } else {
+          hideLookupOnMobile();
         }
       }
       updateToc();
@@ -2087,6 +2095,11 @@
       if (!slug || !lookup || !result) {
         return;
       }
+      if (!desktopQuery.matches) {
+        window.location.href =
+          "/glossary/#" + encodeURIComponent(slug);
+        return;
+      }
       suppressRightRailAutoCollapse = true;
       rightRailScrollCollapsed = false;
       if (marginSidebar) {
@@ -2094,13 +2107,9 @@
           "bs-refined-right-rail-scroll-collapsed"
         );
       }
-      if (!desktopQuery.matches && mobileDrawer) {
-        setMobileDrawerOpen(true);
-      } else {
-        preservePagePosition(function () {
-          open({ focusInput: false });
-        });
-      }
+      preservePagePosition(function () {
+        open({ focusInput: false });
+      });
       result.hidden = false;
       result.textContent = "Looking up\u2026";
       loadGlossaryLookupEntries()
@@ -2155,8 +2164,7 @@
 
     return {
       open: function () {
-        if (!desktopQuery.matches && mobileDrawer) {
-          setMobileDrawerOpen(true);
+        if (!desktopQuery.matches) {
           return;
         }
         preservePagePosition(function () {
@@ -2166,7 +2174,7 @@
     };
   }
 
-  function initializeMobileLessonBar(termLookup) {
+  function initializeMobileLessonBar() {
     if (
       !document.body.classList.contains("bs-learn-article") ||
       document.body.classList.contains("bs-learn-index") ||
@@ -2199,19 +2207,6 @@
     if (filler) {
       filler.classList.add("bs-mobile-lesson-filler");
     }
-
-    const termButton = document.createElement("button");
-    termButton.type = "button";
-    termButton.className = "bs-mobile-term-toggle";
-    termButton.dataset.bsMobileTermToggle = "";
-    termButton.setAttribute("aria-expanded", "false");
-    termButton.textContent = "Look Up a Term \u2192";
-    termButton.addEventListener("click", function () {
-      if (termLookup) {
-        termLookup.open();
-      }
-    });
-    bar.appendChild(termButton);
   }
 
   function initializeLearnLeftSidebarToggle() {
@@ -2503,8 +2498,8 @@
       initializeLearnFilters();
       initializeLearnSidebarControls();
       initializeInlineGlossary();
-      const termLookup = initializeTermLookup();
-      initializeMobileLessonBar(termLookup);
+      initializeTermLookup();
+      initializeMobileLessonBar();
       initializeLearnLeftSidebarToggle();
       placeLessonTrackLinks();
       placeLessonRightRailCards();

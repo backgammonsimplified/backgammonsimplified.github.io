@@ -4,6 +4,7 @@
   const CATEGORY_SELECTOR = "[data-bs-filter-category]";
   const TAG_SELECTOR = "[data-bs-filter-tag]";
   const ITEM_SELECTOR = "[data-bs-research-item]";
+  const CATEGORY_REGISTRY_URL = "/assets/bs-research-categories.json";
 
   function parseList(value) {
     if (!value) {
@@ -35,6 +36,35 @@
 
     button.append(label, count);
     return button;
+  }
+
+  function verifyCategoryRegistry(categoryButtons) {
+    if (typeof fetch !== "function") {
+      return;
+    }
+
+    const sourceCategories = categoryButtons.map(function (button) {
+      return button.dataset.bsFilterCategory || "";
+    });
+
+    fetch(CATEGORY_REGISTRY_URL, { cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Research category registry request failed");
+        }
+        return response.json();
+      })
+      .then(function (payload) {
+        const registryCategories = Array.isArray(payload.categories)
+          ? payload.categories.map(String)
+          : [];
+        if (JSON.stringify(registryCategories) !== JSON.stringify(sourceCategories)) {
+          console.warn("Research category controls differ from publication registry.");
+        }
+      })
+      .catch(function () {
+        // The validated source controls remain the offline/no-network fallback.
+      });
   }
 
   function initializeResearchFilters() {
@@ -202,6 +232,7 @@
     });
 
     applyFilters();
+    verifyCategoryRegistry(categoryButtons);
   }
 
   document.addEventListener("DOMContentLoaded", initializeResearchFilters);

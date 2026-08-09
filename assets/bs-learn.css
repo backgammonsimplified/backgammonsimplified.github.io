@@ -1577,7 +1577,6 @@ body.bs-glossary-index
 }
 
 .bs-mobile-lesson-index-label,
-.bs-mobile-term-toggle,
 .bs-mobile-tools-edge,
 .bs-mobile-tools-drawer,
 .bs-mobile-tools-backdrop,
@@ -1860,7 +1859,7 @@ body.bs-glossary-index
     .bs-site-tools--sidebar
     .bs-term-lookup {
     position: static;
-    width: 50%;
+    width: calc(100% / 3);
     max-height: calc(100vh - 6rem);
     margin: 0;
     align-self: flex-end;
@@ -2073,9 +2072,9 @@ body.bs-glossary-index
   }
 
   .bs-mobile-tools-toc {
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.85rem;
-    border-bottom: 1px solid var(--bs-border);
+    margin: 0;
+    padding: 0;
+    border-bottom: 0;
   }
 
   .bs-mobile-tools-toc-title {
@@ -2089,22 +2088,8 @@ body.bs-glossary-index
     padding-left: 1rem;
   }
 
-  .bs-mobile-tools-drawer .bs-term-lookup {
-    position: static;
-    width: 100%;
-    max-height: none;
-    overflow: visible;
-    box-shadow: none;
-    transform: none;
-  }
-
-  .bs-mobile-tools-drawer .bs-term-lookup-close,
-  body:is(
-      .bs-research-article,
-      .bs-engine-benchmark-page,
-      .bs-learn-article
-    )
-    [data-bs-site-term-toggle] {
+  .bs-site-tools .bs-term-lookup,
+  .bs-site-tools [data-bs-site-term-toggle] {
     display: none !important;
   }
 
@@ -2166,10 +2151,6 @@ body.bs-glossary-index
   .bs-mobile-lesson-breadcrumbs,
   .bs-mobile-lesson-filler {
     display: none !important;
-  }
-
-  .bs-mobile-term-toggle {
-    display: none;
   }
 
   body:is(
