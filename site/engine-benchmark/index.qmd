@@ -20,7 +20,7 @@ The Backgammon Engine Benchmark lets engines play under controlled conditions, t
 
 We ran a [20 match pilot with Sage vs GNU](sage-vs-gnu-stage1/index.qmd). After that pilot we wanted to release a robust way to fairly compare backgammon engines against each other.  That's why we built the Engine Benchmark tool.
 
-Before you have backgammon engines fight each other, you must record the plan, settings, and how the dice were generated.  You also want to record the match files, settings used for review and futher analysis .  We do this for the comparison can be fair, inspected and reproduced by others.
+Before you have backgammon engines fight each other, you must record the plan, settings, and how the dice were generated. You also want to record the match files and settings used for review and further analysis. We do this so the comparison can be fair, inspected, and reproduced by others.
 
 The code and instructions to run your own tests is available in the public repository below, while the website has the stories of the battles we conducted and what it means for backgammon players like yourself.
 
@@ -44,17 +44,17 @@ The code and instructions to run your own tests is available in the public repos
 :::
 
 ::: {.bs-process-step}
-<span class="bs-process-number">04</span>
+<span class="bs-process-number">03</span>
 <strong>Set Dice File then Play</strong>
 :::
 
 ::: {.bs-process-step}
-<span class="bs-process-number">05</span>
+<span class="bs-process-number">04</span>
 <strong>Review the matches and find disagreements</strong>
 :::
 
 ::: {.bs-process-step}
-<span class="bs-process-number">06</span>
+<span class="bs-process-number">05</span>
 <strong>Check and publish the evidence</strong>
 :::
 :::::::
@@ -81,7 +81,7 @@ This is useful because a repeated study can use exactly the same dice rather tha
 
 Engine settings cannot always be matched by using the same ply number.
 
-Ply depth tells us how many decision layers an engine looks ahead. Different engines start count plying depth differently, use different types of search, or expose different analysis tools. Before a study begins, you want to documents what each setting does understand why the selected pair is the closest practical comparison.
+Ply depth tells us how many decision layers an engine looks ahead. Different engines count ply depth differently, use different types of search, or expose different analysis tools. Before a study begins, document what each setting does and explain why the selected pair is the closest practical comparison.
 
 The goal is not to make the engines internally identical. That is impossible. The goal is to avoid an obvious mismatch in ply depth while keeping the live matches practical to run.
 
@@ -101,7 +101,7 @@ This distinction matters because an engine can make stronger decisions and still
 
 We use GNU 4ply to review the decisions made by both engines. The same review method was used for both sides, which keeps the scoring consistent.
 
-Sage doesn't offer a match review function in it's current Python package.  We decided not to implement one as it could be error prone.  Instead we just use the GNU 4 ply to evaluate matches, and compore the differences using a Sage rollout (explained in the next section)
+Sage does not offer a match review function in its current Python package. We decided not to implement one because it could be error-prone. Instead, we use GNU 4-ply to evaluate matches and compare selected disagreements using a Sage rollout, as explained in the next section.
 
 Using GNU 4ply as a review means that it can not be considered a neutral source of perfect answers. It's lower ply cousin also competed in the matches, and it's likely to favour those moves at higher ply as well.  The results are therefore described as GNU's estimates, not as proof of the objectively correct decision.
 
@@ -111,7 +111,7 @@ We ideally would be able to BGBlitz or XG, and will be future work if we can get
 
 A normal match review can find positions where Sage and GNU preferred different actions. These positions can then be examined more deeply by playing out many possible continuations from the same position. This is called a rollout.
 
-Best practice (since GNU is reviewing) is for Sage to do a rollout for the positions which GNU 4 ply said was "wrong".  We can then look at the positions and consider outselves what is the best move.  Or ask another engine.
+Because GNU is the reviewer, selected positions where GNU 4-ply disagreed with Sage can receive a Sage rollout. We can then inspect those positions ourselves or ask another engine.
 
 ## What is checked and published?
 
@@ -129,6 +129,6 @@ It cannot prove that one engine is always stronger. Backgammon results are affec
 
 ## What comes next?
 
-We are going onto Stage 1 where we will test the full process with a small set of matches. The same approach can later be used for larger studies, different settings, and other engines.
+The 20-match Sage-versus-GNU pilot is the first study produced with this process. The same approach can later be used for larger studies, different settings, and other engines.
 
 Each new study will publish its plan before play and keep its results separate, so readers can see exactly which evidence supports each conclusion.

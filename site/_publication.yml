@@ -15,7 +15,7 @@ bs-publication:
         robots-meta: "noindex, follow"
         robots-txt:
           - "User-agent: *"
-          - "Disallow: /"
+          - "Allow: /"
       production:
         robots-meta: "index, follow"
         robots-txt:

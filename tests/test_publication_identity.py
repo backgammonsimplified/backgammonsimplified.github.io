@@ -44,8 +44,9 @@ class PublicationIdentityTests(unittest.TestCase):
         self.assertEqual(development["robots-meta"], "noindex, follow")
         self.assertEqual(
             bs_post_render.robots_text(development),
-            "User-agent: *\nDisallow: /\n",
+            "User-agent: *\nAllow: /\n",
         )
+        self.assertNotIn("Disallow:", bs_post_render.robots_text(development))
 
         mode, production = publication_mode(
             self.publication,
@@ -57,6 +58,41 @@ class PublicationIdentityTests(unittest.TestCase):
         self.assertIn(
             "Sitemap: https://backgammonsimplified.github.io/sitemap.xml",
             bs_post_render.robots_text(production),
+        )
+
+    def test_global_benchmark_navigation_uses_stable_hub(self) -> None:
+        quarto = yaml.safe_load(
+            (ROOT / "site" / "_quarto.yml").read_text(encoding="utf-8")
+        )
+        navbar = quarto["website"]["navbar"]["left"]
+        benchmark = [
+            item
+            for item in navbar
+            if item.get("text") == "Engine Benchmark"
+        ]
+        self.assertEqual(
+            benchmark,
+            [
+                {
+                    "href": "engine-benchmark/index.qmd",
+                    "text": "Engine Benchmark",
+                }
+            ],
+        )
+        self.assertNotIn(
+            "engine-benchmark/sage-vs-gnu-stage1/index.qmd",
+            [item.get("href") for item in navbar],
+        )
+
+        homepage = (ROOT / "site" / "index.qmd").read_text(encoding="utf-8")
+        self.assertIn(
+            "](engine-benchmark/index.qmd){.bs-home-explore-link",
+            homepage,
+        )
+        self.assertNotIn(
+            "](engine-benchmark/sage-vs-gnu-stage1/index.qmd)"
+            "{.bs-home-explore-link",
+            homepage,
         )
 
     def test_rendered_indexing_replaces_existing_policy(self) -> None:

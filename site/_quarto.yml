@@ -54,8 +54,8 @@ website:
         text: Analyze
       - href: match-predictor/index.qmd
         text: Match Predictor
-      - href: engine-benchmark/sage-vs-gnu-stage1/index.qmd
-        text: Sage vs GNU
+      - href: engine-benchmark/index.qmd
+        text: Engine Benchmark
       - href: research/index.qmd
         text: Research
       - href: glossary/index.qmd

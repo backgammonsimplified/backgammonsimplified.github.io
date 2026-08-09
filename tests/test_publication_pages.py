@@ -107,6 +107,48 @@ class PagePublicationTests(unittest.TestCase):
         self.assertIn('class="bs-publication-breadcrumbs"', updated)
         pp.validate_rendered_identity(updated, canonical)
 
+    def test_related_content_hook_renders_reusable_visible_navigation(self) -> None:
+        source = """<!doctype html><html><head>
+<meta name="description" content="Benchmark methods">
+</head><body><main><h1 class="title">Engine Benchmark</h1></main></body></html>"""
+        route = "/engine-benchmark/index.html"
+        config = pp.resolve_route_policy(self.policy, route)
+        records = [
+            {
+                "route": "/engine-benchmark/sage-vs-gnu-stage1/index.html",
+                "title": "Sage vs GNU: Stage 1",
+            }
+        ]
+        updated, changed = pp.enriched_html_text(
+            source,
+            "index, follow",
+            config,
+            route,
+            "https://backgammonsimplified.github.io",
+            "Backgammon Simplified",
+            records,
+        )
+
+        self.assertTrue(changed)
+        self.assertIn('name="bs-related-content"', updated)
+        self.assertIn('class="bs-publication-related"', updated)
+        self.assertIn(
+            'href="/engine-benchmark/sage-vs-gnu-stage1/index.html"',
+            updated,
+        )
+        self.assertIn("Sage vs GNU: Stage 1", updated)
+
+        reapplied, _ = pp.enriched_html_text(
+            updated,
+            "index, follow",
+            config,
+            route,
+            "https://backgammonsimplified.github.io",
+            "Backgammon Simplified",
+            records,
+        )
+        self.assertEqual(reapplied.count('class="bs-publication-related"'), 1)
+
     def test_preliminary_pages_are_excluded_from_sitemap(self) -> None:
         source = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

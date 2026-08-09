@@ -666,3 +666,27 @@ body.bs-editorial-page .bs-editorial-lead p {
     font-size: 0.9rem;
   }
 }
+
+.bs-publication-related {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bs-border-strong, #bcb4a7);
+}
+
+.bs-publication-related h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.bs-publication-related ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bs-publication-related a {
+  text-underline-offset: 0.16em;
+}

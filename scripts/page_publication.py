@@ -85,6 +85,10 @@ RELATED_META_PATTERN = re.compile(
     r'<meta\b[^>]*\bname=["\']bs-related-content["\'][^>]*>\s*',
     flags=re.IGNORECASE,
 )
+RELATED_NAV_PATTERN = re.compile(
+    r'<nav\s+class=["\']bs-publication-related["\'][^>]*>.*?</nav>\s*',
+    flags=re.IGNORECASE | re.DOTALL,
+)
 RESEARCH_CATEGORY_PATTERN = re.compile(
     r'data-bs-filter-category=["\']([^"\']+)["\']'
 )
@@ -336,6 +340,10 @@ def validate_page_policy(
                 raise RuntimeError(
                     f"Invalid related-content route for {route}: {related_route}"
                 )
+            if related_route not in routes:
+                raise RuntimeError(
+                    f"Unknown related-content route for {route}: {related_route}"
+                )
 
         source = config.get("source")
         if source is not None:
@@ -518,6 +526,43 @@ def breadcrumb_html(records: list[dict[str, object]]) -> str:
     )
 
 
+def related_navigation_html(records: list[dict[str, str]]) -> str:
+    if not records:
+        return ""
+    items = "".join(
+        '<li><a href="'
+        + html.escape(record["route"], quote=True)
+        + '">'
+        + html.escape(record["title"])
+        + "</a></li>"
+        for record in records
+    )
+    return (
+        '<nav class="bs-publication-related" aria-labelledby="bs-related-content-title">'
+        '<h2 id="bs-related-content-title">Related content</h2>'
+        + "<ul>"
+        + items
+        + "</ul></nav>\n"
+    )
+
+
+def registered_route_titles(
+    policy: Mapping[str, object], repo_root: Path = REPO_ROOT
+) -> dict[str, str]:
+    titles: dict[str, str] = {}
+    routes = _mapping(policy.get("routes"), "page policy routes")
+    for route, raw_config in routes.items():
+        config = _mapping(raw_config, f"publication route {route}")
+        source = config.get("source")
+        if not isinstance(source, str) or not source.strip():
+            continue
+        metadata = source_front_matter(repo_root / source)
+        title = metadata.get("title")
+        if isinstance(title, str) and title.strip():
+            titles[str(route)] = title.strip()
+    return titles
+
+
 def page_json_ld(
     route_config: Mapping[str, object],
     title: str,
@@ -578,6 +623,7 @@ def enriched_html_text(
     route: str,
     canonical_origin: str,
     site_name: str,
+    related_records: list[dict[str, str]] | None = None,
 ) -> tuple[str, bool]:
     canonical = canonical_url(route, canonical_origin)
     title = rendered_title(text)
@@ -593,6 +639,7 @@ def enriched_html_text(
     updated = BREADCRUMB_PATTERN.sub("", updated)
     updated = BREADCRUMB_STYLE_PATTERN.sub("", updated)
     updated = RELATED_META_PATTERN.sub("", updated)
+    updated = RELATED_NAV_PATTERN.sub("", updated)
 
     head = (
         f'<meta name="robots" content="{html.escape(robots_meta, quote=True)}">\n'
@@ -655,6 +702,17 @@ def enriched_html_text(
             )
         if count != 1:
             raise RuntimeError("Could not insert visible page breadcrumbs")
+    related_navigation = related_navigation_html(related_records or [])
+    if related_navigation:
+        updated, count = re.subn(
+            r"</main>",
+            related_navigation + "</main>",
+            updated,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+        if count != 1:
+            raise RuntimeError("Could not insert visible related-content navigation")
     return updated, updated != text
 
 
@@ -841,15 +899,35 @@ def apply_page_publication(
         ).resolve()
         for route in legacy["routes"]
     }
-    changed_pages = 0
-    validated_pages = 0
+    rendered_pages: list[tuple[Path, str, str]] = []
+    route_titles = registered_route_titles(policy)
     for path in sorted(output_root.rglob("*.html")):
         if path.resolve() in legacy_paths:
             continue
         route = route_for_rendered_path(path, output_root)
+        current = path.read_text(encoding="utf-8")
+        rendered_pages.append((path, route, current))
+        route_titles.setdefault(route, rendered_title(current))
+
+    changed_pages = 0
+    validated_pages = 0
+    for path, route, current in rendered_pages:
         route_config = resolve_route_policy(policy, route)
         robots_meta = page_robots_meta(mode, mode_config, route_config)
-        current = path.read_text(encoding="utf-8")
+        related_records: list[dict[str, str]] = []
+        related_routes = route_config.get("related", [])
+        if isinstance(related_routes, list):
+            for related_route in related_routes:
+                if not isinstance(related_route, str):
+                    continue
+                related_title = route_titles.get(related_route)
+                if related_title is None:
+                    raise RuntimeError(
+                        f"Rendered related-content target is missing: {related_route}"
+                    )
+                related_records.append(
+                    {"route": related_route, "title": related_title}
+                )
         updated, changed = enriched_html_text(
             current,
             robots_meta,
@@ -857,6 +935,7 @@ def apply_page_publication(
             route,
             canonical_origin,
             site_name,
+            related_records,
         )
         if changed:
             path.write_text(updated, encoding="utf-8", newline="\n")

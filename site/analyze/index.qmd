@@ -34,7 +34,7 @@ Use a complete XGID copied from your backgammon software or a shared position li
 
 **Check the position**
 
-From the board and match situation, view the best candidate move.
+Inspect the rendered board and match situation before using a separate engine for move analysis.
 :::
 
 ::: {.bs-step}

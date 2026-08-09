@@ -31,12 +31,12 @@ Clear lessons and tools for stronger backgammon decisions.
 <span class="bs-home-explore-chevron" aria-hidden="true">›</span>](learn/index.qmd){.bs-home-explore-link .bs-home-explore-link--learn}
 
 [<span class="bs-home-explore-icon" aria-hidden="true"></span>
-<span class="bs-home-explore-copy"><span class="bs-home-explore-title">Analyze a position</span><span class="bs-home-explore-description">Free 4-ply evaluations and rollouts, with tools that explain why one choice is stronger.</span></span>
+<span class="bs-home-explore-copy"><span class="bs-home-explore-title">Preview a position</span><span class="bs-home-explore-description">Paste an XGID to render its board and match situation while the full analyzer is still in development.</span></span>
 <span class="bs-home-explore-chevron" aria-hidden="true">›</span>](analyze/index.qmd){.bs-home-explore-link .bs-home-explore-link--analyze}
 
 [<span class="bs-home-explore-icon" aria-hidden="true"></span>
-<span class="bs-home-explore-copy"><span class="bs-home-explore-title">Sage vs GNU</span><span class="bs-home-explore-description">See how Sage and GNU perform, where they differ, and how we test them.</span></span>
-<span class="bs-home-explore-chevron" aria-hidden="true">›</span>](engine-benchmark/sage-vs-gnu-stage1/index.qmd){.bs-home-explore-link .bs-home-explore-link--compare}
+<span class="bs-home-explore-copy"><span class="bs-home-explore-title">Engine Benchmark</span><span class="bs-home-explore-description">See how engine studies are designed, reviewed, and published, including the Sage-versus-GNU pilot.</span></span>
+<span class="bs-home-explore-chevron" aria-hidden="true">›</span>](engine-benchmark/index.qmd){.bs-home-explore-link .bs-home-explore-link--compare}
 
 [<span class="bs-home-explore-icon" aria-hidden="true"></span>
 <span class="bs-home-explore-copy"><span class="bs-home-explore-title">Research</span><span class="bs-home-explore-description">Read about our experiments, current work, and the tools we are building.</span></span>

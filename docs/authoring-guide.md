@@ -13,19 +13,19 @@ This private guide explains where the site lives, how the navigation is wired, a
 | Glossary | `site/glossary/index.qmd` | One searchable page containing every canonical term |
 | Custom 404 | `site/404.qmd` | Root not-found page and recovery links |
 | Analyze | `site/analyze/index.qmd` | Static analyzer entry page and Shiny companion |
-| Sage vs GNU | `site/engine-benchmark/sage-vs-gnu-stage1/index.qmd` | Study overview and status page |
-| Blog | `site/blog/index.qmd` | Chronological listing that discovers `site/posts/**` |
+| Engine Benchmark | `site/engine-benchmark/index.qmd` | Stable benchmark hub and method overview |
+| Sage vs GNU report | `site/engine-benchmark/sage-vs-gnu-stage1/index.qmd` | Preliminary study report beneath the benchmark hub |
 | About | `site/about.qmd` | Project purpose and site-level identity |
-| Posts | `site/posts/**/index.qmd` | Individual blog entries |
+| Legacy post fixtures | `site/posts/**` | Fixture-only examples; not a publication surface |
 | Shared CSS | `site/assets/` | Layout, color, and component styling |
 
 ## Navigation
 
 Edit `site/_quarto.yml` to change the navbar. The current public navigation is:
 
-`Learn | Analyze | Sage vs GNU | Blog | About | Search`
+`Learn | Analyze | Match Predictor | Engine Benchmark | Research | Glossary | About | Search`
 
-`Practice` and `Positions` stay out of the Phase 1 navbar. The old `Articles` label is replaced by `Blog`.
+`Practice`, `Positions`, and the old `Blog` surface stay out of the primary navbar.
 
 ## Learn Sidebar
 
@@ -148,9 +148,9 @@ canonical `terms` metadata.
 links to Home, Learn, Backgammon Glossary, and Research. It must
 remain a normal content page without redirect code.
 
-## Blog Discovery
+## Legacy Post Fixtures
 
-The blog listing is driven by `listing:` metadata on `site/blog/index.qmd`, which points at `site/posts/**/*.qmd`. Add or remove posts by creating or deleting files under `site/posts/`.
+The old `site/posts/**` examples remain explicitly registered as `fixture` routes. They are excluded from indexing, sitemap, RSS, and primary navigation. New Learn, Research, and benchmark content belongs under its public section and must use the page-publication registry instead of reviving a separate blog surface.
 
 ## Updates RSS
 
@@ -177,15 +177,20 @@ Unregistered routes resolve to `draft` and remain non-indexable. Use only the
 controlled statuses `published`, `preliminary`, `draft`, `fixture`, `error`,
 and `legacy`.
 
+Routes listed under a page's `related` field generate one visible related-content
+navigation block and the corresponding machine-readable metadata. Use only
+explicit relationships supported by the page hierarchy or authored content;
+do not duplicate the generated block in each page source.
+
 Before changing an authored article or report to `published`, remove explicit
 unresolved author markers. The publication gate recognizes line-level `TODO:`,
 a line containing only `TODO`, and `[PENDING ...]` markers while ignoring fenced
 examples, HTML comments, and ordinary prose that merely discusses words such as
 “todo” or “pending.” Do not replace preliminary scientific markers with guesses.
 
-## Recently Added
+## Homepage Navigation
 
-The homepage `Recently Added` section is hand-curated. Update it when a new lesson, post, or status page should be surfaced.
+The homepage entry cards are hand-curated. Stable section cards should enter through their section hubs; links to an individual report belong in report-specific context.
 
 ## Copying A Component
 
@@ -218,7 +223,7 @@ quarto render learn/index.qmd
 
 ## Shiny
 
-Run the analyzer app from `shiny/position-dashboard/` with the local R environment. The site and Shiny app are separate, and the Shiny app still keeps worker-backed polling unwired until the contract is finalized next week.
+Run the analyzer app from `shiny/position-dashboard/` with the local R environment. The site and Shiny app are separate. The public Analyze page currently provides a board-and-match preview; it does not promise full engine analysis.
 
 ## Generated Directories
 
