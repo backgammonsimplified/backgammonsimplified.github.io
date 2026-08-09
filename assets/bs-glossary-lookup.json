@@ -2,9 +2,11 @@
   "entries": [
     {
       "alias_slugs": [
+        "10-checkers-in-the-zone",
         "ten-in-the-zone"
       ],
       "aliases": [
+        "10 Checkers in the Zone",
         "Ten in the Zone"
       ],
       "categories": [
@@ -29,13 +31,8 @@
       ],
       "related_terms": [
         {
+          "slug": "attack-zone",
           "term": "Attack Zone"
-        },
-        {
-          "term": "Zone Of Attack"
-        },
-        {
-          "term": "Your Side Of The Board"
         },
         {
           "term": "Home Board"
@@ -57,6 +54,7 @@
           "term": "Blitz"
         },
         {
+          "slug": "attacking-game",
           "term": "Attacking Game"
         },
         {
@@ -74,8 +72,12 @@
       "term": "10 in the Zone"
     },
     {
-      "alias_slugs": [],
-      "aliases": [],
+      "alias_slugs": [
+        "25-rule"
+      ],
+      "aliases": [
+        "25% Rule"
+      ],
       "categories": [
         "Cube Action",
         "Analysis & Probability"
@@ -120,8 +122,12 @@
       "term": "25 Percent Rule"
     },
     {
-      "alias_slugs": [],
-      "aliases": [],
+      "alias_slugs": [
+        "8-9-12-rule"
+      ],
+      "aliases": [
+        "8-9-12 Rule"
+      ],
       "categories": [
         "Cube Action",
         "Race & Bearoff",
@@ -438,6 +444,24 @@
       "alias_slugs": [],
       "aliases": [],
       "categories": [
+        "Race & Bearoff",
+        "Analysis & Probability"
+      ],
+      "definition": "An adjusted pip count is a pip count modified to account for checker distribution and bear-off efficiency. Large gaps and tall stacks usually raise the adjusted pip count because they make a position less efficient. Adjusted pip counts are commonly used to judge who is really ahead in a race, especially when making cube decisions. Methods include Keith Count, Trice Count, and the iSight method.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [],
+      "short_definition": "An adjusted pip count modifies a pip count to account for checker distribution and bear-off efficiency.",
+      "slug": "adjusted-pip-count",
+      "term": "Adjusted Pip Count"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
         "Checker Play",
         "Game Plans & Position Types"
       ],
@@ -486,6 +510,23 @@
       "term": "Advanced Anchor"
     },
     {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Tournaments & Community"
+      ],
+      "definition": "Advanced Level describes a tournament or teaching division for strong, experienced players below the top open or championship level.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [],
+      "short_definition": "Advanced Level is a tournament or teaching division for strong, experienced players below the top open level.",
+      "slug": "advanced-level",
+      "term": "Advanced Level"
+    },
+    {
       "alias_slugs": [
         "ahead-in-the-race"
       ],
@@ -522,6 +563,723 @@
       "short_definition": "Ahead in the Count means having a lower pip count than your opponent and therefore being ahead in the race.",
       "slug": "ahead-in-the-count",
       "term": "Ahead in the Count"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Checker Play"
+      ],
+      "definition": "Ammunition describes checkers positioned where they can attack opposing blots or help make useful points. Ammunition is especially valuable in the attack zone, where it can support a blitz, strengthen the home board, or help close out an opponent.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "attack",
+          "term": "Attack"
+        },
+        {
+          "slug": "attack-zone",
+          "term": "Attack Zone"
+        },
+        {
+          "slug": "attacking-game",
+          "term": "Attacking Game"
+        },
+        {
+          "slug": "active-builder",
+          "term": "Active Builder"
+        }
+      ],
+      "short_definition": "Ammunition describes checkers positioned where they can attack blots or build points.",
+      "slug": "ammunition",
+      "term": "Ammunition"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Board, Equipment & Notation",
+        "Rules & Procedures"
+      ],
+      "definition": "An analog clock is a physical timing device with traditional dials and hands rather than digital displays. It tracks each player's remaining time during a backgammon match and helps ensure that the match is completed within the established time limits.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "simple-delay",
+          "term": "Simple Delay"
+        },
+        {
+          "slug": "fischer-increment",
+          "term": "Fischer Increment"
+        },
+        {
+          "slug": "reserve-time",
+          "term": "Reserve Time"
+        }
+      ],
+      "short_definition": "An analog clock is a backgammon timing device with physical dials rather than digital displays.",
+      "slug": "analog-clock",
+      "term": "Analog Clock"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Game Plans & Position Types"
+      ],
+      "definition": "An anchor game is a strategic approach in which you retain one or more anchors, or made points, in your opponent's home board. These anchors give your checkers safety and allow you to wait for an opportunity to hit an exposed opposing checker. Anchor games are strongest when you also have a strong home board, making any successful hit more dangerous for your opponent.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "back-game",
+          "term": "Back Game"
+        },
+        {
+          "slug": "advanced-anchor",
+          "term": "Advanced Anchor"
+        }
+      ],
+      "short_definition": "An anchor game is a strategic game plan in which you hold one or more anchors in your opponent's home board, often while waiting for a shot that could turn the game around.",
+      "slug": "anchor-game",
+      "term": "Anchor Game"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Analysis & Probability",
+        "Tournaments & Community"
+      ],
+      "definition": "An annotated match is usually video recorded, with each dice roll and checker play entered into an analysis engine such as eXtreme Gammon during or after the match. The engine analyzes the decisions, identifies mistakes, and calculates measures such as Performance Rating, or PR.\n\nAn annotated match may also include written or spoken commentary. BMAB uses analyzed match results when assessing player classifications. In formats such as UBC, players can also earn a point by recording a lower PR than their opponent.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "annotation",
+          "term": "Annotation"
+        },
+        {
+          "slug": "performance-rating",
+          "term": "Performance Rating"
+        },
+        {
+          "slug": "bmab",
+          "term": "BMAB"
+        },
+        {
+          "slug": "ubc",
+          "term": "UBC"
+        }
+      ],
+      "short_definition": "An annotated match is a recorded backgammon match whose rolls and plays have been entered into analysis software so the players' decisions can be reviewed.",
+      "slug": "annotated-match",
+      "term": "Annotated Match"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Board, Equipment & Notation",
+        "Analysis & Probability"
+      ],
+      "definition": "Annotation is the process of entering each dice roll and checker play from a backgammon match into an analysis engine such as eXtreme Gammon. This is usually done from a video recording, either during the match or afterward.\n\nThe engine analyzes the players' decisions move by move and calculates measures such as PR. The resulting analysis can be used to study mistakes, assess playing strength, support BMAB classifications, or determine performance-based results in formats such as UBC.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "annotated-match",
+          "term": "Annotated Match"
+        },
+        {
+          "slug": "performance-rating",
+          "term": "Performance Rating"
+        },
+        {
+          "slug": "bmab",
+          "term": "BMAB"
+        },
+        {
+          "slug": "ubc",
+          "term": "UBC"
+        }
+      ],
+      "short_definition": "Annotation is the process of adding analysis to a backgammon match record.",
+      "slug": "annotation",
+      "term": "Annotation"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Slang & Expressions"
+      ],
+      "definition": "An anti-joker is an exceptionally unlucky roll, or sequence of rolls, that significantly worsens your position. Your position does not need to have been good beforehand; an anti-joker can make an already difficult position even worse. Because the result can feel especially harsh or unexpected, an anti-joker may contribute to tilt.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "awkward-number",
+          "term": "Awkward Number"
+        }
+      ],
+      "short_definition": "An anti-joker is an extremely unlucky roll that usually leaves your position worse after the roll than it was before.",
+      "slug": "anti-joker",
+      "term": "Anti-Joker"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Game Plans & Position Types",
+        "Slang & Expressions"
+      ],
+      "definition": "In backgammon, your army refers to all of your checkers. The term emphasizes that your checkers should work together as a coordinated unit rather than acting as isolated pieces.\n\nA strong army has good formation, connected checkers, and continuity across the board. This allows the checkers to support one another, create useful points, and carry out a common game plan.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [],
+      "short_definition": "Your army is your full group of checkers, viewed as a coordinated unit that should work together.",
+      "slug": "army",
+      "term": "Army"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Checker Play",
+        "Board, Equipment & Notation"
+      ],
+      "definition": "Around the Corner describes the transition in which a checker moves from your opponent's outer board, past the mid-point, and into your own outer board. This brings the checker onto your side of the board and closer to your home board.\n\nThe move often marks progress from the early game toward bringing your checkers home and eventually bearing them in.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "attack-zone",
+          "term": "Attack Zone"
+        }
+      ],
+      "short_definition": "Around the Corner means moving a checker from your opponent's outer board into your own outer board.",
+      "slug": "around-the-corner",
+      "term": "Around the Corner"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Game Plans & Position Types"
+      ],
+      "definition": "In backgammon, an asset is any useful feature of your position that increases your winning chances. Assets can include a made point, a strong anchor, a strong prime, a strong home board, or an advantageous checker distribution.\n\nYou consider your assets when making checker-play and cube decisions, including whether your position is strong enough to double or whether you have enough positional resources to take an opponent's cube.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [],
+      "short_definition": "An asset is a useful positional feature that works in your favour and improves your winning chances.",
+      "slug": "asset",
+      "term": "Asset"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Checker Play"
+      ],
+      "definition": "An attack is a deliberate play aimed at hitting one or more of your opponent's blots, often to gain a positional or timing advantage. Blitzing and trying to close out your opponent are common forms of attack.\n\nAttacking can also help your back checkers escape. When you have several checkers trapped behind your opponent, hitting can put an opposing checker on the bar instead of leaving your own checkers vulnerable to being put on the bar.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "attack-zone",
+          "term": "Attack Zone"
+        },
+        {
+          "slug": "attacking-game",
+          "term": "Attacking Game"
+        }
+      ],
+      "short_definition": "An attack is an aggressive play intended to hit or threaten opposing blots and improve your position.",
+      "slug": "attack",
+      "term": "Attack"
+    },
+    {
+      "alias_slugs": [
+        "the-zone",
+        "your-side-of-the-board",
+        "zone",
+        "zone-of-attack"
+      ],
+      "aliases": [
+        "The Zone",
+        "Your Side of the Board",
+        "Zone",
+        "Zone of Attack"
+      ],
+      "categories": [
+        "Checker Play",
+        "Game Plans & Position Types"
+      ],
+      "definition": "The attack zone is your side of the board: your home board and outer board. It is the area where you can use your ammunition to attack opposing checkers, launch a blitz, make home-board points, or try to close out your opponent.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "ammunition",
+          "term": "Ammunition"
+        },
+        {
+          "slug": "attack",
+          "term": "Attack"
+        },
+        {
+          "slug": "10-in-the-zone",
+          "term": "10 in the Zone"
+        },
+        {
+          "slug": "attacking-game",
+          "term": "Attacking Game"
+        },
+        {
+          "slug": "active-builder",
+          "term": "Active Builder"
+        }
+      ],
+      "short_definition": "The attack zone is your side of the board, consisting of your home board and outer board.",
+      "slug": "attack-zone",
+      "term": "Attack Zone"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Game Plans & Position Types"
+      ],
+      "definition": "An attacking game is a game plan based on hitting, closing points, and keeping opposing checkers on the bar. The most famous type of attacking game is a blitz, where in the early to middle game you repeatedly attack your opponent, put their checkers on the bar, and try to close them out.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "attack",
+          "term": "Attack"
+        },
+        {
+          "slug": "attack-zone",
+          "term": "Attack Zone"
+        },
+        {
+          "slug": "ammunition",
+          "term": "Ammunition"
+        }
+      ],
+      "short_definition": "An attacking game is a game plan based on hitting, closing points, and keeping opposing checkers on the bar.",
+      "slug": "attacking-game",
+      "term": "Attacking Game"
+    },
+    {
+      "alias_slugs": [
+        "automatic",
+        "automatic-double",
+        "automatics"
+      ],
+      "aliases": [
+        "Automatic",
+        "Automatic Double",
+        "Automatics"
+      ],
+      "categories": [
+        "Cube Action",
+        "Rules & Procedures",
+        "Chouette & Money Play"
+      ],
+      "definition": "Automatic Doubles is an optional rule used in money play. If both players roll the same number while determining who moves first, the game's value automatically doubles. The doubling cube is turned to 2 but remains centered, so neither player owns it and either player may offer the next double. Players normally agree before playing whether to use this rule and may limit the number of automatic doubles allowed in one game.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [],
+      "short_definition": "Automatic Doubles is an optional money-game rule where matching opening rolls automatically double the game's value.",
+      "slug": "automatic-doubles",
+      "term": "Automatic Doubles"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Checker Play",
+        "Slang & Expressions"
+      ],
+      "definition": "An awkward number is a roll that creates a difficult checker-play decision because none of the available moves fits the position well. The challenge is not choosing between two strong plays, but identifying the least damaging option among several suboptimal ones.\n\nAn awkward number is related to an anti-joker, but the emphasis is different. An anti-joker describes an exceptionally bad roll that worsens your position, while an awkward number describes the difficulty of the decision because there is no obvious checker play.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "awkward-position",
+          "term": "Awkward Position"
+        },
+        {
+          "slug": "anti-joker",
+          "term": "Anti-Joker"
+        }
+      ],
+      "short_definition": "An awkward number is a roll that leaves no clearly good checker play, forcing you to choose among several suboptimal options.",
+      "slug": "awkward-number",
+      "term": "Awkward Number"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Checker Play",
+        "Game Plans & Position Types"
+      ],
+      "definition": "An awkward position has poor flexibility, distribution, connectivity, or checker coordination, causing many rolls to produce difficult choices among suboptimal plays. The player often has no obvious constructive move and must choose the option that does the least damage.\n\nAn awkward position is different from an awkward number. The position is the underlying board structure that makes many rolls difficult, while an awkward number is one particular roll that creates a difficult decision.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "awkward-number",
+          "term": "Awkward Number"
+        },
+        {
+          "slug": "anti-joker",
+          "term": "Anti-Joker"
+        }
+      ],
+      "short_definition": "An awkward position is a position in which many rolls leave no clearly constructive checker play.",
+      "slug": "awkward-position",
+      "term": "Awkward Position"
+    },
+    {
+      "alias_slugs": [
+        "backgame"
+      ],
+      "aliases": [
+        "Backgame"
+      ],
+      "categories": [
+        "Game Plans & Position Types"
+      ],
+      "definition": "A back game is a highly technical and volatile game plan in which you hold two or more points deep in your opponent's home board. Good timing is essential. If you are forced to break your board or kill checkers, the back game loses much of its effectiveness. It is common to be 70 to 100 pips behind in the race and still have meaningful winning chances.\n\nBack-game play can be counterintuitive. Sometimes you avoid hitting because the hit would give your opponent additional timing, while being hit may help recycle one of your checkers and maintain your own timing. Back games can involve substantial cube action and high cube values. They occur relatively infrequently, generally in fewer than 10 percent of games, so beginners should study more common game plans first. Understanding back games becomes increasingly important when progressing from expert play toward master level and beyond.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [
+        {
+          "route": "/learn/game-plans/",
+          "title": "The Main Game Plans"
+        }
+      ],
+      "related_terms": [],
+      "short_definition": "A back game is a strategy based on holding two or more points deep in your opponent's home board while waiting for a late opportunity to hit.",
+      "slug": "back-game",
+      "term": "Back Game"
+    },
+    {
+      "alias_slugs": [
+        "backgammon-masters-awarding-body"
+      ],
+      "aliases": [
+        "Backgammon Masters Awarding Body"
+      ],
+      "categories": [
+        "Tournaments & Community"
+      ],
+      "definition": "The Backgammon Masters Awarding Body, commonly called BMAB, awards mastership titles and proficiency certificates using Performance Rating from verified, analyzed matches. Players must complete the required amount of qualifying play and meet the applicable PR standard.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "performance-rating",
+          "term": "Performance Rating"
+        },
+        {
+          "slug": "annotated-match",
+          "term": "Annotated Match"
+        },
+        {
+          "slug": "annotation",
+          "term": "Annotation"
+        },
+        {
+          "slug": "ubc",
+          "term": "UBC"
+        }
+      ],
+      "short_definition": "BMAB stands for the Backgammon Masters Awarding Body, an organization that awards backgammon titles based on verified performance ratings.",
+      "slug": "bmab",
+      "term": "BMAB"
+    },
+    {
+      "alias_slugs": [
+        "bonus-time",
+        "fischer-time",
+        "increment"
+      ],
+      "aliases": [
+        "Bonus Time",
+        "Fischer Time",
+        "Increment"
+      ],
+      "categories": [
+        "Board, Equipment & Notation",
+        "Rules & Procedures"
+      ],
+      "definition": "Fischer Increment credits a fixed amount of time for each turn. Depending on the clock or software, the increment may be credited at the start of the turn or after the completed turn. Unlike Simple Delay, the full increment is cumulative. If a player uses less time than the increment, their time bank grows.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "reserve-time",
+          "term": "Reserve Time"
+        },
+        {
+          "slug": "simple-delay",
+          "term": "Simple Delay"
+        }
+      ],
+      "short_definition": "Fischer Increment adds a fixed amount of time to a player's bank for each turn, allowing unused time to accumulate.",
+      "slug": "fischer-increment",
+      "term": "Fischer Increment"
+    },
+    {
+      "alias_slugs": [
+        "er",
+        "error-rate",
+        "performance-rate",
+        "pr"
+      ],
+      "aliases": [
+        "ER",
+        "Error Rate",
+        "Performance Rate",
+        "PR"
+      ],
+      "categories": [
+        "Analysis & Probability"
+      ],
+      "definition": "Performance Rating, usually shortened to PR and sometimes called Error Rate or ER, is a number used to judge how well you played an analyzed match. A PR of 0 means the bot found no mistakes in your checker plays or cube decisions. As a rough guide, newer players may play around 20 to 40 PR, intermediate players around 10 to 20, and advanced players below 10. Different bots can produce different ratings, so results from different programs should not be compared directly.\n\nWhen describing your PR across several matches, combine the value lost across all counted decisions and divide by the total number of those decisions. Do not take a simple average of the separate match PRs, because matches can contain very different numbers of decisions. Lower-PR, more skilled players win more often over large samples, although the PR from one match can be affected by Winner's Curse.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [
+        {
+          "route": "/learn/reading-positions-and-engines/",
+          "title": "Reading Positions and Engine Analysis"
+        }
+      ],
+      "related_terms": [
+        {
+          "slug": "annotation",
+          "term": "Annotation"
+        },
+        {
+          "slug": "annotated-match",
+          "term": "Annotated Match"
+        },
+        {
+          "slug": "bmab",
+          "term": "BMAB"
+        },
+        {
+          "slug": "ubc",
+          "term": "UBC"
+        },
+        {
+          "slug": "winners-curse",
+          "term": "Winner's Curse"
+        }
+      ],
+      "short_definition": "Performance Rating, or PR, measures how closely your checker plays and cube decisions match the moves chosen to be \"correct\" by an analysis bot.",
+      "slug": "performance-rating",
+      "term": "Performance Rating"
+    },
+    {
+      "alias_slugs": [
+        "bank-time",
+        "clock-reserve-time",
+        "time-bank"
+      ],
+      "aliases": [
+        "Bank Time",
+        "Clock Reserve Time",
+        "Time Bank"
+      ],
+      "categories": [
+        "Board, Equipment & Notation",
+        "Rules & Procedures"
+      ],
+      "definition": "Reserve time is the main bank of time available to a player across an entire match or playing session. With Simple Delay, the delay is used first on each turn, and reserve time begins to count down only after the delay expires.\n\nUnder Fischer Increment, a fixed amount of time is credited to this bank for each turn, so the bank can increase when moves are played quickly.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "simple-delay",
+          "term": "Simple Delay"
+        },
+        {
+          "slug": "fischer-increment",
+          "term": "Fischer Increment"
+        },
+        {
+          "slug": "analog-clock",
+          "term": "Analog Clock"
+        }
+      ],
+      "short_definition": "Reserve time is the bank of clock time a player can use across a match after any per-move delay has expired.",
+      "slug": "reserve-time",
+      "term": "Reserve Time"
+    },
+    {
+      "alias_slugs": [
+        "delay-time",
+        "time-delay",
+        "us-delay"
+      ],
+      "aliases": [
+        "Delay Time",
+        "Time Delay",
+        "US Delay"
+      ],
+      "categories": [
+        "Board, Equipment & Notation",
+        "Rules & Procedures"
+      ],
+      "definition": "Simple Delay provides a fixed amount of time at the start of each turn. The delay counts down before the player's reserve time begins to decrease. If the turn is completed within the delay, no reserve time is used. Any unused delay disappears and does not carry forward.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "reserve-time",
+          "term": "Reserve Time"
+        },
+        {
+          "slug": "analog-clock",
+          "term": "Analog Clock"
+        },
+        {
+          "slug": "fischer-increment",
+          "term": "Fischer Increment"
+        }
+      ],
+      "short_definition": "Simple Delay gives a player a fixed amount of use-it-or-lose-it time at the start of every turn before reserve time begins to count down.",
+      "slug": "simple-delay",
+      "term": "Simple Delay"
+    },
+    {
+      "alias_slugs": [
+        "ultimate-backgammon-championship"
+      ],
+      "aliases": [
+        "Ultimate Backgammon Championship"
+      ],
+      "categories": [
+        "Tournaments & Community"
+      ],
+      "definition": "The Ultimate Backgammon Championship, commonly called UBC, rewards both winning matches and playing with a lower Performance Rating. A match can award one point for the match win and a separate point for the PR win, allowing a player to earn zero, one, or two points.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "performance-rating",
+          "term": "Performance Rating"
+        },
+        {
+          "slug": "annotated-match",
+          "term": "Annotated Match"
+        },
+        {
+          "slug": "annotation",
+          "term": "Annotation"
+        },
+        {
+          "slug": "bmab",
+          "term": "BMAB"
+        }
+      ],
+      "short_definition": "UBC stands for the Ultimate Backgammon Championship, a competition in which match results and Performance Rating both contribute to the standings.",
+      "slug": "ubc",
+      "term": "UBC"
+    },
+    {
+      "alias_slugs": [],
+      "aliases": [],
+      "categories": [
+        "Analysis & Probability"
+      ],
+      "definition": "Winners often roll more doubles and other strong rolls, hit more checkers, and put their opponent on the bar more often. These favourable rolls improve their chances of winning, but they can also create more decisions and several good-looking moves, making it harder to choose the very best play. A winning position can also make it easier to miss a double or send the cube too late.\n\nWinner's Curse does not mean winners are usually less skilled or play with a higher PR. Lower-PR, more skilled players still win more often, especially over longer matches or sessions. It means that the same favourable rolls that help produce a win can also make that winning path unusually difficult to play accurately.",
+      "definition_links": [],
+      "learning_tracks": [],
+      "redirect_slugs": [],
+      "references": [],
+      "related_lessons": [],
+      "related_terms": [
+        {
+          "slug": "performance-rating",
+          "term": "Performance Rating"
+        }
+      ],
+      "short_definition": "Winner's Curse is the tendency for favourable rolls that help a player win to also create more difficult decisions, making the winner's match PR look worse than usual.",
+      "slug": "winners-curse",
+      "term": "Winner's Curse"
     }
   ]
 }
