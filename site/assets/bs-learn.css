@@ -1860,7 +1860,7 @@ body.bs-glossary-index
     .bs-site-tools--sidebar
     .bs-term-lookup {
     position: static;
-    width: 50%;
+    width: calc(100% / 3);
     max-height: calc(100vh - 6rem);
     margin: 0;
     align-self: flex-end;

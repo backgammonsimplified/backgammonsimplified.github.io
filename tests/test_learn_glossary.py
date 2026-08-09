@@ -1707,7 +1707,7 @@ private code phrase
             r"\.bs-site-tools--sidebar\s+"
             r"\.bs-term-lookup \{[^}]*"
             r"position: static;[^}]*"
-            r"width: 50%;[^}]*"
+            r"width: calc\(100% / 3\);[^}]*"
             r"align-self: flex-end;",
         )
         self.assertRegex(
