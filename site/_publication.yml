@@ -105,6 +105,10 @@ bs-publication:
         source: site/analyze/index.qmd
         type: page
         status: published
+      /analyze/results-fixture.html:
+        source: site/analyze/results-fixture.qmd
+        type: page
+        status: fixture
       /glossary/:
         source: site/glossary/index.qmd
         type: page
