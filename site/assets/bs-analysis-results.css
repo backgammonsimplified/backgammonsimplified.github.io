@@ -24,7 +24,8 @@
 .bs-analysis-results-subtitle,
 .bs-analysis-results-fixture-message,
 .bs-analysis-results-choice-status,
-.bs-analysis-results-empty {
+.bs-analysis-results-empty,
+.bs-analysis-results-outcome-note {
   color: var(--bs-text-muted);
 }
 
@@ -104,90 +105,213 @@
   text-align: center;
 }
 
-.bs-analysis-results-probabilities {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 1.3rem;
+.bs-analysis-results-outcomes {
+  margin: 0 0 1.35rem;
 }
 
-.bs-analysis-results-probability {
-  min-width: 0;
-  padding: 0.55rem 0.6rem;
-  border-top: 1px solid var(--bs-border);
-}
-
-.bs-analysis-results-probability-label,
-.bs-analysis-results-probability-value {
-  display: block;
-}
-
-.bs-analysis-results-probability-label {
-  color: var(--bs-text-secondary);
-  font-size: 0.78rem;
-}
-
-.bs-analysis-results-probability-value {
-  margin-top: 0.1rem;
+.bs-analysis-results-outcome-headline {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
   font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
-.bs-analysis-results-probability-track {
-  display: block;
-  height: 0.22rem;
-  margin-top: 0.35rem;
-  background: color-mix(in srgb, var(--bs-border) 70%, transparent);
+.bs-analysis-results-outcome-total--win {
+  color: var(--bs-navy);
+}
+
+.bs-analysis-results-outcome-total--lose {
+  color: var(--bs-copper-dark);
+  text-align: right;
+}
+
+.bs-analysis-results-outcome-bar {
+  display: flex;
+  width: 100%;
+  height: 1.25rem;
   overflow: hidden;
+  border: 1px solid var(--bs-border-strong);
+  border-radius: 4px;
+  background: var(--bs-page-background);
 }
 
-.bs-analysis-results-probability-fill {
+.bs-analysis-results-outcome-segment {
   display: block;
+  min-width: 0;
   height: 100%;
-  background: var(--bs-copper-dark);
 }
 
-.bs-analysis-results-probability.is-missing .bs-analysis-results-probability-value {
+.bs-analysis-results-outcome-segment--win-bg,
+.bs-analysis-results-outcome-swatch--win-bg {
+  background: color-mix(in srgb, var(--bs-navy) 92%, black);
+}
+
+.bs-analysis-results-outcome-segment--win-gammon,
+.bs-analysis-results-outcome-swatch--win-gammon {
+  background: color-mix(in srgb, var(--bs-navy) 72%, white);
+}
+
+.bs-analysis-results-outcome-segment--win-single,
+.bs-analysis-results-outcome-swatch--win-single,
+.bs-analysis-results-outcome-segment--win-total,
+.bs-analysis-results-outcome-swatch--win-total {
+  background: color-mix(in srgb, var(--bs-navy) 48%, white);
+}
+
+.bs-analysis-results-outcome-segment--lose-single,
+.bs-analysis-results-outcome-swatch--lose-single,
+.bs-analysis-results-outcome-segment--lose-total,
+.bs-analysis-results-outcome-swatch--lose-total {
+  background: color-mix(in srgb, var(--bs-copper-dark) 48%, white);
+}
+
+.bs-analysis-results-outcome-segment--lose-gammon,
+.bs-analysis-results-outcome-swatch--lose-gammon {
+  background: color-mix(in srgb, var(--bs-copper-dark) 72%, white);
+}
+
+.bs-analysis-results-outcome-segment--lose-bg,
+.bs-analysis-results-outcome-swatch--lose-bg {
+  background: color-mix(in srgb, var(--bs-copper-dark) 92%, black);
+}
+
+.bs-analysis-results-outcome-legend {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.3rem 0.75rem;
+  margin-top: 0.55rem;
+}
+
+.bs-analysis-results-outcome-key {
+  display: grid;
+  grid-template-columns: 0.65rem minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: center;
+  min-width: 0;
+  font-size: 0.76rem;
+  color: var(--bs-text-secondary);
+}
+
+.bs-analysis-results-outcome-swatch {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+}
+
+.bs-analysis-results-outcome-key-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bs-analysis-results-outcome-key-value {
+  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 650;
+}
+
+.bs-analysis-results-outcome-note {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+}
+
+.bs-analysis-results-outcome-unavailable {
+  min-height: 3rem;
+  display: grid;
+  place-items: center;
+  padding: 0.65rem;
+  border: 1px dashed var(--bs-border-strong);
+  background: var(--bs-page-background);
   color: var(--bs-text-muted);
-  font-weight: 500;
+  font-size: 0.85rem;
+  text-align: center;
 }
 
 .bs-analysis-results-choices {
   display: grid;
-  gap: 0.5rem;
-  margin-bottom: 0.65rem;
+  border-top: 1px solid var(--bs-border);
+  margin-bottom: 0.55rem;
 }
 
 .bs-analysis-results-choice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
   width: 100%;
-  justify-content: flex-start;
+  min-height: 3.35rem;
+  padding: 0.55rem 0.15rem;
+  border: 0;
+  border-bottom: 1px solid var(--bs-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--bs-text);
   text-align: left;
+  cursor: pointer;
+}
+
+.bs-analysis-results-choice:hover {
+  background: color-mix(in srgb, var(--bs-navy) 4%, transparent);
+}
+
+.bs-analysis-results-choice-copy {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.bs-analysis-results-choice-primary {
+  color: var(--bs-navy);
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.bs-analysis-results-choice-secondary {
+  color: var(--bs-text-muted);
+  font-size: 0.76rem;
+  line-height: 1.3;
+}
+
+.bs-analysis-results-choice-value {
+  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .bs-analysis-results-choice[aria-pressed="true"] {
-  border-color: var(--bs-navy);
-  background: color-mix(in srgb, var(--bs-navy) 8%, transparent);
-  color: var(--bs-navy);
+  box-shadow: inset 3px 0 0 var(--bs-copper-dark);
+  background: color-mix(in srgb, var(--bs-copper) 8%, transparent);
 }
 
 .bs-analysis-results-choice.is-unsupported {
-  border-style: dashed;
+  opacity: 0.72;
+}
+
+.bs-analysis-results-choice.is-unsupported .bs-analysis-results-choice-primary {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
 }
 
 .bs-analysis-results-choice:focus-visible,
 .bs-analysis-results-more > summary:focus-visible {
   outline: 2px solid var(--bs-focus);
   outline-offset: 3px;
+  position: relative;
+  z-index: 1;
 }
 
 .bs-analysis-results-choice-status {
-  min-height: 1.5rem;
-  margin: 0.45rem 0 0.7rem;
+  min-height: 1.35rem;
+  margin: 0.35rem 0 0.55rem;
+  font-size: 0.82rem;
 }
 
 .bs-analysis-results-selection-summary {
-  padding: 0.65rem 0;
+  padding: 0.55rem 0;
   border-top: 1px solid var(--bs-border);
 }
 
@@ -257,7 +381,16 @@
     margin-bottom: 0.4rem;
   }
 
-  .bs-analysis-results-probabilities {
+  .bs-analysis-results-outcome-legend {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bs-analysis-results-choice {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.45rem;
+  }
+
+  .bs-analysis-results-choice-secondary {
+    white-space: normal;
   }
 }
