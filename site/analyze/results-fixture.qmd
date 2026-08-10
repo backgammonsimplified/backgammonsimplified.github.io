@@ -1,0 +1,69 @@
+---
+title: "Analysis Results Viewer Fixture"
+description: "Development-only synthetic checker and cube fixtures for the shared Backgammon Simplified Analysis Results Viewer."
+subtitle: "DEVELOPMENT FIXTURE :: NOT ENGINE ANALYSIS"
+page-layout: full
+toc: false
+term-lookup: false
+format:
+  html:
+    title-block-style: plain
+    body-classes: "bs-editorial-page bs-title-eyebrow bs-analyze-results-fixture-page"
+---
+
+:::: {.bs-page-shell}
+::: {.bs-reading-column}
+
+::: {.bs-status-panel}
+[SYNTHETIC FIXTURE DATA]{.bs-status-label}
+
+This route exists only to review the shared Analysis Results Viewer. The values below are deliberately synthetic. They are not GNU, Sage, research, or published Analyzer results.
+:::
+
+The viewer loads through a small local `loadAnalysis(id)` boundary. When accepted Node or corpus JSON is ready, the data adapter can change without replacing this renderer.
+
+:::
+
+## Checker result
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="checker-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+```
+
+## Cube result
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="cube-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+```
+
+## Loader failure states
+
+These are deliberate development cases. They verify that malformed or unknown records fail visibly instead of inventing values.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="unknown-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="malformed-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+```
+
+::::
