@@ -22,6 +22,53 @@ assert.equal(checker.candidates[1].probabilities.win_gammon_or_better, null);
 assert.equal(checker.candidates[2].result_board, null);
 assert.equal(checker.candidates[2].value.value, null);
 
+const completeOutcomes = viewer.exclusiveOutcomeSegments(
+  checker.candidates[0].probabilities
+);
+assert.equal(completeOutcomes.status, "complete");
+assert.deepEqual(
+  completeOutcomes.segments.map((segment) => [segment.key, segment.value]),
+  [
+    ["win_backgammon", 0.01],
+    ["win_gammon", 0.1],
+    ["win_single", 0.47],
+    ["lose_single", 0.37],
+    ["lose_gammon", 0.04],
+    ["lose_backgammon", 0.01]
+  ]
+);
+assert.ok(
+  Math.abs(
+    completeOutcomes.segments.reduce((sum, segment) => sum + segment.value, 0) - 1
+  ) < 1e-9
+);
+
+const partialOutcomes = viewer.exclusiveOutcomeSegments(
+  checker.candidates[1].probabilities
+);
+assert.equal(partialOutcomes.status, "partial");
+assert.deepEqual(
+  partialOutcomes.segments.map((segment) => [segment.key, segment.value]),
+  [["win", 0.56], ["lose", 0.44]]
+);
+
+assert.equal(viewer.exclusiveOutcomeSegments(null).status, "missing");
+assert.equal(
+  viewer.exclusiveOutcomeSegments({ win: 0.7, lose: 0.4 }).status,
+  "invalid"
+);
+assert.equal(
+  viewer.exclusiveOutcomeSegments({
+    win: 0.58,
+    win_gammon_or_better: 0.1,
+    win_backgammon: 0.2,
+    lose: 0.42,
+    lose_gammon_or_worse: 0.05,
+    lose_backgammon: 0.01
+  }).status,
+  "invalid"
+);
+
 const cube = viewer.analysisFromDocument(fixtures, "cube-ui-demo").analysis;
 assert.equal(cube.analysis_kind, "cube");
 assert.deepEqual(
