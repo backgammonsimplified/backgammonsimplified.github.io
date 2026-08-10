@@ -1,0 +1,50 @@
+import json
+from pathlib import Path
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+FIXTURE_PATH = ROOT / "site" / "data" / "analyzer-analysis-results-fixtures.json"
+PAGE_PATH = ROOT / "site" / "analyze" / "results-fixture.qmd"
+PUBLICATION_PATH = ROOT / "site" / "_publication.yml"
+QUARTO_PATH = ROOT / "site" / "_quarto.yml"
+SCRIPTS_PATH = ROOT / "site" / "includes" / "bs-scripts.html"
+
+
+class AnalysisResultsViewerContractTests(unittest.TestCase):
+    def test_fixture_document_is_explicitly_synthetic(self):
+        payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(payload["schema_version"], "bs-analysis-results-viewer-fixture-v1")
+        self.assertEqual(payload["fixture_status"]["kind"], "synthetic")
+        self.assertTrue(payload["analyses"]["checker-ui-demo"]["fixture"])
+        self.assertTrue(payload["analyses"]["cube-ui-demo"]["fixture"])
+
+    def test_checker_and_cube_cover_degraded_states(self):
+        payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+        checker = payload["analyses"]["checker-ui-demo"]
+        cube = payload["analyses"]["cube-ui-demo"]
+        self.assertIsNone(checker["candidates"][2]["result_board"])
+        self.assertIsNone(checker["candidates"][1]["probabilities"]["win_gammon_or_better"])
+        self.assertFalse(cube["actions"][3]["supported"])
+        self.assertIn("malformed-ui-demo", payload["analyses"])
+
+    def test_fixture_route_is_registered_non_indexable(self):
+        publication = PUBLICATION_PATH.read_text(encoding="utf-8")
+        route = "/analyze/results-fixture.html:"
+        self.assertIn(route, publication)
+        route_block = publication.split(route, 1)[1].split("\n      /", 1)[0]
+        self.assertIn("status: fixture", route_block)
+        page = PAGE_PATH.read_text(encoding="utf-8")
+        self.assertNotIn("published: true", page)
+        self.assertIn("SYNTHETIC FIXTURE DATA", page)
+
+    def test_viewer_assets_are_registered(self):
+        quarto = QUARTO_PATH.read_text(encoding="utf-8")
+        scripts = SCRIPTS_PATH.read_text(encoding="utf-8")
+        self.assertIn("data/analyzer-analysis-results-fixtures.json", quarto)
+        self.assertIn("assets/bs-analysis-results.css", quarto)
+        self.assertIn('/assets/bs-analysis-results.js', scripts)
+
+
+if __name__ == "__main__":
+    unittest.main()
