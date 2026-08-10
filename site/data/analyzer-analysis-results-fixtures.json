@@ -1,0 +1,203 @@
+{
+  "schema_version": "bs-analysis-results-viewer-fixture-v1",
+  "fixture_status": {
+    "kind": "synthetic",
+    "label": "Synthetic fixture data",
+    "message": "These values exist only to exercise the Analysis Results Viewer. They are not GNU, Sage, research, or published analysis."
+  },
+  "analyses": {
+    "checker-ui-demo": {
+      "id": "checker-ui-demo",
+      "analysis_kind": "checker",
+      "title": "Checker analysis viewer fixture",
+      "subtitle": "Synthetic checker candidates with cached result boards",
+      "fixture": true,
+      "original_board": {
+        "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg",
+        "alt": "Synthetic starting backgammon position used only to exercise the checker results viewer."
+      },
+      "context": {
+        "score": "3-2 to 7 (synthetic)",
+        "cube": "1, centered (synthetic)",
+        "dice": "5-3 (synthetic)",
+        "decision": "Checker play"
+      },
+      "metadata": {
+        "engine": "Synthetic fixture",
+        "engine_version": "not applicable",
+        "parser": "fixture-view-model-v1",
+        "provenance": "Local UI fixture only",
+        "analysis_settings": {
+          "requested": "4-ply-shaped checker request (synthetic)",
+          "effective": "Mixed candidate depths for UI coverage (synthetic)"
+        }
+      },
+      "probabilities": {
+        "win": 0.58,
+        "win_gammon_or_better": 0.11,
+        "win_backgammon": 0.01,
+        "lose": 0.42,
+        "lose_gammon_or_worse": 0.05,
+        "lose_backgammon": 0.01
+      },
+      "candidates": [
+        {
+          "id": "checker-candidate-1",
+          "source_order": 1,
+          "display_rank": 1,
+          "move": "13/8 6/3",
+          "evaluation": "4-ply-shaped fixture",
+          "value": {"label": "Equity", "value": 0.093},
+          "difference_from_best": 0.0,
+          "probabilities": {
+            "win": 0.58,
+            "win_gammon_or_better": 0.11,
+            "win_backgammon": 0.01,
+            "lose": 0.42,
+            "lose_gammon_or_worse": 0.05,
+            "lose_backgammon": 0.01
+          },
+          "result_board": {
+            "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/candidate-2.svg",
+            "alt": "Synthetic resulting board for checker candidate one."
+          },
+          "details": "Synthetic best-display candidate for interaction testing only."
+        },
+        {
+          "id": "checker-candidate-2",
+          "source_order": 2,
+          "display_rank": 2,
+          "move": "8/3 6/3",
+          "evaluation": "2-ply-shaped fixture",
+          "value": {"label": "Equity", "value": 0.067},
+          "difference_from_best": -0.026,
+          "probabilities": {
+            "win": 0.56,
+            "win_gammon_or_better": null,
+            "win_backgammon": null,
+            "lose": 0.44,
+            "lose_gammon_or_worse": null,
+            "lose_backgammon": null
+          },
+          "result_board": {
+            "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/candidate-3.svg",
+            "alt": "Synthetic resulting board for checker candidate two."
+          },
+          "details": null
+        },
+        {
+          "id": "checker-candidate-3",
+          "source_order": 3,
+          "display_rank": 3,
+          "move": "24/16",
+          "evaluation": "0-ply-shaped fixture",
+          "value": {"label": "Equity", "value": null},
+          "difference_from_best": null,
+          "probabilities": null,
+          "result_board": null,
+          "details": "Result board asset deliberately unavailable to exercise a visible degraded state."
+        }
+      ],
+      "warnings": [
+        "Synthetic fixture values must not be interpreted as engine conclusions."
+      ],
+      "limitations": [
+        "Displayed ranks are fixture display order, not a proven ranking over all legal moves.",
+        "Candidate three intentionally omits a result board and optional analytical values."
+      ]
+    },
+    "cube-ui-demo": {
+      "id": "cube-ui-demo",
+      "analysis_kind": "cube",
+      "title": "Cube analysis viewer fixture",
+      "subtitle": "Synthetic cube actions with flat outcome presentation",
+      "fixture": true,
+      "original_board": {
+        "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg",
+        "alt": "Synthetic starting backgammon position used only to exercise the cube results viewer."
+      },
+      "context": {
+        "score": "0-0 to 5 (synthetic)",
+        "cube": "1, centered (synthetic)",
+        "dice": null,
+        "decision": "Cube decision"
+      },
+      "metadata": {
+        "engine": "Synthetic fixture",
+        "engine_version": "not applicable",
+        "parser": "fixture-view-model-v1",
+        "provenance": "Local UI fixture only",
+        "analysis_settings": {
+          "requested": "3-ply-shaped cube request (synthetic)",
+          "effective": "Three ordinary cube branches plus one unsupported action"
+        }
+      },
+      "probabilities": {
+        "win": 0.63,
+        "win_gammon_or_better": 0.14,
+        "win_backgammon": 0.02,
+        "lose": 0.37,
+        "lose_gammon_or_worse": 0.07,
+        "lose_backgammon": 0.01
+      },
+      "actions": [
+        {
+          "id": "roll",
+          "label": "Roll / No double",
+          "normalized_action": "roll",
+          "supported": true,
+          "value": {"label": "Value", "value": 0.082},
+          "probabilities": null,
+          "details": "Synthetic roll branch."
+        },
+        {
+          "id": "double-take",
+          "label": "Double / Take",
+          "normalized_action": "double_take",
+          "supported": true,
+          "value": {"label": "Value", "value": 0.146},
+          "probabilities": {
+            "win": 0.63,
+            "win_gammon_or_better": 0.14,
+            "win_backgammon": 0.02,
+            "lose": 0.37,
+            "lose_gammon_or_worse": 0.07,
+            "lose_backgammon": 0.01
+          },
+          "details": "Synthetic double/take branch."
+        },
+        {
+          "id": "double-pass",
+          "label": "Double / Pass",
+          "normalized_action": "double_pass",
+          "supported": true,
+          "value": {"label": "Value", "value": 1.0},
+          "probabilities": null,
+          "details": "Synthetic double/pass branch."
+        },
+        {
+          "id": "unsupported-beaver",
+          "label": "Beaver",
+          "normalized_action": "beaver",
+          "supported": false,
+          "value": null,
+          "probabilities": null,
+          "details": "Unsupported in this Stage 1 viewer fixture."
+        }
+      ],
+      "warnings": [
+        "Synthetic fixture values must not be interpreted as a real cube recommendation."
+      ],
+      "limitations": [
+        "The MVP viewer does not derive actor/responder perspective or cube margins.",
+        "Beaver is shown only to prove an unsupported-action state."
+      ]
+    },
+    "malformed-ui-demo": {
+      "id": "malformed-ui-demo",
+      "analysis_kind": "unknown",
+      "title": "Intentionally malformed fixture",
+      "fixture": true
+    }
+  }
+}
