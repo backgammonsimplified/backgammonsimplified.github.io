@@ -9,6 +9,8 @@ PAGE_PATH = ROOT / "site" / "analyze" / "results-fixture.qmd"
 PUBLICATION_PATH = ROOT / "site" / "_publication.yml"
 QUARTO_PATH = ROOT / "site" / "_quarto.yml"
 SCRIPTS_PATH = ROOT / "site" / "includes" / "bs-scripts.html"
+VIEWER_PATH = ROOT / "site" / "assets" / "bs-analysis-results.js"
+VIEWER_CSS_PATH = ROOT / "site" / "assets" / "bs-analysis-results.css"
 
 
 class AnalysisResultsViewerContractTests(unittest.TestCase):
@@ -27,6 +29,27 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIsNone(checker["candidates"][1]["probabilities"]["win_gammon_or_better"])
         self.assertFalse(cube["actions"][3]["supported"])
         self.assertIn("malformed-ui-demo", payload["analyses"])
+
+    def test_outcome_presentation_is_one_stacked_bar(self):
+        script = VIEWER_PATH.read_text(encoding="utf-8")
+        css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
+        self.assertIn("exclusiveOutcomeSegments", script)
+        self.assertIn("bs-analysis-results-outcome-bar", script)
+        self.assertIn("bs-analysis-results-outcome-segment", script)
+        self.assertIn("Gammon and backgammon breakdown not supplied", script)
+        self.assertIn(".bs-analysis-results-outcome-bar", css)
+        self.assertIn("display: flex;", css)
+        self.assertNotIn("bs-analysis-results-probability-track", script)
+        self.assertNotIn("bs-analysis-results-probability-track", css)
+
+    def test_move_and_action_controls_use_compact_result_rows(self):
+        script = VIEWER_PATH.read_text(encoding="utf-8")
+        css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
+        self.assertIn("bs-analysis-results-choice-primary", script)
+        self.assertIn("bs-analysis-results-choice-secondary", script)
+        self.assertIn("bs-analysis-results-choice-value", script)
+        self.assertIn("grid-template-columns: minmax(0, 1fr) auto;", css)
+        self.assertIn("border-bottom: 1px solid var(--bs-border);", css)
 
     def test_fixture_route_is_registered_non_indexable(self):
         publication = PUBLICATION_PATH.read_text(encoding="utf-8")
