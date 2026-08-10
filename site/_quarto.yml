@@ -18,6 +18,7 @@ project:
     - "assets/positions/**"
     - data/lesson-analysis-svg-mvp.json
     - data/checker-sage-gnu-disagreement-001.json
+    - data/analyzer-analysis-results-fixtures.json
     - "data/engine-benchmark/**"
     - "engine-benchmark/**/figures/**"
     - "engine-benchmark/**/tables/**"
@@ -80,6 +81,7 @@ format:
       - assets/bs-components.css
       - assets/bs-learn.css
       - assets/bs-lesson-analysis.css
+      - assets/bs-analysis-results.css
     include-after-body:
       - includes/bs-scripts.html
     include-in-header:
