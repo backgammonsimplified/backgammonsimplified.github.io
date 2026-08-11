@@ -21,6 +21,14 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
   stop("The devtools package is required.", call. = FALSE)
 }
 devtools::load_all(board_repo, quiet = TRUE)
+board_commit <- trimws(system2(
+  "git",
+  c("-C", normalizePath(board_repo, winslash = "/"), "rev-parse", "HEAD"),
+  stdout = TRUE
+))
+if (length(board_commit) != 1L || !grepl("^[0-9a-f]{40}$", board_commit)) {
+  stop("Unable to record exact Backgammonboard commit.", call. = FALSE)
+}
 
 read_object <- function(path) {
   jsonlite::fromJSON(path, simplifyVector = FALSE)
@@ -189,6 +197,32 @@ for (candidate in lesson_fixture$candidates) {
   }
   save_svg(plot, file.path(output_dir, candidate$image))
 }
+
+writeLines(
+  c(
+    "Real checker lesson and Analyzer preview asset provenance",
+    "========================================================",
+    "",
+    "Source fixture:",
+    "`fixtures/real-analysis/checker-sage-gnu-disagreement-001/`",
+    "",
+    "Identity:",
+    "",
+    paste0("- position_id: ", view_document$position_id),
+    paste0("- state_hash: ", view_document$state_hash),
+    paste0("- analysis_id: ", view_document$analysis_id),
+    paste0("- backgammonboard commit: ", board_commit),
+    "",
+    "The starting SVG and all candidate SVGs are rendered from the same factual",
+    "starting XGID. Candidate SVGs differ by structured board_moves() movement",
+    "overlays only. The applied checker arrangement for every candidate is",
+    "validated against analyzer-view.json before the SVG is accepted.",
+    "",
+    "The browser does not parse move notation or apply checker moves."
+  ),
+  file.path(output_dir, "PROVENANCE.txt"),
+  useBytes = TRUE
+)
 
 message(
   "PASS: rendered one retained starting position and three structured candidate move overlays."
