@@ -5,21 +5,40 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_PATH = ROOT / "site" / "data" / "analyzer-analysis-results-fixtures.json"
+RETAINED_PATH = ROOT / "site" / "data" / "analyzer-retained-checker-preview.json"
 PAGE_PATH = ROOT / "site" / "analyze" / "results-fixture.qmd"
 PUBLICATION_PATH = ROOT / "site" / "_publication.yml"
 QUARTO_PATH = ROOT / "site" / "_quarto.yml"
 SCRIPTS_PATH = ROOT / "site" / "includes" / "bs-scripts.html"
 VIEWER_PATH = ROOT / "site" / "assets" / "bs-analysis-results.js"
 VIEWER_CSS_PATH = ROOT / "site" / "assets" / "bs-analysis-results.css"
+R_RENDERER_PATH = ROOT / "scripts" / "render_real_checker_assets.R"
 
 
 class AnalysisResultsViewerContractTests(unittest.TestCase):
-    def test_fixture_document_is_explicitly_synthetic(self):
+    def test_synthetic_failure_fixture_remains_explicit(self):
         payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
         self.assertEqual(payload["schema_version"], "bs-analysis-results-viewer-fixture-v1")
         self.assertEqual(payload["fixture_status"]["kind"], "synthetic")
         self.assertTrue(payload["analyses"]["checker-ui-demo"]["fixture"])
         self.assertTrue(payload["analyses"]["cube-ui-demo"]["fixture"])
+
+    def test_retained_checker_preview_uses_real_analysis_and_move_boards(self):
+        payload = json.loads(RETAINED_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(payload["fixture_status"]["kind"], "retained-analysis")
+        checker = payload["analyses"]["retained-checker-preview"]
+        self.assertEqual(checker["context"]["dice"], "3-1")
+        self.assertEqual([item["move"] for item in checker["candidates"]], [
+            "8/4",
+            "13/10 11/10",
+            "13/10 8/7",
+        ])
+        self.assertEqual([item["actual_ply"] for item in checker["candidates"]], [4, 4, 4])
+        self.assertEqual(checker["candidates"][0]["difference_from_best"], 0.0)
+        for candidate in checker["candidates"]:
+            self.assertIn("move_board", candidate)
+            self.assertIn("checker-sage-gnu-disagreement-001", candidate["move_board"]["image"])
+            self.assertIn("starting position", candidate["move_board"]["alt"])
 
     def test_checker_and_cube_cover_degraded_states(self):
         payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
@@ -48,7 +67,7 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertNotIn("bs-analysis-results-probability-track", script)
         self.assertNotIn("bs-analysis-results-probability-track", css)
 
-    def test_checker_uses_board_first_candidate_accordion(self):
+    def test_checker_keeps_open_bars_and_board_is_beside_moves(self):
         script = VIEWER_PATH.read_text(encoding="utf-8")
         css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
         self.assertIn('element("details", "bs-analysis-results-candidate")', script)
@@ -56,9 +75,23 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn('"Equity"', script)
         self.assertIn('"vs best"', script)
         self.assertIn("details.open = true", script)
-        self.assertIn("article.append(header, boardSection, analysisSection)", script)
-        self.assertIn(".bs-analysis-results-candidate-metrics", css)
-        self.assertIn(".bs-analysis-results-board-section", css)
+        self.assertNotIn("other.open = false", script)
+        self.assertIn("candidate.move_board || originalBoard", script)
+        self.assertNotIn("candidate.result_board", script)
+        self.assertIn("shell.append(boardSection, analysisSection)", script)
+        self.assertIn("article.append(header, shell)", script)
+        self.assertIn(".bs-analysis-results-shell", css)
+        self.assertIn("grid-template-columns: minmax(18rem, 0.9fr) minmax(28rem, 1.1fr);", css)
+
+    def test_r_renderer_uses_current_structured_backgammonboard_api(self):
+        renderer = R_RENDERER_PATH.read_text(encoding="utf-8")
+        self.assertIn("structured_moves_from_fixture_notation", renderer)
+        self.assertIn("board_moves(", renderer)
+        self.assertIn('perspective = "decision_maker"', renderer)
+        self.assertIn('light_player = "near_player"', renderer)
+        self.assertNotIn("moves = candidate$move", renderer)
+        self.assertNotIn("show_information", renderer)
+        self.assertNotIn("brand_text", renderer)
 
     def test_cube_action_controls_use_compact_result_rows(self):
         script = VIEWER_PATH.read_text(encoding="utf-8")
@@ -77,12 +110,15 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn("status: fixture", route_block)
         page = PAGE_PATH.read_text(encoding="utf-8")
         self.assertNotIn("published: true", page)
-        self.assertIn("SYNTHETIC FIXTURE DATA", page)
+        self.assertIn("DEVELOPMENT PREVIEW", page)
+        self.assertIn("analyzer-retained-checker-preview.json", page)
+        self.assertIn("opening another move leaves earlier outcome bars open", page)
 
     def test_viewer_assets_are_registered(self):
         quarto = QUARTO_PATH.read_text(encoding="utf-8")
         scripts = SCRIPTS_PATH.read_text(encoding="utf-8")
         self.assertIn("data/analyzer-analysis-results-fixtures.json", quarto)
+        self.assertIn("data/analyzer-retained-checker-preview.json", quarto)
         self.assertIn("assets/bs-analysis-results.css", quarto)
         self.assertIn('/assets/bs-analysis-results.js', scripts)
 
