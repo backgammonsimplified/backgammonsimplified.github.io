@@ -8,6 +8,10 @@ ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_DIR = ROOT / "fixtures" / "real-analysis" / "checker-sage-gnu-disagreement-001"
 OUTPUT_PATH = ROOT / "site" / "data" / "analyzer-retained-checker-preview.json"
 ASSET_DIR = ROOT / "site" / "assets" / "positions" / "real-analysis" / "checker-sage-gnu-disagreement-001"
+RENDER_WRAPPER = ROOT / "scripts" / "analysis" / "render-retained-checker-preview.sh"
+R_REQUIREMENTS = ROOT / "scripts" / "analysis" / "requirements.R"
+SETUP_SCRIPT = ROOT / "scripts" / "setup" / "setup.sh"
+R_RENDERER = ROOT / "scripts" / "render_real_checker_assets.R"
 
 SPEC = importlib.util.spec_from_file_location(
     "project_retained_checker_preview",
@@ -51,6 +55,25 @@ class AnalyzerRetainedCheckerPreviewTests(unittest.TestCase):
         self.assertEqual(metadata["played_move"], "13/12 11/8")
         self.assertEqual(metadata["recommendation"], "8/4")
         self.assertNotEqual(metadata["played_move"], metadata["recommendation"])
+
+    def test_supported_setup_provisions_analyzer_r_dependencies(self):
+        requirements = R_REQUIREMENTS.read_text(encoding="utf-8")
+        setup = SETUP_SCRIPT.read_text(encoding="utf-8")
+        for package in ("jsonlite", "ggplot2", "ggforce"):
+            self.assertIn(package, requirements)
+        self.assertIn("scripts/analysis/requirements.R", setup)
+        self.assertIn("install-r-dependencies.R", setup)
+
+    def test_render_wrapper_installs_current_local_backgammonboard_without_devtools(self):
+        wrapper = RENDER_WRAPPER.read_text(encoding="utf-8")
+        renderer = R_RENDERER.read_text(encoding="utf-8")
+        self.assertIn("CMD INSTALL", wrapper)
+        self.assertIn('"${BACKGAMMONBOARD_REPO}"', wrapper)
+        self.assertNotIn("devtools", wrapper)
+        self.assertNotIn("devtools", renderer)
+        self.assertIn('board_colors("bs")', renderer)
+        self.assertIn('board_style("bs")', renderer)
+        self.assertIn("board_moves(", renderer)
 
 
 if __name__ == "__main__":
