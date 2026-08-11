@@ -41,66 +41,37 @@ stopifnot(
   identical(lesson_fixture$analysis_id, view_document$analysis_id)
 )
 
-arrangement_to_position <- function(document) {
-  arrangement <- document$state$checker_arrangement
-  player <- as.integer(unlist(arrangement$player_points_1_to_24_and_bar))
-  opponent <- as.integer(unlist(arrangement$opponent_points_1_to_24_and_bar))
-  stopifnot(length(player) == 25L, length(opponent) == 25L)
+# This complete XGID is the factual retained checker position represented by
+# position.json. Validate its decoded context against the retained document
+# before rendering so this constant cannot silently drift.
+starting_xgid <- "XGID=-b----E-C---eE---c-e----B-:0:0:1:31:2:5:0:7:10"
+position <- backgammon_position(starting_xgid)
+state <- position_document$state
+stopifnot(
+  identical(position$on_roll, "player_1"),
+  identical(as.integer(position$dice), as.integer(unlist(state$dice))),
+  identical(as.integer(position$cube_value), as.integer(state$cube$value)),
+  identical(position$cube_owner, "center"),
+  identical(as.integer(position$score[["player_1"]]), as.integer(state$score$player)),
+  identical(as.integer(position$score[["player_0"]]), as.integer(state$score$opponent)),
+  identical(as.integer(position$match_length), as.integer(state$score$match_length))
+)
 
-  points <- integer(24L)
-  for (point in seq_len(24L)) {
-    opponent_count <- opponent[[25L - point]]
-    if (player[[point]] > 0L && opponent_count > 0L) {
-      stop("Both players occupy the same canonical point.", call. = FALSE)
-    }
-    points[[point]] <- player[[point]] - opponent_count
-  }
-
-  state <- document$state
-  position <- backgammon_position(
-    "XGID=-b----E-C---eE---c-e----B-:0:0:1:31:2:5:0:7:10"
-  )
-  position$points <- points
-  position$bar <- c(white = player[[25L]], black = opponent[[25L]])
-  position$off <- c(
-    white = as.integer(arrangement$player_borne_off),
-    black = as.integer(arrangement$opponent_borne_off)
-  )
-  position$on_roll <- "white"
-  position$dice <- as.integer(unlist(state$dice))
-  position$action_marker <- paste0(position$dice, collapse = "")
-  position$dice_action <- position$action_marker
-  position$cube_value <- as.integer(state$cube$value)
-  position$cube_owner <- if (identical(state$cube$owner, "centered")) {
-    "center"
-  } else {
-    state$cube$owner
-  }
-  position$score_white <- as.integer(state$score$player)
-  position$score_black <- as.integer(state$score$opponent)
-  position$score <- c(
-    white = position$score_white,
-    black = position$score_black
-  )
-  position$match_length <- as.integer(state$score$match_length)
-  position$is_crawford <- isTRUE(state$crawford)
-  position$jacoby <- isTRUE(state$rules$jacoby)
-  position
-}
-
-position_to_arrangement <- function(position) {
+position_to_decision_player_arrangement <- function(position) {
+  stopifnot(inherits(position, "backgammon_position"))
+  stopifnot(identical(position$on_roll, "player_1") || length(position$dice) == 0L)
   player <- integer(25L)
   opponent <- integer(25L)
   for (point in seq_len(24L)) {
     player[[point]] <- max(position$points[[point]], 0L)
     opponent[[25L - point]] <- max(-position$points[[point]], 0L)
   }
-  player[[25L]] <- unname(position$bar[["white"]])
-  opponent[[25L]] <- unname(position$bar[["black"]])
+  player[[25L]] <- unname(position$bar[["player_1"]])
+  opponent[[25L]] <- unname(position$bar[["player_0"]])
   list(
-    player_borne_off = unname(position$off[["white"]]),
+    player_borne_off = unname(position$off[["player_1"]]),
     player_points_1_to_24_and_bar = as.list(player),
-    opponent_borne_off = unname(position$off[["black"]]),
+    opponent_borne_off = unname(position$off[["player_0"]]),
     opponent_points_1_to_24_and_bar = as.list(opponent),
     perspective = "decision_player"
   )
@@ -120,6 +91,44 @@ arrangements_equal <- function(actual, expected) {
     )
 }
 
+if (!arrangements_equal(
+  position_to_decision_player_arrangement(position),
+  position_document$state$checker_arrangement
+)) {
+  stop("The retained starting XGID no longer matches position.json.", call. = FALSE)
+}
+
+# Current backgammonboard deliberately does not parse GNU/source move notation.
+# This bounded retained fixture uses only normalized point-to-point tokens. Turn
+# those tokens into ordered board_moves() rows and leave die=NA so the renderer
+# does not invent a die assignment for collapsed notation such as 8/4. The
+# resulting checker arrangement is validated below against analyzer-view.json.
+structured_moves_from_fixture_notation <- function(move_text) {
+  if (!is.character(move_text) || length(move_text) != 1L || !nzchar(trimws(move_text))) {
+    stop("Candidate move must be one non-empty normalized move string.", call. = FALSE)
+  }
+  tokens <- strsplit(trimws(move_text), "[[:space:]]+")[[1L]]
+  matches <- regexec("^([1-9]|1[0-9]|2[0-4])/([1-9]|1[0-9]|2[0-4])$", tokens)
+  pieces <- regmatches(tokens, matches)
+  if (any(lengths(pieces) != 3L)) {
+    stop(
+      paste0(
+        "This retained preview renderer only accepts simple point-to-point tokens; got: ",
+        move_text
+      ),
+      call. = FALSE
+    )
+  }
+  from <- vapply(pieces, function(piece) as.integer(piece[[2L]]), integer(1L))
+  to <- vapply(pieces, function(piece) as.integer(piece[[3L]]), integer(1L))
+  board_moves(
+    from = from,
+    to = to,
+    die = rep(NA_integer_, length(from)),
+    label = tokens
+  )
+}
+
 save_svg <- function(plot, path) {
   grDevices::svg(path, width = 10.625, height = 7.5, bg = "white")
   print(plot)
@@ -127,20 +136,16 @@ save_svg <- function(plot, path) {
   stopifnot(file.exists(path), file.info(path)$size > 0)
 }
 
-position <- arrangement_to_position(position_document)
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
-# External backgammonboard compatibility contract: its public preset registry
-# supports only "default" and "bms". Keep this exact literal until that package
-# publishes a BS-named preset; do not infer or introduce an alias here.
 starting <- ggboard(
   position,
   colors = board_colors("bms"),
   style = board_style("bms"),
   decision = "checker_play",
-  perspective = "white",
-  show_information = TRUE,
-  brand_text = "Backgammon\nMade Simple"
+  perspective = "decision_maker",
+  light_player = "near_player",
+  player_name_style = "checker"
 )
 save_svg(starting, file.path(output_dir, lesson_fixture$initial$image))
 
@@ -155,21 +160,24 @@ for (candidate in lesson_fixture$candidates) {
     identical(candidate$move, source$move),
     identical(candidate$resulting_position_id, source$resulting_position_id)
   )
+  moves <- structured_moves_from_fixture_notation(candidate$move)
   plot <- ggboard(
     position,
     colors = board_colors("bms"),
     style = board_style("bms"),
     decision = "checker_play",
-    perspective = "white",
-    show_information = TRUE,
-    brand_text = "Backgammon\nMade Simple",
-    moves = candidate$move
+    perspective = "decision_maker",
+    light_player = "near_player",
+    player_name_style = "checker",
+    moves = moves
   )
-  actual <- position_to_arrangement(attr(plot, "backgammon_display_position"))
+  actual <- position_to_decision_player_arrangement(
+    attr(plot, "backgammon_display_position")
+  )
   if (!arrangements_equal(actual, source$resulting_position)) {
     stop(
       paste0(
-        "Rendered result does not match analyzer-view for rank ",
+        "Rendered move application does not match analyzer-view for rank ",
         candidate$rank,
         ".\nActual: ",
         jsonlite::toJSON(actual, auto_unbox = TRUE),
@@ -182,4 +190,6 @@ for (candidate in lesson_fixture$candidates) {
   save_svg(plot, file.path(output_dir, candidate$image))
 }
 
-message("PASS: rendered starting position and three verified checker candidates.")
+message(
+  "PASS: rendered one retained starting position and three structured candidate move overlays."
+)
