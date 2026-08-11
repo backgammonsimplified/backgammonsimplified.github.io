@@ -76,20 +76,23 @@ Until the joined Canonical Parquet reference package is published, the Analyzer 
 fixtures/real-analysis/checker-sage-gnu-disagreement-001/
 ```
 
-The deterministic projection command is:
+The preview preserves the real retained 3-1 checker position, real GNU 4-ply candidate ranks/equities/probabilities, played move, recommendation, actual 4-ply candidate depth, and candidate result-position identities.
+
+On Laptop 2, with the normal website checkout and a sibling Backgammonboard checkout, regenerate both the analysis-view JSON and Backgammonboard SVGs with one command:
 
 ```bash
-.venv/Scripts/python.exe \
-  scripts/analysis/project_retained_checker_preview.py
+cd "$HOME/Documents/backgammonsimplified.github.io"
+bash scripts/analysis/render-retained-checker-preview.sh
 ```
 
-That writes:
+Override the Backgammonboard checkout when necessary:
 
-```text
-site/data/analyzer-retained-checker-preview.json
+```bash
+BACKGAMMONBOARD_REPO=/path/to/backgammonboard \
+  bash scripts/analysis/render-retained-checker-preview.sh
 ```
 
-The preview preserves the real retained 3-1 checker position, real GNU 4-ply candidate ranks/equities/probabilities, played move, recommendation, actual 4-ply candidate depth, and candidate result-position identities.
+The wrapper runs the deterministic Python projection and then `scripts/render_real_checker_assets.R`.
 
 ## Candidate board assets
 
@@ -104,21 +107,9 @@ Current Backgammonboard requirements relevant to Analyzer:
 - `after_xgid`, when available, validates the applied checker layout and does not replace the displayed before-position;
 - the current Backgammon Simplified presets are `board_colors("bs")` and `board_style("bs")`.
 
-For the bounded retained preview, `scripts/render_real_checker_assets.R` converts its already-normalized simple point-to-point tokens into `board_moves()` rows, leaves die assignment unspecified where the notation has collapsed it, applies the movements to one factual starting XGID, and validates the resulting checker arrangement against `analyzer-view.json`.
+For the bounded retained preview, `scripts/render_real_checker_assets.R` converts its already-normalized simple point-to-point tokens into `board_moves()` rows, leaves die assignment unspecified where notation has collapsed it, applies the movements to one factual starting XGID, and validates the resulting checker arrangement against `analyzer-view.json`.
 
-On Laptop 2, with a sibling Backgammonboard checkout, regenerate the starting board and all three candidate overlays with:
-
-```bash
-cd "$HOME/Documents/backgammonsimplified.github.io"
-
-Rscript scripts/render_real_checker_assets.R \
-  fixtures/real-analysis/checker-sage-gnu-disagreement-001 \
-  site/data/checker-sage-gnu-disagreement-001.json \
-  "$HOME/Documents/backgammonboard" \
-  site/assets/positions/real-analysis/checker-sage-gnu-disagreement-001
-```
-
-The generated candidate SVGs deliberately all use the same starting position. Each one differs only by the candidate movement overlay. Their movement application is checked against the retained resulting-position arrangement before the SVG is accepted.
+The generated candidate SVGs deliberately all use the same starting position. Each one differs only by the candidate movement overlay. The renderer also rewrites `PROVENANCE.txt` with the exact Backgammonboard commit used.
 
 For Canonical Parquet v1, the preferred durable path is stronger and avoids notation parsing entirely:
 
