@@ -64,14 +64,23 @@
   overflow-wrap: anywhere;
 }
 
+.bs-analysis-results-shell {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(28rem, 1.1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  align-items: start;
+}
+
 .bs-analysis-results-board-section,
 .bs-analysis-results-main {
-  width: min(100%, 64rem);
-  margin-inline: auto;
+  min-width: 0;
 }
 
 .bs-analysis-results-board-section {
-  margin-bottom: clamp(1.4rem, 3vw, 2.2rem);
+  position: sticky;
+  top: 1rem;
 }
 
 .bs-analysis-results-section-title {
@@ -81,9 +90,8 @@
 }
 
 .bs-analysis-results-board {
-  width: min(100%, 58rem);
+  width: 100%;
   min-height: 16rem;
-  margin-inline: auto;
 }
 
 .bs-analysis-results-board-image {
@@ -408,13 +416,23 @@
   margin: 0.35rem 0 0;
 }
 
-@media (max-width: 760px) {
-  .bs-analysis-results-board,
-  .bs-analysis-results-board-section,
-  .bs-analysis-results-main {
-    width: 100%;
+@media (max-width: 980px) {
+  .bs-analysis-results-shell {
+    grid-template-columns: 1fr;
+    width: min(100%, 64rem);
   }
 
+  .bs-analysis-results-board-section {
+    position: static;
+  }
+
+  .bs-analysis-results-board {
+    width: min(100%, 52rem);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 760px) {
   .bs-analysis-results-candidate-summary {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.45rem;
