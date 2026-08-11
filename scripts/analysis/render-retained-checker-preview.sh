@@ -4,6 +4,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 BACKGAMMONBOARD_REPO="${BACKGAMMONBOARD_REPO:-$HOME/Documents/backgammonboard}"
+BACKGAMMONCALCULATOR_REPO="${BACKGAMMONCALCULATOR_REPO:-$HOME/Documents/backgammoncalculator}"
 RSCRIPT_COMMAND="${RSCRIPT_BIN:-Rscript}"
 R_COMMAND="${R_BIN:-R}"
 
@@ -21,6 +22,11 @@ fi
   printf 'Set BACKGAMMONBOARD_REPO to the current backgammonboard checkout.\n' >&2
   exit 1
 }
+[[ -d "${BACKGAMMONCALCULATOR_REPO}" ]] || {
+  printf 'ERROR: Backgammoncalculator checkout not found: %s\n' "${BACKGAMMONCALCULATOR_REPO}" >&2
+  printf 'Set BACKGAMMONCALCULATOR_REPO to the current backgammoncalculator checkout.\n' >&2
+  exit 1
+}
 command -v "${RSCRIPT_COMMAND}" >/dev/null || {
   printf 'ERROR: Rscript is unavailable: %s\n' "${RSCRIPT_COMMAND}" >&2
   exit 1
@@ -35,6 +41,11 @@ mkdir -p "${REPO_ROOT}/.r-library"
 export R_LIBS_USER="${REPO_ROOT}/.r-library"
 
 "${PYTHON}" scripts/analysis/project_retained_checker_preview.py
+
+printf 'Installing current local Backgammoncalculator checkout into repository R library...\n'
+"${R_COMMAND}" CMD INSTALL \
+  --library="${R_LIBS_USER}" \
+  "${BACKGAMMONCALCULATOR_REPO}"
 
 printf 'Installing current local Backgammonboard checkout into repository R library...\n'
 "${R_COMMAND}" CMD INSTALL \
