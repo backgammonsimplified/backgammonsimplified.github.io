@@ -19,6 +19,7 @@ project:
     - data/lesson-analysis-svg-mvp.json
     - data/checker-sage-gnu-disagreement-001.json
     - data/analyzer-analysis-results-fixtures.json
+    - data/analyzer-retained-checker-preview.json
     - "data/engine-benchmark/**"
     - "engine-benchmark/**/figures/**"
     - "engine-benchmark/**/tables/**"
