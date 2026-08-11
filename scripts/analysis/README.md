@@ -15,7 +15,7 @@ Parquet remains authoritative analytical storage. The generated JSON is a rebuil
 
 ## Dependency
 
-The repository setup command installs the materializer dependency into the existing `.venv`:
+The repository setup command installs the Python materializer dependency into the existing `.venv`:
 
 ```bash
 bash scripts/setup/windows-dev.sh
@@ -50,7 +50,7 @@ It records table files, SHA-256 values, row counts, and DuckDB-observed column n
 
 ## Mapping rule
 
-Do not add a permanent mapping until the exact joined Canonical Parquet reference package is available and inspected.
+Do not add a permanent Canonical Parquet mapping until the exact joined reference package is available and inspected.
 
 The retained-data proof must preserve at minimum:
 
@@ -66,37 +66,75 @@ The retained-data proof must preserve at minimum:
 
 Cube rows must not receive an invented row-local actual depth when the retained source does not provide one.
 
-Synthetic viewer fixtures remain the deliberate malformed/error/degraded-state test source. Real retained records are added as separate generated fixtures after canonical package intake.
+Synthetic viewer fixtures remain the deliberate malformed/error/degraded-state test source.
+
+## Interim retained checker preview
+
+Until the joined Canonical Parquet reference package is published, the Analyzer preview uses the already accepted retained checker fixture at:
+
+```text
+fixtures/real-analysis/checker-sage-gnu-disagreement-001/
+```
+
+The deterministic projection command is:
+
+```bash
+.venv/Scripts/python.exe \
+  scripts/analysis/project_retained_checker_preview.py
+```
+
+That writes:
+
+```text
+site/data/analyzer-retained-checker-preview.json
+```
+
+The preview preserves the real retained 3-1 checker position, real GNU 4-ply candidate ranks/equities/probabilities, played move, recommendation, actual 4-ply candidate depth, and candidate result-position identities.
 
 ## Candidate board assets
 
-Checker candidate board assets are generated at build/materialization time with the accepted `backgammonboard` renderer. The browser only swaps cached SVG files.
+Checker candidate board assets are generated locally/build-time with `backgammonboard`. The browser only swaps cached SVG files.
 
-`backgammonboard` does not parse GNU/source move notation. The materializer must therefore prefer canonical structured atomic checker movement when available:
+Current Backgammonboard requirements relevant to Analyzer:
+
+- `board_moves()` receives ordered structured atomic movement, not source notation strings;
+- move points are relative to the mover;
+- `die` may be `NA` when a row should not receive limited die checking;
+- `ggboard()` renders the factual before-position and overlays the supplied movement;
+- `after_xgid`, when available, validates the applied checker layout and does not replace the displayed before-position;
+- the current Backgammon Simplified presets are `board_colors("bs")` and `board_style("bs")`.
+
+For the bounded retained preview, `scripts/render_real_checker_assets.R` converts its already-normalized simple point-to-point tokens into `board_moves()` rows, leaves die assignment unspecified where the notation has collapsed it, applies the movements to one factual starting XGID, and validates the resulting checker arrangement against `analyzer-view.json`.
+
+On Laptop 2, with a sibling Backgammonboard checkout, regenerate the starting board and all three candidate overlays with:
+
+```bash
+cd "$HOME/Documents/backgammonsimplified.github.io"
+
+Rscript scripts/render_real_checker_assets.R \
+  fixtures/real-analysis/checker-sage-gnu-disagreement-001 \
+  site/data/checker-sage-gnu-disagreement-001.json \
+  "$HOME/Documents/backgammonboard" \
+  site/assets/positions/real-analysis/checker-sage-gnu-disagreement-001
+```
+
+The generated candidate SVGs deliberately all use the same starting position. Each one differs only by the candidate movement overlay. Their movement application is checked against the retained resulting-position arrangement before the SVG is accepted.
+
+For Canonical Parquet v1, the preferred durable path is stronger and avoids notation parsing entirely:
 
 ```text
 candidate starting position identity/XGID
-+ ordered movement steps: from, to, die
-+ optional canonical resulting-position XGID
++ ordered movement steps: from, to, optional die
++ canonical resulting-position identity/XGID when available
         |
         v
-backgammonboard::board_moves(from, to, die)
+backgammonboard::board_moves(...)
         |
         v
-backgammonboard::ggboard(
-  starting_xgid,
-  moves = structured_moves,
-  after_xgid = resulting_xgid,
-  colors = board_colors("bs"),
-  style = board_style("bs")
-)
+backgammonboard::ggboard(starting_position, moves = structured_moves, ...)
         |
         v
 cached candidate SVG
 ```
 
-`after_xgid` validates the applied checker layout. It does not replace the displayed starting position. This lets the candidate asset show the movement overlay on the decision position while checking agreement with the canonical result position.
-
-If the canonical package supplies a resulting position but no unambiguous structured movement steps, the materializer may render the resulting position as a separate static result board, but it must not invent movement arrows or die assignment.
-
-Before Canonical Parquet v1 freezes, Analyzer therefore benefits from explicit candidate movement fields equivalent to ordered atomic `from`, `to`, and optional `die` values, in addition to the candidate/result-position identities. Native move notation should remain separately preserved for display/audit.
+If Canonical Parquet supplies a resulting position but no unambiguous structured movement steps, the materializer may render a separate resulting position, but it must not invent movement arrows or die assignment. Analyzer therefore benefits from explicit ordered checker movement fields in Canonical Parquet in addition to native notation and candidate/result-position identities.
