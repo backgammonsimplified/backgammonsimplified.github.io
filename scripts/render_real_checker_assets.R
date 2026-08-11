@@ -13,22 +13,42 @@ fixture_dir <- args[[1L]]
 projection_path <- args[[2L]]
 board_repo <- args[[3L]]
 output_dir <- args[[4L]]
+calculator_repo <- Sys.getenv("BACKGAMMONCALCULATOR_REPO", unset = "")
 
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
   stop("The jsonlite package is required; rerun the repository setup command.", call. = FALSE)
 }
+if (!requireNamespace("backgammoncalculator", quietly = TRUE)) {
+  stop(
+    "The local backgammoncalculator package is not installed; rerun the retained checker render wrapper.",
+    call. = FALSE
+  )
+}
 if (!requireNamespace("backgammonboard", quietly = TRUE)) {
-  stop("The local backgammonboard package is not installed; rerun the retained checker render wrapper.", call. = FALSE)
+  stop(
+    "The local backgammonboard package is not installed; rerun the retained checker render wrapper.",
+    call. = FALSE
+  )
 }
 suppressPackageStartupMessages(library(backgammonboard))
-board_commit <- trimws(system2(
-  "git",
-  c("-C", normalizePath(board_repo, winslash = "/"), "rev-parse", "HEAD"),
-  stdout = TRUE
-))
-if (length(board_commit) != 1L || !grepl("^[0-9a-f]{40}$", board_commit)) {
-  stop("Unable to record exact Backgammonboard commit.", call. = FALSE)
+
+repo_commit <- function(path, label) {
+  if (!nzchar(path) || !dir.exists(path)) {
+    stop(paste0("Unable to locate ", label, " checkout for provenance."), call. = FALSE)
+  }
+  value <- trimws(system2(
+    "git",
+    c("-C", normalizePath(path, winslash = "/"), "rev-parse", "HEAD"),
+    stdout = TRUE
+  ))
+  if (length(value) != 1L || !grepl("^[0-9a-f]{40}$", value)) {
+    stop(paste0("Unable to record exact ", label, " commit."), call. = FALSE)
+  }
+  value
 }
+
+board_commit <- repo_commit(board_repo, "Backgammonboard")
+calculator_commit <- repo_commit(calculator_repo, "Backgammoncalculator")
 
 read_object <- function(path) {
   jsonlite::fromJSON(path, simplifyVector = FALSE)
@@ -49,12 +69,25 @@ stopifnot(
   identical(lesson_fixture$analysis_id, view_document$analysis_id)
 )
 
-# This complete XGID is the factual retained checker position represented by
-# position.json. Validate its decoded context against the retained document
-# before rendering so this constant cannot silently drift.
-starting_xgid <- "XGID=-b----E-C---eE---c-e----B-:0:0:1:31:2:5:0:7:10"
+# The retained fixture's source GNU Position ID and Match ID are authoritative.
+# Derive the complete XGID through backgammoncalculator instead of maintaining a
+# second hand-coded position string in the website renderer.
+source <- position_document$source
+gnu_position_id <- source$gnu_position_id
+gnu_match_id <- source$gnu_match_id
+if (
+  !is.character(gnu_position_id) || length(gnu_position_id) != 1L ||
+  !is.character(gnu_match_id) || length(gnu_match_id) != 1L
+) {
+  stop("Retained position.json is missing its authoritative GNU Position/Match IDs.", call. = FALSE)
+}
+complete_gnuid <- paste0(gnu_position_id, ":", gnu_match_id)
+starting_xgid <- backgammoncalculator::gnuid_to_xgid(complete_gnuid)
 position <- backgammon_position(starting_xgid)
 state <- position_document$state
+
+# These context checks make the source conversion fail closed if player identity
+# or match metadata ever diverges from the retained structured position.
 stopifnot(
   identical(position$on_roll, "player_1"),
   identical(as.integer(position$dice), as.integer(unlist(state$dice))),
@@ -102,7 +135,15 @@ if (!arrangements_equal(
   position_to_decision_player_arrangement(position),
   position_document$state$checker_arrangement
 )) {
-  stop("The retained starting XGID no longer matches position.json.", call. = FALSE)
+  stop(
+    paste0(
+      "GNUID-derived starting position does not match position.json. GNUID: ",
+      complete_gnuid,
+      " XGID: ",
+      starting_xgid
+    ),
+    call. = FALSE
+  )
 }
 
 # Current backgammonboard deliberately does not parse GNU/source move notation.
@@ -162,10 +203,10 @@ view_by_rank <- setNames(
 )
 
 for (candidate in lesson_fixture$candidates) {
-  source <- view_by_rank[[as.character(candidate$rank)]]
+  source_candidate <- view_by_rank[[as.character(candidate$rank)]]
   stopifnot(
-    identical(candidate$move, source$move),
-    identical(candidate$resulting_position_id, source$resulting_position_id)
+    identical(candidate$move, source_candidate$move),
+    identical(candidate$resulting_position_id, source_candidate$resulting_position_id)
   )
   moves <- structured_moves_from_fixture_notation(candidate$move)
   plot <- ggboard(
@@ -181,7 +222,7 @@ for (candidate in lesson_fixture$candidates) {
   actual <- position_to_decision_player_arrangement(
     attr(plot, "backgammon_display_position")
   )
-  if (!arrangements_equal(actual, source$resulting_position)) {
+  if (!arrangements_equal(actual, source_candidate$resulting_position)) {
     stop(
       paste0(
         "Rendered move application does not match analyzer-view for rank ",
@@ -189,7 +230,7 @@ for (candidate in lesson_fixture$candidates) {
         ".\nActual: ",
         jsonlite::toJSON(actual, auto_unbox = TRUE),
         "\nExpected: ",
-        jsonlite::toJSON(source$resulting_position, auto_unbox = TRUE)
+        jsonlite::toJSON(source_candidate$resulting_position, auto_unbox = TRUE)
       ),
       call. = FALSE
     )
@@ -210,12 +251,16 @@ writeLines(
     paste0("- position_id: ", view_document$position_id),
     paste0("- state_hash: ", view_document$state_hash),
     paste0("- analysis_id: ", view_document$analysis_id),
+    paste0("- GNUID: ", complete_gnuid),
+    paste0("- derived XGID: ", starting_xgid),
+    paste0("- backgammoncalculator commit: ", calculator_commit),
     paste0("- backgammonboard commit: ", board_commit),
     "",
-    "The starting SVG and all candidate SVGs are rendered from the same factual",
-    "starting XGID. Candidate SVGs differ by structured board_moves() movement",
-    "overlays only. The applied checker arrangement for every candidate is",
-    "validated against analyzer-view.json before the SVG is accepted.",
+    "The starting XGID is deterministically derived from the retained GNU Position",
+    "ID and Match ID. The starting SVG and all candidate SVGs are rendered from",
+    "that same factual starting position. Candidate SVGs differ by structured",
+    "board_moves() movement overlays only. The applied checker arrangement for",
+    "every candidate is validated against analyzer-view.json before acceptance.",
     "",
     "The browser does not parse move notation or apply checker moves."
   ),
