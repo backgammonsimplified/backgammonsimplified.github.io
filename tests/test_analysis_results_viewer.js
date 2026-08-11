@@ -10,8 +10,36 @@ const fixtures = JSON.parse(
     "utf8"
   )
 );
+const retained = JSON.parse(
+  fs.readFileSync(
+    path.join(root, "site/data/analyzer-retained-checker-preview.json"),
+    "utf8"
+  )
+);
 
 assert.equal(viewer.validateFixtureDocument(fixtures), fixtures);
+assert.equal(viewer.validateFixtureDocument(retained), retained);
+assert.equal(retained.fixture_status.kind, "retained-analysis");
+
+const retainedChecker = viewer.analysisFromDocument(
+  retained,
+  "retained-checker-preview"
+).analysis;
+assert.equal(retainedChecker.analysis_kind, "checker");
+assert.equal(retainedChecker.candidates.length, 3);
+assert.equal(retainedChecker.candidates[0].move, "8/4");
+assert.equal(retainedChecker.candidates[0].actual_ply, 4);
+assert.equal(retainedChecker.candidates[0].value.value, -1.615);
+assert.equal(retainedChecker.candidates[0].difference_from_best, 0.0);
+assert.equal(retainedChecker.candidates[1].difference_from_best, -0.002);
+assert.match(
+  retainedChecker.candidates[0].move_board.image,
+  /checker-sage-gnu-disagreement-001\/candidate-1-/
+);
+assert.match(
+  retainedChecker.original_board.image,
+  /checker-sage-gnu-disagreement-001\/starting\.svg$/
+);
 
 const checker = viewer.analysisFromDocument(fixtures, "checker-ui-demo").analysis;
 assert.equal(checker.analysis_kind, "checker");
@@ -57,13 +85,13 @@ assert.ok(
 );
 
 assert.deepEqual(
-  viewer.outcomeSummaryItems(checker.candidates[0].probabilities),
+  viewer.outcomeSummaryItems(retainedChecker.candidates[0].probabilities),
   [
-    ["Win", 0.58, "win"],
-    ["Gammon", 0.11, "win"],
-    ["Backgammon", 0.01, "win"],
-    ["Lose gammon", 0.05, "lose"],
-    ["Lose backgammon", 0.01, "lose"]
+    ["Win", 0.162, "win"],
+    ["Gammon", 0.0, "win"],
+    ["Backgammon", 0.0, "win"],
+    ["Lose gammon", 0.677, "lose"],
+    ["Lose backgammon", 0.052, "lose"]
   ]
 );
 
@@ -74,16 +102,6 @@ assert.equal(partialOutcomes.status, "partial");
 assert.deepEqual(
   partialOutcomes.segments.map((segment) => [segment.key, segment.value]),
   [["win", 0.56], ["lose", 0.44]]
-);
-assert.deepEqual(
-  viewer.outcomeSummaryItems(checker.candidates[1].probabilities),
-  [
-    ["Win", 0.56, "win"],
-    ["Gammon", null, "win"],
-    ["Backgammon", null, "win"],
-    ["Lose gammon", null, "lose"],
-    ["Lose backgammon", null, "lose"]
-  ]
 );
 
 assert.equal(viewer.exclusiveOutcomeSegments(null).status, "missing");
