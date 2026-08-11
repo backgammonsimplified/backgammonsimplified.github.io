@@ -138,7 +138,7 @@ Tools for running reproducible engine-versus-engine matches, checking the result
 :::
 
 ::: {.bs-repository-action}
-[View repository](https://github.com/backgammonsimplified/backgammonboard)
+[Documentation](/about/backgammonboard/) · [Source](https://github.com/backgammonsimplified/backgammonboard)
 :::
 :::::
 
@@ -156,7 +156,7 @@ Tools for running reproducible engine-versus-engine matches, checking the result
 :::
 
 ::: {.bs-repository-action}
-[View repository](https://github.com/backgammonsimplified/backgammoncalculator)
+[Documentation](/about/backgammoncalculator/) · [Source](https://github.com/backgammonsimplified/backgammoncalculator)
 :::
 :::::
 ::::::

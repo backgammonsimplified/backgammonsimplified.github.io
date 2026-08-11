@@ -7,6 +7,8 @@ project:
   post-render:
   - python ../scripts/bs_post_render.py
   - python ../scripts/page_publication.py apply
+  - Rscript ../scripts/build_backgammoncalculator_docs.R
+  - Rscript ../scripts/build_backgammonboard_docs.R
   resources:
     - assets/logo.svg
     - "assets/icons/**"
