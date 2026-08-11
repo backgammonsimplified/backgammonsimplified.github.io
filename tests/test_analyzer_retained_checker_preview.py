@@ -59,21 +59,31 @@ class AnalyzerRetainedCheckerPreviewTests(unittest.TestCase):
     def test_supported_setup_provisions_analyzer_r_dependencies(self):
         requirements = R_REQUIREMENTS.read_text(encoding="utf-8")
         setup = SETUP_SCRIPT.read_text(encoding="utf-8")
-        for package in ("jsonlite", "ggplot2", "ggforce"):
+        for package in ("jsonlite", "ggplot2", "ggforce", "ggiraph", "patchwork", "scales"):
             self.assertIn(package, requirements)
         self.assertIn("scripts/analysis/requirements.R", setup)
         self.assertIn("install-r-dependencies.R", setup)
 
-    def test_render_wrapper_installs_current_local_backgammonboard_without_devtools(self):
+    def test_render_wrapper_installs_current_local_renderer_packages_without_devtools(self):
         wrapper = RENDER_WRAPPER.read_text(encoding="utf-8")
         renderer = R_RENDERER.read_text(encoding="utf-8")
         self.assertIn("CMD INSTALL", wrapper)
         self.assertIn('"${BACKGAMMONBOARD_REPO}"', wrapper)
+        self.assertIn('"${BACKGAMMONCALCULATOR_REPO}"', wrapper)
         self.assertNotIn("devtools", wrapper)
         self.assertNotIn("devtools", renderer)
         self.assertIn('board_colors("bs")', renderer)
         self.assertIn('board_style("bs")', renderer)
         self.assertIn("board_moves(", renderer)
+
+    def test_renderer_derives_starting_xgid_from_retained_gnuid(self):
+        renderer = R_RENDERER.read_text(encoding="utf-8")
+        self.assertIn("source$gnu_position_id", renderer)
+        self.assertIn("source$gnu_match_id", renderer)
+        self.assertIn("backgammoncalculator::gnuid_to_xgid", renderer)
+        self.assertNotIn('starting_xgid <- "XGID=', renderer)
+        self.assertIn("backgammoncalculator commit", renderer)
+        self.assertIn("derived XGID", renderer)
 
 
 if __name__ == "__main__":
