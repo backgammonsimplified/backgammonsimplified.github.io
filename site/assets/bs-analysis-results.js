@@ -140,6 +140,37 @@
     };
   }
 
+  function outcomeSummaryItems(probabilities) {
+    if (!probabilities) {
+      return [
+        ["Win", null, "win"],
+        ["Gammon", null, "win"],
+        ["Backgammon", null, "win"],
+        ["Lose gammon", null, "lose"],
+        ["Lose backgammon", null, "lose"]
+      ];
+    }
+    return [
+      ["Win", numericProbability(probabilities.win), "win"],
+      [
+        "Gammon",
+        numericProbability(probabilities.win_gammon_or_better),
+        "win"
+      ],
+      ["Backgammon", numericProbability(probabilities.win_backgammon), "win"],
+      [
+        "Lose gammon",
+        numericProbability(probabilities.lose_gammon_or_worse),
+        "lose"
+      ],
+      [
+        "Lose backgammon",
+        numericProbability(probabilities.lose_backgammon),
+        "lose"
+      ]
+    ];
+  }
+
   function validateFixtureDocument(document) {
     if (!document || document.schema_version !== FIXTURE_SCHEMA) {
       throw new Error("Unsupported analysis viewer fixture schema.");
@@ -260,20 +291,24 @@
     const panel = element("section", "bs-analysis-results-outcomes");
     panel.setAttribute("aria-label", "Outcome probabilities");
 
-    const headline = element("div", "bs-analysis-results-outcome-headline");
-    headline.append(
-      element(
+    const summary = element("div", "bs-analysis-results-outcome-summary");
+    outcomeSummaryItems(probabilities).forEach(function (item) {
+      const field = element(
         "span",
-        "bs-analysis-results-outcome-total bs-analysis-results-outcome-total--win",
-        "Win " + formatProbability(probabilities && probabilities.win)
-      ),
-      element(
-        "span",
-        "bs-analysis-results-outcome-total bs-analysis-results-outcome-total--lose",
-        "Lose " + formatProbability(probabilities && probabilities.lose)
-      )
-    );
-    panel.appendChild(headline);
+        "bs-analysis-results-outcome-summary-item bs-analysis-results-outcome-summary-item--" +
+          item[2]
+      );
+      field.append(
+        element("span", "bs-analysis-results-outcome-summary-label", item[0] + ":"),
+        element(
+          "span",
+          "bs-analysis-results-outcome-summary-value",
+          formatProbability(item[1])
+        )
+      );
+      summary.appendChild(field);
+    });
+    panel.appendChild(summary);
 
     if (result.status === "missing" || result.status === "invalid") {
       const unavailable = element(
@@ -310,28 +345,6 @@
       bar.appendChild(part);
     });
     panel.appendChild(bar);
-
-    const legend = element("div", "bs-analysis-results-outcome-legend");
-    result.segments.forEach(function (segment) {
-      const item = element("span", "bs-analysis-results-outcome-key");
-      const swatch = element(
-        "span",
-        "bs-analysis-results-outcome-swatch bs-analysis-results-outcome-swatch--" +
-          segment.tone
-      );
-      swatch.setAttribute("aria-hidden", "true");
-      item.append(
-        swatch,
-        element("span", "bs-analysis-results-outcome-key-label", segment.label),
-        element(
-          "span",
-          "bs-analysis-results-outcome-key-value",
-          formatProbability(segment.value)
-        )
-      );
-      legend.appendChild(item);
-    });
-    panel.appendChild(legend);
 
     if (result.status === "partial") {
       panel.appendChild(
@@ -387,6 +400,113 @@
     return optionalText(value.label, "Value") + ": " + formatNumber(value.value);
   }
 
+  function candidateMetrics(candidate) {
+    return {
+      equity:
+        candidate && candidate.value
+          ? formatNumber(candidate.value.value)
+          : "Not supplied",
+      versusBest: formatNumber(candidate && candidate.difference_from_best)
+    };
+  }
+
+  function candidateSummary(candidate) {
+    const summary = element("summary", "bs-analysis-results-candidate-summary");
+    summary.dataset.bsAnalysisResultChoice = candidate.id;
+
+    const identity = element("span", "bs-analysis-results-candidate-identity");
+    identity.append(
+      element(
+        "span",
+        "bs-analysis-results-candidate-rank",
+        candidate.display_rank ? "#" + candidate.display_rank : "-"
+      ),
+      element(
+        "span",
+        "bs-analysis-results-candidate-move",
+        optionalText(candidate.move, "Unnamed candidate")
+      ),
+      element(
+        "span",
+        "bs-analysis-results-candidate-depth",
+        optionalText(candidate.evaluation, "Evaluation not supplied")
+      )
+    );
+
+    const metrics = candidateMetrics(candidate);
+    const metricGroup = element("span", "bs-analysis-results-candidate-metrics");
+    const equity = element("span", "bs-analysis-results-candidate-metric");
+    equity.append(
+      element("span", "bs-analysis-results-candidate-metric-label", "Equity"),
+      element("span", "bs-analysis-results-candidate-metric-value", metrics.equity)
+    );
+    const versusBest = element("span", "bs-analysis-results-candidate-metric");
+    versusBest.append(
+      element("span", "bs-analysis-results-candidate-metric-label", "vs best"),
+      element(
+        "span",
+        "bs-analysis-results-candidate-metric-value",
+        metrics.versusBest
+      )
+    );
+    metricGroup.append(equity, versusBest);
+    summary.append(identity, metricGroup);
+    return summary;
+  }
+
+  function candidateDetails(candidate) {
+    const body = element("div", "bs-analysis-results-candidate-body");
+    body.appendChild(outcomePanel(candidate.probabilities));
+    if (candidate.details) {
+      body.appendChild(
+        element("p", "bs-analysis-results-candidate-detail", candidate.details)
+      );
+    }
+    return body;
+  }
+
+  function openCheckerCandidate(details, candidate, board, group, status) {
+    group
+      .querySelectorAll(".bs-analysis-results-candidate[open]")
+      .forEach(function (other) {
+        if (other !== details) other.open = false;
+      });
+    renderBoard(
+      board,
+      candidate.result_board,
+      "Result board not supplied for this candidate"
+    );
+    status.textContent =
+      "Showing " + optionalText(candidate.move, "candidate") + ".";
+  }
+
+  function renderChecker(model, board, choiceGroup, status) {
+    model.candidates.forEach(function (candidate, index) {
+      const details = element("details", "bs-analysis-results-candidate");
+      details.dataset.bsAnalysisCandidateId = candidate.id;
+      details.append(candidateSummary(candidate), candidateDetails(candidate));
+      details.addEventListener("toggle", function () {
+        if (details.open) {
+          openCheckerCandidate(details, candidate, board, choiceGroup, status);
+        }
+      });
+      choiceGroup.appendChild(details);
+      if (index === 0) {
+        details.open = true;
+      }
+    });
+
+    if (model.candidates.length > 0) {
+      openCheckerCandidate(
+        choiceGroup.querySelector(".bs-analysis-results-candidate"),
+        model.candidates[0],
+        board,
+        choiceGroup,
+        status
+      );
+    }
+  }
+
   function selectionButton(primary, secondary, trailing, id, supported) {
     const button = element("button", "bs-analysis-results-choice");
     button.type = "button";
@@ -410,84 +530,20 @@
     group
       .querySelectorAll("[data-bs-analysis-result-choice]")
       .forEach(function (button) {
-        button.setAttribute(
-          "aria-pressed",
-          button.dataset.bsAnalysisResultChoice === id ? "true" : "false"
-        );
+        if (button.tagName === "BUTTON") {
+          button.setAttribute(
+            "aria-pressed",
+            button.dataset.bsAnalysisResultChoice === id ? "true" : "false"
+          );
+        }
       });
   }
 
-  function renderChecker(
-    model,
-    board,
-    summary,
-    outcomes,
-    choiceGroup,
-    status
-  ) {
-    model.candidates.forEach(function (candidate) {
-      const primary = [
-        candidate.display_rank ? "#" + candidate.display_rank : null,
-        candidate.move || "Unnamed candidate"
-      ]
-        .filter(Boolean)
-        .join("  ");
-      const secondary = [
-        candidate.evaluation || "Evaluation not supplied",
-        candidate.difference_from_best === null ||
-        candidate.difference_from_best === undefined
-          ? "Δ not supplied"
-          : "Δ " + formatNumber(candidate.difference_from_best)
-      ].join(" · ");
-      const trailing = candidate.value
-        ? formatNumber(candidate.value.value)
-        : "Not supplied";
-      const button = selectionButton(
-        primary,
-        secondary,
-        trailing,
-        candidate.id,
-        true
-      );
-      button.addEventListener("click", function () {
-        setPressed(choiceGroup, candidate.id);
-        renderBoard(
-          board,
-          candidate.result_board,
-          "Result board not supplied for this candidate"
-        );
-        summary.replaceChildren(
-          definitionList(
-            [
-              ["Selected candidate", optionalText(candidate.move)],
-              ["Display rank", optionalText(candidate.display_rank)],
-              ["Evaluation", optionalText(candidate.evaluation)],
-              ["Value", selectedValue(candidate.value)],
-              [
-                "Difference from best",
-                formatNumber(candidate.difference_from_best)
-              ],
-              ["Detail", optionalText(candidate.details)]
-            ],
-            "bs-analysis-results-selection-meta"
-          )
-        );
-        outcomes.replaceChildren(outcomePanel(candidate.probabilities));
-        status.textContent =
-          "Selected " + optionalText(candidate.move, "candidate") + ".";
-      });
-      choiceGroup.appendChild(button);
-    });
-  }
+  function renderCube(model, board, choiceGroup, status) {
+    const sharedOutcomes = element("div", "bs-analysis-results-cube-outcomes");
+    sharedOutcomes.appendChild(outcomePanel(model.probabilities));
+    choiceGroup.appendChild(sharedOutcomes);
 
-  function renderCube(
-    model,
-    board,
-    summary,
-    outcomes,
-    choiceGroup,
-    status
-  ) {
     model.actions.forEach(function (action) {
       const secondary =
         action.supported === false
@@ -506,24 +562,7 @@
       button.addEventListener("click", function () {
         setPressed(choiceGroup, action.id);
         renderBoard(board, model.original_board);
-        summary.replaceChildren(
-          definitionList(
-            [
-              ["Selected action", optionalText(action.label)],
-              ["Normalized label", optionalText(action.normalized_action)],
-              [
-                "Support",
-                action.supported === false
-                  ? "Unsupported in this fixture"
-                  : "Supported fixture action"
-              ],
-              ["Value", selectedValue(action.value)],
-              ["Detail", optionalText(action.details)]
-            ],
-            "bs-analysis-results-selection-meta"
-          )
-        );
-        outcomes.replaceChildren(
+        sharedOutcomes.replaceChildren(
           outcomePanel(action.probabilities || model.probabilities)
         );
         status.textContent =
@@ -560,21 +599,14 @@
       contextRows(model.context),
       "bs-analysis-results-context"
     );
-    const shell = element("div", "bs-analysis-results-shell");
-    const boardColumn = element("div", "bs-analysis-results-board-column");
+    const boardSection = element("section", "bs-analysis-results-board-section");
     const boardHeading = element(
       "h3",
       "bs-analysis-results-section-title",
       "Position"
     );
     const board = element("div", "bs-analysis-results-board");
-    const resultsColumn = element("div", "bs-analysis-results-main");
-    const outcomeHeading = element(
-      "h3",
-      "bs-analysis-results-section-title",
-      "Winning chances"
-    );
-    const outcomes = element("div", "");
+    const analysisSection = element("section", "bs-analysis-results-main");
     const choicesHeading = element(
       "h3",
       "bs-analysis-results-section-title",
@@ -584,9 +616,10 @@
     const status = element(
       "p",
       "bs-analysis-results-choice-status",
-      "Choose an item to inspect its supplied details."
+      model.analysis_kind === "checker"
+        ? "The top move is open. Open another move to inspect its outcomes."
+        : "Choose an action to inspect its supplied details."
     );
-    const summary = element("div", "bs-analysis-results-selection-summary");
     const more = element("details", "bs-analysis-results-more");
     const moreSummary = element("summary", "", "More information");
     const moreContent = element("div", "bs-analysis-results-more-content");
@@ -602,7 +635,6 @@
     );
     status.setAttribute("aria-live", "polite");
     renderBoard(board, model.original_board);
-    outcomes.appendChild(outcomePanel(model.probabilities));
     moreSummary.setAttribute(
       "aria-label",
       "More information about this synthetic analysis fixture"
@@ -624,31 +656,15 @@
     more.append(moreSummary, moreContent);
 
     if (model.analysis_kind === "checker") {
-      renderChecker(
-        model,
-        board,
-        summary,
-        outcomes,
-        choiceGroup,
-        status
-      );
+      renderChecker(model, board, choiceGroup, status);
     } else {
-      renderCube(model, board, summary, outcomes, choiceGroup, status);
+      renderCube(model, board, choiceGroup, status);
     }
 
     header.append(fixtureBadge, title, subtitle, fixtureMessage, context);
-    boardColumn.append(boardHeading, board);
-    resultsColumn.append(
-      outcomeHeading,
-      outcomes,
-      choicesHeading,
-      choiceGroup,
-      status,
-      summary,
-      more
-    );
-    shell.append(boardColumn, resultsColumn);
-    article.append(header, shell);
+    boardSection.append(boardHeading, board);
+    analysisSection.append(choicesHeading, choiceGroup, status, more);
+    article.append(header, boardSection, analysisSection);
     host.replaceChildren(article);
   }
 
@@ -699,12 +715,14 @@
   return {
     FIXTURE_SCHEMA,
     analysisFromDocument,
+    candidateMetrics,
     exclusiveOutcomeSegments,
     fixtureLoader,
     formatNumber,
     formatProbability,
     mount,
     mountAll,
+    outcomeSummaryItems,
     validateAnalysisModel,
     validateFixtureDocument
   };
