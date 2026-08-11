@@ -8,6 +8,7 @@
   "use strict";
 
   const FIXTURE_SCHEMA = "bs-analysis-results-viewer-fixture-v1";
+  const FIXTURE_KINDS = new Set(["synthetic", "retained-analysis"]);
   const requestCache = new Map();
   const OUTCOME_SEGMENTS = [
     ["win_backgammon", "Win backgammon", "win-bg"],
@@ -177,20 +178,20 @@
     }
     if (
       !document.fixture_status ||
-      document.fixture_status.kind !== "synthetic" ||
+      !FIXTURE_KINDS.has(document.fixture_status.kind) ||
       !document.fixture_status.label ||
       !document.fixture_status.message ||
       !document.analyses ||
       typeof document.analyses !== "object"
     ) {
-      throw new Error("Analysis viewer fixtures must be explicitly synthetic.");
+      throw new Error("Analysis viewer fixture has an unsupported fixture status.");
     }
     return document;
   }
 
   function validateAnalysisModel(model) {
     if (!model || model.fixture !== true) {
-      throw new Error("Analysis viewer fixture is not marked synthetic.");
+      throw new Error("Analysis viewer record is not marked as a fixture-page record.");
     }
     if (
       !model.id ||
@@ -263,7 +264,7 @@
       const missing = element(
         "div",
         "bs-analysis-results-board-missing",
-        fallbackText || "Result board not available"
+        fallbackText || "Board not available"
       );
       missing.setAttribute("role", "status");
       container.appendChild(missing);
@@ -365,14 +366,22 @@
 
   function metadataRows(metadata) {
     const settings = (metadata && metadata.analysis_settings) || {};
-    return [
+    const rows = [
       ["Engine", optionalText(metadata && metadata.engine)],
       ["Engine version", optionalText(metadata && metadata.engine_version)],
+      ["Source family", optionalText(metadata && metadata.source_family)],
       ["Requested settings", optionalText(settings.requested)],
       ["Effective settings", optionalText(settings.effective)],
       ["Parser / adapter", optionalText(metadata && metadata.parser)],
       ["Provenance", optionalText(metadata && metadata.provenance)]
     ];
+    if (metadata && metadata.played_move !== undefined) {
+      rows.push(["Played move", optionalText(metadata.played_move)]);
+    }
+    if (metadata && metadata.recommendation !== undefined) {
+      rows.push(["Recommendation", optionalText(metadata.recommendation)]);
+    }
+    return rows;
   }
 
   function listSection(title, values, className) {
@@ -393,11 +402,6 @@
     });
     section.appendChild(list);
     return section;
-  }
-
-  function selectedValue(value) {
-    if (!value) return "Not supplied";
-    return optionalText(value.label, "Value") + ": " + formatNumber(value.value);
   }
 
   function candidateMetrics(candidate) {
@@ -465,19 +469,16 @@
     return body;
   }
 
-  function openCheckerCandidate(details, candidate, board, group, status) {
-    group
-      .querySelectorAll(".bs-analysis-results-candidate[open]")
-      .forEach(function (other) {
-        if (other !== details) other.open = false;
-      });
+  function openCheckerCandidate(candidate, board, originalBoard, status) {
+    const boardView = candidate.move_board || originalBoard;
     renderBoard(
       board,
-      candidate.result_board,
-      "Result board not supplied for this candidate"
+      boardView,
+      "Move-overlay board not supplied for this candidate"
     );
-    status.textContent =
-      "Showing " + optionalText(candidate.move, "candidate") + ".";
+    status.textContent = candidate.move_board
+      ? "Showing the starting position with " + optionalText(candidate.move, "candidate") + " overlaid."
+      : "Move overlay unavailable for " + optionalText(candidate.move, "candidate") + "; showing the original position.";
   }
 
   function renderChecker(model, board, choiceGroup, status) {
@@ -487,7 +488,7 @@
       details.append(candidateSummary(candidate), candidateDetails(candidate));
       details.addEventListener("toggle", function () {
         if (details.open) {
-          openCheckerCandidate(details, candidate, board, choiceGroup, status);
+          openCheckerCandidate(candidate, board, model.original_board, status);
         }
       });
       choiceGroup.appendChild(details);
@@ -497,13 +498,7 @@
     });
 
     if (model.candidates.length > 0) {
-      openCheckerCandidate(
-        choiceGroup.querySelector(".bs-analysis-results-candidate"),
-        model.candidates[0],
-        board,
-        choiceGroup,
-        status
-      );
+      openCheckerCandidate(model.candidates[0], board, model.original_board, status);
     }
   }
 
@@ -599,6 +594,7 @@
       contextRows(model.context),
       "bs-analysis-results-context"
     );
+    const shell = element("div", "bs-analysis-results-shell");
     const boardSection = element("section", "bs-analysis-results-board-section");
     const boardHeading = element(
       "h3",
@@ -617,7 +613,7 @@
       "p",
       "bs-analysis-results-choice-status",
       model.analysis_kind === "checker"
-        ? "The top move is open. Open another move to inspect its outcomes."
+        ? "The top move is open. Opening another move keeps previous analysis open."
         : "Choose an action to inspect its supplied details."
     );
     const more = element("details", "bs-analysis-results-more");
@@ -625,7 +621,7 @@
     const moreContent = element("div", "bs-analysis-results-more-content");
 
     article.dataset.bsAnalysisResultsInstance = model.id;
-    fixtureBadge.title = "Fixture data is synthetic";
+    fixtureBadge.title = fixtureStatus.message;
     choiceGroup.setAttribute("role", "group");
     choiceGroup.setAttribute(
       "aria-label",
@@ -637,7 +633,7 @@
     renderBoard(board, model.original_board);
     moreSummary.setAttribute(
       "aria-label",
-      "More information about this synthetic analysis fixture"
+      "More information about this analysis fixture"
     );
     moreContent.append(
       element("h3", "bs-analysis-results-section-title", "Metadata"),
@@ -664,7 +660,8 @@
     header.append(fixtureBadge, title, subtitle, fixtureMessage, context);
     boardSection.append(boardHeading, board);
     analysisSection.append(choicesHeading, choiceGroup, status, more);
-    article.append(header, boardSection, analysisSection);
+    shell.append(boardSection, analysisSection);
+    article.append(header, shell);
     host.replaceChildren(article);
   }
 
