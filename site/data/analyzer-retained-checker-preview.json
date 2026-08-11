@@ -1,0 +1,133 @@
+{
+  "schema_version": "bs-analysis-results-viewer-fixture-v1",
+  "fixture_status": {
+    "kind": "retained-analysis",
+    "label": "Retained GNU analysis",
+    "message": "This development preview uses accepted retained GNU 4-ply evidence. It is not yet materialized from Canonical Parquet v1."
+  },
+  "analyses": {
+    "retained-checker-preview": {
+      "id": "retained-checker-preview",
+      "analysis_kind": "checker",
+      "title": "Retained GNU 4-ply checker analysis",
+      "subtitle": "One factual starting position with candidate movement overlays and persistent analysis bars",
+      "fixture": true,
+      "original_board": {
+        "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/starting.svg",
+        "alt": "The retained checker position before any candidate movement overlay."
+      },
+      "context": {
+        "score": "2-5 to 7",
+        "cube": "1, centered",
+        "dice": "3-1",
+        "decision": "Checker play"
+      },
+      "metadata": {
+        "engine": "GNU Backgammon",
+        "engine_version": null,
+        "source_family": "retained Sage-vs-GNU Stage 1 review",
+        "parser": "backgammon_explainer.gnu_review_parser",
+        "provenance": "retained position checker-sage-gnu-disagreement-001; analysis analysis-sha256-69690b1d0bb2475087e8d11b31303f17a12a4e2e4ddfb8e0d4486462c5afd14d",
+        "played_move": "13/12 11/8",
+        "recommendation": "8/4",
+        "analysis_settings": {
+          "requested": "Requested 4-ply cubeful checker review",
+          "effective": "5 candidates; candidate set complete_full_depth; shown candidates actual 4-ply"
+        }
+      },
+      "probabilities": {
+        "win": 0.162,
+        "win_gammon_or_better": 0.0,
+        "win_backgammon": 0.0,
+        "lose": 0.838,
+        "lose_gammon_or_worse": 0.677,
+        "lose_backgammon": 0.052
+      },
+      "candidates": [
+        {
+          "id": "retained-checker-candidate-1",
+          "source_order": 1,
+          "display_rank": 1,
+          "move": "8/4",
+          "evaluation": "Cubeful 4-ply",
+          "actual_ply": 4,
+          "value": {"label": "Equity", "value": -1.615},
+          "difference_from_best": 0.0,
+          "probabilities": {
+            "win": 0.162,
+            "win_gammon_or_better": 0.0,
+            "win_backgammon": 0.0,
+            "lose": 0.838,
+            "lose_gammon_or_worse": 0.677,
+            "lose_backgammon": 0.052
+          },
+          "move_board": {
+            "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/candidate-1-3N0DAADqGTMABw.svg",
+            "alt": "The retained starting position with checker movement overlay for rank 1: 8/4."
+          },
+          "resulting_position_id": "3N0DAADqGTMABw",
+          "details": "Retained source line 879; the SVG keeps the same starting position and overlays this candidate move."
+        },
+        {
+          "id": "retained-checker-candidate-2",
+          "source_order": 2,
+          "display_rank": 2,
+          "move": "13/10 11/10",
+          "evaluation": "Cubeful 4-ply",
+          "actual_ply": 4,
+          "value": {"label": "Equity", "value": -1.617},
+          "difference_from_best": -0.002,
+          "probabilities": {
+            "win": 0.162,
+            "win_gammon_or_better": 0.0,
+            "win_backgammon": 0.0,
+            "lose": 0.838,
+            "lose_gammon_or_worse": 0.676,
+            "lose_backgammon": 0.051
+          },
+          "move_board": {
+            "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/candidate-2-3N0DAAD0nCUABw.svg",
+            "alt": "The retained starting position with checker movement overlay for rank 2: 13/10 11/10."
+          },
+          "resulting_position_id": "3N0DAAD0nCUABw",
+          "details": "Retained source line 881; the SVG keeps the same starting position and overlays this candidate move."
+        },
+        {
+          "id": "retained-checker-candidate-3",
+          "source_order": 3,
+          "display_rank": 3,
+          "move": "13/10 8/7",
+          "evaluation": "Cubeful 4-ply",
+          "actual_ply": 4,
+          "value": {"label": "Equity", "value": -1.619},
+          "difference_from_best": -0.004,
+          "probabilities": {
+            "win": 0.162,
+            "win_gammon_or_better": 0.0,
+            "win_backgammon": 0.0,
+            "lose": 0.838,
+            "lose_gammon_or_worse": 0.677,
+            "lose_backgammon": 0.051
+          },
+          "move_board": {
+            "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/candidate-3-3N0DAAD0miYABw.svg",
+            "alt": "The retained starting position with checker movement overlay for rank 3: 13/10 8/7."
+          },
+          "resulting_position_id": "3N0DAAD0miYABw",
+          "details": "Retained source line 883; the SVG keeps the same starting position and overlays this candidate move."
+        }
+      ],
+      "warnings": [
+        "GNU 4-ply is configured reviewer evidence, not proven ground truth.",
+        "Candidate SVGs are build-time Backgammonboard renders of the same starting position with movement overlays."
+      ],
+      "limitations": [
+        "GNU 4-ply is a configured reviewer rather than proven ground truth.",
+        "Candidate equities and probabilities are rounded as displayed.",
+        "Resulting positions use decision-player perspective.",
+        "This retained preview is an interim consumer proof; Canonical Parquet v1 remains the target source.",
+        "The current retained R renderer structures this fixture's simple point-to-point notation with board_moves() and validates the applied checker arrangement against analyzer-view.json."
+      ]
+    }
+  }
+}
