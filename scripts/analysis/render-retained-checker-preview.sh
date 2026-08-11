@@ -39,6 +39,7 @@ command -v "${R_COMMAND}" >/dev/null || {
 cd "${REPO_ROOT}"
 mkdir -p "${REPO_ROOT}/.r-library"
 export R_LIBS_USER="${REPO_ROOT}/.r-library"
+export BACKGAMMONCALCULATOR_REPO
 
 "${PYTHON}" scripts/analysis/project_retained_checker_preview.py
 
