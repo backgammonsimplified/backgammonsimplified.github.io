@@ -34,15 +34,32 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         script = VIEWER_PATH.read_text(encoding="utf-8")
         css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
         self.assertIn("exclusiveOutcomeSegments", script)
+        self.assertIn("outcomeSummaryItems", script)
         self.assertIn("bs-analysis-results-outcome-bar", script)
         self.assertIn("bs-analysis-results-outcome-segment", script)
         self.assertIn("Gammon and backgammon breakdown not supplied", script)
         self.assertIn(".bs-analysis-results-outcome-bar", css)
         self.assertIn("display: flex;", css)
+        self.assertIn("bs-analysis-results-outcome-summary-item--win", script)
+        self.assertIn("bs-analysis-results-outcome-summary-item--lose", script)
+        self.assertIn("#237a3b", css)
+        self.assertIn("#b23b3b", css)
         self.assertNotIn("bs-analysis-results-probability-track", script)
         self.assertNotIn("bs-analysis-results-probability-track", css)
 
-    def test_move_and_action_controls_use_compact_result_rows(self):
+    def test_checker_uses_board_first_candidate_accordion(self):
+        script = VIEWER_PATH.read_text(encoding="utf-8")
+        css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
+        self.assertIn('element("details", "bs-analysis-results-candidate")', script)
+        self.assertIn('element("summary", "bs-analysis-results-candidate-summary")', script)
+        self.assertIn('"Equity"', script)
+        self.assertIn('"vs best"', script)
+        self.assertIn("details.open = true", script)
+        self.assertIn("article.append(header, boardSection, analysisSection)", script)
+        self.assertIn(".bs-analysis-results-candidate-metrics", css)
+        self.assertIn(".bs-analysis-results-board-section", css)
+
+    def test_cube_action_controls_use_compact_result_rows(self):
         script = VIEWER_PATH.read_text(encoding="utf-8")
         css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
         self.assertIn("bs-analysis-results-choice-primary", script)
