@@ -67,3 +67,36 @@ The retained-data proof must preserve at minimum:
 Cube rows must not receive an invented row-local actual depth when the retained source does not provide one.
 
 Synthetic viewer fixtures remain the deliberate malformed/error/degraded-state test source. Real retained records are added as separate generated fixtures after canonical package intake.
+
+## Candidate board assets
+
+Checker candidate board assets are generated at build/materialization time with the accepted `backgammonboard` renderer. The browser only swaps cached SVG files.
+
+`backgammonboard` does not parse GNU/source move notation. The materializer must therefore prefer canonical structured atomic checker movement when available:
+
+```text
+candidate starting position identity/XGID
++ ordered movement steps: from, to, die
++ optional canonical resulting-position XGID
+        |
+        v
+backgammonboard::board_moves(from, to, die)
+        |
+        v
+backgammonboard::ggboard(
+  starting_xgid,
+  moves = structured_moves,
+  after_xgid = resulting_xgid,
+  colors = board_colors("bs"),
+  style = board_style("bs")
+)
+        |
+        v
+cached candidate SVG
+```
+
+`after_xgid` validates the applied checker layout. It does not replace the displayed starting position. This lets the candidate asset show the movement overlay on the decision position while checking agreement with the canonical result position.
+
+If the canonical package supplies a resulting position but no unambiguous structured movement steps, the materializer may render the resulting position as a separate static result board, but it must not invent movement arrows or die assignment.
+
+Before Canonical Parquet v1 freezes, Analyzer therefore benefits from explicit candidate movement fields equivalent to ordered atomic `from`, `to`, and optional `die` values, in addition to the candidate/result-position identities. Native move notation should remain separately preserved for display/audit.
