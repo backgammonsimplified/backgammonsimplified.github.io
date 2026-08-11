@@ -3,5 +3,8 @@
 required_r_packages <- c(
   jsonlite = "1.8.8",
   ggplot2 = "3.4.0",
-  ggforce = "0.4.0"
+  ggforce = "0.4.0",
+  ggiraph = "0.0.0",
+  patchwork = "0.0.0",
+  scales = "0.0.0"
 )
