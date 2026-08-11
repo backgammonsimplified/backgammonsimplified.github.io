@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 BACKGAMMONBOARD_REPO="${BACKGAMMONBOARD_REPO:-$HOME/Documents/backgammonboard}"
 RSCRIPT_COMMAND="${RSCRIPT_BIN:-Rscript}"
+R_COMMAND="${R_BIN:-R}"
 
 if [[ -x "${REPO_ROOT}/.venv/Scripts/python.exe" ]]; then
   PYTHON="${REPO_ROOT}/.venv/Scripts/python.exe"
@@ -24,13 +25,23 @@ command -v "${RSCRIPT_COMMAND}" >/dev/null || {
   printf 'ERROR: Rscript is unavailable: %s\n' "${RSCRIPT_COMMAND}" >&2
   exit 1
 }
+command -v "${R_COMMAND}" >/dev/null || {
+  printf 'ERROR: R is unavailable: %s\n' "${R_COMMAND}" >&2
+  exit 1
+}
 
 cd "${REPO_ROOT}"
+mkdir -p "${REPO_ROOT}/.r-library"
 export R_LIBS_USER="${REPO_ROOT}/.r-library"
 
 "${PYTHON}" scripts/analysis/project_retained_checker_preview.py
 
-"${RSCRIPT_COMMAND}" scripts/render_real_checker_assets.R \
+printf 'Installing current local Backgammonboard checkout into repository R library...\n'
+"${R_COMMAND}" CMD INSTALL \
+  --library="${R_LIBS_USER}" \
+  "${BACKGAMMONBOARD_REPO}"
+
+"${RSCRIPT_COMMAND}" --vanilla scripts/render_real_checker_assets.R \
   fixtures/real-analysis/checker-sage-gnu-disagreement-001 \
   site/data/checker-sage-gnu-disagreement-001.json \
   "${BACKGAMMONBOARD_REPO}" \
