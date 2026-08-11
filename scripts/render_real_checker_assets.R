@@ -140,8 +140,8 @@ dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
 starting <- ggboard(
   position,
-  colors = board_colors("bms"),
-  style = board_style("bms"),
+  colors = board_colors("bs"),
+  style = board_style("bs"),
   decision = "checker_play",
   perspective = "decision_maker",
   light_player = "near_player",
@@ -163,8 +163,8 @@ for (candidate in lesson_fixture$candidates) {
   moves <- structured_moves_from_fixture_notation(candidate$move)
   plot <- ggboard(
     position,
-    colors = board_colors("bms"),
-    style = board_style("bms"),
+    colors = board_colors("bs"),
+    style = board_style("bs"),
     decision = "checker_play",
     perspective = "decision_maker",
     light_player = "near_player",
