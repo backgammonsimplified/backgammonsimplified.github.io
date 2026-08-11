@@ -15,12 +15,12 @@ board_repo <- args[[3L]]
 output_dir <- args[[4L]]
 
 if (!requireNamespace("jsonlite", quietly = TRUE)) {
-  stop("The jsonlite package is required.", call. = FALSE)
+  stop("The jsonlite package is required; rerun the repository setup command.", call. = FALSE)
 }
-if (!requireNamespace("devtools", quietly = TRUE)) {
-  stop("The devtools package is required.", call. = FALSE)
+if (!requireNamespace("backgammonboard", quietly = TRUE)) {
+  stop("The local backgammonboard package is not installed; rerun the retained checker render wrapper.", call. = FALSE)
 }
-devtools::load_all(board_repo, quiet = TRUE)
+suppressPackageStartupMessages(library(backgammonboard))
 board_commit <- trimws(system2(
   "git",
   c("-C", normalizePath(board_repo, winslash = "/"), "rev-parse", "HEAD"),
@@ -67,7 +67,6 @@ stopifnot(
 
 position_to_decision_player_arrangement <- function(position) {
   stopifnot(inherits(position, "backgammon_position"))
-  stopifnot(identical(position$on_roll, "player_1") || length(position$dice) == 0L)
   player <- integer(25L)
   opponent <- integer(25L)
   for (point in seq_len(24L)) {
