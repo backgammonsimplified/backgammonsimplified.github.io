@@ -23,6 +23,72 @@ bash scripts/setup/windows-dev.sh
 
 The materializer currently uses DuckDB for Parquet inspection/querying.
 
+## Deterministic Analysis View materializer
+
+The Analyzer-owned deterministic transformation is implemented in
+`analysis_view_materializer.py`. Its checked input boundary is an explicit
+`analyzer-analysis-view-read-set-v1` semantic read set. That boundary keeps
+physical Canonical column names out of browser code and, until the exact Corpus
+package is published, prevents this repository from guessing a Parquet mapping.
+
+The materializer requires every semantic key, including keys whose value is
+explicitly `null`. A missing key, duplicate JSON key, orphan evaluation,
+ambiguous display evaluation, duplicate source order, unsupported decision
+kind, or mismatched position identity fails closed. It preserves:
+
+- canonical decision, logical position, and distinct source-occurrence IDs;
+- match, game, score, cube, dice, and provenance context;
+- requested analysis depth separately from row-local actual depth;
+- source-native and normalized values plus their stated semantics;
+- all checker candidates/evaluations in source order and resulting-position IDs;
+- cube occurrence facts separately from the complete analytical action set;
+- explicit null and unsupported states.
+
+Output uses sorted keys, stable semantic ordering, UTF-8, two-space indentation,
+no non-finite JSON numbers, and one trailing newline. Repeat-byte validation is
+available directly:
+
+```bash
+.venv/bin/python scripts/analysis/analysis_view_materializer.py \
+  tests/fixtures/analyzer-analysis-view-read-set-v1.json \
+  --output /tmp/analyzer-analysis-view.json \
+  --verify-repeat
+```
+
+The checked-in read set is synthetic mechanics proof, not a Canonical package
+or an analytical truth source. A permanent Parquet-to-read-set adapter remains
+blocked on inspection of the exact published Corpus package and its verified
+manifest/checksums.
+
+## Retrieval/materializer workloads
+
+`retrieval_workloads_v1.json` freezes the query meaning and ordering for
+`AVR-001` through `AVR-015`. `run_retrieval_workloads.py` hashes those query
+definitions and refuses a registry with missing, duplicate, or additional IDs.
+It records package/profile identity, resolved canonical IDs or seed, query hash,
+fresh-process versus process-warm classification, latency, throughput, result
+count/hash, CPU, process peak RAM, files touched, and copy/move readback results.
+
+Metrics unavailable from the current driver are recorded as structured
+`unavailable` values. In particular, the semantic JSON proof driver cannot
+observe Parquet row groups, partitions, pruning, physical rows/bytes scanned, or
+DuckDB file-touch telemetry. Normal runs are explicitly classified with unknown
+filesystem-cache state and are never described as OS-cold I/O.
+
+Run all workloads on the minimal proof input with:
+
+```bash
+.venv/bin/python scripts/analysis/run_retrieval_workloads.py \
+  --profile minimal-json=tests/fixtures/analyzer-analysis-view-read-set-v1.json \
+  --output /tmp/analyzer-avr-report.json
+```
+
+Multiple `--profile PROFILE_ID=PATH` arguments use the same registry definitions
+and query hashes. The current JSON driver proves harness mechanics only. A real
+DuckDB/Parquet profile comparison and Canonical conformance claim require the
+published Corpus package, its exact identity, a verified physical mapping, and
+the repository-pinned DuckDB dependency.
+
 ## Reference-package intake
 
 Before writing a field mapping for a new canonical package, inspect it without guessing producer semantics:

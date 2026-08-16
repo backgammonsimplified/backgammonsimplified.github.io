@@ -39,6 +39,8 @@ node tests/test_lesson_analysis_browser_check.mjs
 node tests/test_comprehensive_quality_browser_check.mjs
 node tests/test_runtime_performance_baseline.mjs
 node tests/test_isolated_browser_tab.mjs
+node tests/test_analysis_results_viewer.js
+node tests/test_analysis_view_materializer.js
 
 printf '\n[4/5] Focused Python contracts\n'
 "${PYTHON_COMMAND[@]}" -m unittest \
@@ -49,6 +51,9 @@ printf '\n[4/5] Focused Python contracts\n'
   tests.test_environment_setup \
   tests.test_static_inventory \
   tests.test_quality_reports \
+  tests.test_analysis_parquet_intake \
+  tests.test_analysis_view_materializer \
+  tests.test_retrieval_workloads \
   -v
 
 printf '\n[5/5] Existing rendered-site representative audit\n'
