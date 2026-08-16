@@ -114,7 +114,6 @@ class PublicationIdentityTests(unittest.TestCase):
             rf"(?i)(?:{re.escape(old_name)}|{re.escape(old_slug)}|{old_compact}|\b{old_acronym}\b|{old_acronym}_|_{old_acronym})"
         )
         exceptions = {
-            Path("scripts/render_real_checker_assets.R"),
             LEGACY_DISPOSITIONS_PATH.relative_to(ROOT),
         }
         findings: dict[str, list[str]] = {}
@@ -129,11 +128,6 @@ class PublicationIdentityTests(unittest.TestCase):
                 findings[relative] = matches
         self.assertEqual(findings, {})
 
-        renderer = (ROOT / "scripts" / "render_real_checker_assets.R").read_text(
-            encoding="utf-8"
-        )
-        compatibility_literal = '"' + "b" + "ms" + '"'
-        self.assertEqual(renderer.count(compatibility_literal), 5)
         registry = LEGACY_DISPOSITIONS_PATH.read_text(encoding="utf-8")
         self.assertEqual(registry.count(old_slug), 1)
 

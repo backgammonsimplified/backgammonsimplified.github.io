@@ -51,7 +51,10 @@
           "move": "8/4",
           "evaluation": "Cubeful 4-ply",
           "actual_ply": 4,
-          "value": {"label": "Equity", "value": -1.615},
+          "value": {
+            "label": "Equity",
+            "value": -1.615
+          },
           "difference_from_best": 0.0,
           "probabilities": {
             "win": 0.162,
@@ -75,7 +78,10 @@
           "move": "13/10 11/10",
           "evaluation": "Cubeful 4-ply",
           "actual_ply": 4,
-          "value": {"label": "Equity", "value": -1.617},
+          "value": {
+            "label": "Equity",
+            "value": -1.617
+          },
           "difference_from_best": -0.002,
           "probabilities": {
             "win": 0.162,
@@ -99,7 +105,10 @@
           "move": "13/10 8/7",
           "evaluation": "Cubeful 4-ply",
           "actual_ply": 4,
-          "value": {"label": "Equity", "value": -1.619},
+          "value": {
+            "label": "Equity",
+            "value": -1.619
+          },
           "difference_from_best": -0.004,
           "probabilities": {
             "win": 0.162,

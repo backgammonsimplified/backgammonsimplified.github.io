@@ -85,6 +85,12 @@ class AnalyzerRetainedCheckerPreviewTests(unittest.TestCase):
         self.assertIn("backgammoncalculator commit", renderer)
         self.assertIn("derived XGID", renderer)
 
+    def test_renderer_maps_fixture_decision_player_from_factual_on_roll_identity(self):
+        renderer = R_RENDERER.read_text(encoding="utf-8")
+        self.assertIn("decision_player <- position$on_roll", renderer)
+        self.assertIn("position$score[[position$on_roll]]", renderer)
+        self.assertNotIn('identical(position$on_roll, "player_1")', renderer)
+
 
 if __name__ == "__main__":
     unittest.main()

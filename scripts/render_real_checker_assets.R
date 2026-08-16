@@ -89,29 +89,49 @@ state <- position_document$state
 # These context checks make the source conversion fail closed if player identity
 # or match metadata ever diverges from the retained structured position.
 stopifnot(
-  identical(position$on_roll, "player_1"),
+  position$on_roll %in% c("player_0", "player_1"),
   identical(as.integer(position$dice), as.integer(unlist(state$dice))),
   identical(as.integer(position$cube_value), as.integer(state$cube$value)),
   identical(position$cube_owner, "center"),
-  identical(as.integer(position$score[["player_1"]]), as.integer(state$score$player)),
-  identical(as.integer(position$score[["player_0"]]), as.integer(state$score$opponent)),
+  identical(as.integer(position$score[[position$on_roll]]), as.integer(state$score$player)),
+  identical(
+    as.integer(position$score[[setdiff(c("player_0", "player_1"), position$on_roll)]]),
+    as.integer(state$score$opponent)
+  ),
   identical(as.integer(position$match_length), as.integer(state$score$match_length))
 )
 
 position_to_decision_player_arrangement <- function(position) {
   stopifnot(inherits(position, "backgammon_position"))
+  decision_player <- position$on_roll
+  opponent_player <- setdiff(c("player_0", "player_1"), decision_player)
+  stopifnot(
+    length(decision_player) == 1L,
+    decision_player %in% c("player_0", "player_1"),
+    length(opponent_player) == 1L
+  )
   player <- integer(25L)
   opponent <- integer(25L)
   for (point in seq_len(24L)) {
-    player[[point]] <- max(position$points[[point]], 0L)
-    opponent[[25L - point]] <- max(-position$points[[point]], 0L)
+    player_point <- if (identical(decision_player, "player_1")) point else 25L - point
+    opponent_point <- if (identical(opponent_player, "player_1")) point else 25L - point
+    player[[player_point]] <- if (identical(decision_player, "player_1")) {
+      max(position$points[[point]], 0L)
+    } else {
+      max(-position$points[[point]], 0L)
+    }
+    opponent[[opponent_point]] <- if (identical(opponent_player, "player_1")) {
+      max(position$points[[point]], 0L)
+    } else {
+      max(-position$points[[point]], 0L)
+    }
   }
-  player[[25L]] <- unname(position$bar[["player_1"]])
-  opponent[[25L]] <- unname(position$bar[["player_0"]])
+  player[[25L]] <- unname(position$bar[[decision_player]])
+  opponent[[25L]] <- unname(position$bar[[opponent_player]])
   list(
-    player_borne_off = unname(position$off[["player_1"]]),
+    player_borne_off = unname(position$off[[decision_player]]),
     player_points_1_to_24_and_bar = as.list(player),
-    opponent_borne_off = unname(position$off[["player_0"]]),
+    opponent_borne_off = unname(position$off[[opponent_player]]),
     opponent_points_1_to_24_and_bar = as.list(opponent),
     perspective = "decision_player"
   )

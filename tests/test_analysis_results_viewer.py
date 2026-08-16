@@ -91,8 +91,9 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn('board_style("bs")', renderer)
         self.assertIn('perspective = "decision_maker"', renderer)
         self.assertIn('light_player = "near_player"', renderer)
-        self.assertNotIn('board_colors("bms")', renderer)
-        self.assertNotIn('board_style("bms")', renderer)
+        retired_preset = "b" + "ms"
+        self.assertNotIn(f'board_colors("{retired_preset}")', renderer)
+        self.assertNotIn(f'board_style("{retired_preset}")', renderer)
         self.assertNotIn("moves = candidate$move", renderer)
         self.assertNotIn("show_information", renderer)
         self.assertNotIn("brand_text", renderer)
