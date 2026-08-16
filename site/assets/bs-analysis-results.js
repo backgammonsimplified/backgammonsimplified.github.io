@@ -417,6 +417,7 @@
   function candidateSummary(candidate) {
     const summary = element("summary", "bs-analysis-results-candidate-summary");
     summary.dataset.bsAnalysisResultChoice = candidate.id;
+    summary.setAttribute("aria-current", "false");
 
     const identity = element("span", "bs-analysis-results-candidate-identity");
     identity.append(
@@ -461,15 +462,17 @@
   function candidateDetails(candidate) {
     const body = element("div", "bs-analysis-results-candidate-body");
     body.appendChild(outcomePanel(candidate.probabilities));
-    if (candidate.details) {
-      body.appendChild(
-        element("p", "bs-analysis-results-candidate-detail", candidate.details)
-      );
-    }
+    body.appendChild(
+      element(
+        "p",
+        "bs-analysis-results-candidate-detail",
+        optionalText(candidate.details)
+      )
+    );
     return body;
   }
 
-  function openCheckerCandidate(candidate, board, originalBoard, status) {
+  function showCheckerCandidate(candidate, board, originalBoard, status) {
     const boardView = candidate.move_board || originalBoard;
     renderBoard(
       board,
@@ -481,14 +484,51 @@
       : "Move overlay unavailable for " + optionalText(candidate.move, "candidate") + "; showing the original position.";
   }
 
-  function renderChecker(model, board, choiceGroup, status) {
+  function setActiveCheckerCandidate(
+    choiceGroup,
+    candidate,
+    board,
+    originalBoard,
+    status
+  ) {
+    choiceGroup
+      .querySelectorAll("[data-bs-analysis-candidate-id]")
+      .forEach(function (details) {
+        const active = details.dataset.bsAnalysisCandidateId === candidate.id;
+        details.classList.toggle("is-active", active);
+        const summary = details.querySelector(":scope > summary");
+        if (summary) summary.setAttribute("aria-current", active ? "true" : "false");
+      });
+    showCheckerCandidate(candidate, board, originalBoard, status);
+  }
+
+  function renderChecker(model, board, choiceGroup, status, options) {
+    const candidatesById = new Map();
+    let initializing = true;
     model.candidates.forEach(function (candidate, index) {
       const details = element("details", "bs-analysis-results-candidate");
       details.dataset.bsAnalysisCandidateId = candidate.id;
-      details.append(candidateSummary(candidate), candidateDetails(candidate));
+      const summary = candidateSummary(candidate);
+      details.append(summary, candidateDetails(candidate));
+      candidatesById.set(candidate.id, { candidate: candidate, details: details });
+      summary.addEventListener("click", function () {
+        setActiveCheckerCandidate(
+          choiceGroup,
+          candidate,
+          board,
+          model.original_board,
+          status
+        );
+      });
       details.addEventListener("toggle", function () {
-        if (details.open) {
-          openCheckerCandidate(candidate, board, model.original_board, status);
+        if (!initializing && details.open) {
+          setActiveCheckerCandidate(
+            choiceGroup,
+            candidate,
+            board,
+            model.original_board,
+            status
+          );
         }
       });
       choiceGroup.appendChild(details);
@@ -498,8 +538,41 @@
     });
 
     if (model.candidates.length > 0) {
-      openCheckerCandidate(model.candidates[0], board, model.original_board, status);
+      const requested =
+        options && options.initialActiveId
+          ? candidatesById.get(options.initialActiveId)
+          : null;
+      const active = requested || candidatesById.get(model.candidates[0].id);
+      if (requested) requested.details.open = true;
+      setActiveCheckerCandidate(
+        choiceGroup,
+        active.candidate,
+        board,
+        model.original_board,
+        status
+      );
     }
+    setTimeout(function () {
+      initializing = false;
+    }, 0);
+
+    return {
+      activate: function (candidateId, activateOptions) {
+        const selected = candidatesById.get(candidateId);
+        if (!selected) return false;
+        if (!activateOptions || activateOptions.open !== false) {
+          selected.details.open = true;
+        }
+        setActiveCheckerCandidate(
+          choiceGroup,
+          selected.candidate,
+          board,
+          model.original_board,
+          status
+        );
+        return true;
+      }
+    };
   }
 
   function selectionButton(primary, secondary, trailing, id, supported) {
@@ -534,10 +607,32 @@
       });
   }
 
-  function renderCube(model, board, choiceGroup, status) {
+  function renderCube(model, board, choiceGroup, status, options) {
     const sharedOutcomes = element("div", "bs-analysis-results-cube-outcomes");
+    const actionDetail = element(
+      "p",
+      "bs-analysis-results-action-detail",
+      "Select an action to inspect its supplied explanation."
+    );
     sharedOutcomes.appendChild(outcomePanel(model.probabilities));
     choiceGroup.appendChild(sharedOutcomes);
+    const actionsById = new Map();
+
+    function activate(action) {
+      setPressed(choiceGroup, action.id);
+      renderBoard(board, model.original_board);
+      sharedOutcomes.replaceChildren(
+        outcomePanel(action.probabilities || model.probabilities)
+      );
+      status.textContent =
+        action.supported === false
+          ? action.label + " is intentionally unsupported in this fixture."
+          : "Selected " + action.label + ".";
+      actionDetail.textContent = optionalText(
+        action.details,
+        "No additional explanation was supplied for this action."
+      );
+    }
 
     model.actions.forEach(function (action) {
       const secondary =
@@ -555,18 +650,106 @@
         action.supported
       );
       button.addEventListener("click", function () {
-        setPressed(choiceGroup, action.id);
-        renderBoard(board, model.original_board);
-        sharedOutcomes.replaceChildren(
-          outcomePanel(action.probabilities || model.probabilities)
-        );
-        status.textContent =
-          action.supported === false
-            ? action.label + " is intentionally unsupported in this fixture."
-            : "Selected " + action.label + ".";
+        activate(action);
       });
+      actionsById.set(action.id, action);
       choiceGroup.appendChild(button);
     });
+    choiceGroup.appendChild(actionDetail);
+
+    if (options && options.initialActiveId && actionsById.has(options.initialActiveId)) {
+      activate(actionsById.get(options.initialActiveId));
+    }
+
+    return {
+      activate: function (actionId) {
+        const action = actionsById.get(actionId);
+        if (!action) return false;
+        activate(action);
+        return true;
+      }
+    };
+  }
+
+  function buildPresentation(model, options) {
+    const presentation = element("div", "bs-analysis-results-presentation");
+    const shell = element("div", "bs-analysis-results-shell");
+    const boardSection = element("section", "bs-analysis-results-board-section");
+    const boardHeading = element(
+      "h3",
+      "bs-analysis-results-section-title",
+      "Position"
+    );
+    const board = element("div", "bs-analysis-results-board");
+    const analysisSection = element("section", "bs-analysis-results-main");
+    const choicesHeading = element(
+      "h3",
+      "bs-analysis-results-section-title",
+      model.analysis_kind === "checker" ? "Moves" : "Cube actions"
+    );
+    const choiceGroup = element("div", "bs-analysis-results-choices");
+    const status = element(
+      "p",
+      "bs-analysis-results-choice-status",
+      model.analysis_kind === "checker"
+        ? "The top move is open. Opening another move keeps previous analysis open."
+        : "Choose an action to inspect its supplied details."
+    );
+    const more = element("details", "bs-analysis-results-more");
+    const moreSummary = element("summary", "", "More information");
+    const moreContent = element("div", "bs-analysis-results-more-content");
+
+    presentation.dataset.bsSharedAnalysisPresentation = "true";
+    choiceGroup.setAttribute("role", "group");
+    choiceGroup.setAttribute(
+      "aria-label",
+      model.analysis_kind === "checker"
+        ? "Displayed checker candidates"
+        : "Cube actions"
+    );
+    status.setAttribute("aria-live", "polite");
+    renderBoard(board, model.original_board);
+
+    let controls;
+    if (model.analysis_kind === "checker") {
+      controls = renderChecker(model, board, choiceGroup, status, options);
+    } else {
+      controls = renderCube(model, board, choiceGroup, status, options);
+    }
+
+    boardSection.append(boardHeading, board);
+    analysisSection.append(choicesHeading, choiceGroup, status);
+
+    if (!options || options.showMore !== false) {
+      moreSummary.setAttribute("aria-label", "More information about this analysis");
+      moreContent.append(
+        element("h3", "bs-analysis-results-section-title", "Metadata"),
+        definitionList(metadataRows(model.metadata)),
+        listSection(
+          "Warnings",
+          model.warnings,
+          "bs-analysis-results-warning-section"
+        ),
+        listSection(
+          "Limitations",
+          model.limitations,
+          "bs-analysis-results-limitation-section"
+        )
+      );
+      more.append(moreSummary, moreContent);
+      analysisSection.appendChild(more);
+    }
+
+    shell.append(boardSection, analysisSection);
+    presentation.appendChild(shell);
+    return { element: presentation, controls: controls };
+  }
+
+  function renderPresentation(host, model, options) {
+    validateAnalysisModel(model);
+    const result = buildPresentation(model, options || {});
+    host.replaceChildren(result.element);
+    return result.controls;
   }
 
   function render(host, payload) {
@@ -594,74 +777,12 @@
       contextRows(model.context),
       "bs-analysis-results-context"
     );
-    const shell = element("div", "bs-analysis-results-shell");
-    const boardSection = element("section", "bs-analysis-results-board-section");
-    const boardHeading = element(
-      "h3",
-      "bs-analysis-results-section-title",
-      "Position"
-    );
-    const board = element("div", "bs-analysis-results-board");
-    const analysisSection = element("section", "bs-analysis-results-main");
-    const choicesHeading = element(
-      "h3",
-      "bs-analysis-results-section-title",
-      model.analysis_kind === "checker" ? "Moves" : "Cube actions"
-    );
-    const choiceGroup = element("div", "bs-analysis-results-choices");
-    const status = element(
-      "p",
-      "bs-analysis-results-choice-status",
-      model.analysis_kind === "checker"
-        ? "The top move is open. Opening another move keeps previous analysis open."
-        : "Choose an action to inspect its supplied details."
-    );
-    const more = element("details", "bs-analysis-results-more");
-    const moreSummary = element("summary", "", "More information");
-    const moreContent = element("div", "bs-analysis-results-more-content");
+    const presentation = buildPresentation(model, {});
 
     article.dataset.bsAnalysisResultsInstance = model.id;
     fixtureBadge.title = fixtureStatus.message;
-    choiceGroup.setAttribute("role", "group");
-    choiceGroup.setAttribute(
-      "aria-label",
-      model.analysis_kind === "checker"
-        ? "Displayed checker candidates"
-        : "Cube actions"
-    );
-    status.setAttribute("aria-live", "polite");
-    renderBoard(board, model.original_board);
-    moreSummary.setAttribute(
-      "aria-label",
-      "More information about this analysis fixture"
-    );
-    moreContent.append(
-      element("h3", "bs-analysis-results-section-title", "Metadata"),
-      definitionList(metadataRows(model.metadata)),
-      listSection(
-        "Warnings",
-        model.warnings,
-        "bs-analysis-results-warning-section"
-      ),
-      listSection(
-        "Limitations",
-        model.limitations,
-        "bs-analysis-results-limitation-section"
-      )
-    );
-    more.append(moreSummary, moreContent);
-
-    if (model.analysis_kind === "checker") {
-      renderChecker(model, board, choiceGroup, status);
-    } else {
-      renderCube(model, board, choiceGroup, status);
-    }
-
     header.append(fixtureBadge, title, subtitle, fixtureMessage, context);
-    boardSection.append(boardHeading, board);
-    analysisSection.append(choicesHeading, choiceGroup, status, more);
-    shell.append(boardSection, analysisSection);
-    article.append(header, shell);
+    article.append(header, presentation.element);
     host.replaceChildren(article);
   }
 
@@ -720,6 +841,9 @@
     mount,
     mountAll,
     outcomeSummaryItems,
+    renderBoard,
+    renderPresentation,
+    setActiveCheckerCandidate,
     validateAnalysisModel,
     validateFixtureDocument
   };

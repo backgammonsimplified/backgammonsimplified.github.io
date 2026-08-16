@@ -24,6 +24,7 @@
 .bs-analysis-results-subtitle,
 .bs-analysis-results-fixture-message,
 .bs-analysis-results-choice-status,
+.bs-analysis-results-action-detail,
 .bs-analysis-results-empty,
 .bs-analysis-results-outcome-note,
 .bs-analysis-results-candidate-detail {
@@ -157,6 +158,11 @@
 
 .bs-analysis-results-candidate[open] > .bs-analysis-results-candidate-summary {
   background: color-mix(in srgb, var(--bs-navy) 4%, transparent);
+}
+
+.bs-analysis-results-candidate.is-active > .bs-analysis-results-candidate-summary {
+  box-shadow: inset 4px 0 0 var(--bs-copper);
+  background: color-mix(in srgb, var(--bs-copper) 9%, transparent);
 }
 
 .bs-analysis-results-candidate-summary:hover {
@@ -373,6 +379,11 @@
   min-height: 1.35rem;
   margin: 0.55rem 0 0;
   font-size: 0.82rem;
+}
+
+.bs-analysis-results-action-detail {
+  margin: 0.65rem 0 0;
+  font-size: 0.86rem;
 }
 
 .bs-analysis-results-more {

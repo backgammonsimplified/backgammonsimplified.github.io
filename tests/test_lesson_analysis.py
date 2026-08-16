@@ -135,7 +135,9 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
             encoding="utf-8"
         )
         analysis_index = scripts.index("bs-lesson-analysis.js")
+        shared_index = scripts.index("bs-analysis-results.js")
         scroll_index = scripts.index("bs-learn-scroll.js")
+        self.assertLess(shared_index, analysis_index)
         self.assertLess(analysis_index, scroll_index)
         implementation = (
             SITE / "assets" / "bs-lesson-analysis.js"
@@ -148,10 +150,8 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         implementation = (
             SITE / "assets" / "bs-lesson-analysis.js"
         ).read_text(encoding="utf-8")
-        self.assertIn('element("img", "bs-analysis-position-image")', implementation)
-        self.assertIn("img.width = 1200", implementation)
-        self.assertIn("img.height = 910", implementation)
-        self.assertIn('img.loading = "eager"', implementation)
+        self.assertIn("sharedAnalysis().renderBoard", implementation)
+        self.assertNotIn('document.createElement("img")', implementation)
         self.assertNotIn("fetchSvg", implementation)
         start_hash = hashlib.sha256(
             (ASSET_ROOT / "starting.svg").read_bytes()
@@ -174,6 +174,27 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         provenance = ASSET_ROOT / "PROVENANCE.txt"
         self.assertTrue(provenance.is_file())
         self.assertFalse((ASSET_ROOT / "PROVENANCE.md").exists())
+
+    def test_lesson_is_a_thin_adapter_to_shared_presentation(self):
+        implementation = (
+            SITE / "assets" / "bs-lesson-analysis.js"
+        ).read_text(encoding="utf-8")
+        shared = (SITE / "assets" / "bs-analysis-results.js").read_text(
+            encoding="utf-8"
+        )
+        lesson_css = (SITE / "assets" / "bs-lesson-analysis.css").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("checkerViewModel", implementation)
+        self.assertIn("cubeViewModel", implementation)
+        self.assertIn("sharedAnalysis().renderPresentation", implementation)
+        self.assertNotIn("candidateMetricRows", implementation)
+        self.assertNotIn("analysisRows", implementation)
+        self.assertNotIn(".bs-analysis-position-image", lesson_css)
+        self.assertNotIn(".bs-analysis-metrics", lesson_css)
+        self.assertIn("function outcomePanel", shared)
+        self.assertIn("function renderChecker", shared)
+        self.assertIn("function renderCube", shared)
 
 
 if __name__ == "__main__":

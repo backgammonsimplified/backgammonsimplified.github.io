@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const analysis = require("../site/assets/bs-lesson-analysis.js");
+const shared = require("../site/assets/bs-analysis-results.js");
 
 const root = path.resolve(__dirname, "..");
 const fixtures = JSON.parse(
@@ -112,11 +113,53 @@ assert.throws(
   /does not define/
 );
 
-assert.equal(analysis.formatEquity(0.093), "+0.093");
-assert.equal(analysis.formatEquity(-1), "-1.000");
-assert.equal(analysis.formatEquity(null), "Not supplied");
-assert.equal(analysis.formatProbability(0.58), "58.0%");
-assert.equal(analysis.formatProbability(null), "Not supplied");
+const checkerModel = analysis.checkerViewModel(checker, fixtures);
+assert.equal(checkerModel.analysis_kind, "checker");
+assert.equal(checkerModel.candidates.length, 3);
+assert.equal(checkerModel.candidates[1].value.value, 0.093);
+assert.equal(checkerModel.candidates[1].difference_from_best, -0);
+assert.equal(checkerModel.candidates[2].probabilities.win_gammon_or_better, null);
+assert.match(checkerModel.candidates[0].move_board.image, /candidate-1\.svg$/);
+assert.equal(shared.validateAnalysisModel(checkerModel), checkerModel);
+
+const retainedCheckerModel = analysis.checkerViewModel(realChecker, realFixtures);
+assert.equal(retainedCheckerModel.candidates[0].move, "8/4");
+assert.equal(retainedCheckerModel.candidates[1].difference_from_best, -0.002);
+assert.equal(
+  retainedCheckerModel.candidates[0].probabilities.lose_gammon_or_worse,
+  0.677
+);
+assert.match(
+  retainedCheckerModel.candidates[0].move_board.alt,
+  /starting position with checker movement overlay/
+);
+assert.equal(shared.validateAnalysisModel(retainedCheckerModel), retainedCheckerModel);
+
+const cubeModel = analysis.cubeViewModel(
+  doubleTake.actions.double.analysis,
+  doubleTake.initial,
+  doubleTake,
+  fixtures,
+  "first-double"
+);
+assert.equal(cubeModel.analysis_kind, "cube");
+assert.deepEqual(
+  cubeModel.actions.map((action) => action.id),
+  ["roll", "double_take"]
+);
+assert.equal(cubeModel.probabilities.lose, 0.37);
+assert.equal(cubeModel.probabilities.win_gammon_or_better, 0.14);
+assert.equal(analysis.matchingActionId(cubeModel, "double"), "double_take");
+assert.equal(shared.validateAnalysisModel(cubeModel), cubeModel);
+
+assert.deepEqual(analysis.lessonProbabilities({ win: 0.58 }), {
+  win: 0.58,
+  win_gammon_or_better: undefined,
+  win_backgammon: undefined,
+  lose: 0.42000000000000004,
+  lose_gammon_or_worse: undefined,
+  lose_backgammon: undefined
+});
 
 assert.equal(
   analysis.assetUrl(fixtures.asset_root, fixtures.cube_cases["cube-roll"].initial.image),

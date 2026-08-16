@@ -231,7 +231,7 @@
           "id": "candidate-1",
           "label": "Candidate 1",
           "image": "candidate-1.svg",
-          "image_alt": "Fixture result supplied for Candidate 1.",
+          "image_alt": "The shared starting fixture position with the supplied movement overlay for Candidate 1.",
           "equity": 0.041,
           "equity_loss": 0.052,
           "winning_probabilities": {
@@ -245,7 +245,7 @@
           "id": "candidate-2",
           "label": "Candidate 2",
           "image": "candidate-2.svg",
-          "image_alt": "Fixture result supplied for Candidate 2.",
+          "image_alt": "The shared starting fixture position with the supplied movement overlay for Candidate 2.",
           "equity": 0.093,
           "equity_loss": 0.0,
           "winning_probabilities": {
@@ -259,7 +259,7 @@
           "id": "candidate-3",
           "label": "Candidate 3",
           "image": "candidate-3.svg",
-          "image_alt": "Fixture result supplied for Candidate 3.",
+          "image_alt": "The shared starting fixture position with the supplied movement overlay for Candidate 3.",
           "equity": 0.067,
           "equity_loss": 0.026,
           "winning_probabilities": {

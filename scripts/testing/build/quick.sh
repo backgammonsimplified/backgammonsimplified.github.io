@@ -21,6 +21,7 @@ git diff --check
 printf '\n[2/5] JavaScript syntax\n'
 node --check site/assets/bs-learn.js
 node --check site/assets/bs-learn-scroll.js
+node --check site/assets/bs-analysis-results.js
 node --check site/assets/bs-lesson-analysis.js
 node --check scripts/testing/ux/browser/release_ui_browser_check.mjs
 node --check scripts/testing/ux/browser/lesson_analysis_browser_check.mjs

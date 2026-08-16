@@ -108,9 +108,9 @@ export async function runLessonAnalysisBrowserChecks({
               instances.map((item) => item.dataset.bsAnalysisInstance)
             ).size,
             primaryImageLoaded: Boolean(
-              instances[0]?.querySelector(".bs-analysis-position-image")
+              instances[0]?.querySelector(".bs-analysis-results-board-image")
                 ?.complete &&
-                instances[0]?.querySelector(".bs-analysis-position-image")
+                instances[0]?.querySelector(".bs-analysis-results-board-image")
                   ?.naturalWidth > 0
             ),
             starts
@@ -287,7 +287,7 @@ export async function runLessonAnalysisBrowserChecks({
           "[data-bs-checker-decision]"
         );
         const startingSource = await host
-          .locator(".bs-analysis-position-image")
+          .locator(".bs-analysis-results-board-image")
           .getAttribute("src");
         check(
           startingSource?.endsWith("/starting.svg"),
@@ -307,7 +307,7 @@ export async function runLessonAnalysisBrowserChecks({
             .click();
           const selected = await host.evaluate((element, selectedId) => ({
             image: element
-              .querySelector(".bs-analysis-position-image")
+              .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
               ?.getAttribute("src"),
             pressed: element
               .querySelector(
@@ -316,19 +316,97 @@ export async function runLessonAnalysisBrowserChecks({
               ?.getAttribute("aria-pressed"),
             status: element
               .querySelector(".bs-analysis-choice-status")
-              ?.textContent.trim()
+              ?.textContent.trim(),
+            sharedConsumer: element
+              .querySelector("[data-bs-shared-analysis-consumer='lesson']")
+              ?.querySelector("[data-bs-shared-analysis-presentation]")
+              ?.dataset.bsSharedAnalysisPresentation
           }), candidateId);
           check(
             selected.image?.endsWith(`/${candidateAssets[candidateId]}`) &&
               selected.pressed === "true" &&
-              selected.status.includes("selected"),
+              selected.status.includes("selected") &&
+              selected.sharedConsumer === "true",
             checkerContext,
-            `${candidateId} updates its verified image and state`
+            `${candidateId} uses the shared presentation and verified overlay`
           );
         }
+
+        const candidateTwoSummary = host.locator(
+          "[data-bs-analysis-candidate-id='candidate-2'] > summary"
+        );
+        await candidateTwoSummary.click();
+        const openTogether = await host.evaluate((element) => ({
+          active: element
+            .querySelector(".bs-analysis-results-candidate.is-active")
+            ?.dataset.bsAnalysisCandidateId,
+          current: element
+            .querySelector("[data-bs-analysis-candidate-id='candidate-2'] > summary")
+            ?.getAttribute("aria-current"),
+          image: element
+            .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
+            ?.getAttribute("src"),
+          open: Array.from(
+            element.querySelectorAll(".bs-analysis-results-candidate[open]")
+          ).map((candidate) => candidate.dataset.bsAnalysisCandidateId)
+        }));
+        check(
+          openTogether.active === "candidate-2" &&
+            openTogether.current === "true" &&
+            openTogether.image?.endsWith(`/${candidateAssets["candidate-2"]}`) &&
+            openTogether.open.includes("candidate-1") &&
+            openTogether.open.includes("candidate-2") &&
+            openTogether.open.includes("candidate-3"),
+          checkerContext,
+          "active overlay selection is independent from multiple open disclosures"
+        );
+
+        await host
+          .locator("[data-bs-analysis-candidate-id='candidate-3'] > summary")
+          .click();
+        const reactivated = await host.evaluate((element) => ({
+          active: element
+            .querySelector(".bs-analysis-results-candidate.is-active")
+            ?.dataset.bsAnalysisCandidateId,
+          candidateThreeOpen: element.querySelector(
+            "[data-bs-analysis-candidate-id='candidate-3']"
+          )?.open,
+          image: element
+            .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
+            ?.getAttribute("src")
+        }));
+        check(
+          reactivated.active === "candidate-3" &&
+            reactivated.candidateThreeOpen === false &&
+            reactivated.image?.endsWith(`/${candidateAssets["candidate-3"]}`),
+          checkerContext,
+          "clicking an already-open candidate reselects its board before closing disclosure"
+        );
+
+        await candidateTwoSummary.press("ENTER");
+        const keyboardSelection = await host.evaluate((element) => ({
+          active: element
+            .querySelector(".bs-analysis-results-candidate.is-active")
+            ?.dataset.bsAnalysisCandidateId,
+          focused:
+            document.activeElement?.dataset.bsAnalysisResultChoice ===
+            "candidate-2",
+          image: element
+            .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
+            ?.getAttribute("src")
+        }));
+        check(
+          keyboardSelection.active === "candidate-2" &&
+            keyboardSelection.focused &&
+            keyboardSelection.image?.endsWith(`/${candidateAssets["candidate-2"]}`),
+          checkerContext,
+          "keyboard activation reselects the overlay and preserves focus"
+        );
         const missing = await host.evaluate((element) => ({
           explanation: element
-            .querySelector(".bs-analysis-explanation")
+            .querySelector(
+              "[data-bs-analysis-candidate-id='candidate-2'] .bs-analysis-results-candidate-detail"
+            )
             ?.textContent.trim(),
           identities: {
             positionId: element.querySelector("article")?.dataset.positionId,
@@ -347,10 +425,10 @@ export async function runLessonAnalysisBrowserChecks({
         await scrollAndRestore(checkerTab);
         check(
           (await host
-            .locator("button[data-bs-analysis-choice='candidate-3']")
-            .getAttribute("aria-pressed")) === "true",
+            .locator("[data-bs-analysis-candidate-id='candidate-2'] > summary")
+            .getAttribute("aria-current")) === "true",
           checkerContext,
-          "checker selection survives scrolling"
+          "shared checker selection survives scrolling"
         );
         const checkerPage = await componentSnapshot(checkerTab);
         check(

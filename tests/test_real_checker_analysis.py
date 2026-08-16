@@ -106,9 +106,13 @@ class RealCheckerAnalysisTests(unittest.TestCase):
         self.assertIn('data-bs-fixture-src="/data/checker-sage-gnu-disagreement-001.json"', source)
         self.assertIn('data-bs-fixture-id="checker-sage-gnu-disagreement-001"', source)
         browser = (ROOT / "site" / "assets" / "bs-lesson-analysis.js").read_text(encoding="utf-8")
+        shared = (ROOT / "site" / "assets" / "bs-analysis-results.js").read_text(encoding="utf-8")
         self.assertNotIn("board_moves", browser)
         self.assertNotIn("apply_board_moves", browser)
-        self.assertIn("position.image.src = assetUrl", browser)
+        self.assertIn("move_board", browser)
+        self.assertIn("assetUrl(fixtures.asset_root, candidate.image)", browser)
+        self.assertIn("candidate.move_board || originalBoard", shared)
+        self.assertIn("sharedAnalysis().renderPresentation", browser)
 
 
 if __name__ == "__main__":

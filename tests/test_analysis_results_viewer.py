@@ -79,9 +79,33 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn("candidate.move_board || originalBoard", script)
         self.assertNotIn("candidate.result_board", script)
         self.assertIn("shell.append(boardSection, analysisSection)", script)
-        self.assertIn("article.append(header, shell)", script)
+        self.assertIn("article.append(header, presentation.element)", script)
         self.assertIn(".bs-analysis-results-shell", css)
         self.assertIn("grid-template-columns: minmax(18rem, 0.9fr) minmax(28rem, 1.1fr);", css)
+
+    def test_checker_active_selection_is_separate_from_disclosure(self):
+        script = VIEWER_PATH.read_text(encoding="utf-8")
+        css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
+        self.assertIn("setActiveCheckerCandidate", script)
+        self.assertIn('summary.addEventListener("click"', script)
+        self.assertIn('summary.setAttribute("aria-current"', script)
+        self.assertIn('details.classList.toggle("is-active", active)', script)
+        self.assertIn("selected.details.open = true", script)
+        self.assertNotIn("details.open = false", script)
+        self.assertIn(".bs-analysis-results-candidate.is-active", css)
+
+    def test_presentation_api_is_shared_with_lessons(self):
+        viewer = VIEWER_PATH.read_text(encoding="utf-8")
+        lesson = (ROOT / "site" / "assets" / "bs-lesson-analysis.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("function renderPresentation(host, model, options)", viewer)
+        self.assertIn("sharedAnalysis().renderPresentation", lesson)
+        self.assertIn("checkerViewModel", lesson)
+        self.assertIn("cubeViewModel", lesson)
+        self.assertNotIn("candidateMetricRows", lesson)
+        self.assertNotIn("analysisRows", lesson)
+        self.assertNotIn("formatProbability", lesson)
 
     def test_r_renderer_uses_current_structured_backgammonboard_api(self):
         renderer = R_RENDERER_PATH.read_text(encoding="utf-8")
@@ -126,6 +150,10 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn("data/analyzer-retained-checker-preview.json", quarto)
         self.assertIn("assets/bs-analysis-results.css", quarto)
         self.assertIn('/assets/bs-analysis-results.js', scripts)
+        self.assertLess(
+            scripts.index("bs-analysis-results.js"),
+            scripts.index("bs-lesson-analysis.js"),
+        )
 
 
 if __name__ == "__main__":
