@@ -1,0 +1,305 @@
+{
+  "schema_version": "analyzer-analysis-view-read-set-v1",
+  "package": {
+    "package_id": "synthetic-analyzer-read-set-001",
+    "profile_id": "minimal-json-proof-v1",
+    "manifest_sha256": null,
+    "conformance_status": "synthetic-minimal"
+  },
+  "fixture_status": {
+    "kind": "synthetic",
+    "label": "Synthetic materializer proof",
+    "message": "This deterministic minimal read set exercises Analyzer mechanics only; it is not a Canonical V1 package."
+  },
+  "analyses": [
+    {
+      "canonical_decision_id": "synthetic-checker-decision-001",
+      "decision_kind": "checker",
+      "logical_position_id": "synthetic-logical-position-001",
+      "source_occurrence": {
+        "occurrence_id": "synthetic-occurrence-001",
+        "source_id": "synthetic-source-001",
+        "source_record_id": "synthetic-record-001",
+        "match_id": "synthetic-match-001",
+        "game_id": "synthetic-game-001",
+        "line_number": 101
+      },
+      "context": {
+        "score": {"player": 2, "opponent": 5, "match_length": 7},
+        "cube": {"value": 1, "owner": "centered"},
+        "dice": [3, 1],
+        "decision": "Checker play",
+        "player_on_roll": "decision_player"
+      },
+      "requested_analysis": {
+        "requested_ply": 4,
+        "cubeful": true,
+        "profile_id": "synthetic-gnu-checker-profile"
+      },
+      "provenance": {
+        "engine": "Synthetic GNU-shaped fixture",
+        "engine_version": null,
+        "source_family": "Analyzer minimal mechanics proof",
+        "parser": "synthetic-read-set-v1",
+        "source_hash": "sha256:synthetic-checker-source"
+      },
+      "presentation": {
+        "title": "Synthetic checker materialization proof",
+        "subtitle": "Requested and row-local depth, native values, and resulting identities",
+        "fixture": true,
+        "played_move": "13/12 11/8",
+        "recommendation": "8/4"
+      },
+      "position": {
+        "position_id": "synthetic-logical-position-001",
+        "original_board": {
+          "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg",
+          "alt": "Synthetic starting board for materializer mechanics testing."
+        }
+      },
+      "checker_candidates": [
+        {
+          "candidate_id": "synthetic-checker-candidate-002",
+          "source_order": 2,
+          "display_rank": 2,
+          "native_move": "13/10 11/10",
+          "normalized_move": "13/10 11/10",
+          "structured_movements": [
+            {"order": 1, "from": 13, "to": 10, "die": 3},
+            {"order": 2, "from": 11, "to": 10, "die": 1}
+          ],
+          "resulting_position_id": "synthetic-result-position-002",
+          "move_board": {
+            "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/candidate-2.svg",
+            "alt": "Synthetic starting board with candidate two movement overlaid."
+          },
+          "supported": true,
+          "details": null
+        },
+        {
+          "candidate_id": "synthetic-checker-candidate-001",
+          "source_order": 1,
+          "display_rank": 1,
+          "native_move": "8/4",
+          "normalized_move": "8/4",
+          "structured_movements": [
+            {"order": 1, "from": 8, "to": 4, "die": null}
+          ],
+          "resulting_position_id": "synthetic-result-position-001",
+          "move_board": {
+            "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/candidate-1.svg",
+            "alt": "Synthetic starting board with candidate one movement overlaid."
+          },
+          "supported": true,
+          "details": "Native GNU-shaped cubeful equity is selected for display."
+        },
+        {
+          "candidate_id": "synthetic-checker-candidate-003",
+          "source_order": 3,
+          "display_rank": 3,
+          "native_move": "13/10 8/7",
+          "normalized_move": "13/10 8/7",
+          "structured_movements": [
+            {"order": 1, "from": 13, "to": 10, "die": 3},
+            {"order": 2, "from": 8, "to": 7, "die": 1}
+          ],
+          "resulting_position_id": "synthetic-result-position-003",
+          "move_board": null,
+          "supported": true,
+          "details": "Overlay deliberately unavailable; the viewer falls back to the original board."
+        }
+      ],
+      "checker_evaluations": [
+        {
+          "evaluation_id": "synthetic-evaluation-003",
+          "candidate_id": "synthetic-checker-candidate-003",
+          "source_order": 1,
+          "selected_for_display": true,
+          "evaluation_type": "Actual depth unavailable",
+          "actual_ply": null,
+          "native_value": {"label": "Equity", "value": null, "semantics": "GNU Cubeful equity; unavailable"},
+          "normalized_value": {"label": "Normalized value", "value": null, "semantics": "No normalized value supplied"},
+          "display_value_source": "native",
+          "difference_from_best": null,
+          "probabilities": null
+        },
+        {
+          "evaluation_id": "synthetic-evaluation-001",
+          "candidate_id": "synthetic-checker-candidate-001",
+          "source_order": 1,
+          "selected_for_display": true,
+          "evaluation_type": "Cubeful 4-ply",
+          "actual_ply": 4,
+          "native_value": {"label": "Equity", "value": -1.615, "semantics": "GNU Cubeful equity"},
+          "normalized_value": {"label": "Normalized equity", "value": -0.8075, "semantics": "Synthetic normalized display-independent value"},
+          "display_value_source": "native",
+          "difference_from_best": 0.0,
+          "probabilities": {
+            "win": 0.162,
+            "win_gammon_or_better": 0.0,
+            "win_backgammon": 0.0,
+            "lose": 0.838,
+            "lose_gammon_or_worse": 0.677,
+            "lose_backgammon": 0.052
+          }
+        },
+        {
+          "evaluation_id": "synthetic-evaluation-002",
+          "candidate_id": "synthetic-checker-candidate-002",
+          "source_order": 1,
+          "selected_for_display": true,
+          "evaluation_type": "Cubeful 2-ply",
+          "actual_ply": 2,
+          "native_value": {"label": "Equity", "value": -1.617, "semantics": "GNU Cubeful equity"},
+          "normalized_value": {"label": "Normalized equity", "value": -0.8085, "semantics": "Synthetic normalized display-independent value"},
+          "display_value_source": "native",
+          "difference_from_best": -0.002,
+          "probabilities": {
+            "win": 0.162,
+            "win_gammon_or_better": null,
+            "win_backgammon": null,
+            "lose": 0.838,
+            "lose_gammon_or_worse": null,
+            "lose_backgammon": null
+          }
+        }
+      ],
+      "probabilities": {
+        "win": 0.162,
+        "win_gammon_or_better": 0.0,
+        "win_backgammon": 0.0,
+        "lose": 0.838,
+        "lose_gammon_or_worse": 0.677,
+        "lose_backgammon": 0.052
+      },
+      "warnings": ["Synthetic values are mechanics-only and are not engine conclusions."],
+      "limitations": ["No Canonical V1 physical field mapping is asserted by this read set."]
+    },
+    {
+      "canonical_decision_id": "synthetic-cube-decision-001",
+      "decision_kind": "cube",
+      "logical_position_id": "synthetic-logical-position-002",
+      "source_occurrence": {
+        "occurrence_id": "synthetic-occurrence-002",
+        "source_id": "synthetic-source-001",
+        "source_record_id": "synthetic-record-002",
+        "match_id": "synthetic-match-001",
+        "game_id": "synthetic-game-002",
+        "line_number": null
+      },
+      "context": {
+        "score": {"player": 0, "opponent": 0, "match_length": 5},
+        "cube": {"value": 1, "owner": "centered"},
+        "dice": null,
+        "decision": "Cube decision",
+        "player_on_roll": "decision_player"
+      },
+      "requested_analysis": {
+        "requested_ply": 3,
+        "cubeful": true,
+        "profile_id": "synthetic-gnu-cube-profile"
+      },
+      "provenance": {
+        "engine": "Synthetic GNU-shaped fixture",
+        "engine_version": null,
+        "source_family": "Analyzer minimal mechanics proof",
+        "parser": "synthetic-read-set-v1",
+        "source_hash": "sha256:synthetic-cube-source"
+      },
+      "presentation": {
+        "title": "Synthetic cube materialization proof",
+        "subtitle": "Occurrence facts remain distinct from analytical actions",
+        "fixture": true,
+        "played_move": null,
+        "recommendation": "Double / Take"
+      },
+      "position": {
+        "position_id": "synthetic-logical-position-002",
+        "original_board": {
+          "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg",
+          "alt": "Synthetic starting board for cube materializer mechanics testing."
+        }
+      },
+      "cube_occurrence": {
+        "cube_occurrence_id": "synthetic-cube-occurrence-001",
+        "observed_action_native": "No double",
+        "observed_action_normalized": "roll"
+      },
+      "cube_actions": [
+        {
+          "action_id": "synthetic-cube-action-roll",
+          "source_order": 1,
+          "label": "Roll / No double",
+          "native_action": "No double",
+          "normalized_action": "roll",
+          "supported": true,
+          "actual_ply": null,
+          "native_value": {"label": "Cubeful equity", "value": 0.082, "semantics": "GNU native cubeful equity"},
+          "normalized_value": {"label": "Normalized value", "value": 0.082, "semantics": "Synthetic identity normalization"},
+          "display_value_source": "native",
+          "probabilities": null,
+          "details": "Observed occurrence action; analytical row remains separate."
+        },
+        {
+          "action_id": "synthetic-cube-action-double-take",
+          "source_order": 2,
+          "label": "Double / Take",
+          "native_action": "Double, take",
+          "normalized_action": "double_take",
+          "supported": true,
+          "actual_ply": null,
+          "native_value": {"label": "Cubeful equity", "value": 0.146, "semantics": "GNU native cubeful equity"},
+          "normalized_value": {"label": "Normalized value", "value": 0.146, "semantics": "Synthetic identity normalization"},
+          "display_value_source": "native",
+          "probabilities": {
+            "win": 0.63,
+            "win_gammon_or_better": 0.14,
+            "win_backgammon": 0.02,
+            "lose": 0.37,
+            "lose_gammon_or_worse": 0.07,
+            "lose_backgammon": 0.01
+          },
+          "details": "Synthetic analytical recommendation."
+        },
+        {
+          "action_id": "synthetic-cube-action-double-pass",
+          "source_order": 3,
+          "label": "Double / Pass",
+          "native_action": "Double, pass",
+          "normalized_action": "double_pass",
+          "supported": true,
+          "actual_ply": null,
+          "native_value": {"label": "Cubeful equity", "value": 1.0, "semantics": "GNU native cubeful equity"},
+          "normalized_value": {"label": "Normalized value", "value": 1.0, "semantics": "Synthetic identity normalization"},
+          "display_value_source": "native",
+          "probabilities": null,
+          "details": null
+        },
+        {
+          "action_id": "synthetic-cube-action-beaver",
+          "source_order": 4,
+          "label": "Beaver",
+          "native_action": "Beaver",
+          "normalized_action": "beaver",
+          "supported": false,
+          "actual_ply": null,
+          "native_value": {"label": "Cubeful equity", "value": null, "semantics": "Unsupported; no native value"},
+          "normalized_value": {"label": "Normalized value", "value": null, "semantics": "Unsupported; no normalized value"},
+          "display_value_source": "native",
+          "probabilities": null,
+          "details": "Explicit unsupported action."
+        }
+      ],
+      "probabilities": {
+        "win": 0.63,
+        "win_gammon_or_better": 0.14,
+        "win_backgammon": 0.02,
+        "lose": 0.37,
+        "lose_gammon_or_worse": 0.07,
+        "lose_backgammon": 0.01
+      },
+      "warnings": ["Synthetic values are mechanics-only and are not engine conclusions."],
+      "limitations": ["Cube actions have explicit null actual depth because no row-local depth is supplied."]
+    }
+  ]
+}

@@ -8,7 +8,10 @@ import hashlib
 import json
 from pathlib import Path
 
-import duckdb
+try:
+    import duckdb
+except ModuleNotFoundError:  # Report a bounded setup failure instead of a traceback.
+    duckdb = None
 
 
 LOGICAL_TABLES = (
@@ -65,7 +68,16 @@ def relative_paths(root: Path, paths: list[Path]) -> list[str]:
     return [path.relative_to(root).as_posix() for path in paths]
 
 
-def inspect_relation(connection: duckdb.DuckDBPyConnection, files: list[Path]) -> dict[str, object]:
+def require_duckdb():
+    if duckdb is None:
+        raise RuntimeError(
+            "DuckDB is unavailable; install scripts/analysis/requirements.txt "
+            "before inspecting Canonical Parquet"
+        )
+    return duckdb
+
+
+def inspect_relation(connection, files: list[Path]) -> dict[str, object]:
     relation = connection.read_parquet([str(path) for path in files], union_by_name=True)
     columns = [
         {"name": name, "type": str(column_type)}
@@ -89,7 +101,8 @@ def inspect_package(package_root: Path) -> dict[str, object]:
         manifest_payload = json.loads(manifests[0].read_text(encoding="utf-8"))
 
     tables: dict[str, object] = {}
-    with duckdb.connect(database=":memory:") as connection:
+    duckdb_module = require_duckdb()
+    with duckdb_module.connect(database=":memory:") as connection:
         for table in LOGICAL_TABLES:
             files = discover_table_files(root, table)
             if not files:
@@ -150,7 +163,11 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    report = inspect_package(args.package_root)
+    try:
+        report = inspect_package(args.package_root)
+    except (RuntimeError, ValueError, OSError, json.JSONDecodeError) as error:
+        print(f"ERROR: {error}", file=__import__("sys").stderr)
+        return 1
     gaps = canonical_family_gaps(report)
     report["canonical_family_gaps"] = gaps
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"

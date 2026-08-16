@@ -6,7 +6,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import duckdb
+try:
+    import duckdb
+except ModuleNotFoundError:
+    duckdb = None
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -16,6 +19,7 @@ from scripts.analysis import inspect_canonical_parquet as intake
 
 
 class CanonicalParquetIntakeTests(unittest.TestCase):
+    @unittest.skipUnless(duckdb is not None, "duckdb dependency is unavailable")
     def write_table(self, root: Path, table: str, columns: str) -> None:
         target = root / table / "part-000.parquet"
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -40,6 +44,7 @@ class CanonicalParquetIntakeTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    @unittest.skipUnless(duckdb is not None, "duckdb dependency is unavailable")
     def test_complete_logical_family_is_inspected_without_mapping_columns(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -55,6 +60,7 @@ class CanonicalParquetIntakeTests(unittest.TestCase):
         )
         self.assertEqual(len(report["tables"]["positions"]["file_sha256"]), 1)
 
+    @unittest.skipUnless(duckdb is not None, "duckdb dependency is unavailable")
     def test_missing_tables_are_reported_instead_of_synthesized(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -66,6 +72,12 @@ class CanonicalParquetIntakeTests(unittest.TestCase):
         self.assertIn("decisions", gaps)
         self.assertIn("evaluations", gaps)
         self.assertEqual(report["tables"]["decisions"]["status"], "missing")
+
+    @unittest.skipIf(duckdb is not None, "only applies when DuckDB is absent")
+    def test_missing_duckdb_fails_closed_with_setup_message(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaisesRegex(RuntimeError, "DuckDB is unavailable"):
+                intake.inspect_package(Path(temporary))
 
 
 if __name__ == "__main__":
