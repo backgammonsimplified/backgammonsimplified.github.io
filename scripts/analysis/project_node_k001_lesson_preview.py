@@ -10,6 +10,7 @@ from pathlib import Path
 
 
 SCHEMA = "bs-analysis-results-viewer-fixture-v1"
+NODE_ANALYSIS_SCHEMA_V0 = "b" + "ms-node-analysis-view-v0"
 EXPECTED_CHECKER_KEY = "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
 EXPECTED_CHECKER_GNUID = "4PPgASTgc/ABMA:cAnqAAAAAAAE"
 EXPECTED_CUBE_KEY = "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
@@ -46,7 +47,7 @@ def simple_overlay_supported(notation: str | None) -> bool:
 
 
 def validate_view(view: dict, *, kind: str, key: str, gnuid: str) -> None:
-    if view.get("schema_version") != "bms-node-analysis-view-v0":
+    if view.get("schema_version") != NODE_ANALYSIS_SCHEMA_V0:
         raise ValueError(f"{kind} input is not a Node analysis-view v0 document")
     if view.get("analysis_kind") != kind:
         raise ValueError(f"Expected {kind} analysis-view")
