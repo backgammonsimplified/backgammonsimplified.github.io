@@ -22,6 +22,14 @@
     ["lose_gammon", "Lose gammon", "lose-gammon"],
     ["lose_backgammon", "Lose backgammon", "lose-bg"]
   ];
+  const PROBABILITY_COMPARISON_ROWS = [
+    ["win", "Win"],
+    ["win_gammon_or_better", "Win gammon or better"],
+    ["win_backgammon", "Win backgammon"],
+    ["lose", "Lose"],
+    ["lose_gammon_or_worse", "Lose gammon or worse"],
+    ["lose_backgammon", "Lose backgammon"]
+  ];
 
   function optionalText(value, fallback) {
     return value === null || value === undefined || value === ""
@@ -44,12 +52,45 @@
     return (Number(value) * 100).toFixed(1) + "%";
   }
 
+  function formatComparisonPercent(value, signed) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "Not supplied";
+    }
+    const percentage = Number(value) * 100;
+    const rounded = Math.abs(percentage) < 0.05 ? 0 : percentage;
+    const text = rounded.toFixed(1).replace(/\.0$/, "") + "%";
+    return signed && rounded >= 0 ? "+" + text : text;
+  }
+
   function numericProbability(value) {
     if (value === null || value === undefined || Number.isNaN(Number(value))) {
       return null;
     }
     const number = Number(value);
     return number >= 0 && number <= 1 ? number : null;
+  }
+
+  function probabilityComparisonRows(topProbabilities, selectedProbabilities) {
+    return PROBABILITY_COMPARISON_ROWS.map(function (definition) {
+      const top = numericProbability(
+        topProbabilities && topProbabilities[definition[0]]
+      );
+      const selected = numericProbability(
+        selectedProbabilities && selectedProbabilities[definition[0]]
+      );
+      const difference = top === null || selected === null ? null : selected - top;
+      return {
+        key: definition[0],
+        label: definition[1],
+        top: top,
+        selected: selected,
+        difference: difference,
+        topDisplay: formatComparisonPercent(top, false),
+        selectedDisplay: formatComparisonPercent(selected, false),
+        differenceDisplay:
+          difference === null ? null : formatComparisonPercent(difference, true)
+      };
+    });
   }
 
   function approximatelyOne(value) {
@@ -424,6 +465,18 @@
     summary.setAttribute("aria-current", "false");
 
     const identity = element("span", "bs-analysis-results-candidate-identity");
+    const depth = element(
+      "span",
+      "bs-analysis-results-candidate-depth",
+      optionalText(candidate.evaluation, "Evaluation not supplied")
+    );
+    const selectedIndicator = element(
+      "span",
+      "bs-analysis-results-candidate-selected",
+      "Selected"
+    );
+    selectedIndicator.setAttribute("aria-hidden", "true");
+    depth.appendChild(selectedIndicator);
     identity.append(
       element(
         "span",
@@ -435,11 +488,7 @@
         "bs-analysis-results-candidate-move",
         optionalText(candidate.move, "Unnamed candidate")
       ),
-      element(
-        "span",
-        "bs-analysis-results-candidate-depth",
-        optionalText(candidate.evaluation, "Evaluation not supplied")
-      )
+      depth
     );
 
     const metrics = candidateMetrics(candidate);
@@ -488,12 +537,110 @@
       : "Move overlay unavailable for " + optionalText(candidate.move, "candidate") + "; showing the original position.";
   }
 
+  function checkerMoveCard(candidate, label, modifier) {
+    const card = element(
+      "section",
+      "bs-analysis-results-decision-card bs-analysis-results-decision-card--" +
+        modifier
+    );
+    const heading = element("div", "bs-analysis-results-decision-card-heading");
+    const identity = element("div", "bs-analysis-results-decision-card-identity");
+    const metrics = candidateMetrics(candidate);
+    heading.append(
+      element("span", "bs-analysis-results-decision-label", label),
+      element(
+        "span",
+        "bs-analysis-results-decision-rank",
+        candidate && candidate.display_rank
+          ? "Rank " + candidate.display_rank
+          : "Rank not supplied"
+      )
+    );
+    identity.append(
+      element(
+        "strong",
+        "bs-analysis-results-decision-move",
+        optionalText(candidate && candidate.move, "Unnamed candidate")
+      ),
+      element(
+        "span",
+        "bs-analysis-results-decision-equity",
+        "Equity " + metrics.equity
+      )
+    );
+    card.append(heading, identity, outcomePanel(candidate && candidate.probabilities));
+    return card;
+  }
+
+  function probabilityComparisonTable(topCandidate, selectedCandidate) {
+    const table = element("table", "bs-analysis-results-comparison-table");
+    const caption = element(
+      "caption",
+      "bs-analysis-results-comparison-caption",
+      "Top move versus selected move probabilities"
+    );
+    const head = element("thead", "");
+    const headerRow = element("tr", "");
+    const body = element("tbody", "");
+    const outcomeHeader = element("th", "", "Outcome");
+    const topHeader = element("th", "", "Top move");
+    const selectedHeader = element("th", "", "Selected move");
+    outcomeHeader.scope = "col";
+    topHeader.scope = "col";
+    selectedHeader.scope = "col";
+    headerRow.append(outcomeHeader, topHeader, selectedHeader);
+    head.appendChild(headerRow);
+
+    probabilityComparisonRows(
+      topCandidate && topCandidate.probabilities,
+      selectedCandidate && selectedCandidate.probabilities
+    ).forEach(function (row) {
+      const tableRow = element("tr", "");
+      const label = element("th", "", row.label);
+      const top = element("td", "", row.topDisplay);
+      const selected = element("td", "");
+      label.scope = "row";
+      top.dataset.label = "Top move";
+      selected.dataset.label = "Selected move";
+      selected.appendChild(
+        element("span", "bs-analysis-results-comparison-value", row.selectedDisplay)
+      );
+      if (row.differenceDisplay !== null) {
+        selected.appendChild(
+          element(
+            "span",
+            "bs-analysis-results-comparison-difference",
+            " (" + row.differenceDisplay + ")"
+          )
+        );
+      }
+      tableRow.append(label, top, selected);
+      body.appendChild(tableRow);
+    });
+    table.append(caption, head, body);
+    return table;
+  }
+
+  function showCheckerDecision(decision, topCandidate, selectedCandidate) {
+    decision.replaceChildren(checkerMoveCard(topCandidate, "Top move", "top"));
+    if (!selectedCandidate || selectedCandidate.id === topCandidate.id) return;
+
+    const selected = element("div", "bs-analysis-results-selected-comparison");
+    selected.append(
+      checkerMoveCard(selectedCandidate, "Selected move", "selected"),
+      probabilityComparisonTable(topCandidate, selectedCandidate)
+    );
+    decision.appendChild(selected);
+  }
+
   function setActiveCheckerCandidate(
     choiceGroup,
     candidate,
     board,
     originalBoard,
-    status
+    status,
+    decision,
+    topCandidate
   ) {
     choiceGroup
       .querySelectorAll("[data-bs-analysis-candidate-id]")
@@ -504,12 +651,16 @@
         if (summary) summary.setAttribute("aria-current", active ? "true" : "false");
       });
     showCheckerCandidate(candidate, board, originalBoard, status);
+    showCheckerDecision(decision, topCandidate, candidate);
   }
 
-  function renderChecker(model, board, choiceGroup, status, options) {
+  function renderChecker(model, board, choiceGroup, status, decision, options) {
     const candidatesById = new Map();
-    let initializing = true;
-    model.candidates.forEach(function (candidate, index) {
+    const topCandidate =
+      model.candidates.find(function (candidate) {
+        return Number(candidate.display_rank) === 1;
+      }) || model.candidates[0];
+    model.candidates.forEach(function (candidate) {
       const details = element("details", "bs-analysis-results-candidate");
       details.dataset.bsAnalysisCandidateId = candidate.id;
       const summary = candidateSummary(candidate);
@@ -521,44 +672,38 @@
           candidate,
           board,
           model.original_board,
-          status
+          status,
+          decision,
+          topCandidate
         );
       });
-      details.addEventListener("toggle", function () {
-        if (!initializing && details.open) {
-          setActiveCheckerCandidate(
-            choiceGroup,
-            candidate,
-            board,
-            model.original_board,
-            status
-          );
-        }
-      });
       choiceGroup.appendChild(details);
-      if (index === 0) {
+      if (candidate.id === topCandidate.id) {
         details.open = true;
       }
     });
 
-    if (model.candidates.length > 0) {
+    if (topCandidate) {
       const requested =
         options && options.initialActiveId
           ? candidatesById.get(options.initialActiveId)
           : null;
-      const active = requested || candidatesById.get(model.candidates[0].id);
+      const active = requested || candidatesById.get(topCandidate.id);
       if (requested) requested.details.open = true;
       setActiveCheckerCandidate(
         choiceGroup,
         active.candidate,
         board,
         model.original_board,
-        status
+        status,
+        decision,
+        topCandidate
+      );
+    } else {
+      decision.appendChild(
+        element("p", "bs-analysis-results-empty", "No checker moves supplied")
       );
     }
-    setTimeout(function () {
-      initializing = false;
-    }, 0);
 
     return {
       activate: function (candidateId, activateOptions) {
@@ -572,7 +717,9 @@
           selected.candidate,
           board,
           model.original_board,
-          status
+          status,
+          decision,
+          topCandidate
         );
         return true;
       }
@@ -692,6 +839,10 @@
       model.analysis_kind === "checker" ? "Moves" : "Cube actions"
     );
     const choiceGroup = element("div", "bs-analysis-results-choices");
+    const checkerDecision = element(
+      "section",
+      "bs-analysis-results-checker-summary"
+    );
     const status = element(
       "p",
       "bs-analysis-results-choice-status",
@@ -716,7 +867,15 @@
 
     let controls;
     if (model.analysis_kind === "checker") {
-      controls = renderChecker(model, board, choiceGroup, status, options);
+      checkerDecision.setAttribute("aria-label", "Checker move comparison");
+      controls = renderChecker(
+        model,
+        board,
+        choiceGroup,
+        status,
+        checkerDecision,
+        options
+      );
     } else {
       controls = renderCube(model, board, choiceGroup, status, options);
     }
@@ -744,8 +903,17 @@
       analysisSection.appendChild(more);
     }
 
-    shell.append(boardSection, analysisSection);
-    presentation.appendChild(shell);
+    if (model.analysis_kind === "checker") {
+      const decisionSurface = element(
+        "div",
+        "bs-analysis-results-checker-decision"
+      );
+      decisionSurface.append(boardSection, checkerDecision);
+      presentation.append(decisionSurface, analysisSection);
+    } else {
+      shell.append(boardSection, analysisSection);
+      presentation.appendChild(shell);
+    }
     return { element: presentation, controls: controls };
   }
 
@@ -845,6 +1013,7 @@
     mount,
     mountAll,
     outcomeSummaryItems,
+    probabilityComparisonRows,
     renderBoard,
     renderPresentation,
     setActiveCheckerCandidate,

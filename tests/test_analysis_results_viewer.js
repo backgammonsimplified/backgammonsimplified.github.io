@@ -17,6 +17,111 @@ const retained = JSON.parse(
   )
 );
 
+class FakeElement {
+  constructor(tagName) {
+    this.tagName = String(tagName).toUpperCase();
+    this.children = [];
+    this.attributes = {};
+    this.dataset = {};
+    this.style = {};
+    this.className = "";
+    this._textContent = "";
+    this.open = false;
+    this.hidden = false;
+    this.listeners = {};
+    this.classList = {
+      add: (className) => {
+        const classes = new Set(this.className.split(/\s+/).filter(Boolean));
+        classes.add(className);
+        this.className = Array.from(classes).join(" ");
+      },
+      toggle: (className, enabled) => {
+        const classes = new Set(this.className.split(/\s+/).filter(Boolean));
+        enabled ? classes.add(className) : classes.delete(className);
+        this.className = Array.from(classes).join(" ");
+      },
+      contains: (className) =>
+        this.className.split(/\s+/).filter(Boolean).includes(className)
+    };
+  }
+
+  get textContent() {
+    return this._textContent + this.children.map((child) => child.textContent).join("");
+  }
+
+  set textContent(value) {
+    this._textContent = String(value);
+    this.children = [];
+  }
+
+  append(...children) {
+    children.forEach((child) => this.appendChild(child));
+  }
+
+  appendChild(child) {
+    this.children.push(child);
+    return child;
+  }
+
+  replaceChildren(...children) {
+    this._textContent = "";
+    this.children = [];
+    this.append(...children);
+  }
+
+  setAttribute(name, value) {
+    this.attributes[name] = String(value);
+  }
+
+  getAttribute(name) {
+    return this.attributes[name];
+  }
+
+  addEventListener(name, listener) {
+    this.listeners[name] = this.listeners[name] || [];
+    this.listeners[name].push(listener);
+  }
+
+  querySelector(selector) {
+    if (selector === ":scope > summary") {
+      return this.children.find((child) => child.tagName === "SUMMARY") || null;
+    }
+    return this.querySelectorAll(selector)[0] || null;
+  }
+
+  querySelectorAll(selector) {
+    const matches = [];
+    const attributeMatch = selector.match(/^\[data-([a-z0-9-]+)\]$/);
+    const classMatch = selector.match(/^\.([a-zA-Z0-9_-]+)$/);
+    const datasetKey = attributeMatch
+      ? attributeMatch[1].replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+      : null;
+    function visit(node) {
+      node.children.forEach((child) => {
+        if (
+          (datasetKey && child.dataset[datasetKey] !== undefined) ||
+          (classMatch && child.classList.contains(classMatch[1])) ||
+          (!datasetKey && !classMatch && child.tagName === selector.toUpperCase())
+        ) {
+          matches.push(child);
+        }
+        visit(child);
+      });
+    }
+    visit(this);
+    return matches;
+  }
+}
+
+function findByClass(rootElement, className) {
+  if (rootElement.classList.contains(className)) return rootElement;
+  for (const child of rootElement.children) {
+    const found = findByClass(child, className);
+    if (found) return found;
+  }
+  return null;
+}
+
 assert.equal(viewer.validateFixtureDocument(fixtures), fixtures);
 assert.equal(viewer.validateFixtureDocument(retained), retained);
 assert.equal(retained.fixture_status.kind, "retained-analysis");
@@ -143,6 +248,102 @@ assert.equal(viewer.formatNumber(-0.026), "-0.026");
 assert.equal(viewer.formatNumber(null), "Not supplied");
 assert.equal(viewer.formatProbability(0.58), "58.0%");
 assert.equal(viewer.formatProbability(null), "Not supplied");
+
+const comparisonRows = viewer.probabilityComparisonRows(
+  {
+    win: 0.42,
+    win_gammon_or_better: 0.12,
+    win_backgammon: 0.02,
+    lose: 0.58,
+    lose_gammon_or_worse: 0.18,
+    lose_backgammon: 0.03
+  },
+  {
+    win: 0.37,
+    win_gammon_or_better: 0.15,
+    win_backgammon: null,
+    lose: 0.63,
+    lose_gammon_or_worse: 0.15,
+    lose_backgammon: 0.04
+  }
+);
+assert.deepEqual(
+  comparisonRows.map((row) => row.label),
+  [
+    "Win",
+    "Win gammon or better",
+    "Win backgammon",
+    "Lose",
+    "Lose gammon or worse",
+    "Lose backgammon"
+  ]
+);
+assert.equal(comparisonRows[0].topDisplay, "42%");
+assert.equal(comparisonRows[0].selectedDisplay, "37%");
+assert.equal(comparisonRows[0].differenceDisplay, "-5%");
+assert.equal(comparisonRows[1].differenceDisplay, "+3%");
+assert.equal(comparisonRows[2].selectedDisplay, "Not supplied");
+assert.equal(comparisonRows[2].differenceDisplay, null);
+
+global.document = {
+  createElement(tagName) {
+    return new FakeElement(tagName);
+  }
+};
+
+const checkerHost = new FakeElement("div");
+const checkerControls = viewer.renderPresentation(checkerHost, retainedChecker, {});
+const checkerDecision = findByClass(
+  checkerHost,
+  "bs-analysis-results-checker-decision"
+);
+assert.ok(checkerDecision, "checker presentation has a sticky decision structure");
+assert.ok(findByClass(checkerDecision, "bs-analysis-results-decision-card--top"));
+assert.ok(findByClass(checkerDecision, "bs-analysis-results-outcome-bar"));
+assert.equal(
+  findByClass(checkerDecision, "bs-analysis-results-decision-move").textContent,
+  retainedChecker.candidates[0].move
+);
+assert.equal(findByClass(checkerDecision, "bs-analysis-results-comparison-table"), null);
+
+const candidateDetails = checkerHost.querySelectorAll(
+  "[data-bs-analysis-candidate-id]"
+);
+assert.equal(candidateDetails[0].open, true);
+candidateDetails[1].open = true;
+assert.equal(checkerControls.activate(retainedChecker.candidates[1].id), true);
+assert.equal(candidateDetails[0].open, true, "selecting keeps the top details open");
+assert.equal(candidateDetails[1].open, true, "selecting keeps another details open");
+assert.equal(
+  findByClass(checkerHost, "bs-analysis-results-board-image").src,
+  retainedChecker.candidates[1].move_board.image
+);
+assert.equal(
+  findByClass(checkerDecision, "bs-analysis-results-decision-card--top")
+    .textContent.includes(retainedChecker.candidates[0].move),
+  true,
+  "the top move remains the baseline"
+);
+assert.ok(findByClass(checkerDecision, "bs-analysis-results-decision-card--selected"));
+assert.ok(
+  findByClass(checkerDecision, "bs-analysis-results-decision-card--selected")
+    .querySelector(".bs-analysis-results-outcome-bar")
+);
+const comparisonTable = findByClass(
+  checkerDecision,
+  "bs-analysis-results-comparison-table"
+);
+assert.ok(comparisonTable);
+assert.match(comparisonTable.textContent, /Top move/);
+assert.match(comparisonTable.textContent, /Selected move/);
+
+assert.equal(checkerControls.activate(retainedChecker.candidates[0].id), true);
+assert.equal(findByClass(checkerDecision, "bs-analysis-results-comparison-table"), null);
+
+const cubeHost = new FakeElement("div");
+viewer.renderPresentation(cubeHost, cube, {});
+assert.equal(findByClass(cubeHost, "bs-analysis-results-checker-decision"), null);
+assert.equal(findByClass(cubeHost, "bs-analysis-results-comparison-table"), null);
 
 assert.throws(
   () => viewer.analysisFromDocument(fixtures, "unknown-ui-demo"),

@@ -148,7 +148,69 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn('details.classList.toggle("is-active", active)', script)
         self.assertIn("selected.details.open = true", script)
         self.assertNotIn("details.open = false", script)
+        self.assertNotIn('details.addEventListener("toggle"', script)
         self.assertIn(".bs-analysis-results-candidate.is-active", css)
+        self.assertIn("bs-analysis-results-candidate-selected", script)
+
+    def test_checker_sticky_surface_keeps_top_and_selected_decisions(self):
+        script = VIEWER_PATH.read_text(encoding="utf-8")
+        css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
+
+        self.assertIn("bs-analysis-results-checker-decision", script)
+        self.assertIn("bs-analysis-results-checker-summary", script)
+        self.assertIn('checkerMoveCard(topCandidate, "Top move", "top")', script)
+        self.assertIn(
+            'checkerMoveCard(selectedCandidate, "Selected move", "selected")',
+            script,
+        )
+        self.assertIn("showCheckerDecision(decision, topCandidate, candidate)", script)
+        self.assertIn("selectedCandidate.id === topCandidate.id", script)
+        self.assertIn("candidate.move_board || originalBoard", script)
+
+        sticky_block = css.split(
+            ".bs-analysis-results-checker-decision {", 1
+        )[1].split("}", 1)[0]
+        self.assertIn("position: sticky;", sticky_block)
+        self.assertIn("top: var(--bs-analysis-results-sticky-top", sticky_block)
+        self.assertIn("max-height:", sticky_block)
+        self.assertIn("overflow-y: auto;", sticky_block)
+
+    def test_checker_probability_comparison_is_semantic_and_complete(self):
+        script = VIEWER_PATH.read_text(encoding="utf-8")
+
+        self.assertIn("PROBABILITY_COMPARISON_ROWS", script)
+        for label in (
+            "Win",
+            "Win gammon or better",
+            "Win backgammon",
+            "Lose",
+            "Lose gammon or worse",
+            "Lose backgammon",
+        ):
+            self.assertIn(f'"{label}"', script)
+        self.assertIn('element("table", "bs-analysis-results-comparison-table")', script)
+        self.assertIn('element("thead", "")', script)
+        self.assertIn('element("tbody", "")', script)
+        self.assertIn('label.scope = "row"', script)
+        self.assertIn('topHeader.scope = "col"', script)
+        self.assertIn('selectedHeader.scope = "col"', script)
+        self.assertIn("selected - top", script)
+        self.assertIn('difference === null ? null', script)
+        self.assertIn('return "Not supplied"', script)
+
+    def test_checker_responsive_css_contains_component_overflow(self):
+        css = VIEWER_CSS_PATH.read_text(encoding="utf-8")
+
+        self.assertIn("max-width: 100%;", css)
+        self.assertIn("overflow-x: clip;", css)
+        self.assertIn("table-layout: fixed;", css)
+        self.assertIn("@media (max-width: 700px)", css)
+        narrow = css.split("@media (max-width: 700px)", 1)[1]
+        self.assertIn(
+            "grid-template-columns: minmax(6.75rem, 34vw) minmax(0, 1fr);",
+            narrow,
+        )
+        self.assertIn(".bs-analysis-results-comparison-table", narrow)
 
     def test_presentation_api_is_shared_with_lessons(self):
         viewer = VIEWER_PATH.read_text(encoding="utf-8")
