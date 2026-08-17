@@ -21,6 +21,7 @@ project:
     - data/analyzer-analysis-results-fixtures.json
     - data/analyzer-retained-checker-preview.json
     - data/analyzer-canonical-checker-preview.json
+    - data/analyzer-canonical-cube-preview.json
     - data/analyzer-node-k001-lesson-preview.json
     - "data/engine-benchmark/**"
     - "engine-benchmark/**/figures/**"
