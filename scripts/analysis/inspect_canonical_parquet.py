@@ -17,9 +17,13 @@ except ModuleNotFoundError:  # Report a bounded setup failure instead of a trace
 LOGICAL_TABLES = (
     "positions",
     "games",
+    "source_occurrences",
+    "occurrence_contexts",
     "decisions",
     "candidates",
     "evaluations",
+    "cube_occurrences",
+    "cube_actions",
     "exclusions",
 )
 
