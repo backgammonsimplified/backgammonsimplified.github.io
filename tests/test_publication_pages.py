@@ -431,7 +431,7 @@ TODO is also an ordinary subject when it has no marker colon.
         )
         self.assertEqual(
             quarto["project"]["post-render"][-1],
-            "python ../scripts/page_publication.py apply",
+            "bash ../scripts/project-python.sh ../scripts/page_publication.py apply",
         )
 
         with tempfile.TemporaryDirectory() as directory:

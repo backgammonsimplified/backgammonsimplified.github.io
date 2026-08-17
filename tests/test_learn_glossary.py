@@ -2127,7 +2127,7 @@ private code phrase
         )
         self.assertRegex(
             config,
-            r"pre-render:\s*\n\s*-\s+python ../scripts/bs_pre_render\.py",
+            r"pre-render:\s*\n\s*-\s+bash ../scripts/project-python\.sh ../scripts/bs_pre_render\.py",
         )
 
         with mock.patch.dict(os.environ, {}, clear=True):
@@ -2253,7 +2253,7 @@ private code phrase
         )
         self.assertRegex(
             config,
-            r"post-render:\s*\n\s*-\s+python ../scripts/bs_post_render\.py",
+            r"post-render:\s*\n\s*-\s+bash ../scripts/project-python\.sh ../scripts/bs_post_render\.py",
         )
         unrelated = "https://backgammonsimplified.github.io/research/index.html"
         dirty = bs_post_render.GLOSSARY_INDEX_URL
