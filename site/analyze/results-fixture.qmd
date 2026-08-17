@@ -63,6 +63,19 @@ The existing frozen Canonical Analysis Parquet v1 checker remains on the page as
 ></div>
 ```
 
+## Canonical Parquet cube regression result
+
+This is the frozen Canonical Analysis Parquet v1 cube occurrence `002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d`. It preserves the real 0-0/7 centered-cube context, the source recommendation `No double, take (25.7%)`, and the three source-native cube action equities. The source does not supply an observed action or row-local actual ply, so those remain null.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d"
+  data-analysis-fixture-url="/data/analyzer-canonical-cube-preview.json"
+></div>
+```
+
 ## Synthetic loader failure states
 
 These deliberate development cases verify that malformed or unknown records fail visibly instead of inventing values.
