@@ -197,7 +197,9 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertNotIn("published: true", page)
         self.assertIn("DEVELOPMENT PREVIEW", page)
         self.assertIn("analyzer-canonical-checker-preview.json", page)
-        self.assertIn("Canonical Parquet checker result", page)
+        self.assertIn("analyzer-canonical-cube-preview.json", page)
+        self.assertIn("Canonical Parquet checker regression result", page)
+        self.assertIn("Canonical Parquet cube regression result", page)
 
     def test_viewer_assets_are_registered(self):
         quarto = QUARTO_PATH.read_text(encoding="utf-8")
@@ -205,6 +207,7 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn("data/analyzer-analysis-results-fixtures.json", quarto)
         self.assertIn("data/analyzer-retained-checker-preview.json", quarto)
         self.assertIn("data/analyzer-canonical-checker-preview.json", quarto)
+        self.assertIn("data/analyzer-canonical-cube-preview.json", quarto)
         self.assertIn("assets/bs-analysis-results.css", quarto)
         self.assertIn('/assets/bs-analysis-results.js', scripts)
         self.assertLess(
