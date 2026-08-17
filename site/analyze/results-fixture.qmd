@@ -1,7 +1,7 @@
 ---
 title: "Analysis Results Viewer Preview"
-description: "Development-only Canonical Parquet checker and synthetic cube/error fixtures for the shared Backgammon Simplified Analysis Results Viewer."
-subtitle: "DEVELOPMENT PREVIEW :: CANONICAL PARQUET CHECKER + SYNTHETIC FAILURE CASES"
+description: "Development preview for the exact Node K001 checker and cube lesson analyses plus retained viewer regression fixtures."
+subtitle: "DEVELOPMENT PREVIEW :: EXACT NODE CHECKER + CUBE"
 page-layout: full
 toc: false
 term-lookup: false
@@ -17,16 +17,42 @@ format:
 ::: {.bs-status-panel}
 [DEVELOPMENT PREVIEW]{.bs-status-label}
 
-The checker example below is materialized from the verified frozen Canonical Analysis Parquet v1 reference package. Its cached Backgammonboard SVGs are presentation assets for the same factual GNU position. The cube and loader-failure cases remain deliberately synthetic. This route is still a development preview, not a published Analyzer result.
+The first two examples below are projected directly from the accepted Node K001 analysis-view JSON files. Backgammonboard renders the factual starting positions and supported checker movement overlays at build time. The browser does not run an engine, parse GNU output, or apply checker moves.
 :::
 
-The browser still loads only analysis-view JSON. Retained and future Canonical Parquet records are materialized before the browser boundary, and Backgammonboard renders candidate move-overlay SVGs at build time.
+Run `bash scripts/analysis/render-node-k001-lesson-preview.sh` after pulling this branch to materialize the local Node lesson JSON and SVG assets.
 
 :::
 
-## Canonical Parquet checker result
+## Exact Node checker lesson result
 
-The analytical values, canonical identities, occurrence context, requested depth, and candidate evaluations come from verified Canonical Parquet. The board assets are retained build-time renders for this exact factual position. Candidate analysis rows remain independent.
+This is the accepted checker analysis for GNUID `4PPgASTgc/ABMA:cAnqAAAAAAAE`, dice `4-2`. It preserves all exported Node candidates and the recommendation `8/4 6/4`.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+  data-analysis-fixture-url="/data/analyzer-node-k001-lesson-preview.json"
+></div>
+```
+
+## Exact Node cube lesson result
+
+This is the accepted authored cube analysis. The recommendation is `Double, take`; the action values and shared probabilities come directly from the completed Node analysis-view.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+  data-analysis-fixture-url="/data/analyzer-node-k001-lesson-preview.json"
+></div>
+```
+
+## Canonical Parquet checker regression result
+
+The existing frozen Canonical Analysis Parquet v1 checker remains on the page as a regression comparison for the shared viewer.
 
 ```{=html}
 <div
@@ -34,17 +60,6 @@ The analytical values, canonical identities, occurrence context, requested depth
   data-bs-analysis-results
   data-analysis-id="b909630c811a0214b8156e068b88ebeb9a064a56bfec3ae5af8c6afe45278d07"
   data-analysis-fixture-url="/data/analyzer-canonical-checker-preview.json"
-></div>
-```
-
-## Synthetic cube result
-
-```{=html}
-<div
-  class="bs-analysis-results-host"
-  data-bs-analysis-results
-  data-analysis-id="cube-ui-demo"
-  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
 ></div>
 ```
 
