@@ -31,12 +31,32 @@ class CanonicalParquetIntakeTests(unittest.TestCase):
     def complete_package(self, root: Path) -> None:
         self.write_table(root, "positions", "'position-1' AS position_id")
         self.write_table(root, "games", "'game-1' AS game_id")
+        self.write_table(
+            root,
+            "source_occurrences",
+            "'occurrence-1' AS source_occurrence_id",
+        )
+        self.write_table(
+            root,
+            "occurrence_contexts",
+            "'occurrence-1' AS source_occurrence_id",
+        )
         self.write_table(root, "decisions", "'decision-1' AS decision_id")
         self.write_table(root, "candidates", "'candidate-1' AS candidate_id")
         self.write_table(
             root,
             "evaluations",
             "'evaluation-1' AS evaluation_id, 4 AS actual_ply",
+        )
+        self.write_table(
+            root,
+            "cube_occurrences",
+            "'cube-occurrence-1' AS cube_occurrence_id",
+        )
+        self.write_table(
+            root,
+            "cube_actions",
+            "'cube-action-1' AS cube_action_id",
         )
         self.write_table(root, "exclusions", "'excluded-source-row' AS reason")
         (root / "manifest.json").write_text(
@@ -54,6 +74,7 @@ class CanonicalParquetIntakeTests(unittest.TestCase):
         self.assertEqual(intake.canonical_family_gaps(report), [])
         self.assertEqual(report["manifest"]["payload"]["schema_version"], "test-only")
         self.assertEqual(report["tables"]["evaluations"]["row_count"], 1)
+        self.assertEqual(report["tables"]["cube_actions"]["row_count"], 1)
         self.assertEqual(
             [column["name"] for column in report["tables"]["evaluations"]["columns"]],
             ["evaluation_id", "actual_ply"],
@@ -71,6 +92,8 @@ class CanonicalParquetIntakeTests(unittest.TestCase):
         self.assertIn("manifest.json", gaps)
         self.assertIn("decisions", gaps)
         self.assertIn("evaluations", gaps)
+        self.assertIn("cube_occurrences", gaps)
+        self.assertIn("cube_actions", gaps)
         self.assertEqual(report["tables"]["decisions"]["status"], "missing")
 
     @unittest.skipIf(duckdb is not None, "only applies when DuckDB is absent")
