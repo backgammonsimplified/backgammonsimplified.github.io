@@ -95,45 +95,56 @@
   top: var(--bs-analysis-results-sticky-top, 4.75rem);
   display: grid;
   grid-template-columns: minmax(20rem, 0.95fr) minmax(24rem, 1.05fr);
-  gap: clamp(0.8rem, 2vw, 1.5rem);
+  gap: clamp(1rem, 2vw, 1.6rem);
   width: min(100%, 76rem);
   max-height: calc(100vh - var(--bs-analysis-results-sticky-top, 4.75rem) - 0.5rem);
   max-height: calc(100svh - var(--bs-analysis-results-sticky-top, 4.75rem) - 0.5rem);
   margin-inline: auto;
-  padding: clamp(0.55rem, 1.5vw, 0.9rem);
+  padding: clamp(0.75rem, 1.5vw, 1rem);
   overflow-y: auto;
   overscroll-behavior: contain;
   border: 1px solid var(--bs-border);
+  border-radius: 0.45rem;
   background: var(--bs-page-background);
   box-shadow: 0 0.35rem 1rem color-mix(in srgb, var(--bs-navy) 12%, transparent);
 }
 
 .bs-analysis-results-checker-decision > .bs-analysis-results-board-section {
   position: static;
+  padding: 0.35rem;
+  border-radius: 0.3rem;
+  background: color-mix(in srgb, var(--bs-navy) 3%, var(--bs-surface));
 }
 
 .bs-analysis-results-presentation > .bs-analysis-results-main {
   width: min(100%, 76rem);
-  margin: 1.25rem auto 0;
+  margin: 1.6rem auto 0;
+  padding-top: 1rem;
+  border-top: 2px solid color-mix(in srgb, var(--bs-copper) 45%, var(--bs-border));
 }
 
 .bs-analysis-results-checker-summary {
+  display: grid;
+  align-content: start;
   min-width: 0;
 }
 
 .bs-analysis-results-decision-card {
   min-width: 0;
-  padding: 0.65rem 0.75rem 0.75rem;
+  padding: 0.7rem 0.8rem 0.8rem;
   border: 1px solid var(--bs-border);
+  border-radius: 0.3rem;
   background: var(--bs-surface);
 }
 
 .bs-analysis-results-decision-card--top {
   border-left: 4px solid var(--bs-navy);
+  background: color-mix(in srgb, var(--bs-navy) 4%, var(--bs-surface));
 }
 
 .bs-analysis-results-decision-card--selected {
   border-left: 4px solid var(--bs-copper);
+  background: color-mix(in srgb, var(--bs-copper) 7%, var(--bs-surface));
 }
 
 .bs-analysis-results-decision-card-heading,
@@ -181,25 +192,35 @@
 }
 
 .bs-analysis-results-decision-card .bs-analysis-results-outcomes {
-  margin-top: 0.55rem;
+  margin-top: 0.7rem;
+}
+
+.bs-analysis-results-decision-card .bs-analysis-results-outcome-note {
+  display: none;
 }
 
 .bs-analysis-results-selected-comparison {
   display: grid;
-  gap: 0.65rem;
-  margin-top: 0.65rem;
+  gap: 0.8rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--bs-border-strong);
 }
 
 .bs-analysis-results-comparison-table {
   width: 100%;
   max-width: 100%;
-  border-collapse: collapse;
+  overflow: hidden;
+  border: 1px solid var(--bs-border);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.3rem;
   table-layout: fixed;
   font-size: 0.8rem;
 }
 
 .bs-analysis-results-comparison-caption {
-  padding: 0 0 0.35rem;
+  padding: 0 0 0.45rem;
   color: var(--bs-navy);
   font-weight: 700;
   text-align: left;
@@ -207,7 +228,7 @@
 
 .bs-analysis-results-comparison-table th,
 .bs-analysis-results-comparison-table td {
-  padding: 0.3rem 0.4rem;
+  padding: 0.38rem 0.45rem;
   border-bottom: 1px solid var(--bs-border);
   overflow-wrap: anywhere;
   text-align: right;
@@ -220,6 +241,7 @@
 }
 
 .bs-analysis-results-comparison-table thead th {
+  background: color-mix(in srgb, var(--bs-navy) 6%, var(--bs-surface));
   color: var(--bs-text-muted);
   font-size: 0.7rem;
   letter-spacing: 0.03em;
@@ -229,6 +251,10 @@
 .bs-analysis-results-comparison-table tbody th {
   color: var(--bs-text);
   font-weight: 600;
+}
+
+.bs-analysis-results-comparison-table tbody tr:nth-child(even) > * {
+  background: color-mix(in srgb, var(--bs-navy) 3%, var(--bs-surface));
 }
 
 .bs-analysis-results-comparison-table td {
@@ -257,6 +283,7 @@
   width: 100%;
   height: auto;
   border: 1px solid var(--bs-border);
+  border-radius: 0.22rem;
   background: var(--bs-surface);
 }
 
@@ -273,6 +300,7 @@
 
 .bs-analysis-results-choices {
   border-top: 1px solid var(--bs-border);
+  border-bottom: 1px solid var(--bs-border);
 }
 
 .bs-analysis-results-candidate {
@@ -293,8 +321,8 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: center;
-  min-height: 4rem;
-  padding: 0.72rem 2rem 0.72rem 0;
+  min-height: 4.15rem;
+  padding: 0.85rem 2rem 0.85rem 0.35rem;
   cursor: pointer;
 }
 
@@ -406,7 +434,7 @@
 }
 
 .bs-analysis-results-candidate-body {
-  padding: 0.75rem 0 1rem 2.75rem;
+  padding: 0.85rem 0.5rem 1.15rem 3.1rem;
 }
 
 .bs-analysis-results-candidate-detail {
@@ -422,7 +450,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.82rem;
   font-weight: 700;
@@ -485,7 +513,7 @@
 }
 
 .bs-analysis-results-outcome-note {
-  margin: 0.45rem 0 0;
+  margin: 0.55rem 0 0;
   font-size: 0.78rem;
 }
 
@@ -620,11 +648,15 @@
 @media (max-width: 700px) {
   .bs-analysis-results-checker-decision {
     grid-template-columns: minmax(6.75rem, 34vw) minmax(0, 1fr);
-    gap: 0.55rem;
+    gap: 0.65rem;
     top: var(--bs-analysis-results-sticky-top, 4rem);
-    max-height: calc(100vh - var(--bs-analysis-results-sticky-top, 4rem) - 0.35rem);
-    max-height: calc(100svh - var(--bs-analysis-results-sticky-top, 4rem) - 0.35rem);
-    padding: 0.4rem;
+    max-height: min(58vh, 30rem);
+    max-height: min(58svh, 30rem);
+    padding: 0.45rem;
+  }
+
+  .bs-analysis-results-checker-decision > .bs-analysis-results-board-section {
+    padding: 0.18rem;
   }
 
   .bs-analysis-results-checker-decision .bs-analysis-results-section-title {
@@ -643,7 +675,7 @@
   }
 
   .bs-analysis-results-decision-card {
-    padding: 0.4rem 0.45rem 0.5rem;
+    padding: 0.45rem 0.5rem 0.55rem;
   }
 
   .bs-analysis-results-decision-card-heading,
@@ -674,8 +706,9 @@
   }
 
   .bs-analysis-results-selected-comparison {
-    gap: 0.4rem;
-    margin-top: 0.4rem;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
   }
 
   .bs-analysis-results-comparison-table {
@@ -684,7 +717,7 @@
 
   .bs-analysis-results-comparison-table th,
   .bs-analysis-results-comparison-table td {
-    padding: 0.2rem 0.22rem;
+    padding: 0.25rem 0.28rem;
   }
 
   .bs-analysis-results-comparison-table th:first-child {
@@ -697,6 +730,11 @@
 
   .bs-analysis-results-comparison-caption {
     font-size: 0.72rem;
+  }
+
+  .bs-analysis-results-presentation > .bs-analysis-results-main {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
   }
 }
 
@@ -715,7 +753,7 @@
   }
 
   .bs-analysis-results-candidate-body {
-    padding-left: 0;
+    padding: 0.75rem 0.35rem 1rem;
   }
 }
 

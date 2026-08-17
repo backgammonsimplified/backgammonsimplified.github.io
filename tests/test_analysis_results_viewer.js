@@ -156,6 +156,7 @@ const goldenCube = viewer.analysisFromDocument(
 assert.equal(goldenChecker.candidates.length, 8);
 assert.equal(goldenChecker.candidates[0].move, "8/4 6/4");
 assert.equal(goldenCube.metadata.recommendation, "Double, take");
+assert.match(goldenCube.responder_board.image, /node-k001\/cube\/responder\.svg$/);
 assert.deepEqual(
   goldenCube.actions.map((action) => action.id),
   ["double-take", "double-pass", "no-double"]
@@ -389,6 +390,7 @@ assert.ok(
 
 const goldenCubeHost = new FakeElement("div");
 viewer.renderPresentation(goldenCubeHost, goldenCube, {
+  boardOverride: goldenCube.responder_board,
   initialActiveId: "double-take"
 });
 assert.equal(
@@ -402,6 +404,10 @@ assert.equal(
 assert.equal(
   findByClass(goldenCubeHost, "bs-analysis-results-comparison-table"),
   null
+);
+assert.match(
+  findByClass(goldenCubeHost, "bs-analysis-results-board-image").src,
+  /node-k001\/cube\/responder\.svg$/
 );
 
 assert.throws(

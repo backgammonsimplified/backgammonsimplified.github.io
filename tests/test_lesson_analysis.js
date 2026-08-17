@@ -55,6 +55,14 @@ assert.match(
   /node-k001\/checker\/candidate-8\.svg$/
 );
 assert.equal(goldenCube.metadata.recommendation, "Double, take");
+assert.match(
+  goldenCube.original_board.image,
+  /node-k001\/cube\/starting\.svg$/
+);
+assert.match(
+  goldenCube.responder_board.image,
+  /node-k001\/cube\/responder\.svg$/
+);
 assert.deepEqual(
   goldenCube.actions.map((action) => [action.id, action.value.value]),
   [
@@ -67,6 +75,8 @@ assert.equal(
   analysis.acceptedAnalysisChoice(goldenCube, "double-take").probabilities,
   null
 );
+assert.equal(goldenCube.context.decision, "Cube decision");
+assert.equal(goldenCube.context.dice, null);
 assert.throws(
   () => analysis.acceptedAnalysisChoice(goldenCube, "roll"),
   /does not define/

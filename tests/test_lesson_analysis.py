@@ -174,6 +174,34 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         )
         self.assertTrue(all(action["probabilities"] is None for action in cube["actions"]))
 
+        self.assertEqual(
+            cube["original_board"]["image"],
+            "/assets/positions/node-k001/cube/starting.svg",
+        )
+        self.assertEqual(
+            cube["responder_board"]["image"],
+            "/assets/positions/node-k001/cube/responder.svg",
+        )
+        responder = SITE / cube["responder_board"]["image"].removeprefix("/")
+        self.assertTrue(responder.is_file())
+        self.assertTrue(ElementTree.parse(responder).getroot().tag.endswith("svg"))
+        self.assertEqual(cube["context"]["decision"], "Cube decision")
+        self.assertIsNone(cube["context"]["dice"])
+
+    def test_cube_renderer_prepares_decision_maker_perspectives_without_reanalysis(self):
+        renderer = (
+            ROOT / "scripts" / "analysis" / "render_node_k001_lesson_assets.R"
+        ).read_text(encoding="utf-8")
+        projector = (
+            ROOT / "scripts" / "analysis" / "project_node_k001_lesson_preview.py"
+        ).read_text(encoding="utf-8")
+        self.assertIn('decision = "roll_double"', renderer)
+        self.assertIn('decision = "take_pass"', renderer)
+        self.assertGreaterEqual(renderer.count('perspective = "decision_maker"'), 4)
+        self.assertIn("cube_start_position$on_roll", renderer)
+        self.assertIn("cube_responder_position$on_roll", renderer)
+        self.assertIn('"responder_board"', projector)
+
     def test_qmd_hosts_do_not_hard_code_component_ids(self):
         for source in (self.cube_source, self.checker_source):
             host_blocks = re.findall(

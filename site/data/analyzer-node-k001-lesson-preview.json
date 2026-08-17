@@ -284,6 +284,10 @@
         "image": "/assets/positions/node-k001/cube/starting.svg",
         "alt": "Exact Node cube lesson starting position."
       },
+      "responder_board": {
+        "image": "/assets/positions/node-k001/cube/responder.svg",
+        "alt": "The exact same Node cube lesson position shown from the responder's perspective after Double."
+      },
       "context": {
         "score": null,
         "cube": null,

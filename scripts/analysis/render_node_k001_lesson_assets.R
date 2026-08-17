@@ -110,6 +110,45 @@ cube_start <- ggboard(
 )
 save_svg(cube_start, file.path(cube_dir, "starting.svg"))
 
+# Prepare the second lesson stage with Backgammonboard's cube-response
+# contract. Only the action marker changes to represent the offer the learner
+# just selected; the position, factual on-roll player, cube value/owner, and
+# scores remain unchanged. `decision_maker` therefore resolves to the other
+# player without browser-side position interpretation.
+cube_start_position <- attr(cube_start, "backgammon_position")
+cube_offer_xgid <- sub(
+  ":00:",
+  ":D:",
+  cube_start_position$xgid,
+  fixed = TRUE
+)
+stopifnot(!identical(cube_offer_xgid, cube_start_position$xgid))
+cube_responder <- ggboard(
+  cube_offer_xgid,
+  colors = board_colors("bs"),
+  style = board_style("bs"),
+  decision = "take_pass",
+  perspective = "decision_maker",
+  light_player = "near_player",
+  player_name_style = "checker"
+)
+cube_responder_position <- attr(cube_responder, "backgammon_position")
+stopifnot(
+  identical(cube_start_position$points, cube_responder_position$points),
+  identical(cube_start_position$bar, cube_responder_position$bar),
+  identical(cube_start_position$off, cube_responder_position$off),
+  identical(cube_start_position$on_roll, cube_responder_position$on_roll),
+  identical(cube_start_position$cube_value, cube_responder_position$cube_value),
+  identical(cube_start_position$cube_owner, cube_responder_position$cube_owner),
+  identical(cube_start_position$score, cube_responder_position$score),
+  identical(attr(cube_start, "backgammon_near_player"), cube_start_position$on_roll),
+  !identical(
+    attr(cube_responder, "backgammon_near_player"),
+    cube_responder_position$on_roll
+  )
+)
+save_svg(cube_responder, file.path(cube_dir, "responder.svg"))
+
 writeLines(
   c(
     "Node K001 exact lesson preview",
@@ -122,6 +161,9 @@ writeLines(
     paste0("cube_analysis_key: ", cube$analysis_key),
     paste0("cube_gnuid: ", cube$source_request$position$id),
     paste0("cube_recommendation: ", cube$recommendation$label),
+    "cube_starting_perspective: factual player on roll",
+    "cube_responder_perspective: other player deciding Take or Pass",
+    "cube_position_and_on_roll_unchanged_between_prepared_assets: true",
     "",
     "All boards are build-time presentation assets. The browser does not run an engine or apply moves."
   ),
@@ -129,4 +171,4 @@ writeLines(
   useBytes = TRUE
 )
 
-message(paste0("PASS: rendered checker starting board, ", rendered_candidates, " checker overlays, and cube board."))
+message(paste0("PASS: rendered checker starting board, ", rendered_candidates, " checker overlays, and both cube perspectives."))

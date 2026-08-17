@@ -452,6 +452,7 @@
 
     return {
       article: article,
+      board: board,
       heading: heading,
       instanceId: instanceId,
       position: position,
@@ -461,9 +462,10 @@
     };
   }
 
-  function revealAcceptedAnalysis(parts, model, choiceId) {
+  function revealAcceptedAnalysis(parts, model, choiceId, boardOverride) {
     const choice = acceptedAnalysisChoice(model, choiceId);
     sharedAnalysis().renderPresentation(parts.result, model, {
+      boardOverride: boardOverride,
       initialActiveId: choice.id,
       showMore: true
     });
@@ -539,8 +541,13 @@
     responseGroup.append(takeButton, passButton);
     response.append(responseHeading, responsePrompt, responseGroup);
 
-    function revealCubeChoice(actionId, lessonChoice) {
-      const selected = revealAcceptedAnalysis(parts, model, actionId);
+    function revealCubeChoice(actionId, lessonChoice, boardOverride) {
+      const selected = revealAcceptedAnalysis(
+        parts,
+        model,
+        actionId,
+        boardOverride
+      );
       parts.status.textContent =
         lessonChoice + " selected. The accepted cube analysis is revealed.";
       return selected;
@@ -549,6 +556,10 @@
     doubleButton.addEventListener("click", function () {
       setPressed(firstGroup, "double");
       setPressed(responseGroup, "");
+      sharedAnalysis().renderBoard(
+        parts.board,
+        model.responder_board || model.original_board
+      );
       response.hidden = false;
       parts.result.hidden = true;
       parts.position.hidden = false;
@@ -558,15 +569,24 @@
     noDoubleButton.addEventListener("click", function () {
       setPressed(firstGroup, "no-double");
       response.hidden = true;
+      sharedAnalysis().renderBoard(parts.board, model.original_board);
       revealCubeChoice(actionIds.noDouble, "No double");
     });
     takeButton.addEventListener("click", function () {
       setPressed(responseGroup, "take");
-      revealCubeChoice(actionIds.take, "Double, take");
+      revealCubeChoice(
+        actionIds.take,
+        "Double, take",
+        model.responder_board || model.original_board
+      );
     });
     passButton.addEventListener("click", function () {
       setPressed(responseGroup, "pass");
-      revealCubeChoice(actionIds.pass, "Double, pass");
+      revealCubeChoice(
+        actionIds.pass,
+        "Double, pass",
+        model.responder_board || model.original_board
+      );
     });
 
     parts.article.append(

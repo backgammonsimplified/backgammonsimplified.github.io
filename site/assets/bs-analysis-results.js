@@ -759,6 +759,8 @@
   }
 
   function renderCube(model, board, choiceGroup, status, options) {
+    const presentationBoard =
+      (options && options.boardOverride) || model.original_board;
     const sharedOutcomes = element("div", "bs-analysis-results-cube-outcomes");
     const actionDetail = element(
       "p",
@@ -771,7 +773,7 @@
 
     function activate(action) {
       setPressed(choiceGroup, action.id);
-      renderBoard(board, model.original_board);
+      renderBoard(board, presentationBoard);
       sharedOutcomes.replaceChildren(
         outcomePanel(action.probabilities || model.probabilities)
       );
@@ -863,7 +865,10 @@
         : "Cube actions"
     );
     status.setAttribute("aria-live", "polite");
-    renderBoard(board, model.original_board);
+    renderBoard(
+      board,
+      (options && options.boardOverride) || model.original_board
+    );
 
     let controls;
     if (model.analysis_kind === "checker") {

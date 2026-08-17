@@ -8,5 +8,8 @@ checker_overlays_rendered: 8
 cube_analysis_key: sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01
 cube_gnuid: PAAAICMAAAAAAA:MAEAAAAAAAAE
 cube_recommendation: Double, take
+cube_starting_perspective: factual player on roll
+cube_responder_perspective: other player deciding Take or Pass
+cube_position_and_on_roll_unchanged_between_prepared_assets: true
 
 All boards are build-time presentation assets. The browser does not run an engine or apply moves.

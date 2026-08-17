@@ -110,6 +110,57 @@ export async function runLessonAnalysisBrowserChecks({
           cubeContext,
           "lesson-owned Double choice reveals responder prompt"
         );
+        check(
+          (await host
+            .locator(".bs-analysis-position .bs-analysis-results-board-image")
+            .getAttribute("src")) ===
+            "/assets/positions/node-k001/cube/responder.svg",
+          cubeContext,
+          "Double switches the prepared board to responder perspective"
+        );
+        await host.locator("button[data-bs-analysis-choice='take']").click();
+        check(
+          (await host
+            .locator(
+              ".bs-analysis-candidate-result .bs-analysis-results-board-image"
+            )
+            .getAttribute("src")) ===
+            "/assets/positions/node-k001/cube/responder.svg",
+          cubeContext,
+          "Take retains the responder-perspective board"
+        );
+        await host.locator("button[data-bs-analysis-choice='pass']").click();
+        check(
+          (await host
+            .locator(
+              ".bs-analysis-candidate-result .bs-analysis-results-board-image"
+            )
+            .getAttribute("src")) ===
+            "/assets/positions/node-k001/cube/responder.svg" &&
+            (await host
+              .locator(
+                "button[data-bs-analysis-result-choice='double-pass']"
+              )
+              .getAttribute("aria-pressed")) === "true",
+          cubeContext,
+          "Pass uses the same responder-perspective board"
+        );
+        await host.locator("button[data-bs-analysis-choice='no-double']").click();
+        check(
+          !(await host.locator(".bs-analysis-responder").isVisible()) &&
+            (await host
+              .locator(
+                ".bs-analysis-candidate-result .bs-analysis-results-board-image"
+              )
+              .getAttribute("src")) ===
+              "/assets/positions/node-k001/cube/starting.svg" &&
+            (await host
+              .locator("button[data-bs-analysis-result-choice='no-double']")
+              .getAttribute("aria-pressed")) === "true",
+          cubeContext,
+          "No double stays out of the responder stage and uses the original perspective"
+        );
+        await host.locator("button[data-bs-analysis-choice='double']").click();
         await host.locator("button[data-bs-analysis-choice='take']").click();
         const revealed = await host.evaluate((element) => ({
           active: element
@@ -226,7 +277,11 @@ export async function runLessonAnalysisBrowserChecks({
             ?.dataset.bsSharedAnalysisPresentation,
           sticky: Boolean(
             element.querySelector(".bs-analysis-results-checker-decision")
-          )
+          ),
+          stickyHeight: element
+            .querySelector(".bs-analysis-results-checker-decision")
+            ?.getBoundingClientRect().height,
+          viewportHeight: window.innerHeight
         }));
         check(
           revealed.shared === "true" &&
@@ -246,6 +301,13 @@ export async function runLessonAnalysisBrowserChecks({
           checkerContext,
           "Task 005 top/selected comparison and probability bar remain available"
         );
+        if (viewportCase.name === "mobile") {
+          check(
+            revealed.stickyHeight <= revealed.viewportHeight * 0.6,
+            checkerContext,
+            "mobile sticky checker surface leaves room for the candidate list"
+          );
+        }
 
         await host
           .locator("[data-bs-analysis-candidate-id='gnu-move-2'] > summary")

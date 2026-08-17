@@ -195,6 +195,13 @@ def cube_model(view: dict) -> dict:
             "image": CUBE_ASSET_ROOT + "starting.svg",
             "alt": "Exact Node cube lesson starting position.",
         },
+        "responder_board": {
+            "image": CUBE_ASSET_ROOT + "responder.svg",
+            "alt": (
+                "The exact same Node cube lesson position shown from the "
+                "responder's perspective after Double."
+            ),
+        },
         "context": {"score": None, "cube": None, "dice": None, "decision": "Cube decision"},
         "metadata": model_metadata,
         "probabilities": map_probabilities(view.get("probabilities")),
