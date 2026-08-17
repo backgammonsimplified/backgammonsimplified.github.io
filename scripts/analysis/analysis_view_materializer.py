@@ -469,6 +469,22 @@ def map_cube(source: dict[str, Any], path: str) -> tuple[list[dict[str, Any]], d
         "observed_action_normalized": require_optional_text(
             occurrence["observed_action_normalized"], f"{path}.cube_occurrence.observed_action_normalized"
         ),
+        "recommendation_native": require_optional_text(
+            occurrence.get("recommendation_native"),
+            f"{path}.cube_occurrence.recommendation_native",
+        ),
+        "recommendation_normalized": require_optional_text(
+            occurrence.get("recommendation_normalized"),
+            f"{path}.cube_occurrence.recommendation_normalized",
+        ),
+        "block_analysis_ply": require_optional_integer(
+            occurrence.get("block_analysis_ply"),
+            f"{path}.cube_occurrence.block_analysis_ply",
+        ),
+        "requested_cube_ply": require_optional_integer(
+            occurrence.get("requested_cube_ply"),
+            f"{path}.cube_occurrence.requested_cube_ply",
+        ),
     }
     rows = require_list(source["cube_actions"], f"{path}.cube_actions")
     if not rows:
@@ -518,6 +534,10 @@ def map_cube(source: dict[str, Any], path: str) -> tuple[list[dict[str, Any]], d
                 "id": action_id,
                 "label": require_identifier(action["label"], f"{item_path}.label"),
                 "native_action": require_identifier(action["native_action"], f"{item_path}.native_action"),
+                "native_difference": require_optional_number(
+                    action.get("native_difference"),
+                    f"{item_path}.native_difference",
+                ),
                 "normalized_action": require_identifier(
                     action["normalized_action"], f"{item_path}.normalized_action"
                 ),

@@ -1,0 +1,198 @@
+{
+  "analyses": {
+    "002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d": {
+      "actions": [
+        {
+          "actual_ply": null,
+          "details": "Source-native rank: 1; Row-local actual ply: not supplied; Block analysis ply: 4; Requested cube ply: 4",
+          "id": "baed3ba2fcb0833d4d9de1773b1761db73190c36ea83e2c3e6ec4f4786c53649",
+          "label": "No double",
+          "native_action": "No double",
+          "native_difference": null,
+          "normalized_action": "no_double",
+          "probabilities": null,
+          "source_order": 1,
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -0.005
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "Source-native cube action equity",
+              "value": -0.005
+            },
+            "normalized": {
+              "label": "Normalized value",
+              "semantics": "No normalized cube action value supplied by Canonical Analysis Parquet v1",
+              "value": null
+            }
+          }
+        },
+        {
+          "actual_ply": null,
+          "details": "Source-native rank: 2; Row-local actual ply: not supplied; Block analysis ply: 4; Requested cube ply: 4; Source-native difference: +1.005",
+          "id": "572e2a7428a461ef65ef0e66600a2c8ee7358a4f5328bde7a88e5430ecefdb82",
+          "label": "Double, pass",
+          "native_action": "Double, pass",
+          "native_difference": 1.005,
+          "normalized_action": "double_pass",
+          "probabilities": null,
+          "source_order": 2,
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": 1.0
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "Source-native cube action equity",
+              "value": 1.0
+            },
+            "normalized": {
+              "label": "Normalized value",
+              "semantics": "No normalized cube action value supplied by Canonical Analysis Parquet v1",
+              "value": null
+            }
+          }
+        },
+        {
+          "actual_ply": null,
+          "details": "Source-native rank: 3; Row-local actual ply: not supplied; Block analysis ply: 4; Requested cube ply: 4; Source-native difference: -0.348",
+          "id": "a63ed7da1addf685c9104bf7485bb75d07ed0615efd627e797edcf40f947a5e7",
+          "label": "Double, take",
+          "native_action": "Double, take",
+          "native_difference": -0.348,
+          "normalized_action": "double_take",
+          "probabilities": null,
+          "source_order": 3,
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -0.352
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "Source-native cube action equity",
+              "value": -0.352
+            },
+            "normalized": {
+              "label": "Normalized value",
+              "semantics": "No normalized cube action value supplied by Canonical Analysis Parquet v1",
+              "value": null
+            }
+          }
+        }
+      ],
+      "analysis_kind": "cube",
+      "canonical_context": {
+        "logical_position_id": "137aca188f6e67042764faec8131af302297f64208b03918f9e2aa79babf09cb",
+        "package": {
+          "conformance_status": "verified-canonical-v1",
+          "manifest_sha256": "effa2a8bc273be03222d8193c090f96ef3415224af228f0e45678b8e7ec498a7",
+          "package_id": "canonical-analysis-reference-2c828e118b6cf22f",
+          "profile_id": "canonical-analysis-parquet-v1"
+        },
+        "requested_analysis": {
+          "cubeful": null,
+          "profile_id": "canonical-analysis-parquet-v1",
+          "requested_ply": 4
+        },
+        "source_occurrence": {
+          "game_id": "c9f190d1f33bb64f51facb62216d1800d24804bcc091d640b23aee4452e316b4",
+          "gnu_match_id_native": "cAnnAAAAAAAE",
+          "gnu_position_id_native": "4HPhASLgc/ABMA",
+          "historical_pipeline_selected": true,
+          "line_number": null,
+          "logical_opportunity_id": "pair_01_match_a:g001:m002:cube01",
+          "match_id": "pair_01_match_a",
+          "occurrence_id": "sage-vs-gnu-stage1-match-review-artifacts-v1:cube:game_named:pair_01_match_a:g001:m002:cube01",
+          "source_end_line": 82,
+          "source_id": "retained-stage1-analysis",
+          "source_path": "pair_01/match_A/4ply_review/gnu_vs_sage_match_1a_game_1.txt",
+          "source_record_id": null,
+          "source_start_line": 40
+        },
+        "state": {
+          "cube": {
+            "owner": "centered",
+            "value": 1
+          },
+          "decision": "Cube decision",
+          "dice": null,
+          "player_on_roll": "player_on_roll",
+          "score": {
+            "match_length": 7,
+            "opponent": 0,
+            "player": 0
+          }
+        }
+      },
+      "context": {
+        "cube": "1, centered",
+        "decision": "Cube decision",
+        "dice": null,
+        "score": "0-0 to 7"
+      },
+      "cube_occurrence": {
+        "block_analysis_ply": 4,
+        "cube_occurrence_id": "002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d",
+        "observed_action_native": null,
+        "observed_action_normalized": null,
+        "recommendation_native": "No double, take (25.7%)",
+        "recommendation_normalized": "no_double_take",
+        "requested_cube_ply": 4
+      },
+      "fixture": true,
+      "id": "002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d",
+      "limitations": [
+        "Row-local actual ply is absent for these cube action rows; requested and block analysis ply remain 4.",
+        "Source-native cube action differences are preserved separately and are not reinterpreted.",
+        "No normalized cube action equity is supplied by Canonical Analysis Parquet v1."
+      ],
+      "metadata": {
+        "analysis_settings": {
+          "effective": "Row-local actual depth is retained on each evaluation/action",
+          "requested": "Requested 4-ply"
+        },
+        "engine": "GNU Backgammon",
+        "engine_version": null,
+        "parser": "canonical-parquet-cube-readset-v1",
+        "played_move": null,
+        "provenance": "package canonical-analysis-reference-2c828e118b6cf22f; occurrence sage-vs-gnu-stage1-match-review-artifacts-v1:cube:game_named:pair_01_match_a:g001:m002:cube01; source hash 97f65c6a061dea94dea51a03fe63719aeb1b763007c770e51384e9cc943e4696",
+        "recommendation": "No double, take (25.7%)",
+        "source_family": "game_named"
+      },
+      "original_board": {
+        "alt": "The real Canonical cube position before selecting an analytical cube action.",
+        "image": "/assets/positions/real-analysis/canonical-cube-preview/starting.svg"
+      },
+      "probabilities": null,
+      "subtitle": "Real cube occurrence and analytical action rows from Canonical Analysis Parquet v1",
+      "title": "Canonical Parquet cube analysis",
+      "warnings": [
+        "Cube occurrence and all displayed action equities come from the verified Canonical Parquet package.",
+        "The source occurrence is the historically selected game_named record."
+      ]
+    }
+  },
+  "fixture_status": {
+    "kind": "canonical-analysis",
+    "label": "Canonical Parquet analysis",
+    "message": "Cube values are materialized from the verified frozen Canonical Analysis Parquet v1 reference package."
+  },
+  "materialization": {
+    "contract": "analyzer-analysis-view-read-set-v1",
+    "deterministic_order": "canonical decision ID; source order; stable identity",
+    "package": {
+      "conformance_status": "verified-canonical-v1",
+      "manifest_sha256": "effa2a8bc273be03222d8193c090f96ef3415224af228f0e45678b8e7ec498a7",
+      "package_id": "canonical-analysis-reference-2c828e118b6cf22f",
+      "profile_id": "canonical-analysis-parquet-v1"
+    }
+  },
+  "schema_version": "bs-analysis-results-viewer-fixture-v1"
+}
