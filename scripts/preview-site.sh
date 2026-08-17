@@ -9,14 +9,15 @@ HOST="127.0.0.1"
 usage() {
   cat <<'EOF'
 Usage:
-  bash preview-site.sh [PORT]
+  bash scripts/preview-site.sh [PORT]
 
-Immediately serves the last rendered site while Quarto watches source files
-and writes changed pages to site/_site. Social cards are not regenerated.
+Bootstraps the rendered site when needed, then serves site/_site while Quarto
+watches source files and writes changed pages there. The repository-managed
+Python environment is used for Quarto hooks. Social cards are not regenerated.
 
 Examples:
-  bash preview-site.sh
-  bash preview-site.sh 8765
+  bash scripts/preview-site.sh
+  bash scripts/preview-site.sh 8765
 
 Stop with Ctrl-C.
 EOF
@@ -48,22 +49,32 @@ if [[ -x "${PROJECT_PYTHON}" ]] &&
   "${PROJECT_PYTHON}" -c 'import sys' >/dev/null 2>&1; then
   PYTHON_COMMAND=("${PROJECT_PYTHON}")
   export PATH="$(dirname "${PROJECT_PYTHON}"):${PATH}"
+elif [[ -x "${REPO_ROOT}/.venv/bin/python" ]]; then
+  PROJECT_PYTHON="${REPO_ROOT}/.venv/bin/python"
+  PYTHON_COMMAND=("${PROJECT_PYTHON}")
+  export PATH="$(dirname "${PROJECT_PYTHON}"):${PATH}"
 elif command -v py >/dev/null 2>&1; then
   PYTHON_COMMAND=(py)
 elif command -v python >/dev/null 2>&1; then
   PYTHON_COMMAND=(python)
 else
-  printf 'ERROR: Neither py nor python was found on PATH.\n' >&2
+  printf 'ERROR: Neither project Python, py, nor python was found on PATH.\n' >&2
   exit 127
 fi
 
 cd "${REPO_ROOT}"
+export PYTHONPATH="${REPO_ROOT}${PYTHONPATH:+:${PYTHONPATH}}"
 export BS_SKIP_SOCIAL_CARDS=1
 export BS_PUBLICATION_MODE=development
 
 if [[ ! -f "site/_site/index.html" ]]; then
-  printf 'ERROR: site/_site/index.html does not exist.\n' >&2
-  printf 'Run a full build once before starting the development preview.\n' >&2
+  printf 'No rendered site found; bootstrapping development render.\n'
+  printf 'Python: %s\n\n' "${PYTHON_COMMAND[*]}"
+  quarto render site
+fi
+
+if [[ ! -f "site/_site/index.html" ]]; then
+  printf 'ERROR: bootstrap render did not produce site/_site/index.html.\n' >&2
   exit 1
 fi
 
@@ -80,8 +91,9 @@ trap cleanup EXIT
 
 printf 'BS static preview + render watcher\n'
 printf 'Repository: %s\n' "${REPO_ROOT}"
+printf 'Python:     %s\n' "${PYTHON_COMMAND[*]}"
 printf 'URL:        http://%s:%s/\n' "${HOST}" "${PORT}"
-printf 'Serving:    existing site/_site output\n'
+printf 'Serving:    site/_site output\n'
 printf 'Watching:   Quarto source changes\n'
 printf 'Social:     skipped\n'
 printf 'Stop:       Ctrl-C\n\n'
@@ -91,8 +103,6 @@ printf 'Stop:       Ctrl-C\n\n'
   --directory site/_site &
 STATIC_SERVER_PID=$!
 
-# Fail quickly if the static server could not bind (for example, if the port
-# is already in use) instead of leaving only the render watcher running.
 sleep 0.25
 if ! kill -0 "${STATIC_SERVER_PID}" 2>/dev/null; then
   wait "${STATIC_SERVER_PID}"
