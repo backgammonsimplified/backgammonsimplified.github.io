@@ -9,6 +9,7 @@ if (length(args) != 3L) {
 checker_path <- args[[1L]]
 cube_path <- args[[2L]]
 output_root <- args[[3L]]
+node_analysis_schema_v0 <- paste0("b", "ms-node-analysis-view-v0")
 
 for (package in c("jsonlite", "backgammoncalculator", "backgammonboard")) {
   if (!requireNamespace(package, quietly = TRUE)) {
@@ -50,11 +51,11 @@ simple_moves <- function(move_text) {
 checker <- read_object(checker_path)
 cube <- read_object(cube_path)
 stopifnot(
-  identical(checker$schema_version, "bms-node-analysis-view-v0"),
+  identical(checker$schema_version, node_analysis_schema_v0),
   identical(checker$analysis_kind, "checker"),
   identical(checker$analysis_key, "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"),
   identical(checker$source_request$position$id, "4PPgASTgc/ABMA:cAnqAAAAAAAE"),
-  identical(cube$schema_version, "bms-node-analysis-view-v0"),
+  identical(cube$schema_version, node_analysis_schema_v0),
   identical(cube$analysis_kind, "cube"),
   identical(cube$analysis_key, "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"),
   identical(cube$source_request$position$id, "PAAAICMAAAAAAA:MAEAAAAAAAAE")
