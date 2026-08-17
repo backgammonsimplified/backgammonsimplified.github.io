@@ -1,0 +1,12 @@
+Node K001 exact lesson preview
+===============================
+
+checker_analysis_key: sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d
+checker_gnuid: 4PPgASTgc/ABMA:cAnqAAAAAAAE
+checker_recommendation: 8/4 6/4
+checker_overlays_rendered: 8
+cube_analysis_key: sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01
+cube_gnuid: PAAAICMAAAAAAA:MAEAAAAAAAAE
+cube_recommendation: Double, take
+
+All boards are build-time presentation assets. The browser does not run an engine or apply moves.

@@ -1,0 +1,362 @@
+{
+  "schema_version": "bs-analysis-results-viewer-fixture-v1",
+  "fixture_status": {
+    "kind": "retained-analysis",
+    "label": "Exact Node lesson data",
+    "message": "These are the accepted Node K001 checker and cube analysis records, projected for the development Results Viewer."
+  },
+  "analyses": {
+    "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d": {
+      "id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "analysis_kind": "checker",
+      "title": "Exact Node checker lesson analysis",
+      "subtitle": "Accepted 1-ply GNU checker record with all exported candidates",
+      "fixture": true,
+      "original_board": {
+        "image": "/assets/positions/node-k001/checker/starting.svg",
+        "alt": "Exact Node checker lesson starting position."
+      },
+      "context": {
+        "score": null,
+        "cube": null,
+        "dice": "4-2",
+        "decision": "Checker play"
+      },
+      "metadata": {
+        "engine": "gnu",
+        "engine_version": "1.08.003-mingw 32-Bit 20240428",
+        "source_family": "backgammon-node exact lesson analysis",
+        "parser": "gnu-text-parser-v1",
+        "provenance": "analysis sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d; producer b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+        "analysis_settings": {
+          "requested": "1ply, checker, quick",
+          "effective": "actual_evaluation_type=evaluation, evaluation_plies=1, cubeful=True, pruning=False"
+        },
+        "recommendation": "8/4 6/4",
+        "played_move": null
+      },
+      "probabilities": {
+        "win": 0.505167,
+        "win_gammon_or_better": 0.140466,
+        "win_backgammon": 0.004389,
+        "lose": 0.494833,
+        "lose_gammon_or_worse": 0.131013,
+        "lose_backgammon": 0.00627
+      },
+      "candidates": [
+        {
+          "id": "gnu-move-1",
+          "source_order": 1,
+          "display_rank": 1,
+          "move": "8/4 6/4",
+          "evaluation": "evaluation",
+          "actual_ply": 1,
+          "value": {
+            "label": "equity",
+            "value": 0.025296
+          },
+          "difference_from_best": 0.0,
+          "probabilities": {
+            "win": 0.505167,
+            "win_gammon_or_better": 0.140466,
+            "win_backgammon": 0.004389,
+            "lose": 0.494833,
+            "lose_gammon_or_worse": 0.131013,
+            "lose_backgammon": 0.00627
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-1.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 1: 8/4 6/4."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-2",
+          "source_order": 2,
+          "display_rank": 2,
+          "move": "24/20 13/11",
+          "evaluation": "evaluation",
+          "actual_ply": 1,
+          "value": {
+            "label": "equity",
+            "value": -0.144343
+          },
+          "difference_from_best": -0.169639,
+          "probabilities": {
+            "win": 0.468466,
+            "win_gammon_or_better": 0.114991,
+            "win_backgammon": 0.004577,
+            "lose": 0.531534,
+            "lose_gammon_or_worse": 0.152369,
+            "lose_backgammon": 0.00638
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-2.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 2: 24/20 13/11."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-3",
+          "source_order": 3,
+          "display_rank": 3,
+          "move": "24/22 24/20",
+          "evaluation": "evaluation",
+          "actual_ply": 0,
+          "value": {
+            "label": "equity",
+            "value": -0.179149
+          },
+          "difference_from_best": -0.204445,
+          "probabilities": {
+            "win": 0.461177,
+            "win_gammon_or_better": 0.100439,
+            "win_backgammon": 0.00309,
+            "lose": 0.538823,
+            "lose_gammon_or_worse": 0.147844,
+            "lose_backgammon": 0.005208
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-3.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 3: 24/22 24/20."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-4",
+          "source_order": 4,
+          "display_rank": 4,
+          "move": "24/18",
+          "evaluation": "evaluation",
+          "actual_ply": 0,
+          "value": {
+            "label": "equity",
+            "value": -0.187987
+          },
+          "difference_from_best": -0.213283,
+          "probabilities": {
+            "win": 0.461445,
+            "win_gammon_or_better": 0.100813,
+            "win_backgammon": 0.003132,
+            "lose": 0.538555,
+            "lose_gammon_or_worse": 0.156015,
+            "lose_backgammon": 0.005658
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-4.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 4: 24/18."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-5",
+          "source_order": 5,
+          "display_rank": 5,
+          "move": "13/11 13/9",
+          "evaluation": "evaluation",
+          "actual_ply": 0,
+          "value": {
+            "label": "equity",
+            "value": -0.195895
+          },
+          "difference_from_best": -0.221191,
+          "probabilities": {
+            "win": 0.453778,
+            "win_gammon_or_better": 0.120179,
+            "win_backgammon": 0.005774,
+            "lose": 0.546222,
+            "lose_gammon_or_worse": 0.158389,
+            "lose_backgammon": 0.011572
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-5.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 5: 13/11 13/9."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-6",
+          "source_order": 6,
+          "display_rank": 6,
+          "move": "24/22 13/9",
+          "evaluation": "evaluation",
+          "actual_ply": 0,
+          "value": {
+            "label": "equity",
+            "value": -0.20807
+          },
+          "difference_from_best": -0.233366,
+          "probabilities": {
+            "win": 0.453154,
+            "win_gammon_or_better": 0.108647,
+            "win_backgammon": 0.004539,
+            "lose": 0.546846,
+            "lose_gammon_or_worse": 0.157139,
+            "lose_backgammon": 0.00881
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-6.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 6: 24/22 13/9."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-7",
+          "source_order": 7,
+          "display_rank": 7,
+          "move": "24/20 8/6",
+          "evaluation": "evaluation",
+          "actual_ply": 0,
+          "value": {
+            "label": "equity",
+            "value": -0.229902
+          },
+          "difference_from_best": -0.255198,
+          "probabilities": {
+            "win": 0.446804,
+            "win_gammon_or_better": 0.101817,
+            "win_backgammon": 0.003175,
+            "lose": 0.553196,
+            "lose_gammon_or_worse": 0.153773,
+            "lose_backgammon": 0.005842
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-7.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 7: 24/20 8/6."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        },
+        {
+          "id": "gnu-move-8",
+          "source_order": 8,
+          "display_rank": 8,
+          "move": "24/20 6/4",
+          "evaluation": "evaluation",
+          "actual_ply": 0,
+          "value": {
+            "label": "equity",
+            "value": -0.234248
+          },
+          "difference_from_best": -0.259544,
+          "probabilities": {
+            "win": 0.451738,
+            "win_gammon_or_better": 0.10325,
+            "win_backgammon": 0.003993,
+            "lose": 0.548262,
+            "lose_gammon_or_worse": 0.169014,
+            "lose_backgammon": 0.009572
+          },
+          "move_board": {
+            "image": "/assets/positions/node-k001/checker/candidate-8.svg",
+            "alt": "Exact Node checker position with movement overlay for rank 8: 24/20 6/4."
+          },
+          "resulting_position_id": null,
+          "details": "Movement overlay is build-time rendered from this exact starting GNUID."
+        }
+      ],
+      "warnings": [
+        "GNU hint output does not identify a previously played move; is_played_move remains null",
+        "resulting Position IDs were not generated; resulting_position_id remains null",
+        "No canonical board asset is available for this GNUID-only request.",
+        "No structured checker movement steps or move-overlay assets are present in the source request/result."
+      ],
+      "limitations": [
+        "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
+        "No board image asset is present in the canonical request or normalized result.",
+        "The normalized result does not include structured movement steps, move-overlay assets, or resulting-position identities.",
+        "The played move is unknown; the recommendation is not presented as a played move."
+      ]
+    },
+    "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01": {
+      "id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "analysis_kind": "cube",
+      "title": "Exact Node cube lesson analysis",
+      "subtitle": "Accepted 1-ply GNU cube record",
+      "fixture": true,
+      "original_board": {
+        "image": "/assets/positions/node-k001/cube/starting.svg",
+        "alt": "Exact Node cube lesson starting position."
+      },
+      "context": {
+        "score": null,
+        "cube": null,
+        "dice": null,
+        "decision": "Cube decision"
+      },
+      "metadata": {
+        "engine": "gnu",
+        "engine_version": "1.08.003-mingw 32-Bit 20240428",
+        "source_family": "backgammon-node exact lesson analysis",
+        "parser": "gnu-text-parser-v1",
+        "provenance": "analysis sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01; producer b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+        "analysis_settings": {
+          "requested": "1ply, cube, quick",
+          "effective": "actual_evaluation_type=evaluation, evaluation_plies=1, cubeful=True, pruning=False"
+        },
+        "recommendation": "Double, take"
+      },
+      "probabilities": {
+        "win": 0.749996,
+        "win_gammon_or_better": 0.0,
+        "win_backgammon": 0.0,
+        "lose": 0.250004,
+        "lose_gammon_or_worse": 0.0,
+        "lose_backgammon": 0.0
+      },
+      "actions": [
+        {
+          "id": "double-take",
+          "label": "Double, take",
+          "normalized_action": "double-take",
+          "supported": true,
+          "value": {
+            "label": "equity",
+            "value": 0.998032
+          },
+          "probabilities": null,
+          "details": "Exact Node cube action from the accepted completed record."
+        },
+        {
+          "id": "double-pass",
+          "label": "Double, pass",
+          "normalized_action": "double-pass",
+          "supported": true,
+          "value": {
+            "label": "equity",
+            "value": 1.0
+          },
+          "probabilities": null,
+          "details": "Exact Node cube action from the accepted completed record."
+        },
+        {
+          "id": "no-double",
+          "label": "No double",
+          "normalized_action": "no-double",
+          "supported": true,
+          "value": {
+            "label": "equity",
+            "value": 0.637873
+          },
+          "probabilities": null,
+          "details": "Exact Node cube action from the accepted completed record."
+        }
+      ],
+      "warnings": [
+        "GNU cube-action equities are preserved as emitted; action probabilities and match-winning chances remain null",
+        "No canonical board asset is available for this GNUID-only request."
+      ],
+      "limitations": [
+        "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
+        "No board image asset is present in the canonical request or normalized result.",
+        "Cube action probabilities, match-winning chances, and cube efficiency are null because the source result did not emit them."
+      ]
+    }
+  }
+}
