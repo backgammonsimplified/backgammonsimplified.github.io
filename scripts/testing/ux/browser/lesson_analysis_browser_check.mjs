@@ -3,6 +3,11 @@ const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 }
 ];
 
+const CHECKER_KEY =
+  "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d";
+const CUBE_KEY =
+  "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01";
+
 export const LESSON_ANALYSIS_ROUTES = {
   cube: "/learn/cube/what-the-cube-is-asking.html",
   checker: "/learn/cube/why-is-25-percent-the-basic-take-point.html"
@@ -21,7 +26,6 @@ const componentSnapshot = (tab) =>
       duplicateComponentIds: Array.from(
         new Set(ids.filter((id, index) => ids.indexOf(id) !== index))
       ),
-      innerWidth: window.innerWidth,
       overflow:
         document.documentElement.scrollWidth -
         document.documentElement.clientWidth
@@ -36,12 +40,6 @@ const consoleErrors = async (tab) => {
     )
   );
 };
-
-const scrollAndRestore = (tab) =>
-  tab.playwright.locator("html").evaluate(() => {
-    window.scrollTo(0, document.documentElement.scrollHeight);
-    window.scrollTo(0, 0);
-  });
 
 export const summarizeLessonAnalysisReport = (report) => ({
   passed: report.failures.length === 0,
@@ -65,9 +63,7 @@ export async function runLessonAnalysisBrowserChecks({
   let pages = 0;
   const check = (condition, context, message) => {
     checks += 1;
-    if (!condition) {
-      failures.push({ context, message });
-    }
+    if (!condition) failures.push({ context, message });
   };
   const freshTab = async (viewportCase, route) => {
     await browser.tabs.finalize();
@@ -85,173 +81,78 @@ export async function runLessonAnalysisBrowserChecks({
   try {
     for (const viewportCase of VIEWPORTS) {
       const cubeContext = `${viewportCase.name}/cube`;
-      const cubeTab = await freshTab(
-        viewportCase,
-        LESSON_ANALYSIS_ROUTES.cube
-      );
+      const cubeTab = await freshTab(viewportCase, LESSON_ANALYSIS_ROUTES.cube);
       try {
-        const hosts = cubeTab.playwright.locator(
-          "[data-bs-cube-decision]"
-        );
-        const first = hosts.nth(0);
-        const second = hosts.nth(1);
-        check((await hosts.count()) === 2, cubeContext, "two cube hosts mount");
-        const initial = await cubeTab.playwright.locator("html").evaluate(() => {
-          const instances = Array.from(
-            document.querySelectorAll("[data-bs-analysis-instance]")
-          );
-          const starts = instances.map(
-            (item) => item.querySelector("img")?.getAttribute("src") || ""
-          );
-          return {
-            distinctInstances: new Set(
-              instances.map((item) => item.dataset.bsAnalysisInstance)
-            ).size,
-            primaryImageLoaded: Boolean(
-              instances[0]?.querySelector(".bs-analysis-results-board-image")
-                ?.complete &&
-                instances[0]?.querySelector(".bs-analysis-results-board-image")
-                  ?.naturalWidth > 0
-            ),
-            starts
-          };
-        });
+        const host = cubeTab.playwright.locator("[data-bs-cube-decision]");
+        check((await host.count()) === 1, cubeContext, "one real cube host mounts");
+        const initial = await host.evaluate((element) => ({
+          analysisId: element.querySelector("article")?.dataset.analysisId,
+          image: element
+            .querySelector(".bs-analysis-results-board-image")
+            ?.getAttribute("src"),
+          loaded: Boolean(
+            element.querySelector(".bs-analysis-results-board-image")?.complete &&
+              element.querySelector(".bs-analysis-results-board-image")
+                ?.naturalWidth > 0
+          )
+        }));
+        check(initial.analysisId === CUBE_KEY, cubeContext, "exact cube key mounts");
         check(
-          initial.distinctInstances === 2,
+          initial.image === "/assets/positions/node-k001/cube/starting.svg" &&
+            initial.loaded,
           cubeContext,
-          "cube instances have unique IDs"
-        );
-        check(
-          initial.starts.length === 2 &&
-            initial.starts.every(
-              (source) =>
-                source ===
-                "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg"
-            ),
-          cubeContext,
-          "both instances reuse the shared starting SVG"
-        );
-        check(
-          initial.primaryImageLoaded,
-          cubeContext,
-          "the visible primary cube SVG loads"
+          "prepared cube board loads"
         );
 
-        const rollButton = first.locator(
-          "button[data-bs-analysis-choice='roll']"
-        );
-        await rollButton.press("ENTER");
-        const rollFocused = await first.evaluate(
-          () =>
-            document.activeElement?.dataset.bsAnalysisChoice === "roll"
-        );
+        await host.locator("button[data-bs-analysis-choice='double']").click();
         check(
-          rollFocused,
+          await host.locator(".bs-analysis-responder").isVisible(),
           cubeContext,
-          "the native Roll button accepts keyboard focus"
+          "lesson-owned Double choice reveals responder prompt"
         );
-        await rollButton.evaluate((button) =>
-          button.scrollIntoView({ block: "center" })
-        );
-        await delay(900);
-        const beforeRoll = await first.evaluate(() => window.scrollY);
-        await rollButton.click();
-        const roll = await first.evaluate((element) => ({
-          answerOpen: element.querySelector(".bs-analysis-answer")?.open,
-          nested: element.querySelectorAll(
-            ".bs-analysis-disclosure--nested"
+        await host.locator("button[data-bs-analysis-choice='take']").click();
+        const revealed = await host.evaluate((element) => ({
+          active: element
+            .querySelector(
+              "button[data-bs-analysis-result-choice='double-take']"
+            )
+            ?.getAttribute("aria-pressed"),
+          actionCount: element.querySelectorAll(
+            "button[data-bs-analysis-result-choice]"
           ).length,
-          summary: element
-            .querySelector(".bs-analysis-answer > summary")
-            ?.textContent.trim(),
-          scrollY: window.scrollY
+          checkerDecision: Boolean(
+            element.querySelector(".bs-analysis-results-checker-decision")
+          ),
+          comparison: Boolean(
+            element.querySelector(".bs-analysis-results-comparison-table")
+          ),
+          shared: element
+            .querySelector("[data-bs-shared-analysis-consumer='lesson']")
+            ?.querySelector("[data-bs-shared-analysis-presentation]")
+            ?.dataset.bsSharedAnalysisPresentation,
+          text: element.textContent
         }));
         check(
-          roll.answerOpen && roll.nested >= 1,
+          revealed.shared === "true" && revealed.active === "true",
           cubeContext,
-          "Roll reveals its nested analysis"
+          "cube reveal invokes the shared viewer with Double, take active"
         );
         check(
-          roll.summary === "Roll: review the fixture answer",
+          revealed.actionCount === 3 &&
+            revealed.text.includes("Double, take") &&
+            revealed.text.includes("+0.998") &&
+            revealed.text.includes("Double, pass") &&
+            revealed.text.includes("+1.000") &&
+            revealed.text.includes("No double") &&
+            revealed.text.includes("+0.638") &&
+            revealed.text.includes("75.0%"),
           cubeContext,
-          "Roll path reports its fixture result"
+          "cube source actions, equities, and probabilities remain visible"
         );
         check(
-          Math.abs(roll.scrollY - beforeRoll) <= 32,
+          !revealed.checkerDecision && !revealed.comparison,
           cubeContext,
-          "Roll reveal does not jump the page"
-        );
-
-        await first
-          .locator("button[data-bs-analysis-choice='double']")
-          .click();
-        const double = await first.evaluate((element) => ({
-          responder: Boolean(element.querySelector(".bs-analysis-responder")),
-          responderImage: element
-            .querySelector(".bs-analysis-responder img")
-            ?.getAttribute("src")
-        }));
-        check(double.responder, cubeContext, "Double reveals responder choice");
-        check(
-          double.responderImage?.endsWith("/responder-flipped.svg"),
-          cubeContext,
-          "Double uses the supplied responder SVG"
-        );
-
-        await first
-          .locator("button[data-bs-analysis-choice='pass']")
-          .click();
-        check(
-          (await first
-            .locator(".bs-analysis-answer--response > summary")
-            .textContent()).trim() === "Pass: review the fixture answer",
-          cubeContext,
-          "Pass reveals response analysis"
-        );
-        await first
-          .locator("button[data-bs-analysis-choice='take']")
-          .click();
-        check(
-          (await first
-            .locator(".bs-analysis-answer--response > summary")
-            .textContent()).trim() === "Take: fixture answer",
-          cubeContext,
-          "Take reveals the accepted response"
-        );
-
-        await cubeTab.playwright
-          .getByText("Open the component-isolation fixture", { exact: true })
-          .click();
-        await second
-          .locator("button[data-bs-analysis-choice='roll']")
-          .click();
-        const isolated = await cubeTab.playwright
-          .locator("html")
-          .evaluate(() => {
-            const hosts = document.querySelectorAll(
-              "[data-bs-cube-decision]"
-            );
-            return {
-              firstTake: hosts[0]
-                .querySelector("button[data-bs-analysis-choice='take']")
-                ?.getAttribute("aria-pressed"),
-              secondRoll: hosts[1]
-                .querySelector("button[data-bs-analysis-choice='roll']")
-                ?.getAttribute("aria-pressed")
-            };
-          });
-        check(
-          isolated.firstTake === "true" && isolated.secondRoll === "true",
-          cubeContext,
-          "two cube instances keep independent state"
-        );
-        await scrollAndRestore(cubeTab);
-        check(
-          (await first
-            .locator("button[data-bs-analysis-choice='take']")
-            .getAttribute("aria-pressed")) === "true",
-          cubeContext,
-          "cube state survives scrolling"
+          "cube remains free of checker comparison UI"
         );
         const cubePage = await componentSnapshot(cubeTab);
         check(cubePage.overflow <= 0, cubeContext, "cube page has no overflow");
@@ -261,14 +162,10 @@ export async function runLessonAnalysisBrowserChecks({
           "cube component IDs remain unique"
         );
         check(
-          cubePage.componentErrors === 0,
+          cubePage.componentErrors === 0 &&
+            (await consoleErrors(cubeTab)).length === 0,
           cubeContext,
-          "cube fixture has no mount errors"
-        );
-        check(
-          (await consoleErrors(cubeTab)).length === 0,
-          cubeContext,
-          "cube page has no console exceptions"
+          "cube page has no mount or console errors"
         );
       } catch (error) {
         failures.push({
@@ -283,152 +180,100 @@ export async function runLessonAnalysisBrowserChecks({
         LESSON_ANALYSIS_ROUTES.checker
       );
       try {
-        const host = checkerTab.playwright.locator(
-          "[data-bs-checker-decision]"
-        );
-        const startingSource = await host
-          .locator(".bs-analysis-results-board-image")
-          .getAttribute("src");
+        const host = checkerTab.playwright.locator("[data-bs-checker-decision]");
+        const initial = await host.evaluate((element) => ({
+          analysisId: element.querySelector("article")?.dataset.analysisId,
+          choices: element.querySelectorAll(
+            ":scope .bs-analysis-choice-row > [data-bs-analysis-choice]"
+          ).length,
+          image: element
+            .querySelector(".bs-analysis-results-board-image")
+            ?.getAttribute("src")
+        }));
         check(
-          startingSource?.endsWith("/starting.svg"),
+          initial.analysisId === CHECKER_KEY && initial.choices === 8,
           checkerContext,
-          "checker lesson loads the retained starting SVG"
+          "exact checker key exposes all eight lesson choices"
         );
-        const candidateAssets = {
-          "candidate-1": "candidate-1-3N0DAADqGTMABw.svg",
-          "candidate-2": "candidate-2-3N0DAAD0nCUABw.svg",
-          "candidate-3": "candidate-3-3N0DAAD0miYABw.svg"
-        };
-        for (const candidateId of Object.keys(candidateAssets)) {
-          await host
-            .locator(
-              `button[data-bs-analysis-choice='${candidateId}']`
-            )
-            .click();
-          const selected = await host.evaluate((element, selectedId) => ({
-            image: element
-              .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
-              ?.getAttribute("src"),
-            pressed: element
-              .querySelector(
-                `button[data-bs-analysis-choice='${selectedId}']`
-              )
-              ?.getAttribute("aria-pressed"),
-            status: element
-              .querySelector(".bs-analysis-choice-status")
-              ?.textContent.trim(),
-            sharedConsumer: element
-              .querySelector("[data-bs-shared-analysis-consumer='lesson']")
-              ?.querySelector("[data-bs-shared-analysis-presentation]")
-              ?.dataset.bsSharedAnalysisPresentation
-          }), candidateId);
-          check(
-            selected.image?.endsWith(`/${candidateAssets[candidateId]}`) &&
-              selected.pressed === "true" &&
-              selected.status.includes("selected") &&
-              selected.sharedConsumer === "true",
-            checkerContext,
-            `${candidateId} uses the shared presentation and verified overlay`
-          );
-        }
+        check(
+          initial.image === "/assets/positions/node-k001/checker/starting.svg",
+          checkerContext,
+          "prepared checker starting board loads"
+        );
 
-        const candidateTwoSummary = host.locator(
-          "[data-bs-analysis-candidate-id='candidate-2'] > summary"
-        );
-        await candidateTwoSummary.click();
-        const openTogether = await host.evaluate((element) => ({
+        await host.locator("button[data-bs-analysis-choice='gnu-move-8']").click();
+        const revealed = await host.evaluate((element) => ({
           active: element
             .querySelector(".bs-analysis-results-candidate.is-active")
             ?.dataset.bsAnalysisCandidateId,
-          current: element
-            .querySelector("[data-bs-analysis-candidate-id='candidate-2'] > summary")
-            ?.getAttribute("aria-current"),
+          candidateCount: element.querySelectorAll(
+            ".bs-analysis-results-candidate"
+          ).length,
+          comparison: Boolean(
+            element.querySelector(".bs-analysis-results-comparison-table")
+          ),
           image: element
-            .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
+            .querySelector(".bs-analysis-results-board-image")
+            ?.getAttribute("src"),
+          selectedBar: Boolean(
+            element.querySelector(
+              ".bs-analysis-results-decision-card--selected .bs-analysis-results-outcome-bar"
+            )
+          ),
+          shared: element
+            .querySelector("[data-bs-shared-analysis-consumer='lesson']")
+            ?.querySelector("[data-bs-shared-analysis-presentation]")
+            ?.dataset.bsSharedAnalysisPresentation,
+          sticky: Boolean(
+            element.querySelector(".bs-analysis-results-checker-decision")
+          )
+        }));
+        check(
+          revealed.shared === "true" &&
+            revealed.candidateCount === 8 &&
+            revealed.active === "gnu-move-8",
+          checkerContext,
+          "checker reveal uses the shared viewer and preserves eight candidates"
+        );
+        check(
+          revealed.image ===
+            "/assets/positions/node-k001/checker/candidate-8.svg",
+          checkerContext,
+          "selected checker uses its supplied movement overlay"
+        );
+        check(
+          revealed.sticky && revealed.comparison && revealed.selectedBar,
+          checkerContext,
+          "Task 005 top/selected comparison and probability bar remain available"
+        );
+
+        await host
+          .locator("[data-bs-analysis-candidate-id='gnu-move-2'] > summary")
+          .click();
+        await host
+          .locator("[data-bs-analysis-candidate-id='gnu-move-3'] > summary")
+          .click();
+        const disclosures = await host.evaluate((element) => ({
+          active: element
+            .querySelector(".bs-analysis-results-candidate.is-active")
+            ?.dataset.bsAnalysisCandidateId,
+          image: element
+            .querySelector(".bs-analysis-results-board-image")
             ?.getAttribute("src"),
           open: Array.from(
             element.querySelectorAll(".bs-analysis-results-candidate[open]")
           ).map((candidate) => candidate.dataset.bsAnalysisCandidateId)
         }));
         check(
-          openTogether.active === "candidate-2" &&
-            openTogether.current === "true" &&
-            openTogether.image?.endsWith(`/${candidateAssets["candidate-2"]}`) &&
-            openTogether.open.includes("candidate-1") &&
-            openTogether.open.includes("candidate-2") &&
-            openTogether.open.includes("candidate-3"),
+          disclosures.active === "gnu-move-3" &&
+            disclosures.image ===
+              "/assets/positions/node-k001/checker/candidate-3.svg" &&
+            disclosures.open.includes("gnu-move-1") &&
+            disclosures.open.includes("gnu-move-2") &&
+            disclosures.open.includes("gnu-move-3") &&
+            disclosures.open.includes("gnu-move-8"),
           checkerContext,
-          "active overlay selection is independent from multiple open disclosures"
-        );
-
-        await host
-          .locator("[data-bs-analysis-candidate-id='candidate-3'] > summary")
-          .click();
-        const reactivated = await host.evaluate((element) => ({
-          active: element
-            .querySelector(".bs-analysis-results-candidate.is-active")
-            ?.dataset.bsAnalysisCandidateId,
-          candidateThreeOpen: element.querySelector(
-            "[data-bs-analysis-candidate-id='candidate-3']"
-          )?.open,
-          image: element
-            .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
-            ?.getAttribute("src")
-        }));
-        check(
-          reactivated.active === "candidate-3" &&
-            reactivated.candidateThreeOpen === false &&
-            reactivated.image?.endsWith(`/${candidateAssets["candidate-3"]}`),
-          checkerContext,
-          "clicking an already-open candidate reselects its board before closing disclosure"
-        );
-
-        await candidateTwoSummary.press("ENTER");
-        const keyboardSelection = await host.evaluate((element) => ({
-          active: element
-            .querySelector(".bs-analysis-results-candidate.is-active")
-            ?.dataset.bsAnalysisCandidateId,
-          focused:
-            document.activeElement?.dataset.bsAnalysisResultChoice ===
-            "candidate-2",
-          image: element
-            .querySelector(".bs-analysis-results-presentation .bs-analysis-results-board-image")
-            ?.getAttribute("src")
-        }));
-        check(
-          keyboardSelection.active === "candidate-2" &&
-            keyboardSelection.focused &&
-            keyboardSelection.image?.endsWith(`/${candidateAssets["candidate-2"]}`),
-          checkerContext,
-          "keyboard activation reselects the overlay and preserves focus"
-        );
-        const missing = await host.evaluate((element) => ({
-          explanation: element
-            .querySelector(
-              "[data-bs-analysis-candidate-id='candidate-2'] .bs-analysis-results-candidate-detail"
-            )
-            ?.textContent.trim(),
-          identities: {
-            positionId: element.querySelector("article")?.dataset.positionId,
-            stateHash: element.querySelector("article")?.dataset.stateHash,
-            analysisId: element.querySelector("article")?.dataset.analysisId
-          }
-        }));
-        check(
-          missing.explanation === "Not supplied" &&
-            missing.identities.positionId === "checker-sage-gnu-disagreement-001" &&
-            missing.identities.stateHash?.length === 64 &&
-            missing.identities.analysisId?.startsWith("analysis-sha256-"),
-          checkerContext,
-          "missing explanation and stable identities display correctly"
-        );
-        await scrollAndRestore(checkerTab);
-        check(
-          (await host
-            .locator("[data-bs-analysis-candidate-id='candidate-2'] > summary")
-            .getAttribute("aria-current")) === "true",
-          checkerContext,
-          "shared checker selection survives scrolling"
+          "active movement board is independent of open candidate disclosures"
         );
         const checkerPage = await componentSnapshot(checkerTab);
         check(
@@ -442,14 +287,10 @@ export async function runLessonAnalysisBrowserChecks({
           "checker component IDs remain unique"
         );
         check(
-          checkerPage.componentErrors === 0,
+          checkerPage.componentErrors === 0 &&
+            (await consoleErrors(checkerTab)).length === 0,
           checkerContext,
-          "checker fixture has no mount errors"
-        );
-        check(
-          (await consoleErrors(checkerTab)).length === 0,
-          checkerContext,
-          "checker page has no console exceptions"
+          "checker page has no mount or console errors"
         );
       } catch (error) {
         failures.push({

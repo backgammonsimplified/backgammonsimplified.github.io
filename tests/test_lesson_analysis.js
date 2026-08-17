@@ -18,6 +18,12 @@ const realFixtures = JSON.parse(
     "utf8"
   )
 );
+const goldenAnalyses = JSON.parse(
+  fs.readFileSync(
+    path.join(root, "site/data/analyzer-node-k001-lesson-preview.json"),
+    "utf8"
+  )
+);
 
 assert.equal(
   analysis.validateFixtureDocument(fixtures),
@@ -25,6 +31,46 @@ assert.equal(
   "the checked-in fixture document is accepted"
 );
 assert.equal(analysis.validateFixtureDocument(realFixtures), realFixtures);
+
+const goldenChecker = shared.analysisFromDocument(
+  goldenAnalyses,
+  "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+).analysis;
+const goldenCube = shared.analysisFromDocument(
+  goldenAnalyses,
+  "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+).analysis;
+assert.equal(goldenChecker.metadata.recommendation, "8/4 6/4");
+assert.equal(goldenChecker.candidates.length, 8);
+assert.deepEqual(
+  goldenChecker.candidates.map((candidate) => candidate.source_order),
+  [1, 2, 3, 4, 5, 6, 7, 8]
+);
+assert.equal(
+  analysis.acceptedAnalysisChoice(goldenChecker, "gnu-move-8").move,
+  "24/20 6/4"
+);
+assert.match(
+  analysis.acceptedAnalysisChoice(goldenChecker, "gnu-move-8").move_board.image,
+  /node-k001\/checker\/candidate-8\.svg$/
+);
+assert.equal(goldenCube.metadata.recommendation, "Double, take");
+assert.deepEqual(
+  goldenCube.actions.map((action) => [action.id, action.value.value]),
+  [
+    ["double-take", 0.998032],
+    ["double-pass", 1.0],
+    ["no-double", 0.637873]
+  ]
+);
+assert.equal(
+  analysis.acceptedAnalysisChoice(goldenCube, "double-take").probabilities,
+  null
+);
+assert.throws(
+  () => analysis.acceptedAnalysisChoice(goldenCube, "roll"),
+  /does not define/
+);
 
 const doubleTake = fixtures.cube_cases["cube-double-take"];
 const rollReview = analysis.cubeDecisionState(doubleTake, "roll");

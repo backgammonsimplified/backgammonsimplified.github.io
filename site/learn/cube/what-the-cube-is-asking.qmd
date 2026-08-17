@@ -75,25 +75,14 @@ Take point ~= risk / (risk + reward)
 <div
   class="bs-lesson-analysis-host"
   data-bs-cube-decision
-  data-bs-fixture-src="/data/lesson-analysis-svg-mvp.json"
-  data-bs-fixture-id="cube-double-take"
+  data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"
+  data-bs-analysis-id="sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+  data-bs-lesson-title="Choose the cube action"
+  data-bs-lesson-prompt="Would you double or play on? If doubled, should the responder take or pass?"
+  data-bs-no-double-action-id="no-double"
+  data-bs-double-take-action-id="double-take"
+  data-bs-double-pass-action-id="double-pass"
 ></div>
-
-<details>
-<summary>Open the component-isolation fixture</summary>
-
-This second instance uses the same starting SVG but has Roll as its fixture
-answer. It exists to verify that repeated components receive independent
-controls and IDs.
-
-<div
-  class="bs-lesson-analysis-host"
-  data-bs-cube-decision
-  data-bs-fixture-src="/data/lesson-analysis-svg-mvp.json"
-  data-bs-fixture-id="cube-roll"
-></div>
-
-</details>
 
 ## What Changes the Answer?
 

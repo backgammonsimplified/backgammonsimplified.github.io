@@ -16,6 +16,12 @@ const retained = JSON.parse(
     "utf8"
   )
 );
+const golden = JSON.parse(
+  fs.readFileSync(
+    path.join(root, "site/data/analyzer-node-k001-lesson-preview.json"),
+    "utf8"
+  )
+);
 
 class FakeElement {
   constructor(tagName) {
@@ -124,6 +130,7 @@ function findByClass(rootElement, className) {
 
 assert.equal(viewer.validateFixtureDocument(fixtures), fixtures);
 assert.equal(viewer.validateFixtureDocument(retained), retained);
+assert.equal(viewer.validateFixtureDocument(golden), golden);
 assert.equal(retained.fixture_status.kind, "retained-analysis");
 
 const canonical = JSON.parse(JSON.stringify(retained));
@@ -138,6 +145,21 @@ const retainedChecker = viewer.analysisFromDocument(
   retained,
   "retained-checker-preview"
 ).analysis;
+const goldenChecker = viewer.analysisFromDocument(
+  golden,
+  "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+).analysis;
+const goldenCube = viewer.analysisFromDocument(
+  golden,
+  "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+).analysis;
+assert.equal(goldenChecker.candidates.length, 8);
+assert.equal(goldenChecker.candidates[0].move, "8/4 6/4");
+assert.equal(goldenCube.metadata.recommendation, "Double, take");
+assert.deepEqual(
+  goldenCube.actions.map((action) => action.id),
+  ["double-take", "double-pass", "no-double"]
+);
 assert.equal(retainedChecker.analysis_kind, "checker");
 assert.equal(retainedChecker.candidates.length, 3);
 assert.equal(retainedChecker.candidates[0].move, "8/4");
@@ -344,6 +366,43 @@ const cubeHost = new FakeElement("div");
 viewer.renderPresentation(cubeHost, cube, {});
 assert.equal(findByClass(cubeHost, "bs-analysis-results-checker-decision"), null);
 assert.equal(findByClass(cubeHost, "bs-analysis-results-comparison-table"), null);
+
+const goldenCheckerHost = new FakeElement("div");
+const goldenCheckerControls = viewer.renderPresentation(
+  goldenCheckerHost,
+  goldenChecker,
+  { initialActiveId: "gnu-move-8" }
+);
+assert.equal(
+  goldenCheckerHost.querySelectorAll("[data-bs-analysis-candidate-id]").length,
+  8
+);
+assert.equal(goldenCheckerControls.activate("gnu-move-2"), true);
+assert.match(
+  findByClass(goldenCheckerHost, "bs-analysis-results-board-image").src,
+  /node-k001\/checker\/candidate-2\.svg$/
+);
+assert.ok(
+  findByClass(goldenCheckerHost, "bs-analysis-results-comparison-table"),
+  "the golden checker retains the Task 005 comparison"
+);
+
+const goldenCubeHost = new FakeElement("div");
+viewer.renderPresentation(goldenCubeHost, goldenCube, {
+  initialActiveId: "double-take"
+});
+assert.equal(
+  goldenCubeHost.querySelectorAll("[data-bs-analysis-result-choice]").length,
+  3
+);
+assert.equal(
+  findByClass(goldenCubeHost, "bs-analysis-results-checker-decision"),
+  null
+);
+assert.equal(
+  findByClass(goldenCubeHost, "bs-analysis-results-comparison-table"),
+  null
+);
 
 assert.throws(
   () => viewer.analysisFromDocument(fixtures, "unknown-ui-demo"),

@@ -9,6 +9,7 @@ from xml.etree import ElementTree
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 FIXTURE_PATH = SITE / "data" / "lesson-analysis-svg-mvp.json"
+GOLDEN_PATH = SITE / "data" / "analyzer-node-k001-lesson-preview.json"
 ASSET_ROOT = (
     SITE
     / "assets"
@@ -29,6 +30,7 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+        cls.golden = json.loads(GOLDEN_PATH.read_text(encoding="utf-8"))
         cls.cube_source = CUBE_LESSON.read_text(encoding="utf-8")
         cls.checker_source = CHECKER_LESSON.read_text(encoding="utf-8")
 
@@ -99,25 +101,78 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         starts = list(ASSET_ROOT.rglob("starting.svg"))
         self.assertEqual(starts, [ASSET_ROOT / "starting.svg"])
 
-    def test_two_lessons_use_root_relative_fixture_loading(self):
+    def test_real_lessons_reference_exact_golden_analysis_keys(self):
         self.assertIn(
-            'data-bs-fixture-src="/data/lesson-analysis-svg-mvp.json"',
+            'data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"',
             self.cube_source,
         )
         self.assertIn(
-            'data-bs-fixture-src="/data/checker-sage-gnu-disagreement-001.json"',
+            'data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"',
             self.checker_source,
         )
         self.assertEqual(
             self.cube_source.count("data-bs-cube-decision"),
-            2,
+            1,
         )
         self.assertEqual(
             self.checker_source.count("data-bs-checker-decision"),
             1,
         )
+        self.assertIn(
+            "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+            self.checker_source,
+        )
+        self.assertIn(
+            "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+            self.cube_source,
+        )
         self.assertNotIn("<svg", self.cube_source.casefold())
         self.assertNotIn("<svg", self.checker_source.casefold())
+
+    def test_golden_checker_preserves_source_candidates_and_prepared_assets(self):
+        checker = self.golden["analyses"][
+            "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+        ]
+        self.assertEqual(checker["metadata"]["recommendation"], "8/4 6/4")
+        self.assertEqual(len(checker["candidates"]), 8)
+        self.assertEqual(
+            [candidate["source_order"] for candidate in checker["candidates"]],
+            list(range(1, 9)),
+        )
+        self.assertEqual(
+            [candidate["id"] for candidate in checker["candidates"]],
+            [f"gnu-move-{rank}" for rank in range(1, 9)],
+        )
+        for rank, candidate in enumerate(checker["candidates"], start=1):
+            expected = f"/assets/positions/node-k001/checker/candidate-{rank}.svg"
+            self.assertEqual(candidate["move_board"]["image"], expected)
+            self.assertTrue((SITE / expected.removeprefix("/")).is_file())
+
+    def test_golden_cube_preserves_source_actions_equities_and_probabilities(self):
+        cube = self.golden["analyses"][
+            "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+        ]
+        self.assertEqual(cube["metadata"]["recommendation"], "Double, take")
+        self.assertEqual(
+            [(action["id"], action["value"]["value"]) for action in cube["actions"]],
+            [
+                ("double-take", 0.998032),
+                ("double-pass", 1.0),
+                ("no-double", 0.637873),
+            ],
+        )
+        self.assertEqual(
+            cube["probabilities"],
+            {
+                "win": 0.749996,
+                "win_gammon_or_better": 0.0,
+                "win_backgammon": 0.0,
+                "lose": 0.250004,
+                "lose_gammon_or_worse": 0.0,
+                "lose_backgammon": 0.0,
+            },
+        )
+        self.assertTrue(all(action["probabilities"] is None for action in cube["actions"]))
 
     def test_qmd_hosts_do_not_hard_code_component_ids(self):
         for source in (self.cube_source, self.checker_source):
@@ -170,6 +225,7 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         self.assertIn('"assets/positions/**"', config)
         self.assertIn("data/lesson-analysis-svg-mvp.json", config)
         self.assertIn("data/checker-sage-gnu-disagreement-001.json", config)
+        self.assertIn("data/analyzer-node-k001-lesson-preview.json", config)
         self.assertIn("assets/bs-lesson-analysis.css", config)
         provenance = ASSET_ROOT / "PROVENANCE.txt"
         self.assertTrue(provenance.is_file())
@@ -188,6 +244,9 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         self.assertIn("checkerViewModel", implementation)
         self.assertIn("cubeViewModel", implementation)
         self.assertIn("sharedAnalysis().renderPresentation", implementation)
+        self.assertIn(".fixtureLoader(analysisUrl)(analysisId)", implementation)
+        self.assertIn("mountAcceptedChecker", implementation)
+        self.assertIn("mountAcceptedCube", implementation)
         self.assertNotIn("candidateMetricRows", implementation)
         self.assertNotIn("analysisRows", implementation)
         self.assertNotIn(".bs-analysis-position-image", lesson_css)
@@ -195,6 +254,38 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
         self.assertIn("function outcomePanel", shared)
         self.assertIn("function renderChecker", shared)
         self.assertIn("function renderCube", shared)
+
+    def test_real_lesson_flow_remains_owned_by_the_adapter(self):
+        implementation = (
+            SITE / "assets" / "bs-lesson-analysis.js"
+        ).read_text(encoding="utf-8")
+        self.assertIn('choiceButton(candidate.move, candidate.id)', implementation)
+        self.assertIn('choiceButton("Double", "double")', implementation)
+        self.assertIn('choiceButton("Take", "take")', implementation)
+        self.assertIn("revealAcceptedAnalysis", implementation)
+        self.assertIn("data-bs-lesson-prompt", self.checker_source)
+        self.assertIn("data-bs-lesson-prompt", self.cube_source)
+
+    def test_direct_browser_path_does_not_transform_or_calculate_analysis(self):
+        implementation = (
+            SITE / "assets" / "bs-lesson-analysis.js"
+        ).read_text(encoding="utf-8")
+        direct_path = implementation.split(
+            "function acceptedAnalysisChoice", 1
+        )[1].split("function mountCube", 1)[0]
+        self.assertIn("payload.analysis", implementation)
+        for forbidden in (
+            "Parquet",
+            "DuckDB",
+            "GNUID",
+            "Position ID",
+            "decode",
+            "applyMove",
+            "parseMove",
+            "difference_from_best",
+            "equity_loss",
+        ):
+            self.assertNotIn(forbidden, direct_path)
 
 
 if __name__ == "__main__":

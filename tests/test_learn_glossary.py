@@ -969,7 +969,11 @@ private code phrase
         self.assertNotRegex(source, r"[A-Za-z]:\\")
         self.assertIn("data-bs-cube-decision", source)
         self.assertIn(
-            'data-bs-fixture-src="/data/lesson-analysis-svg-mvp.json"',
+            'data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"',
+            source,
+        )
+        self.assertIn(
+            'data-bs-analysis-id="sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"',
             source,
         )
         self.assertIn("[Back to the cube overview](index.qmd)", source)

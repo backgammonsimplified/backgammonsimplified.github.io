@@ -101,10 +101,16 @@ class RealCheckerAnalysisTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "analysis_id"):
                 ADAPTER.build_projection(FIXTURE_DIR)
 
-    def test_lesson_loads_real_projection_and_browser_does_not_apply_moves(self):
+    def test_lesson_loads_golden_projection_and_browser_does_not_apply_moves(self):
         source = LESSON.read_text(encoding="utf-8")
-        self.assertIn('data-bs-fixture-src="/data/checker-sage-gnu-disagreement-001.json"', source)
-        self.assertIn('data-bs-fixture-id="checker-sage-gnu-disagreement-001"', source)
+        self.assertIn(
+            'data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"',
+            source,
+        )
+        self.assertIn(
+            'data-bs-analysis-id="sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"',
+            source,
+        )
         browser = (ROOT / "site" / "assets" / "bs-lesson-analysis.js").read_text(encoding="utf-8")
         shared = (ROOT / "site" / "assets" / "bs-analysis-results.js").read_text(encoding="utf-8")
         self.assertNotIn("board_moves", browser)

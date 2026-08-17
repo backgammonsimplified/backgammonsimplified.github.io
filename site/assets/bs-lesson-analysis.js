@@ -392,6 +392,195 @@
     return section;
   }
 
+  function acceptedAnalysisChoice(model, choiceId) {
+    const choices = model
+      ? model.analysis_kind === "checker"
+        ? model.candidates
+        : model.actions
+      : null;
+    if (!Array.isArray(choices)) {
+      throw new Error("Accepted lesson analysis does not define choices.");
+    }
+    const choice = choices.find(function (item) {
+      return item && item.id === choiceId;
+    });
+    if (!choice) {
+      throw new Error("Accepted lesson analysis does not define the selected choice.");
+    }
+    return choice;
+  }
+
+  function acceptedLessonArticle(host, model, kind) {
+    if (!model || model.analysis_kind !== kind) {
+      throw new Error("Accepted lesson analysis has the wrong decision type.");
+    }
+    const instanceId = nextInstanceId(kind, model.id);
+    const article = element(
+      "article",
+      "bs-lesson-analysis bs-" + kind + "-analysis"
+    );
+    const heading = element(
+      "h3",
+      "bs-analysis-title",
+      host.dataset.bsLessonTitle || model.title
+    );
+    const position = element("figure", "bs-analysis-position");
+    const board = element("div", "bs-analysis-results-board");
+    const prompt = element(
+      "p",
+      "bs-analysis-prompt",
+      host.dataset.bsLessonPrompt || model.subtitle
+    );
+    const status = element(
+      "p",
+      "bs-analysis-choice-status",
+      kind === "checker"
+        ? "Choose a move to reveal the accepted analysis."
+        : "Choose the cube action you would make."
+    );
+    const result = element("div", "bs-analysis-candidate-result");
+
+    heading.id = instanceId + "-title";
+    article.setAttribute("aria-labelledby", heading.id);
+    article.dataset.bsAnalysisInstance = instanceId;
+    article.dataset.analysisId = model.id;
+    sharedAnalysis().renderBoard(board, model.original_board);
+    position.appendChild(board);
+    status.setAttribute("aria-live", "polite");
+    result.hidden = true;
+    result.dataset.bsSharedAnalysisConsumer = "lesson";
+
+    return {
+      article: article,
+      heading: heading,
+      instanceId: instanceId,
+      position: position,
+      prompt: prompt,
+      result: result,
+      status: status
+    };
+  }
+
+  function revealAcceptedAnalysis(parts, model, choiceId) {
+    const choice = acceptedAnalysisChoice(model, choiceId);
+    sharedAnalysis().renderPresentation(parts.result, model, {
+      initialActiveId: choice.id,
+      showMore: true
+    });
+    parts.position.hidden = true;
+    parts.result.hidden = false;
+    return choice;
+  }
+
+  function mountAcceptedChecker(host, model) {
+    const parts = acceptedLessonArticle(host, model, "checker");
+    const group = element("div", "bs-analysis-choice-row");
+
+    group.setAttribute("role", "group");
+    group.setAttribute("aria-label", parts.prompt.textContent);
+    model.candidates.forEach(function (candidate) {
+      const button = choiceButton(candidate.move, candidate.id);
+      button.addEventListener("click", function () {
+        const selected = revealAcceptedAnalysis(parts, model, candidate.id);
+        setPressed(group, selected.id);
+        parts.status.textContent =
+          selected.move + " selected. The accepted analysis is revealed.";
+      });
+      group.appendChild(button);
+    });
+
+    parts.article.append(
+      parts.heading,
+      parts.position,
+      parts.prompt,
+      group,
+      parts.status,
+      parts.result
+    );
+    host.replaceChildren(parts.article);
+  }
+
+  function mountAcceptedCube(host, model) {
+    const parts = acceptedLessonArticle(host, model, "cube");
+    const firstGroup = element("div", "bs-analysis-choice-row");
+    const response = element("section", "bs-analysis-responder");
+    const responseHeading = element(
+      "h4",
+      "bs-analysis-responder-title",
+      "Responder decision"
+    );
+    const responsePrompt = element(
+      "p",
+      "bs-analysis-prompt",
+      "If the cube is doubled, should the responder take or pass?"
+    );
+    const responseGroup = element("div", "bs-analysis-choice-row");
+    const doubleButton = choiceButton("Double", "double");
+    const noDoubleButton = choiceButton("No double", "no-double");
+    const takeButton = choiceButton("Take", "take");
+    const passButton = choiceButton("Pass", "pass");
+    const actionIds = {
+      noDouble: host.dataset.bsNoDoubleActionId,
+      take: host.dataset.bsDoubleTakeActionId,
+      pass: host.dataset.bsDoublePassActionId
+    };
+
+    Object.values(actionIds).forEach(function (actionId) {
+      acceptedAnalysisChoice(model, actionId);
+    });
+    firstGroup.setAttribute("role", "group");
+    firstGroup.setAttribute("aria-label", parts.prompt.textContent);
+    firstGroup.append(doubleButton, noDoubleButton);
+    response.hidden = true;
+    responseHeading.id = parts.instanceId + "-responder-title";
+    response.setAttribute("aria-labelledby", responseHeading.id);
+    responseGroup.setAttribute("role", "group");
+    responseGroup.setAttribute("aria-label", responsePrompt.textContent);
+    responseGroup.append(takeButton, passButton);
+    response.append(responseHeading, responsePrompt, responseGroup);
+
+    function revealCubeChoice(actionId, lessonChoice) {
+      const selected = revealAcceptedAnalysis(parts, model, actionId);
+      parts.status.textContent =
+        lessonChoice + " selected. The accepted cube analysis is revealed.";
+      return selected;
+    }
+
+    doubleButton.addEventListener("click", function () {
+      setPressed(firstGroup, "double");
+      setPressed(responseGroup, "");
+      response.hidden = false;
+      parts.result.hidden = true;
+      parts.position.hidden = false;
+      parts.status.textContent =
+        "Double selected. Now choose the responder's action.";
+    });
+    noDoubleButton.addEventListener("click", function () {
+      setPressed(firstGroup, "no-double");
+      response.hidden = true;
+      revealCubeChoice(actionIds.noDouble, "No double");
+    });
+    takeButton.addEventListener("click", function () {
+      setPressed(responseGroup, "take");
+      revealCubeChoice(actionIds.take, "Double, take");
+    });
+    passButton.addEventListener("click", function () {
+      setPressed(responseGroup, "pass");
+      revealCubeChoice(actionIds.pass, "Double, pass");
+    });
+
+    parts.article.append(
+      parts.heading,
+      parts.position,
+      parts.prompt,
+      firstGroup,
+      response,
+      parts.status,
+      parts.result
+    );
+    host.replaceChildren(parts.article);
+  }
+
   function mountCube(host, fixtures, fixtureId) {
     const fixture = fixtures.cube_cases && fixtures.cube_cases[fixtureId];
     if (!fixture) throw new Error("Unknown cube lesson fixture: " + fixtureId);
@@ -629,7 +818,7 @@
     const message = element(
       "p",
       "bs-analysis-error",
-      "This lesson analysis fixture could not be loaded."
+      "This lesson analysis could not be loaded."
     );
     message.setAttribute("role", "alert");
     message.title = String(error && error.message ? error.message : error);
@@ -641,6 +830,32 @@
       return Promise.resolve();
     }
     host.dataset.bsAnalysisMounted = "true";
+    const analysisUrl = host.dataset.bsAnalysisSrc;
+    const analysisId = host.dataset.bsAnalysisId;
+    if (analysisUrl || analysisId) {
+      if (!analysisUrl || !analysisId) {
+        showMountError(host, new Error("Analysis source and ID are required."));
+        return Promise.resolve();
+      }
+      host.setAttribute("aria-busy", "true");
+      return sharedAnalysis()
+        .fixtureLoader(analysisUrl)(analysisId)
+        .then(function (payload) {
+          if (host.hasAttribute("data-bs-cube-decision")) {
+            mountAcceptedCube(host, payload.analysis);
+          } else if (host.hasAttribute("data-bs-checker-decision")) {
+            mountAcceptedChecker(host, payload.analysis);
+          } else {
+            throw new Error("Unknown lesson analysis component type.");
+          }
+        })
+        .catch(function (error) {
+          showMountError(host, error);
+        })
+        .finally(function () {
+          host.removeAttribute("aria-busy");
+        });
+    }
     const url = host.dataset.bsFixtureSrc;
     const fixtureId = host.dataset.bsFixtureId;
     if (!url || !fixtureId) {
@@ -704,6 +919,7 @@
   }
 
   const publicApi = {
+    acceptedAnalysisChoice: acceptedAnalysisChoice,
     assetUrl: assetUrl,
     checkerCandidateIdentityMatches: checkerCandidateIdentityMatches,
     checkerCandidateState: checkerCandidateState,
@@ -713,6 +929,8 @@
     lessonProbabilities: lessonProbabilities,
     matchingActionId: matchingActionId,
     mount: mount,
+    mountAcceptedChecker: mountAcceptedChecker,
+    mountAcceptedCube: mountAcceptedCube,
     nextInstanceId: nextInstanceId,
     resetInstanceCounter: resetInstanceCounter,
     validateFixtureDocument: validateFixtureDocument
