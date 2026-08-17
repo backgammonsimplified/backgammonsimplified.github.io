@@ -1,7 +1,7 @@
 ---
 title: "Analysis Results Viewer Preview"
-description: "Development-only retained checker and synthetic cube/error fixtures for the shared Backgammon Simplified Analysis Results Viewer."
-subtitle: "DEVELOPMENT PREVIEW :: RETAINED CHECKER + SYNTHETIC FAILURE CASES"
+description: "Development-only Canonical Parquet checker and synthetic cube/error fixtures for the shared Backgammon Simplified Analysis Results Viewer."
+subtitle: "DEVELOPMENT PREVIEW :: CANONICAL PARQUET CHECKER + SYNTHETIC FAILURE CASES"
 page-layout: full
 toc: false
 term-lookup: false
@@ -17,23 +17,23 @@ format:
 ::: {.bs-status-panel}
 [DEVELOPMENT PREVIEW]{.bs-status-label}
 
-The checker example below uses accepted retained GNU 4-ply evidence and cached Backgammonboard SVGs. The cube and loader-failure cases remain deliberately synthetic. This route is still a development fixture, not a published Analyzer result.
+The checker example below is materialized from the verified frozen Canonical Analysis Parquet v1 reference package. Its cached Backgammonboard SVGs are presentation assets for the same factual GNU position. The cube and loader-failure cases remain deliberately synthetic. This route is still a development preview, not a published Analyzer result.
 :::
 
 The browser still loads only analysis-view JSON. Retained and future Canonical Parquet records are materialized before the browser boundary, and Backgammonboard renders candidate move-overlay SVGs at build time.
 
 :::
 
-## Retained checker result
+## Canonical Parquet checker result
 
-The board and move list share one factual starting position. Candidate analysis rows are independent: the top move starts open, and opening another move leaves earlier outcome bars open while changing the board to that candidate's movement overlay.
+The analytical values, canonical identities, occurrence context, requested depth, and candidate evaluations come from verified Canonical Parquet. The board assets are retained build-time renders for this exact factual position. Candidate analysis rows remain independent.
 
 ```{=html}
 <div
   class="bs-analysis-results-host"
   data-bs-analysis-results
-  data-analysis-id="retained-checker-preview"
-  data-analysis-fixture-url="/data/analyzer-retained-checker-preview.json"
+  data-analysis-id="b909630c811a0214b8156e068b88ebeb9a064a56bfec3ae5af8c6afe45278d07"
+  data-analysis-fixture-url="/data/analyzer-canonical-checker-preview.json"
 ></div>
 ```
 

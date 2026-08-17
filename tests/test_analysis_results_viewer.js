@@ -21,6 +21,14 @@ assert.equal(viewer.validateFixtureDocument(fixtures), fixtures);
 assert.equal(viewer.validateFixtureDocument(retained), retained);
 assert.equal(retained.fixture_status.kind, "retained-analysis");
 
+const canonical = JSON.parse(JSON.stringify(retained));
+canonical.fixture_status = {
+  kind: "canonical-analysis",
+  label: "Canonical Parquet analysis",
+  message: "Values come from verified Canonical Analysis Parquet v1."
+};
+assert.equal(viewer.validateFixtureDocument(canonical), canonical);
+
 const retainedChecker = viewer.analysisFromDocument(
   retained,
   "retained-checker-preview"

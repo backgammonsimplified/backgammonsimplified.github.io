@@ -6,6 +6,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_PATH = ROOT / "site" / "data" / "analyzer-analysis-results-fixtures.json"
 RETAINED_PATH = ROOT / "site" / "data" / "analyzer-retained-checker-preview.json"
+CANONICAL_PATH = ROOT / "site" / "data" / "analyzer-canonical-checker-preview.json"
 PAGE_PATH = ROOT / "site" / "analyze" / "results-fixture.qmd"
 PUBLICATION_PATH = ROOT / "site" / "_publication.yml"
 QUARTO_PATH = ROOT / "site" / "_quarto.yml"
@@ -39,6 +40,61 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
             self.assertIn("move_board", candidate)
             self.assertIn("checker-sage-gnu-disagreement-001", candidate["move_board"]["image"])
             self.assertIn("starting position", candidate["move_board"]["alt"])
+
+    def test_canonical_checker_preview_uses_verified_parquet_materialization(self):
+        payload = json.loads(CANONICAL_PATH.read_text(encoding="utf-8"))
+
+        self.assertEqual(payload["fixture_status"]["kind"], "canonical-analysis")
+        package = payload["materialization"]["package"]
+        self.assertEqual(
+            package["package_id"],
+            "canonical-analysis-reference-2c828e118b6cf22f",
+        )
+        self.assertEqual(
+            package["manifest_sha256"],
+            "effa2a8bc273be03222d8193c090f96ef3415224af228f0e45678b8e7ec498a7",
+        )
+        self.assertEqual(package["conformance_status"], "verified-canonical-v1")
+
+        decision_id = (
+            "b909630c811a0214b8156e068b88ebeb9a064a56bfec3ae5af8c6afe45278d07"
+        )
+        checker = payload["analyses"][decision_id]
+
+        self.assertEqual(
+            checker["canonical_context"]["logical_position_id"],
+            "c3aeb102842104c01efb857fbcd5c3f45d0cd3859b65f28d6fae3c7a470c2e3b",
+        )
+        self.assertEqual(checker["context"]["dice"], "3-1")
+        self.assertEqual(checker["metadata"]["played_move"], "13/12 11/8")
+        self.assertEqual(checker["metadata"]["recommendation"], "8/4")
+
+        self.assertEqual(
+            [item["move"] for item in checker["candidates"]],
+            ["8/4", "13/10 11/10", "13/10 8/7", "8/7 6/3", "13/12 11/8"],
+        )
+        self.assertEqual(
+            [item["value"]["value"] for item in checker["candidates"]],
+            [-1.615, -1.617, -1.619, -1.625, -1.643],
+        )
+        self.assertTrue(
+            all(item["difference_from_best"] is None for item in checker["candidates"])
+        )
+        self.assertEqual(
+            [item["native_equity_loss_display"] for item in checker["candidates"]],
+            [None, -0.002, -0.004, -0.01, -0.028],
+        )
+        self.assertEqual(
+            checker["candidates"][0]["probabilities"],
+            {
+                "win": 0.162,
+                "win_gammon_or_better": 0.0,
+                "win_backgammon": 0.0,
+                "lose": 0.838,
+                "lose_gammon_or_worse": 0.677,
+                "lose_backgammon": 0.052,
+            },
+        )
 
     def test_checker_and_cube_cover_degraded_states(self):
         payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
@@ -140,14 +196,15 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         page = PAGE_PATH.read_text(encoding="utf-8")
         self.assertNotIn("published: true", page)
         self.assertIn("DEVELOPMENT PREVIEW", page)
-        self.assertIn("analyzer-retained-checker-preview.json", page)
-        self.assertIn("opening another move leaves earlier outcome bars open", page)
+        self.assertIn("analyzer-canonical-checker-preview.json", page)
+        self.assertIn("Canonical Parquet checker result", page)
 
     def test_viewer_assets_are_registered(self):
         quarto = QUARTO_PATH.read_text(encoding="utf-8")
         scripts = SCRIPTS_PATH.read_text(encoding="utf-8")
         self.assertIn("data/analyzer-analysis-results-fixtures.json", quarto)
         self.assertIn("data/analyzer-retained-checker-preview.json", quarto)
+        self.assertIn("data/analyzer-canonical-checker-preview.json", quarto)
         self.assertIn("assets/bs-analysis-results.css", quarto)
         self.assertIn('/assets/bs-analysis-results.js', scripts)
         self.assertLess(

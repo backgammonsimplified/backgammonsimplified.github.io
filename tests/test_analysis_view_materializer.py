@@ -106,6 +106,51 @@ class AnalysisViewMaterializerTests(unittest.TestCase):
         with self.assertRaisesRegex(materializer.MaterializationError, "manifest SHA-256"):
             materializer.materialize_document(malformed)
 
+    def test_verified_canonical_read_set_preserves_null_source_identity_and_native_loss(self) -> None:
+        canonical = copy.deepcopy(self.read_set)
+        canonical["package"] = {
+            "package_id": "canonical-analysis-reference-test",
+            "profile_id": "canonical-analysis-parquet-v1",
+            "manifest_sha256": "a" * 64,
+            "conformance_status": "verified-canonical-v1",
+        }
+        canonical["fixture_status"] = {
+            "kind": "canonical-analysis",
+            "label": "Canonical Parquet analysis",
+            "message": "Verified Canonical Analysis Parquet v1 test record.",
+        }
+
+        checker = canonical["analyses"][0]
+        checker["source_occurrence"]["source_record_id"] = None
+
+        evaluation = next(
+            item
+            for item in checker["checker_evaluations"]
+            if item["candidate_id"] == "synthetic-checker-candidate-002"
+        )
+        evaluation["difference_from_best"] = None
+        evaluation["native_equity_loss_display"] = -0.002
+
+        output = materializer.materialize_document(canonical)
+        self.assertEqual(output["fixture_status"]["kind"], "canonical-analysis")
+
+        result = output["analyses"]["synthetic-checker-decision-001"]
+        self.assertIsNone(
+            result["canonical_context"]["source_occurrence"]["source_record_id"]
+        )
+
+        candidate = next(
+            item
+            for item in result["candidates"]
+            if item["id"] == "synthetic-checker-candidate-002"
+        )
+        self.assertIsNone(candidate["difference_from_best"])
+        self.assertEqual(candidate["native_equity_loss_display"], -0.002)
+        self.assertEqual(
+            candidate["evaluations"][0]["native_equity_loss_display"],
+            -0.002,
+        )
+
     def test_cli_repeat_verification_writes_stable_bytes(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "analysis-view.json"

@@ -8,7 +8,11 @@
   "use strict";
 
   const FIXTURE_SCHEMA = "bs-analysis-results-viewer-fixture-v1";
-  const FIXTURE_KINDS = new Set(["synthetic", "retained-analysis"]);
+  const FIXTURE_KINDS = new Set([
+    "synthetic",
+    "retained-analysis",
+    "canonical-analysis"
+  ]);
   const requestCache = new Map();
   const OUTCOME_SEGMENTS = [
     ["win_backgammon", "Win backgammon", "win-bg"],

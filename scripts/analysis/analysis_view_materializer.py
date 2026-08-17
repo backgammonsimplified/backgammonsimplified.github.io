@@ -221,8 +221,10 @@ def validate_common_analysis(source: dict[str, Any], path: str) -> None:
         ("occurrence_id", "source_id", "source_record_id", "match_id", "game_id", "line_number"),
         f"{path}.source_occurrence",
     )
-    for key in ("occurrence_id", "source_id", "source_record_id", "match_id", "game_id"):
+    for key in ("occurrence_id", "source_id"):
         require_identifier(occurrence[key], f"{path}.source_occurrence.{key}")
+    for key in ("source_record_id", "match_id", "game_id"):
+        require_optional_text(occurrence[key], f"{path}.source_occurrence.{key}")
     require_optional_integer(occurrence["line_number"], f"{path}.source_occurrence.line_number")
 
     context = require_object(source["context"], f"{path}.context")
@@ -307,6 +309,10 @@ def map_evaluation(source: dict[str, Any], path: str) -> dict[str, Any]:
         "candidate_id": require_identifier(source["candidate_id"], f"{path}.candidate_id"),
         "difference_from_best": require_optional_number(
             source["difference_from_best"], f"{path}.difference_from_best"
+        ),
+        "native_equity_loss_display": require_optional_number(
+            source.get("native_equity_loss_display"),
+            f"{path}.native_equity_loss_display",
         ),
         "display_value_source": display_source,
         "evaluation_id": require_identifier(source["evaluation_id"], f"{path}.evaluation_id"),
@@ -431,6 +437,7 @@ def map_checker(source: dict[str, Any], path: str) -> tuple[list[dict[str, Any]]
                 **candidate,
                 "actual_ply": display["actual_ply"],
                 "difference_from_best": display["difference_from_best"],
+                "native_equity_loss_display": display["native_equity_loss_display"],
                 "evaluation": display["evaluation_type"],
                 "evaluations": evaluations,
                 "probabilities": display["probabilities"],
@@ -623,8 +630,14 @@ def materialize_document(read_set: dict[str, Any]) -> dict[str, Any]:
     package = validate_package(read_set["package"])
     fixture_status = require_object(read_set["fixture_status"], "fixture_status")
     require_keys(fixture_status, ("kind", "label", "message"), "fixture_status")
-    if fixture_status["kind"] not in {"synthetic", "retained-analysis"}:
-        raise MaterializationError("fixture_status.kind is not compatible with the current viewer")
+    if fixture_status["kind"] not in {
+        "synthetic",
+        "retained-analysis",
+        "canonical-analysis",
+    }:
+        raise MaterializationError(
+            "fixture_status.kind is not compatible with the current viewer"
+        )
     for key in ("label", "message"):
         require_identifier(fixture_status[key], f"fixture_status.{key}")
     rows = require_list(read_set["analyses"], "analyses")
