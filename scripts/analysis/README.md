@@ -195,3 +195,54 @@ cached candidate SVG
 ```
 
 If Canonical Parquet supplies a resulting position but no unambiguous structured movement steps, the materializer may render a separate resulting position, but it must not invent movement arrows or die assignment. Analyzer therefore benefits from explicit ordered checker movement fields in Canonical Parquet in addition to native notation and candidate/result-position identities.
+
+## Reusable local Node authoring loop
+
+Completed local Node analysis artifacts can be attached to the existing Results
+Viewer without waiting for Corpus or Parquet:
+
+```text
+completed Node analysis-view v0 artifact
+-> strict local/build-time projection
+-> existing analysis-view JSON contract
+-> existing shared Results Viewer
+-> optional marked Learn lesson host
+```
+
+Create a config using
+`node-k001-regression-authoring.json` as the interface example, then run:
+
+```bash
+bash scripts/analysis/materialize-node-analysis.sh path/to/authoring.json
+```
+
+The config explicitly supplies:
+
+- `authority: local-development-only` and a stable output `slug`;
+- each artifact path, exact `analysis_id`, selected `kind`, and asset subdirectory;
+- the analysis-view output path/public URL and the asset output path/public root;
+- presentation-only labels and whether a cube responder board should be prepared;
+- optional Learn bindings for regions delimited by
+  `bs-local-node-analysis:<name>:start/end` comments.
+
+Relative filesystem paths resolve from the repository root. Environment
+variables and `~` are expanded for artifact and output paths. Set
+`BACKGAMMONCALCULATOR_REPO` and/or `BACKGAMMONBOARD_REPO` when the corresponding
+R packages need to be installed into `.r-library`; `R_BIN`, `RSCRIPT_BIN`, and
+`LOCAL_NODE_R_LIBS_USER` remain overridable.
+
+The command selects every analysis by exact key and decision kind, rejects
+duplicate JSON keys and ambiguous row identity/order, projects deterministic
+JSON, and renders boards in a staging directory before replacing the requested
+asset directory. Simple point-to-point checker notation receives build-time
+movement overlays through `backgammonboard::board_moves()`. Unsupported notation
+is retained with an explicit missing overlay; it is never interpreted or
+guessed. Cube responder assets are only created when the config explicitly asks
+for them and the offered-double state can be prepared unambiguously.
+
+The output retains the Node schema, analysis key, artifact SHA-256, full source
+request, and full producer-provenance object under `local_authoring`. Both the
+config and output say `local-development-only`; the command refuses a Canonical
+status. It consumes completed artifacts only and never starts GNU or another
+analysis engine. The K001 checker/cube files in `tests/fixtures/` are regression
+inputs, not a new analytical run or authority source.

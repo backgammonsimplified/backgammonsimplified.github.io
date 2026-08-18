@@ -1,0 +1,71 @@
+{
+  "schema_version": "bs-local-node-analysis-authoring-v1",
+  "authority": "local-development-only",
+  "slug": "node-k001",
+  "output": {
+    "analysis_view": "site/data/analyzer-node-k001-lesson-preview.json",
+    "public_analysis_view": "/data/analyzer-node-k001-lesson-preview.json",
+    "assets": "site/assets/positions/node-k001",
+    "public_asset_root": "/assets/positions/node-k001"
+  },
+  "fixture_status": {
+    "kind": "retained-analysis",
+    "label": "Exact Node lesson data",
+    "message": "These are the accepted Node K001 checker and cube analysis records, projected for the development Results Viewer."
+  },
+  "analyses": [
+    {
+      "artifact": "tests/fixtures/node-k001-checker-analysis-view.json",
+      "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "kind": "checker",
+      "asset_subdir": "checker",
+      "presentation": {
+        "title": "Exact Node checker lesson analysis",
+        "subtitle": "Accepted 1-ply GNU checker record with all exported candidates",
+        "decision": "Checker play",
+        "original_board_alt": "Exact Node checker lesson starting position.",
+        "candidate_alt": "Exact Node checker position with movement overlay for rank {rank}: {notation}.",
+        "overlay_details": "Movement overlay is build-time rendered from this exact starting GNUID.",
+        "unsupported_details": "This source notation is preserved, but no overlay is invented for unsupported notation."
+      }
+    },
+    {
+      "artifact": "tests/fixtures/node-k001-cube-analysis-view.json",
+      "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "kind": "cube",
+      "asset_subdir": "cube",
+      "presentation": {
+        "title": "Exact Node cube lesson analysis",
+        "subtitle": "Accepted 1-ply GNU cube record",
+        "decision": "Cube decision",
+        "original_board_alt": "Exact Node cube lesson starting position.",
+        "action_details": "Exact Node cube action from the accepted completed record.",
+        "render_responder_board": true,
+        "responder_board_alt": "The exact same Node cube lesson position shown from the responder's perspective after Double."
+      }
+    }
+  ],
+  "learn_bindings": [
+    {
+      "name": "node-k001-checker",
+      "lesson": "site/learn/cube/why-is-25-percent-the-basic-take-point.qmd",
+      "kind": "checker",
+      "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "title": "Choose a checker play",
+      "prompt": "With 4-2 to play, which candidate would you choose?"
+    },
+    {
+      "name": "node-k001-cube",
+      "lesson": "site/learn/cube/what-the-cube-is-asking.qmd",
+      "kind": "cube",
+      "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "title": "Choose the cube action",
+      "prompt": "Would you double or play on? If doubled, should the responder take or pass?",
+      "action_ids": {
+        "no_double": "no-double",
+        "double_take": "double-take",
+        "double_pass": "double-pass"
+      }
+    }
+  ]
+}

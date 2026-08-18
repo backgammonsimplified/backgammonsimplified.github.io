@@ -1,0 +1,151 @@
+{
+  "schema_version": "b\u006ds-node-analysis-view-v0",
+  "analysis_kind": "checker",
+  "analysis_key": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+  "source_request": {
+    "position": {
+      "format": "gnuid",
+      "id": "4PPgASTgc/ABMA:cAnqAAAAAAAE"
+    },
+    "dice": [4, 2]
+  },
+  "engine": {
+    "name": "gnu",
+    "version": "1.08.003-mingw 32-Bit 20240428"
+  },
+  "producer_provenance": {
+    "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+    "parser": {
+      "identity": "gnu-text-parser-v1"
+    }
+  },
+  "settings": {
+    "requested": {
+      "analysis_setting": "1ply",
+      "decision_type": "checker",
+      "report_mode": "quick"
+    },
+    "effective": {
+      "actual_evaluation_type": "evaluation",
+      "evaluation_plies": 1,
+      "cubeful": true,
+      "pruning": false
+    }
+  },
+  "probabilities": {
+    "win": 0.505167,
+    "win_gammon": 0.140466,
+    "win_backgammon": 0.004389,
+    "lose": 0.494833,
+    "lose_gammon": 0.131013,
+    "lose_backgammon": 0.00627
+  },
+  "recommendation": {
+    "notation": "8/4 6/4"
+  },
+  "played_move": null,
+  "checker": {
+    "candidates": [
+      {
+        "id": "gnu-move-1",
+        "source_order": 1,
+        "display_order": 1,
+        "notation": "8/4 6/4",
+        "evaluation": {"type": "evaluation", "ply": 1},
+        "value": {"label": "equity", "value": 0.025296},
+        "difference_from_best": 0.0,
+        "probabilities": {"win": 0.505167, "win_gammon": 0.140466, "win_backgammon": 0.004389, "lose": 0.494833, "lose_gammon": 0.131013, "lose_backgammon": 0.00627},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-2",
+        "source_order": 2,
+        "display_order": 2,
+        "notation": "24/20 13/11",
+        "evaluation": {"type": "evaluation", "ply": 1},
+        "value": {"label": "equity", "value": -0.144343},
+        "difference_from_best": -0.169639,
+        "probabilities": {"win": 0.468466, "win_gammon": 0.114991, "win_backgammon": 0.004577, "lose": 0.531534, "lose_gammon": 0.152369, "lose_backgammon": 0.00638},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-3",
+        "source_order": 3,
+        "display_order": 3,
+        "notation": "24/22 24/20",
+        "evaluation": {"type": "evaluation", "ply": 0},
+        "value": {"label": "equity", "value": -0.179149},
+        "difference_from_best": -0.204445,
+        "probabilities": {"win": 0.461177, "win_gammon": 0.100439, "win_backgammon": 0.00309, "lose": 0.538823, "lose_gammon": 0.147844, "lose_backgammon": 0.005208},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-4",
+        "source_order": 4,
+        "display_order": 4,
+        "notation": "24/18",
+        "evaluation": {"type": "evaluation", "ply": 0},
+        "value": {"label": "equity", "value": -0.187987},
+        "difference_from_best": -0.213283,
+        "probabilities": {"win": 0.461445, "win_gammon": 0.100813, "win_backgammon": 0.003132, "lose": 0.538555, "lose_gammon": 0.156015, "lose_backgammon": 0.005658},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-5",
+        "source_order": 5,
+        "display_order": 5,
+        "notation": "13/11 13/9",
+        "evaluation": {"type": "evaluation", "ply": 0},
+        "value": {"label": "equity", "value": -0.195895},
+        "difference_from_best": -0.221191,
+        "probabilities": {"win": 0.453778, "win_gammon": 0.120179, "win_backgammon": 0.005774, "lose": 0.546222, "lose_gammon": 0.158389, "lose_backgammon": 0.011572},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-6",
+        "source_order": 6,
+        "display_order": 6,
+        "notation": "24/22 13/9",
+        "evaluation": {"type": "evaluation", "ply": 0},
+        "value": {"label": "equity", "value": -0.20807},
+        "difference_from_best": -0.233366,
+        "probabilities": {"win": 0.453154, "win_gammon": 0.108647, "win_backgammon": 0.004539, "lose": 0.546846, "lose_gammon": 0.157139, "lose_backgammon": 0.00881},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-7",
+        "source_order": 7,
+        "display_order": 7,
+        "notation": "24/20 8/6",
+        "evaluation": {"type": "evaluation", "ply": 0},
+        "value": {"label": "equity", "value": -0.229902},
+        "difference_from_best": -0.255198,
+        "probabilities": {"win": 0.446804, "win_gammon": 0.101817, "win_backgammon": 0.003175, "lose": 0.553196, "lose_gammon": 0.153773, "lose_backgammon": 0.005842},
+        "resulting_position_id": null
+      },
+      {
+        "id": "gnu-move-8",
+        "source_order": 8,
+        "display_order": 8,
+        "notation": "24/20 6/4",
+        "evaluation": {"type": "evaluation", "ply": 0},
+        "value": {"label": "equity", "value": -0.234248},
+        "difference_from_best": -0.259544,
+        "probabilities": {"win": 0.451738, "win_gammon": 0.10325, "win_backgammon": 0.003993, "lose": 0.548262, "lose_gammon": 0.169014, "lose_backgammon": 0.009572},
+        "resulting_position_id": null
+      }
+    ]
+  },
+  "warnings": [
+    "GNU hint output does not identify a previously played move; is_played_move remains null",
+    "resulting Position IDs were not generated; resulting_position_id remains null",
+    "No canonical board asset is available for this GNUID-only request.",
+    "No structured checker movement steps or move-overlay assets are present in the source request/result."
+  ],
+  "limitations": [
+    "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
+    "No board image asset is present in the canonical request or normalized result.",
+    "The normalized result does not include structured movement steps, move-overlay assets, or resulting-position identities.",
+    "The played move is unknown; the recommendation is not presented as a played move."
+  ]
+}

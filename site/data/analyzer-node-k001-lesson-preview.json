@@ -6,6 +6,113 @@
     "message": "These are the accepted Node K001 checker and cube analysis records, projected for the development Results Viewer."
   },
   "analyses": {
+    "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01": {
+      "id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "analysis_kind": "cube",
+      "title": "Exact Node cube lesson analysis",
+      "subtitle": "Accepted 1-ply GNU cube record",
+      "fixture": true,
+      "original_board": {
+        "image": "/assets/positions/node-k001/cube/starting.svg",
+        "alt": "Exact Node cube lesson starting position."
+      },
+      "context": {
+        "score": null,
+        "cube": null,
+        "dice": null,
+        "decision": "Cube decision"
+      },
+      "metadata": {
+        "engine": "gnu",
+        "engine_version": "1.08.003-mingw 32-Bit 20240428",
+        "source_family": "backgammon-node exact lesson analysis",
+        "parser": "gnu-text-parser-v1",
+        "provenance": "analysis sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01; producer b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+        "analysis_settings": {
+          "requested": "1ply, cube, quick",
+          "effective": "actual_evaluation_type=evaluation, evaluation_plies=1, cubeful=True, pruning=False"
+        },
+        "recommendation": "Double, take"
+      },
+      "probabilities": {
+        "win": 0.749996,
+        "win_gammon_or_better": 0.0,
+        "win_backgammon": 0.0,
+        "lose": 0.250004,
+        "lose_gammon_or_worse": 0.0,
+        "lose_backgammon": 0.0
+      },
+      "warnings": [
+        "GNU cube-action equities are preserved as emitted; action probabilities and match-winning chances remain null",
+        "No canonical board asset is available for this GNUID-only request."
+      ],
+      "limitations": [
+        "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
+        "No board image asset is present in the canonical request or normalized result.",
+        "Cube action probabilities, match-winning chances, and cube efficiency are null because the source result did not emit them."
+      ],
+      "local_authoring": {
+        "authority": "local-development-only",
+        "source_schema": "b\u006ds-node-analysis-view-v0",
+        "analysis_key": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+        "artifact_sha256": "dcb9888fc9846fc53fb86fdd733228b02acfea281d44a7798025bdaf248dd3a0",
+        "source_request": {
+          "position": {
+            "format": "gnuid",
+            "id": "PAAAICMAAAAAAA:MAEAAAAAAAAE"
+          },
+          "dice": null
+        },
+        "producer_provenance": {
+          "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+          "parser": {
+            "identity": "gnu-text-parser-v1"
+          }
+        }
+      },
+      "actions": [
+        {
+          "id": "double-take",
+          "label": "Double, take",
+          "normalized_action": "double-take",
+          "supported": true,
+          "value": {
+            "label": "equity",
+            "value": 0.998032
+          },
+          "probabilities": null,
+          "details": "Exact Node cube action from the accepted completed record."
+        },
+        {
+          "id": "double-pass",
+          "label": "Double, pass",
+          "normalized_action": "double-pass",
+          "supported": true,
+          "value": {
+            "label": "equity",
+            "value": 1.0
+          },
+          "probabilities": null,
+          "details": "Exact Node cube action from the accepted completed record."
+        },
+        {
+          "id": "no-double",
+          "label": "No double",
+          "normalized_action": "no-double",
+          "supported": true,
+          "value": {
+            "label": "equity",
+            "value": 0.637873
+          },
+          "probabilities": null,
+          "details": "Exact Node cube action from the accepted completed record."
+        }
+      ],
+      "responder_board": {
+        "image": "/assets/positions/node-k001/cube/responder.svg",
+        "alt": "The exact same Node cube lesson position shown from the responder's perspective after Double."
+      }
+    },
     "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d": {
       "id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
       "analysis_kind": "checker",
@@ -42,6 +149,40 @@
         "lose": 0.494833,
         "lose_gammon_or_worse": 0.131013,
         "lose_backgammon": 0.00627
+      },
+      "warnings": [
+        "GNU hint output does not identify a previously played move; is_played_move remains null",
+        "resulting Position IDs were not generated; resulting_position_id remains null",
+        "No canonical board asset is available for this GNUID-only request.",
+        "No structured checker movement steps or move-overlay assets are present in the source request/result."
+      ],
+      "limitations": [
+        "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
+        "No board image asset is present in the canonical request or normalized result.",
+        "The normalized result does not include structured movement steps, move-overlay assets, or resulting-position identities.",
+        "The played move is unknown; the recommendation is not presented as a played move."
+      ],
+      "local_authoring": {
+        "authority": "local-development-only",
+        "source_schema": "b\u006ds-node-analysis-view-v0",
+        "analysis_key": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "artifact_sha256": "0186d761a54a8e1f38a91686d960224790a3232efab487f8dc723bb390d8f1cf",
+        "source_request": {
+          "position": {
+            "format": "gnuid",
+            "id": "4PPgASTgc/ABMA:cAnqAAAAAAAE"
+          },
+          "dice": [
+            4,
+            2
+          ]
+        },
+        "producer_provenance": {
+          "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+          "parser": {
+            "identity": "gnu-text-parser-v1"
+          }
+        }
       },
       "candidates": [
         {
@@ -260,107 +401,12 @@
           "resulting_position_id": null,
           "details": "Movement overlay is build-time rendered from this exact starting GNUID."
         }
-      ],
-      "warnings": [
-        "GNU hint output does not identify a previously played move; is_played_move remains null",
-        "resulting Position IDs were not generated; resulting_position_id remains null",
-        "No canonical board asset is available for this GNUID-only request.",
-        "No structured checker movement steps or move-overlay assets are present in the source request/result."
-      ],
-      "limitations": [
-        "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
-        "No board image asset is present in the canonical request or normalized result.",
-        "The normalized result does not include structured movement steps, move-overlay assets, or resulting-position identities.",
-        "The played move is unknown; the recommendation is not presented as a played move."
-      ]
-    },
-    "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01": {
-      "id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
-      "analysis_kind": "cube",
-      "title": "Exact Node cube lesson analysis",
-      "subtitle": "Accepted 1-ply GNU cube record",
-      "fixture": true,
-      "original_board": {
-        "image": "/assets/positions/node-k001/cube/starting.svg",
-        "alt": "Exact Node cube lesson starting position."
-      },
-      "responder_board": {
-        "image": "/assets/positions/node-k001/cube/responder.svg",
-        "alt": "The exact same Node cube lesson position shown from the responder's perspective after Double."
-      },
-      "context": {
-        "score": null,
-        "cube": null,
-        "dice": null,
-        "decision": "Cube decision"
-      },
-      "metadata": {
-        "engine": "gnu",
-        "engine_version": "1.08.003-mingw 32-Bit 20240428",
-        "source_family": "backgammon-node exact lesson analysis",
-        "parser": "gnu-text-parser-v1",
-        "provenance": "analysis sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01; producer b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
-        "analysis_settings": {
-          "requested": "1ply, cube, quick",
-          "effective": "actual_evaluation_type=evaluation, evaluation_plies=1, cubeful=True, pruning=False"
-        },
-        "recommendation": "Double, take"
-      },
-      "probabilities": {
-        "win": 0.749996,
-        "win_gammon_or_better": 0.0,
-        "win_backgammon": 0.0,
-        "lose": 0.250004,
-        "lose_gammon_or_worse": 0.0,
-        "lose_backgammon": 0.0
-      },
-      "actions": [
-        {
-          "id": "double-take",
-          "label": "Double, take",
-          "normalized_action": "double-take",
-          "supported": true,
-          "value": {
-            "label": "equity",
-            "value": 0.998032
-          },
-          "probabilities": null,
-          "details": "Exact Node cube action from the accepted completed record."
-        },
-        {
-          "id": "double-pass",
-          "label": "Double, pass",
-          "normalized_action": "double-pass",
-          "supported": true,
-          "value": {
-            "label": "equity",
-            "value": 1.0
-          },
-          "probabilities": null,
-          "details": "Exact Node cube action from the accepted completed record."
-        },
-        {
-          "id": "no-double",
-          "label": "No double",
-          "normalized_action": "no-double",
-          "supported": true,
-          "value": {
-            "label": "equity",
-            "value": 0.637873
-          },
-          "probabilities": null,
-          "details": "Exact Node cube action from the accepted completed record."
-        }
-      ],
-      "warnings": [
-        "GNU cube-action equities are preserved as emitted; action probabilities and match-winning chances remain null",
-        "No canonical board asset is available for this GNUID-only request."
-      ],
-      "limitations": [
-        "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
-        "No board image asset is present in the canonical request or normalized result.",
-        "Cube action probabilities, match-winning chances, and cube efficiency are null because the source result did not emit them."
       ]
     }
+  },
+  "local_authoring": {
+    "authority": "local-development-only",
+    "slug": "node-k001",
+    "message": "Rebuildable local Node projection; not Canonical analytical authority."
   }
 }

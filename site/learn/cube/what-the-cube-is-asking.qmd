@@ -72,6 +72,7 @@ Take point ~= risk / (risk + reward)
 
 ## Worked Position
 
+<!-- bs-local-node-analysis:node-k001-cube:start -->
 <div
   class="bs-lesson-analysis-host"
   data-bs-cube-decision
@@ -83,6 +84,7 @@ Take point ~= risk / (risk + reward)
   data-bs-double-take-action-id="double-take"
   data-bs-double-pass-action-id="double-pass"
 ></div>
+<!-- bs-local-node-analysis:node-k001-cube:end -->
 
 ## What Changes the Answer?
 

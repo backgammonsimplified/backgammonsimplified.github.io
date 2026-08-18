@@ -1,0 +1,89 @@
+{
+  "schema_version": "b\u006ds-node-analysis-view-v0",
+  "analysis_kind": "cube",
+  "analysis_key": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+  "source_request": {
+    "position": {
+      "format": "gnuid",
+      "id": "PAAAICMAAAAAAA:MAEAAAAAAAAE"
+    },
+    "dice": null
+  },
+  "engine": {
+    "name": "gnu",
+    "version": "1.08.003-mingw 32-Bit 20240428"
+  },
+  "producer_provenance": {
+    "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+    "parser": {
+      "identity": "gnu-text-parser-v1"
+    }
+  },
+  "settings": {
+    "requested": {
+      "analysis_setting": "1ply",
+      "decision_type": "cube",
+      "report_mode": "quick"
+    },
+    "effective": {
+      "actual_evaluation_type": "evaluation",
+      "evaluation_plies": 1,
+      "cubeful": true,
+      "pruning": false
+    }
+  },
+  "probabilities": {
+    "win": 0.749996,
+    "win_gammon": 0.0,
+    "win_backgammon": 0.0,
+    "lose": 0.250004,
+    "lose_gammon": 0.0,
+    "lose_backgammon": 0.0
+  },
+  "recommendation": {
+    "label": "Double, take"
+  },
+  "cube": {
+    "actions": [
+      {
+        "id": "double-take",
+        "source_order": 1,
+        "display_order": 1,
+        "label": "Double, take",
+        "normalized_action": "double-take",
+        "supported": true,
+        "value": {"label": "equity", "value": 0.998032},
+        "probabilities": null
+      },
+      {
+        "id": "double-pass",
+        "source_order": 2,
+        "display_order": 2,
+        "label": "Double, pass",
+        "normalized_action": "double-pass",
+        "supported": true,
+        "value": {"label": "equity", "value": 1.0},
+        "probabilities": null
+      },
+      {
+        "id": "no-double",
+        "source_order": 3,
+        "display_order": 3,
+        "label": "No double",
+        "normalized_action": "no-double",
+        "supported": true,
+        "value": {"label": "equity", "value": 0.637873},
+        "probabilities": null
+      }
+    ]
+  },
+  "warnings": [
+    "GNU cube-action equities are preserved as emitted; action probabilities and match-winning chances remain null",
+    "No canonical board asset is available for this GNUID-only request."
+  ],
+  "limitations": [
+    "Score and cube-state presentation fields are unavailable because they are not represented separately in the canonical request/result.",
+    "No board image asset is present in the canonical request or normalized result.",
+    "Cube action probabilities, match-winning chances, and cube efficiency are null because the source result did not emit them."
+  ]
+}

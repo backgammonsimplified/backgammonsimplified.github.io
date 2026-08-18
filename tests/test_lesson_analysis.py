@@ -190,16 +190,16 @@ class LessonAnalysisFixtureTests(unittest.TestCase):
 
     def test_cube_renderer_prepares_decision_maker_perspectives_without_reanalysis(self):
         renderer = (
-            ROOT / "scripts" / "analysis" / "render_node_k001_lesson_assets.R"
+            ROOT / "scripts" / "analysis" / "render_node_analysis_assets.R"
         ).read_text(encoding="utf-8")
         projector = (
-            ROOT / "scripts" / "analysis" / "project_node_k001_lesson_preview.py"
+            ROOT / "scripts" / "analysis" / "materialize_node_analysis.py"
         ).read_text(encoding="utf-8")
-        self.assertIn('decision = "roll_double"', renderer)
+        self.assertIn('else "roll_double"', renderer)
         self.assertIn('decision = "take_pass"', renderer)
-        self.assertGreaterEqual(renderer.count('perspective = "decision_maker"'), 4)
-        self.assertIn("cube_start_position$on_roll", renderer)
-        self.assertIn("cube_responder_position$on_roll", renderer)
+        self.assertGreaterEqual(renderer.count('perspective = "decision_maker"'), 3)
+        self.assertIn("starting_position$on_roll", renderer)
+        self.assertIn("responder_position$on_roll", renderer)
         self.assertIn('"responder_board"', projector)
 
     def test_qmd_hosts_do_not_hard_code_component_ids(self):

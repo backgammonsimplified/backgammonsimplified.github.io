@@ -47,6 +47,7 @@ printf '\n[4/5] Focused Python contracts\n'
 "${PYTHON_COMMAND[@]}" -m unittest \
   tests.test_release_ui_checks \
   tests.test_lesson_analysis \
+  tests.test_node_analysis_authoring \
   tests.test_real_checker_analysis \
   tests.test_publication_identity \
   tests.test_environment_setup \

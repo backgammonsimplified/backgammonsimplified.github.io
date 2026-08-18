@@ -64,6 +64,7 @@ Before comparing the cube choices, use this exact checker decision to practise
 reading equity and outcome probabilities. Choose a move, then compare it with
 the accepted top move and the other source-ranked candidates.
 
+<!-- bs-local-node-analysis:node-k001-checker:start -->
 <div
   class="bs-lesson-analysis-host"
   data-bs-checker-decision
@@ -72,6 +73,7 @@ the accepted top move and the other source-ranked candidates.
   data-bs-lesson-title="Choose a checker play"
   data-bs-lesson-prompt="With 4-2 to play, which candidate would you choose?"
 ></div>
+<!-- bs-local-node-analysis:node-k001-checker:end -->
 
 <details class="bs-analyzer-embed">
 <summary>Explore this position in the analyzer</summary>
