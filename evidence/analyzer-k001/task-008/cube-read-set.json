@@ -1,0 +1,334 @@
+{
+  "analyses": [
+    {
+      "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "canonical_decision_id": "215747e8305eff4e89325822fda7c967d2a242154194ff7a1b4b8ea6f34c5005",
+      "canonical_provenance": {
+        "adapter": "canonical-parquet-cube-readset-v1",
+        "producer": {
+          "analysis_producer_identity": {
+            "configuration": {
+              "configuration_hash": "375b0cbf77d6a2e9961c2a25c8b957f28278582728089510496b55d38383ea01",
+              "engine": "gnu",
+              "engine_version": "1.08.003-mingw 32-Bit 20240428",
+              "invocation_identity": "gnubg-cli-command-file-windows-v1",
+              "model_or_weights_identity": "gnubg.wd:sha256:bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b;gnubg_os0.bd:sha256:38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49;gnubg_ts0.bd:sha256:9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f;met/Kazaross-XG2.xml:sha256:7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3",
+              "options": {
+                "actual_evaluation_type": "evaluation",
+                "beavers": 0,
+                "cubeful": true,
+                "deterministic": true,
+                "evaluation_plies": 1,
+                "jacoby": false,
+                "move_filter": "1:0:0:8:0.160",
+                "node_producer_base_commit": "ca475237d6e5be96f3ebcc2a68eca70c6ad39908",
+                "node_producer_version": "0.1.0/windows-gnu-v1",
+                "noise": 0.0,
+                "output_digits": 6,
+                "output_mwc": false,
+                "output_winpc": false,
+                "platform_runtime_identity": "windows-native-mingw32-x86",
+                "pruning": false,
+                "runtime_executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+                "threads": 1,
+                "variation": "standard"
+              },
+              "parser_version": "gnu-text-parser-v1",
+              "profile": "gnu-1.08.003-mingw-20240428-1ply-cubeful-noiseless-windows"
+            },
+            "node_producer": {
+              "base_commit": "ca475237d6e5be96f3ebcc2a68eca70c6ad39908",
+              "execution_source": "src/backgammon_node/windows_gnu.py",
+              "execution_source_sha256": "3d234362ccb587cf53a7581cebf76de11fe1a917fd107c89c86923de94f7b53f",
+              "package_name": "backgammon-node",
+              "package_version": "0.1.0",
+              "version": "0.1.0/windows-gnu-v1"
+            },
+            "parser": {
+              "identity": "gnu-text-parser-v1",
+              "implementation": "backgammon-engine-kit",
+              "package_version": "0.3.0",
+              "source_commit": "5dd21daf166f6284c0224ac35a4a5495cb00a0ff"
+            },
+            "producer": {
+              "engine_name": "gnu",
+              "engine_version": "1.08.003-mingw 32-Bit 20240428",
+              "executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+              "platform_runtime_identity": "windows-native-mingw32-x86",
+              "version_build": "GNU Backgammon 1.08.003-mingw 32-Bit 20240428"
+            },
+            "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+            "resources": [
+              {
+                "name": "gnubg.wd",
+                "sha256": "bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b"
+              },
+              {
+                "name": "gnubg_os0.bd",
+                "sha256": "38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49"
+              },
+              {
+                "name": "gnubg_ts0.bd",
+                "sha256": "9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f"
+              },
+              {
+                "name": "met/Kazaross-XG2.xml",
+                "sha256": "7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3"
+              }
+            ],
+            "schema_version": "b\u006ds-windows-gnu-producer-v1"
+          },
+          "branch": "left-brain",
+          "commit": "fb6a121474517c29b66d959d579a9282a61280b2",
+          "materializer": {
+            "branch": "left-brain",
+            "commit": "fb6a121474517c29b66d959d579a9282a61280b2",
+            "package_name": "backgammon-node",
+            "package_version": "0.1.0",
+            "pr": 1,
+            "repository": "backgammonsimplified/backgammon-node"
+          },
+          "pr": 1,
+          "repository": "backgammonsimplified/backgammon-node"
+        },
+        "settings": {
+          "analysis_setting": "1ply",
+          "configuration_identity": "375b0cbf77d6a2e9961c2a25c8b957f28278582728089510496b55d38383ea01",
+          "decision_types": [
+            "cube"
+          ],
+          "invocation_identity": "gnubg-cli-command-file-windows-v1",
+          "model_or_weights_identity": "gnubg.wd:sha256:bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b;gnubg_os0.bd:sha256:38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49;gnubg_ts0.bd:sha256:9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f;met/Kazaross-XG2.xml:sha256:7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3",
+          "options": {
+            "actual_evaluation_type": "evaluation",
+            "beavers": 0,
+            "cubeful": true,
+            "deterministic": true,
+            "evaluation_plies": 1,
+            "jacoby": false,
+            "move_filter": "1:0:0:8:0.160",
+            "node_producer_base_commit": "ca475237d6e5be96f3ebcc2a68eca70c6ad39908",
+            "node_producer_version": "0.1.0/windows-gnu-v1",
+            "noise": 0.0,
+            "output_digits": 6,
+            "output_mwc": false,
+            "output_winpc": false,
+            "platform_runtime_identity": "windows-native-mingw32-x86",
+            "pruning": false,
+            "runtime_executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+            "threads": 1,
+            "variation": "standard"
+          },
+          "parser_identity": "gnu-text-parser-v1",
+          "producer_identity": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+          "profile": "gnu-1.08.003-mingw-20240428-1ply-cubeful-noiseless-windows"
+        },
+        "source": {
+          "dataset_id": "sha256-b4065495bb3e4e33895512779b47ee16272f78710801c756896c78039f731d3e",
+          "gnu_id_native": "PAAAICMAAAAAAA:MAEAAAAAAAAE",
+          "gnu_match_id_native": "MAEAAAAAAAAE",
+          "gnu_position_id_native": "PAAAICMAAAAAAA",
+          "parser_status": "complete",
+          "parser_warnings_json": "[\"GNU cube-action equities are preserved as emitted; action probabilities and match-winning chances remain null\"]",
+          "raw_block_sha256": "0377fc9d163eb578b8145c02a82b2623fedcda5024c60acc6ee2055181ad6741",
+          "source_path": "records/analyses.jsonl",
+          "source_record_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+          "source_schema_version": "b\u006ds-node-canonical-spool-record-v0"
+        },
+        "source_manifests": [
+          {
+            "path": "batch.json",
+            "sha256": "45ba9454f036dfcca48a566e22c0f2caa8ac1721bab31449517c02baec63067b"
+          },
+          {
+            "path": "SHA256SUMS.txt",
+            "sha256": "8d21fd963624465a841d5c9a4b3d5c4e9b8bdb3def8a3e10469647d443d322d3"
+          },
+          {
+            "path": "FINALIZED",
+            "sha256": "433d59b02681ee025229157d651f36c5170d3320a1b14a221d2e7f141a43f005"
+          }
+        ],
+        "writer": {
+          "commit": "1569284972239a2627de8e5176eb47caef454fda",
+          "compression": "zstd",
+          "compression_level": 3,
+          "pyarrow_version": "25.0.0",
+          "repository": "backgammonsimplified/backgammon-engine-benchmarker",
+          "rows_per_shard": 100000
+        }
+      },
+      "context": {
+        "cube": {
+          "owner": "centered",
+          "value": 1
+        },
+        "decision": "Cube decision",
+        "dice": null,
+        "player_on_roll": "player_on_roll",
+        "score": {
+          "match_length": null,
+          "opponent": null,
+          "player": null
+        }
+      },
+      "cube_actions": [
+        {
+          "action_id": "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f",
+          "actual_ply": null,
+          "details": "Source-native rank: 1; Row-local actual ply: not supplied; Block analysis ply: 1; Requested cube ply: 1",
+          "display_value_source": "native",
+          "label": "Double, take",
+          "native_action": "Double, take",
+          "native_difference": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "Source-native cube action equity",
+            "value": 0.998032
+          },
+          "normalized_action": "double-take",
+          "normalized_value": {
+            "label": "Normalized value",
+            "semantics": "No normalized cube action value supplied by Canonical Analysis Parquet v1",
+            "value": null
+          },
+          "probabilities": null,
+          "source_order": 1,
+          "supported": true
+        },
+        {
+          "action_id": "7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936",
+          "actual_ply": null,
+          "details": "Source-native rank: 2; Row-local actual ply: not supplied; Block analysis ply: 1; Requested cube ply: 1",
+          "display_value_source": "native",
+          "label": "Double, pass",
+          "native_action": "Double, pass",
+          "native_difference": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "Source-native cube action equity",
+            "value": 1.0
+          },
+          "normalized_action": "double-pass",
+          "normalized_value": {
+            "label": "Normalized value",
+            "semantics": "No normalized cube action value supplied by Canonical Analysis Parquet v1",
+            "value": null
+          },
+          "probabilities": null,
+          "source_order": 2,
+          "supported": true
+        },
+        {
+          "action_id": "b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad",
+          "actual_ply": null,
+          "details": "Source-native rank: 3; Row-local actual ply: not supplied; Block analysis ply: 1; Requested cube ply: 1",
+          "display_value_source": "native",
+          "label": "No double",
+          "native_action": "No double",
+          "native_difference": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "Source-native cube action equity",
+            "value": 0.637873
+          },
+          "normalized_action": "no-double",
+          "normalized_value": {
+            "label": "Normalized value",
+            "semantics": "No normalized cube action value supplied by Canonical Analysis Parquet v1",
+            "value": null
+          },
+          "probabilities": null,
+          "source_order": 3,
+          "supported": true
+        }
+      ],
+      "cube_occurrence": {
+        "block_analysis_ply": 1,
+        "cube_occurrence_id": "215747e8305eff4e89325822fda7c967d2a242154194ff7a1b4b8ea6f34c5005",
+        "observed_action_native": null,
+        "observed_action_normalized": null,
+        "recommendation_native": "Double, take",
+        "recommendation_normalized": "double-take",
+        "requested_cube_ply": 1
+      },
+      "decision_kind": "cube",
+      "limitations": [
+        "Row-local actual ply is absent for these cube action rows; requested and block analysis ply remain 1.",
+        "Source-native cube action differences are preserved separately and are not reinterpreted.",
+        "No normalized cube action equity is supplied by Canonical Analysis Parquet v1."
+      ],
+      "logical_position_id": "16381b1bf9673c73b94d47d16df3ced8aa0bf252ed49f94fec1e8d9737eb7e7d",
+      "position": {
+        "gnu_position_id": "PAAAICMAAAAAAA",
+        "original_board": {
+          "alt": "Exact Node cube lesson starting position.",
+          "image": "/assets/positions/node-k001/cube/starting.svg"
+        },
+        "position_id": "16381b1bf9673c73b94d47d16df3ced8aa0bf252ed49f94fec1e8d9737eb7e7d"
+      },
+      "presentation": {
+        "fixture": true,
+        "played_move": null,
+        "recommendation": "Double, take",
+        "subtitle": "Real cube occurrence and analytical action rows from Canonical Analysis Parquet v1",
+        "title": "Canonical Parquet cube analysis"
+      },
+      "probabilities": {
+        "lose": 0.250004,
+        "lose_backgammon": 0.0,
+        "lose_gammon_or_worse": 0.0,
+        "win": 0.749996,
+        "win_backgammon": 0.0,
+        "win_gammon_or_better": 0.0
+      },
+      "provenance": {
+        "engine": "gnu",
+        "engine_version": "1.08.003-mingw 32-Bit 20240428",
+        "parser": "gnu-text-parser-v1",
+        "source_family": "node_spool",
+        "source_hash": "46fd92f966e6f1a1b1d92bf99832e57b89b4695c71b89493d8e972033840f6c4"
+      },
+      "requested_analysis": {
+        "cubeful": null,
+        "profile_id": "canonical-analysis-parquet-v1",
+        "requested_ply": 1
+      },
+      "responder_board": {
+        "alt": "The exact same Node cube lesson position shown from the responder's perspective after Double.",
+        "image": "/assets/positions/node-k001/cube/responder.svg"
+      },
+      "source_occurrence": {
+        "game_id": null,
+        "gnu_match_id_native": "MAEAAAAAAAAE",
+        "gnu_position_id_native": "PAAAICMAAAAAAA",
+        "historical_pipeline_selected": null,
+        "line_number": 1,
+        "logical_opportunity_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+        "match_id": "MAEAAAAAAAAE",
+        "occurrence_id": "e1c4f4aad95bb49b1a0c084c6efbc7172a4c66eb31f86b67d6dc1a92674c5ced",
+        "source_end_line": 1,
+        "source_id": "sha256-b4065495bb3e4e33895512779b47ee16272f78710801c756896c78039f731d3e",
+        "source_path": "records/analyses.jsonl",
+        "source_record_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+        "source_start_line": 1
+      },
+      "warnings": [
+        "Cube occurrence and all displayed action equities come from the verified Canonical Parquet package.",
+        "GNU cube-action equities are preserved as emitted; action probabilities and match-winning chances remain null"
+      ]
+    }
+  ],
+  "fixture_status": {
+    "kind": "canonical-analysis",
+    "label": "Canonical Parquet analysis",
+    "message": "Cube values are materialized from the verified frozen Canonical Analysis Parquet v1 reference package."
+  },
+  "package": {
+    "conformance_status": "verified-canonical-v1",
+    "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a",
+    "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+    "profile_id": "canonical-analysis-parquet-v1"
+  },
+  "schema_version": "analyzer-analysis-view-read-set-v1"
+}

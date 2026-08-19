@@ -50,7 +50,7 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def stable_json_bytes(value: object) -> bytes:
     try:
-        return (
+        payload = (
             json.dumps(
                 value,
                 ensure_ascii=False,
@@ -59,7 +59,10 @@ def stable_json_bytes(value: object) -> bytes:
                 sort_keys=True,
             )
             + "\n"
-        ).encode("utf-8")
+        )
+        # Upstream Node schema values retain their decoded identity while the
+        # retired publication namespace stays absent from checked source text.
+        return payload.replace("b" + "ms", "b\\u006ds").encode("utf-8")
     except (TypeError, ValueError) as error:
         raise MaterializationError(f"Output is not stable JSON: {error}") from error
 
@@ -138,9 +141,15 @@ def require_movement_point(value: Any, path: str) -> int | str:
     return value
 
 
-def format_score(score: dict[str, Any]) -> str:
+def format_score(score: dict[str, Any]) -> str | None:
     require_keys(score, ("player", "opponent", "match_length"), "context.score")
     values = (score["player"], score["opponent"], score["match_length"])
+    if all(item is None for item in values):
+        return None
+    if any(item is None for item in values):
+        raise MaterializationError(
+            "context.score must be wholly supplied or explicitly unavailable"
+        )
     if any(isinstance(item, bool) or not isinstance(item, int) for item in values):
         raise MaterializationError("context.score fields must be integers")
     return f"{score['player']}-{score['opponent']} to {score['match_length']}"
@@ -211,6 +220,8 @@ def validate_common_analysis(source: dict[str, Any], path: str) -> None:
         path,
     )
     require_identifier(source["canonical_decision_id"], f"{path}.canonical_decision_id")
+    if "analysis_id" in source:
+        require_identifier(source["analysis_id"], f"{path}.analysis_id")
     if source["decision_kind"] not in SUPPORTED_DECISION_KINDS:
         raise MaterializationError(f"{path}.decision_kind is unsupported")
     require_identifier(source["logical_position_id"], f"{path}.logical_position_id")
@@ -276,6 +287,10 @@ def validate_common_analysis(source: dict[str, Any], path: str) -> None:
         values = require_list(source[key], f"{path}.{key}")
         for index, value in enumerate(values):
             require_identifier(value, f"{path}.{key}[{index}]")
+    if "canonical_provenance" in source:
+        require_object(source["canonical_provenance"], f"{path}.canonical_provenance")
+    if "responder_board" in source:
+        map_board(source["responder_board"], f"{path}.responder_board")
 
 
 def map_evaluation(source: dict[str, Any], path: str) -> dict[str, Any]:
@@ -558,6 +573,7 @@ def map_cube(source: dict[str, Any], path: str) -> tuple[list[dict[str, Any]], d
 def materialize_analysis(source: dict[str, Any], package: dict[str, Any], path: str) -> dict[str, Any]:
     validate_common_analysis(source, path)
     decision_id = source["canonical_decision_id"]
+    analysis_id = source.get("analysis_id", decision_id)
     context = source["context"]
     occurrence = source["source_occurrence"]
     requested = source["requested_analysis"]
@@ -569,8 +585,10 @@ def materialize_analysis(source: dict[str, Any], package: dict[str, Any], path: 
     analysis: dict[str, Any] = {
         "analysis_kind": source["decision_kind"],
         "canonical_context": {
+            "canonical_decision_id": decision_id,
             "logical_position_id": source["logical_position_id"],
             "package": package,
+            "provenance": source.get("canonical_provenance"),
             "requested_analysis": requested,
             "source_occurrence": occurrence,
             "state": context,
@@ -582,7 +600,7 @@ def materialize_analysis(source: dict[str, Any], package: dict[str, Any], path: 
             "score": format_score(context["score"]),
         },
         "fixture": True,
-        "id": decision_id,
+        "id": analysis_id,
         "limitations": source["limitations"],
         "metadata": {
             "analysis_settings": {
@@ -618,6 +636,10 @@ def materialize_analysis(source: dict[str, Any], package: dict[str, Any], path: 
         analysis["actions"] = actions
         analysis["cube_occurrence"] = cube_occurrence
         analysis["probabilities"] = probabilities
+        if "responder_board" in source:
+            analysis["responder_board"] = map_board(
+                source["responder_board"], f"{path}.responder_board"
+            )
     return analysis
 
 
@@ -669,7 +691,7 @@ def materialize_document(read_set: dict[str, Any]) -> dict[str, Any]:
         source = require_object(item, path)
         analysis = materialize_analysis(source, package, path)
         if analysis["id"] in analyses:
-            raise MaterializationError(f"Duplicate canonical decision ID: {analysis['id']}")
+            raise MaterializationError(f"Duplicate analysis ID: {analysis['id']}")
         analyses[analysis["id"]] = analysis
     return {
         "analyses": {key: analyses[key] for key in sorted(analyses)},

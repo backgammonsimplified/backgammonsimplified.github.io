@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "scripts" / "analysis" / "node-k001-regression-authoring.json"
-GOLDEN_PATH = ROOT / "site" / "data" / "analyzer-node-k001-lesson-preview.json"
+GOLDEN_PATH = ROOT / "site" / "data" / "analyzer-node-k001-local-authoring-preview.json"
 
 SPEC = importlib.util.spec_from_file_location(
     "materialize_node_analysis",
@@ -95,21 +95,14 @@ class NodeAnalysisAuthoringTests(unittest.TestCase):
         with self.assertRaisesRegex(AUTHORING.AuthoringError, "not Canonical"):
             AUTHORING.build_document(promoted, ROOT)
 
-    def test_marked_learn_bindings_are_exact_and_unambiguous(self):
+    def test_local_authoring_does_not_rebind_canonical_lessons(self):
         self.assertEqual(
             AUTHORING.apply_learn_bindings(
                 self.config, ROOT, set(self.document["analyses"])
             ),
             [],
         )
-        for binding in self.config["learn_bindings"]:
-            lesson = (ROOT / binding["lesson"]).read_text(encoding="utf-8")
-            self.assertEqual(
-                lesson.count(AUTHORING.marker(binding["name"], "start")), 1
-            )
-            self.assertEqual(
-                lesson.count(AUTHORING.marker(binding["name"], "end")), 1
-            )
+        self.assertEqual(self.config["learn_bindings"], [])
 
     def test_render_manifest_uses_only_selected_completed_artifacts(self):
         self.assertEqual(self.manifest["authority"], "local-development-only")

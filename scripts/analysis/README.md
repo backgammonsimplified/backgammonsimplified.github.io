@@ -21,7 +21,39 @@ The repository setup command installs the Python materializer dependency into th
 bash scripts/setup/windows-dev.sh
 ```
 
-The materializer currently uses DuckDB for Parquet inspection/querying.
+The materializer uses DuckDB for Parquet inspection/querying.
+
+## Commissioned Node golden pair
+
+The accepted Node checker and Learn cube are materialized from two immutable,
+committed Canonical package authorities with:
+
+```bash
+CANONICAL_CHECKER_PACKAGE=/path/to/canonical-analysis-v1-retained-1a38c... \
+CANONICAL_CUBE_PACKAGE=/path/to/canonical-analysis-v1-retained-bde401... \
+  bash scripts/analysis/materialize-accepted-node-pair.sh
+```
+
+The command verifies the exact package directory identity, manifest hash,
+`_COMMITTED` binding, `SHA256SUMS.txt`, immutable/reconciliation status, exact
+source-record inventory, and complete relation-part inventory before DuckDB
+selection. It selects by the accepted Node analysis key and derives the
+Canonical decision/candidate/evaluation/occurrence/action IDs from Parquet.
+Package A's explicitly excluded cube is queried only for rejection evidence and
+must not occur in the output.
+
+The deterministic outputs are:
+
+- semantic read sets and materialization evidence under
+  `evidence/analyzer-k001/task-008/`;
+- the shared-viewer document at
+  `site/data/analyzer-node-k001-lesson-preview.json`.
+
+The prior Node-direct projection remains at
+`site/data/analyzer-node-k001-local-authoring-preview.json` as presentation
+sidecar and future equivalence input. Its board URLs are accepted only after an
+exact analysis/GNU identity and move match; no analytical value is read from
+that sidecar. The Learn hosts continue to use the existing Results Viewer.
 
 ## Deterministic Analysis View materializer
 
@@ -55,10 +87,10 @@ available directly:
   --verify-repeat
 ```
 
-The checked-in read set is synthetic mechanics proof, not a Canonical package
-or an analytical truth source. A permanent Parquet-to-read-set adapter remains
-blocked on inspection of the exact published Corpus package and its verified
-manifest/checksums.
+The generic checked-in read set is synthetic mechanics proof. The Task 008
+read sets under `evidence/analyzer-k001/task-008/` are deterministic projections
+of the exact commissioned immutable packages; Canonical Parquet remains the
+analytical authority.
 
 ## Retrieval/materializer workloads
 

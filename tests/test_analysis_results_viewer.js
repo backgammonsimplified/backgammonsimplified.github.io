@@ -159,7 +159,11 @@ assert.equal(goldenCube.metadata.recommendation, "Double, take");
 assert.match(goldenCube.responder_board.image, /node-k001\/cube\/responder\.svg$/);
 assert.deepEqual(
   goldenCube.actions.map((action) => action.id),
-  ["double-take", "double-pass", "no-double"]
+  [
+    "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f",
+    "7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936",
+    "b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad"
+  ]
 );
 assert.equal(retainedChecker.analysis_kind, "checker");
 assert.equal(retainedChecker.candidates.length, 3);
@@ -372,13 +376,18 @@ const goldenCheckerHost = new FakeElement("div");
 const goldenCheckerControls = viewer.renderPresentation(
   goldenCheckerHost,
   goldenChecker,
-  { initialActiveId: "gnu-move-8" }
+  { initialActiveId: "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2" }
 );
 assert.equal(
   goldenCheckerHost.querySelectorAll("[data-bs-analysis-candidate-id]").length,
   8
 );
-assert.equal(goldenCheckerControls.activate("gnu-move-2"), true);
+assert.equal(
+  goldenCheckerControls.activate(
+    "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477"
+  ),
+  true
+);
 assert.match(
   findByClass(goldenCheckerHost, "bs-analysis-results-board-image").src,
   /node-k001\/checker\/candidate-2\.svg$/
@@ -391,7 +400,7 @@ assert.ok(
 const goldenCubeHost = new FakeElement("div");
 viewer.renderPresentation(goldenCubeHost, goldenCube, {
   boardOverride: goldenCube.responder_board,
-  initialActiveId: "double-take"
+  initialActiveId: "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f"
 });
 assert.equal(
   goldenCubeHost.querySelectorAll("[data-bs-analysis-result-choice]").length,

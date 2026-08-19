@@ -23,6 +23,7 @@ project:
     - data/analyzer-canonical-checker-preview.json
     - data/analyzer-canonical-cube-preview.json
     - data/analyzer-node-k001-lesson-preview.json
+    - data/analyzer-node-k001-local-authoring-preview.json
     - "data/engine-benchmark/**"
     - "engine-benchmark/**/figures/**"
     - "engine-benchmark/**/tables/**"

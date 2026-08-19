@@ -47,11 +47,17 @@ assert.deepEqual(
   [1, 2, 3, 4, 5, 6, 7, 8]
 );
 assert.equal(
-  analysis.acceptedAnalysisChoice(goldenChecker, "gnu-move-8").move,
+  analysis.acceptedAnalysisChoice(
+    goldenChecker,
+    "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+  ).move,
   "24/20 6/4"
 );
 assert.match(
-  analysis.acceptedAnalysisChoice(goldenChecker, "gnu-move-8").move_board.image,
+  analysis.acceptedAnalysisChoice(
+    goldenChecker,
+    "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+  ).move_board.image,
   /node-k001\/checker\/candidate-8\.svg$/
 );
 assert.equal(goldenCube.metadata.recommendation, "Double, take");
@@ -66,13 +72,16 @@ assert.match(
 assert.deepEqual(
   goldenCube.actions.map((action) => [action.id, action.value.value]),
   [
-    ["double-take", 0.998032],
-    ["double-pass", 1.0],
-    ["no-double", 0.637873]
+    ["5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f", 0.998032],
+    ["7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936", 1.0],
+    ["b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad", 0.637873]
   ]
 );
 assert.equal(
-  analysis.acceptedAnalysisChoice(goldenCube, "double-take").probabilities,
+  analysis.acceptedAnalysisChoice(
+    goldenCube,
+    "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f"
+  ).probabilities,
   null
 );
 assert.equal(goldenCube.context.decision, "Cube decision");

@@ -54,6 +54,7 @@ printf '\n[4/5] Focused Python contracts\n'
   tests.test_static_inventory \
   tests.test_quality_reports \
   tests.test_analysis_parquet_intake \
+  tests.test_accepted_node_canonical_materialization \
   tests.test_analysis_view_materializer \
   tests.test_retrieval_workloads \
   -v

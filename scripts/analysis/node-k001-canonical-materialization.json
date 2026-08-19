@@ -1,0 +1,26 @@
+{
+  "schema_version": "analyzer-accepted-node-canonical-pair-v1",
+  "presentation_sidecar": "site/data/analyzer-node-k001-local-authoring-preview.json",
+  "checker": {
+    "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+    "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e",
+    "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+    "excluded_analysis_ids": [
+      "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414"
+    ]
+  },
+  "cube": {
+    "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+    "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a",
+    "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+    "expected_record_ids": [
+      "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+    ]
+  },
+  "outputs": {
+    "checker_read_set": "evidence/analyzer-k001/task-008/checker-read-set.json",
+    "cube_read_set": "evidence/analyzer-k001/task-008/cube-read-set.json",
+    "analysis_view": "site/data/analyzer-node-k001-lesson-preview.json",
+    "evidence": "evidence/analyzer-k001/task-008/materialization-evidence.json"
+  }
+}

@@ -80,9 +80,9 @@ Take point ~= risk / (risk + reward)
   data-bs-analysis-id="sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
   data-bs-lesson-title="Choose the cube action"
   data-bs-lesson-prompt="Would you double or play on? If doubled, should the responder take or pass?"
-  data-bs-no-double-action-id="no-double"
-  data-bs-double-take-action-id="double-take"
-  data-bs-double-pass-action-id="double-pass"
+  data-bs-no-double-action-id="b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad"
+  data-bs-double-take-action-id="5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f"
+  data-bs-double-pass-action-id="7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936"
 ></div>
 <!-- bs-local-node-analysis:node-k001-cube:end -->
 

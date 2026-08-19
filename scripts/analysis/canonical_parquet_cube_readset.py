@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 from typing import Any
@@ -15,47 +16,14 @@ if str(ROOT) not in sys.path:
 from scripts.analysis.canonical_parquet_readset import (
     CanonicalReadSetError,
     fetch_dicts,
+    load_presentation,
     require_duckdb,
     stable_json_bytes,
     verify_package,
 )
 
 
-REQUIRED_TABLES = (
-    "positions",
-    "games",
-    "source_occurrences",
-    "occurrence_contexts",
-    "cube_occurrences",
-    "cube_actions",
-)
-
-
-def build_cube_read_set(
-    package_root: Path,
-    expected_manifest_sha256: str,
-    cube_occurrence_id: str,
-) -> dict[str, Any]:
-    verified = verify_package(package_root, expected_manifest_sha256)
-    root: Path = verified["root"]
-
-    for table in REQUIRED_TABLES:
-        target = root / f"{table}.parquet"
-        if not target.is_file():
-            raise CanonicalReadSetError(
-                f"Canonical package is missing {target.name}"
-            )
-
-    module = require_duckdb()
-    with module.connect(database=":memory:") as connection:
-        for table in REQUIRED_TABLES:
-            connection.read_parquet(
-                str(root / f"{table}.parquet")
-            ).create_view(table)
-
-        rows = fetch_dicts(
-            connection,
-            """
+CUBE_SELECTION_SQL = """
             SELECT
                 co.cube_occurrence_id,
                 co.source_occurrence_id,
@@ -65,6 +33,8 @@ def build_cube_read_set(
                 co.requested_cube_ply,
                 co.cubeless_equity_native,
                 co.cubeless_money_equity_native,
+                co.native_probabilities_json,
+                co.native_probabilities_lexical_json,
                 co.recommendation_native,
                 co.recommendation_class,
                 co.observed_action_native,
@@ -73,15 +43,21 @@ def build_cube_read_set(
                 co.cube_value_displayed,
 
                 so.dataset_id,
+                so.occurrence_kind,
                 so.source_family,
                 so.historical_pipeline_selected,
                 so.logical_opportunity_id,
                 so.source_path,
                 so.source_sha256,
+                so.raw_block_sha256,
+                so.parser_status,
+                so.parser_warnings_json,
+                so.source_schema_version,
                 so.source_start_line,
                 so.source_end_line,
                 so.source_record_id,
                 so.source_line,
+                so.gnu_id_native,
                 so.gnu_position_id_native,
                 so.gnu_match_id_native,
 
@@ -112,32 +88,14 @@ def build_cube_read_set(
               ON p.position_id = co.position_id
             LEFT JOIN games g
               ON g.game_id = co.game_id
-            WHERE co.cube_occurrence_id = ?
-            """,
-            (cube_occurrence_id,),
-        )
-
-        if len(rows) != 1:
-            raise CanonicalReadSetError(
-                f"Expected one cube occurrence {cube_occurrence_id!r}; "
-                f"found {len(rows)}"
-            )
-
-        occurrence = rows[0]
-        if occurrence["gnu_position_id_native"] != occurrence["gnu_position_id"]:
-            raise CanonicalReadSetError(
-                "Source-native and Canonical GNU Position IDs disagree"
-            )
-        if not occurrence["source_sha256"]:
-            raise CanonicalReadSetError(
-                "Selected source occurrence lacks source_sha256"
-            )
-
-        actions = fetch_dicts(
-            connection,
+            WHERE so.source_record_id = ?
+              AND so.occurrence_kind = 'cube_analysis'
             """
+
+CUBE_ACTIONS_SQL = """
             SELECT
                 cube_action_id,
+                source_occurrence_id,
                 native_rank,
                 action_native,
                 action_class,
@@ -150,7 +108,91 @@ def build_cube_read_set(
             FROM cube_actions
             WHERE cube_occurrence_id = ?
             ORDER BY native_rank NULLS LAST, cube_action_id
-            """,
+            """
+
+
+REQUIRED_TABLES = (
+    "positions",
+    "games",
+    "source_occurrences",
+    "occurrence_contexts",
+    "cube_occurrences",
+    "cube_actions",
+)
+
+
+def build_cube_read_set(
+    package_root: Path,
+    expected_manifest_sha256: str,
+    analysis_id: str,
+    *,
+    expected_package_id: str | None = None,
+    expected_record_ids: set[str] | None = None,
+    presentation_sidecar: Path,
+    presentation_analysis_id: str,
+) -> dict[str, Any]:
+    verified = verify_package(
+        package_root,
+        expected_manifest_sha256,
+        expected_package_id=expected_package_id,
+        expected_record_ids=expected_record_ids,
+    )
+    root: Path = verified["root"]
+    presentation = load_presentation(presentation_sidecar, presentation_analysis_id)
+    if presentation_analysis_id != analysis_id:
+        raise CanonicalReadSetError(
+            "Presentation analysis identity does not match accepted cube identity"
+        )
+
+    for table in REQUIRED_TABLES:
+        if table not in verified["table_files"]:
+            raise CanonicalReadSetError(f"Canonical package is missing {table}")
+
+    module = require_duckdb()
+    with module.connect(database=":memory:") as connection:
+        for table in REQUIRED_TABLES:
+            connection.read_parquet(
+                [str(path) for path in verified["table_files"][table]],
+                union_by_name=True,
+            ).create_view(table)
+
+        rows = fetch_dicts(
+            connection,
+            CUBE_SELECTION_SQL,
+            (analysis_id,),
+        )
+
+        if len(rows) != 1:
+            raise CanonicalReadSetError(
+                f"Expected one cube row for accepted analysis {analysis_id!r}; "
+                f"found {len(rows)}"
+            )
+
+        occurrence = rows[0]
+        cube_occurrence_id = occurrence["cube_occurrence_id"]
+        if occurrence["source_record_id"] != analysis_id:
+            raise CanonicalReadSetError("Selected cube row lost accepted source identity")
+        if occurrence["gnu_position_id_native"] != occurrence["gnu_position_id"]:
+            raise CanonicalReadSetError(
+                "Source-native and Canonical GNU Position IDs disagree"
+            )
+        if not occurrence["source_sha256"]:
+            raise CanonicalReadSetError(
+                "Selected source occurrence lacks source_sha256"
+            )
+        authoring = presentation.get("local_authoring")
+        source_request = authoring.get("source_request") if isinstance(authoring, dict) else None
+        sidecar_position = (
+            source_request.get("position") if isinstance(source_request, dict) else None
+        )
+        if not isinstance(sidecar_position, dict) or sidecar_position.get("id") != occurrence["gnu_id_native"]:
+            raise CanonicalReadSetError(
+                "Presentation GNU identity does not match the accepted Canonical cube row"
+            )
+
+        actions = fetch_dicts(
+            connection,
+            CUBE_ACTIONS_SQL,
             (cube_occurrence_id,),
         )
 
@@ -217,16 +259,48 @@ def build_cube_read_set(
         )
 
     manifest = verified["manifest"]
+    source_identity = manifest.get("source_identity", {})
+    source_settings = source_identity.get("settings", {})
     match_id = occurrence["source_match_id"] or occurrence["gnu_match_id_native"]
+    try:
+        native_probabilities = json.loads(occurrence["native_probabilities_json"])
+        parser_warnings = json.loads(occurrence["parser_warnings_json"])
+    except (TypeError, json.JSONDecodeError) as error:
+        raise CanonicalReadSetError("Canonical cube JSON fields are malformed") from error
+    probability_keys = {
+        "win",
+        "win_gammon",
+        "win_backgammon",
+        "lose",
+        "lose_gammon",
+        "lose_backgammon",
+    }
+    if not isinstance(native_probabilities, dict) or set(native_probabilities) != probability_keys:
+        raise CanonicalReadSetError("Canonical cube probabilities have an unexpected shape")
+    if not isinstance(parser_warnings, list) or not all(
+        isinstance(item, str) for item in parser_warnings
+    ):
+        raise CanonicalReadSetError("Canonical cube parser warnings are malformed")
+    probabilities = {
+        "win": native_probabilities["win"],
+        "win_gammon_or_better": native_probabilities["win_gammon"],
+        "win_backgammon": native_probabilities["win_backgammon"],
+        "lose": native_probabilities["lose"],
+        "lose_gammon_or_worse": native_probabilities["lose_gammon"],
+        "lose_backgammon": native_probabilities["lose_backgammon"],
+    }
+    original_board = presentation.get("original_board")
+    responder_board = presentation.get("responder_board")
+    if not isinstance(original_board, dict) or not original_board.get("image"):
+        raise CanonicalReadSetError("Presentation sidecar lacks the exact cube board asset")
+    if not isinstance(responder_board, dict) or not responder_board.get("image"):
+        raise CanonicalReadSetError("Presentation sidecar lacks the prepared responder board")
 
     return {
         "schema_version": "analyzer-analysis-view-read-set-v1",
         "package": {
             "package_id": verified["package_id"],
-            "profile_id": (
-                manifest.get("candidate_version")
-                or manifest["contract_version"]
-            ),
+            "profile_id": verified["profile_id"],
             "manifest_sha256": verified["manifest_sha256"],
             "conformance_status": "verified-canonical-v1",
         },
@@ -240,6 +314,7 @@ def build_cube_read_set(
         },
         "analyses": [
             {
+                "analysis_id": analysis_id,
                 "canonical_decision_id": cube_occurrence_id,
                 "decision_kind": "cube",
                 "logical_position_id": occurrence["position_id"],
@@ -280,11 +355,30 @@ def build_cube_read_set(
                     "profile_id": "canonical-analysis-parquet-v1",
                 },
                 "provenance": {
-                    "engine": "GNU Backgammon",
-                    "engine_version": None,
+                    "engine": source_identity.get("engine", {}).get("name", "gnu"),
+                    "engine_version": source_identity.get("engine", {}).get("version"),
                     "source_family": occurrence["source_family"],
-                    "parser": "canonical-parquet-cube-readset-v1",
+                    "parser": source_settings.get("parser_identity") or "unknown",
                     "source_hash": occurrence["source_sha256"],
+                },
+                "canonical_provenance": {
+                    "adapter": "canonical-parquet-cube-readset-v1",
+                    "source": {
+                        "dataset_id": occurrence["dataset_id"],
+                        "source_path": occurrence["source_path"],
+                        "source_record_id": occurrence["source_record_id"],
+                        "raw_block_sha256": occurrence["raw_block_sha256"],
+                        "parser_status": occurrence["parser_status"],
+                        "parser_warnings_json": occurrence["parser_warnings_json"],
+                        "source_schema_version": occurrence["source_schema_version"],
+                        "gnu_id_native": occurrence["gnu_id_native"],
+                        "gnu_position_id_native": occurrence["gnu_position_id_native"],
+                        "gnu_match_id_native": occurrence["gnu_match_id_native"],
+                    },
+                    "producer": source_identity.get("producer"),
+                    "settings": source_settings,
+                    "source_manifests": source_identity.get("source_manifests"),
+                    "writer": manifest.get("writer"),
                 },
                 "presentation": {
                     "title": "Canonical Parquet cube analysis",
@@ -300,16 +394,11 @@ def build_cube_read_set(
                     "position_id": occurrence["position_id"],
                     "gnu_position_id": occurrence["gnu_position_id"],
                     "original_board": {
-                        "image": (
-                            "/assets/positions/real-analysis/"
-                            "canonical-cube-preview/starting.svg"
-                        ),
-                        "alt": (
-                            "The real Canonical cube position before selecting "
-                            "an analytical cube action."
-                        ),
+                        "image": original_board["image"],
+                        "alt": original_board["alt"],
                     },
                 },
+                "responder_board": responder_board,
                 "cube_occurrence": {
                     "cube_occurrence_id": cube_occurrence_id,
                     "observed_action_native": occurrence["observed_action_native"],
@@ -324,21 +413,18 @@ def build_cube_read_set(
                     "requested_cube_ply": occurrence["requested_cube_ply"],
                 },
                 "cube_actions": cube_actions,
-                "probabilities": None,
+                "probabilities": probabilities,
                 "warnings": [
                     (
                         "Cube occurrence and all displayed action equities come "
                         "from the verified Canonical Parquet package."
                     ),
-                    (
-                        "The source occurrence is the historically selected "
-                        "game_named record."
-                    ),
+                    *parser_warnings,
                 ],
                 "limitations": [
                     (
                         "Row-local actual ply is absent for these cube action "
-                        "rows; requested and block analysis ply remain 4."
+                        f"rows; requested and block analysis ply remain {occurrence['requested_cube_ply']}."
                     ),
                     (
                         "Source-native cube action differences are preserved "
@@ -357,8 +443,12 @@ def build_cube_read_set(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("package_root", type=Path)
-    parser.add_argument("--cube-occurrence-id", required=True)
+    parser.add_argument("--analysis-id", required=True)
+    parser.add_argument("--expected-package-id")
+    parser.add_argument("--expected-record-id", action="append", default=[])
     parser.add_argument("--expected-manifest-sha256", required=True)
+    parser.add_argument("--presentation-sidecar", type=Path, required=True)
+    parser.add_argument("--presentation-analysis-id", required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
@@ -366,7 +456,11 @@ def main() -> int:
         payload = build_cube_read_set(
             args.package_root,
             args.expected_manifest_sha256,
-            args.cube_occurrence_id,
+            args.analysis_id,
+            expected_package_id=args.expected_package_id,
+            expected_record_ids=(set(args.expected_record_id) or None),
+            presentation_sidecar=args.presentation_sidecar,
+            presentation_analysis_id=args.presentation_analysis_id,
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_bytes(stable_json_bytes(payload))
