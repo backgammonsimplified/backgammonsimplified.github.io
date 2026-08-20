@@ -1,0 +1,279 @@
+{
+  "schema_version": "analyzer-task-011-interactive-position-node-loop-result-v1",
+  "task": "implement-interactive-position-id-node-analysis-loop-v1",
+  "status": "PASS",
+  "implementation": {
+    "starting_head": "3658e09f1cc3e09121761d18391fc4deb03bda7c",
+    "final_head": "382fd9d3c58102275910e839c386c41c91713ab4",
+    "final_head_scope": "last commit containing Task 011 product implementation; durable evidence is committed afterward",
+    "branch": "agent/analyzer-position-id-node-loop-v1"
+  },
+  "refreshed_authority": {
+    "control_tower": {
+      "repository": "backgammonsimplified/control-tower",
+      "branch": "master",
+      "head": "168a10e754c1120b146b0d5a262e7f928e90b65b"
+    },
+    "task_management": {
+      "repository": "backgammonsimplified/task-management",
+      "branch": "milestone/analyzer-k001",
+      "head": "42d06c4525a8c8de7e5ef6b1526ddee2a19276ef",
+      "prompt": "milestones/analyzer-k001/prompts/011-interactive-position-id-node-analysis-loop.md"
+    },
+    "website": {
+      "repository": "backgammonsimplified/backgammonsimplified.github.io",
+      "accepted_golden_pr": 15,
+      "accepted_golden_head": "3658e09f1cc3e09121761d18391fc4deb03bda7c",
+      "task_branch_base": "3658e09f1cc3e09121761d18391fc4deb03bda7c"
+    },
+    "node": {
+      "repository": "backgammonsimplified/backgammon-node",
+      "pr": 1,
+      "branch": "left-brain",
+      "head": "fb6a121474517c29b66d959d579a9282a61280b2",
+      "package_name": "backgammon-node",
+      "package_version": "0.1.0",
+      "parser_package": "backgammon-engine-kit",
+      "parser_package_version": "0.3.0",
+      "parser_source_commit": "5dd21daf166f6284c0224ac35a4a5495cb00a0ff"
+    }
+  },
+  "fixed_product_contract": {
+    "input": "complete GNUID",
+    "engine": "gnu",
+    "analysis_setting": "1ply",
+    "decision_types": [
+      "checker",
+      "cube"
+    ],
+    "checker_dice": "two explicit integers in the inclusive range 1..6",
+    "cube_dice": null,
+    "malformed_or_incomplete_input_rejected_before_node_submission": "PASS"
+  },
+  "producer_identity": {
+    "profile": "gnu-1.08.003-mingw-20240428-1ply-cubeful-noiseless-windows",
+    "engine_version": "1.08.003-mingw 32-Bit 20240428",
+    "configuration_hash": "375b0cbf77d6a2e9961c2a25c8b957f28278582728089510496b55d38383ea01",
+    "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+    "runtime_executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+    "resources": {
+      "gnubg.wd": "bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b",
+      "gnubg_os0.bd": "38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49",
+      "gnubg_ts0.bd": "9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f",
+      "met/Kazaross-XG2.xml": "7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3"
+    }
+  },
+  "non_golden_live_requests": {
+    "checker": {
+      "request": {
+        "schema_version": "b\u006ds-analysis-submission-v2",
+        "engine": "gnu",
+        "decision_type": "checker",
+        "analysis_setting": "1ply",
+        "position": {
+          "format": "gnuid",
+          "id": "4HPwATDgc/ABMA:cAnqAAAAAAAE"
+        },
+        "dice": [
+          4,
+          2
+        ]
+      },
+      "analysis_key": "sha256-313bbe4dfad0c2555d3b0c719ba6811fb6a361b8f110c967b50ea1b8e33969fa",
+      "analysis_view_sha256": "3ed591f99a6fa614d7275912bdfa0c626f88a58df340179cb6aac2157b29067d",
+      "candidate_count_rendered": 8,
+      "native_engine_execution_count": 1,
+      "shared_presentation_count": 1,
+      "status": "PASS"
+    },
+    "cube": {
+      "request": {
+        "schema_version": "b\u006ds-analysis-submission-v2",
+        "engine": "gnu",
+        "decision_type": "cube",
+        "analysis_setting": "1ply",
+        "position": {
+          "format": "gnuid",
+          "id": "4HPwATDgc/ABMA:cAngAAAAAAAE"
+        },
+        "dice": null
+      },
+      "analysis_key": "sha256-c7239f1e7b935f2dd81fc6e41fae1d8e4924a7cdcebe1b5af474af0ba79b5f65",
+      "analysis_view_sha256": "1b7c0f5d6392443a499d19e16e87afd6e89a74c522717d9bda7da6a6e643520e",
+      "action_count_rendered": 3,
+      "native_engine_execution_count": 1,
+      "shared_presentation_count": 1,
+      "status": "PASS"
+    },
+    "actual_node_live_mode": true,
+    "fixture_only": false,
+    "command_line_only": false
+  },
+  "identical_request_reuse": {
+    "request": "checker",
+    "same_normalized_request": true,
+    "first_analysis_key": "sha256-313bbe4dfad0c2555d3b0c719ba6811fb6a361b8f110c967b50ea1b8e33969fa",
+    "repeated_analysis_key": "sha256-313bbe4dfad0c2555d3b0c719ba6811fb6a361b8f110c967b50ea1b8e33969fa",
+    "node_cache_hit_state_observed": true,
+    "native_engine_execution_count_before_repeat": 1,
+    "native_engine_execution_count_after_repeat": 1,
+    "first_analysis_view_sha256": "3ed591f99a6fa614d7275912bdfa0c626f88a58df340179cb6aac2157b29067d",
+    "repeated_analysis_view_sha256": "3ed591f99a6fa614d7275912bdfa0c626f88a58df340179cb6aac2157b29067d",
+    "analyzer_deduplication_implemented": false,
+    "status": "PASS"
+  },
+  "product_path": {
+    "browser_route": "/analyze/",
+    "adapter_routes": [
+      "POST /__bs_local_analysis/submit",
+      "GET /__bs_local_analysis/status/sha256-313bbe4dfad0c2555d3b0c719ba6811fb6a361b8f110c967b50ea1b8e33969fa",
+      "GET /__bs_local_analysis/status/sha256-c7239f1e7b935f2dd81fc6e41fae1d8e4924a7cdcebe1b5af474af0ba79b5f65"
+    ],
+    "node_commands_coordinated": [
+      "submit --mode live",
+      "worker --once",
+      "analysis-view"
+    ],
+    "adapter_authority": "local-development-only",
+    "adapter_bind": "127.0.0.1",
+    "browser_executes_node_or_gnu": false,
+    "browser_receives_raw_engine_output": false
+  },
+  "shared_results_viewer": {
+    "status": "PASS",
+    "existing_component": "site/assets/bs-analysis-results.js",
+    "existing_global": "BMSAnalysisResults",
+    "node_view_entrypoint": "BMSAnalysisResults.renderNodeAnalysisView",
+    "node_view_schema": "b\u006ds-node-analysis-view-v0",
+    "runtime_marker": "data-bs-shared-analysis-presentation",
+    "checker_marker_count": 1,
+    "cube_marker_count": 1,
+    "another_viewer_created": false,
+    "another_presentation_contract_created": false
+  },
+  "browser_runtime_proof": {
+    "status": "PASS",
+    "engine": "Google Chrome through Playwright Chromium API",
+    "headless": true,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "states_observed": [
+      "cache-hit",
+      "complete",
+      "idle",
+      "invalid",
+      "running",
+      "starting"
+    ],
+    "page_errors": [],
+    "console_errors": [],
+    "invalid_input_created_presentation": false,
+    "checker_live_node_render": "PASS",
+    "cube_live_node_render": "PASS",
+    "identical_request_reuse_render": "PASS"
+  },
+  "golden_regression_boundary": {
+    "accepted_checker_gnuid": "4PPgASTgc/ABMA:cAnqAAAAAAAE",
+    "accepted_cube_gnuid": "bD3BAQyYd2cEAA:cAngAAAAAAAE",
+    "checker_proof_is_distinct": true,
+    "cube_proof_is_distinct": true,
+    "golden_engine_rerun": false,
+    "golden_pair_disposition": "retained permanent regression only"
+  },
+  "boundary_confirmations": {
+    "node_identity_queue_worker_parser_or_result_semantics_reimplemented_in_website": false,
+    "production_routing_or_server_commissioning": false,
+    "authentication_quotas_rate_limiting_job_leases_or_multi_host_scheduling": false,
+    "explainer_modeling": false,
+    "sage_gnu_comparison": false,
+    "full_graphical_board_editor": false,
+    "xgid_or_ogid_conversion": false,
+    "d1_writes": [],
+    "corpus_writes": [],
+    "canonical_parquet_writes": [],
+    "benchmark_paths_changed": [],
+    "broad_ui_polish": false,
+    "status": "PASS"
+  },
+  "validation": {
+    "focused": [
+      {
+        "command": "node tests/test_analyzer_live.js",
+        "result": "PASS"
+      },
+      {
+        "command": "node tests/test_analysis_results_viewer.js",
+        "result": "PASS"
+      },
+      {
+        "command": "python3 -m unittest tests.test_analyzer_local_preview",
+        "result": "PASS; 6 tests"
+      },
+      {
+        "command": "node tests/test_release_ui_browser_check.mjs",
+        "result": "PASS"
+      },
+      {
+        "command": "python3 -m unittest tests.test_release_ui_checks tests.test_quality_reports",
+        "result": "PASS; 8 tests"
+      },
+      {
+        "command": "python3 scripts/testing/build/release_ui_static_check.py --site-dir site/_site",
+        "result": "PASS; 29 pages; 0 findings"
+      }
+    ],
+    "actual_browser": {
+      "command": "tests/test_analyzer_live_browser.py --url http://127.0.0.1:8871/analyze/ --output <temporary-proof>",
+      "result": "PASS; live checker, live cube, Node cache hit, one engine execution per distinct key, shared viewer mounted, 0 page errors, 0 console errors"
+    },
+    "quick_gate": {
+      "command": "bash scripts/testing/quick.sh",
+      "result": "EXPECTED PRE-EXISTING FAILURE ONLY; 80 tests; 1 failure; 2 skips",
+      "failure": "tests.test_publication_identity.PublicationIdentityTests.test_source_tree_has_no_old_active_identity_or_namespace",
+      "base_and_task_finding_sets_exactly_equal": true,
+      "finding_paths": [
+        "evidence/analyzer-k001/task-009/RESULT.md",
+        "evidence/analyzer-k001/task-009/equivalence-result.json",
+        "scripts/analysis/validate_node_parquet_equivalence.py",
+        "site/legacy-dispositions.yml"
+      ]
+    },
+    "full_unit_discovery": {
+      "command": "python3 -m unittest discover",
+      "result": "EXPECTED PRE-EXISTING FAILURE ONLY; 215 tests; 1 failure; 3 skips",
+      "failure": "the same publication-identity scanner debt"
+    },
+    "comprehensive_entrypoint": {
+      "command": "bash scripts/testing/comprehensive.sh",
+      "result": "ENVIRONMENT BLOCKED at preflight because Rscript is not installed"
+    },
+    "manual_comprehensive_components": [
+      {
+        "command": "XDG_CACHE_HOME=<temporary-cache> BS_PUBLICATION_MODE=development BS_SKIP_SOCIAL_CARDS=1 quarto render site",
+        "result": "PASS; 28/28 pages"
+      },
+      {
+        "command": "python3 scripts/testing/build/release_ui_static_check.py --site-dir site/_site",
+        "result": "PASS; 29 pages; 0 findings"
+      },
+      {
+        "command": "git diff --check 3658e09f1cc3e09121761d18391fc4deb03bda7c...382fd9d3c58102275910e839c386c41c91713ab4",
+        "result": "PASS"
+      }
+    ],
+    "generic_human_ux_review": "NOT RUN; actual Task 011 browser product proof was run",
+    "generic_live_browser_suite": "NOT RUN; actual Task 011 browser product proof was run"
+  },
+  "overall": {
+    "interactive_complete_gnuid_input": "PASS",
+    "checker_node_product_loop": "PASS",
+    "cube_node_product_loop": "PASS",
+    "non_golden_real_node_execution_proof": "PASS",
+    "identical_request_cache_reuse_proof": "PASS",
+    "shared_results_viewer_reuse": "PASS",
+    "browser_presentation_only_boundary": "PASS",
+    "benchmark_isolation": "PASS"
+  }
+}
