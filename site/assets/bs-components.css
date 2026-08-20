@@ -547,6 +547,102 @@
   margin: 0;
 }
 
+.bs-live-analyzer {
+  margin-bottom: 3rem;
+}
+
+.bs-analyzer-request {
+  display: grid;
+  gap: 1.1rem;
+  margin: 1.75rem 0;
+  padding: 1.25rem;
+  border: 1px solid var(--bs-border);
+  border-radius: 6px;
+  background: var(--bs-surface);
+}
+
+.bs-analyzer-field,
+.bs-analyzer-decision,
+.bs-analyzer-dice {
+  margin: 0;
+}
+
+.bs-analyzer-field label,
+.bs-analyzer-decision legend,
+.bs-analyzer-dice legend {
+  margin-bottom: 0.45rem;
+  font-weight: 700;
+}
+
+.bs-analyzer-field input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--bs-border-strong);
+  border-radius: 4px;
+  font-family: "Source Code Pro", ui-monospace, monospace;
+}
+
+.bs-analyzer-field-help {
+  margin: 0.4rem 0 0;
+  color: var(--bs-text-muted);
+  font-size: 0.9rem;
+}
+
+.bs-analyzer-decision,
+.bs-analyzer-dice,
+.bs-analyzer-profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1.25rem;
+  padding: 0;
+  border: 0;
+}
+
+.bs-analyzer-dice select {
+  min-width: 5.5rem;
+  padding: 0.45rem;
+}
+
+.bs-analyzer-profile {
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--bs-border);
+  border-bottom: 1px solid var(--bs-border);
+  color: var(--bs-text-secondary);
+}
+
+.bs-analyzer-request button {
+  justify-self: start;
+}
+
+.bs-analyzer-runtime-status {
+  margin: 1rem 0 1.75rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--bs-copper);
+  background: color-mix(in srgb, var(--bs-ivory) 72%, var(--bs-surface));
+}
+
+.bs-analyzer-runtime-status p {
+  margin: 0.35rem 0 0;
+}
+
+.bs-analyzer-runtime-status code {
+  display: block;
+  margin-top: 0.45rem;
+  overflow-wrap: anywhere;
+}
+
+.bs-analyzer-runtime-status[data-bs-analyzer-state="invalid"],
+.bs-analyzer-runtime-status[data-bs-analyzer-state="failed"],
+.bs-analyzer-runtime-status[data-bs-analyzer-state="unsupported"] {
+  border-left-color: var(--bs-danger, #9f2f24);
+}
+
+.bs-analyzer-live-results {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
 @media (max-width: 900px) {
   .bs-step-row,
   .bs-analyze-steps {

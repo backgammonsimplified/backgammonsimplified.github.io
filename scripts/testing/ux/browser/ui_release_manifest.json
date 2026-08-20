@@ -109,7 +109,7 @@
       "name": "Analyzer landing page",
       "route": "/analyze/",
       "kind": "analyzer",
-      "required_markers": ["bs-position-preview-frame"]
+      "required_markers": ["data-bs-live-analyzer"]
     },
     {
       "id": "match-predictor",

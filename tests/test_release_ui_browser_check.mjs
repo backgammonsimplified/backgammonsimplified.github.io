@@ -31,6 +31,11 @@ assert.deepEqual(
 );
 assert.ok(DEFAULT_MANIFEST.pages.some((page) => page.id === "home"));
 assert.deepEqual(
+  DEFAULT_MANIFEST.pages.find((page) => page.id === "analyze")
+    .required_markers,
+  ["data-bs-live-analyzer"]
+);
+assert.deepEqual(
   DEFAULT_MANIFEST.pages.find((page) => page.id === "cube-lesson")
     .required_markers,
   ["data-bs-cube-decision"]
@@ -88,6 +93,9 @@ assert.ok(
   )
 );
 assert.ok(canonicalHelperSource.includes("checksByContext[context]"));
+assert.ok(canonicalHelperSource.includes("interactive analyzer form is present"));
+assert.ok(canonicalHelperSource.includes("analyzer shared results mount is present"));
+assert.ok(!canonicalHelperSource.includes("#bs-position-preview-frame"));
 assert.ok(!helperSource.includes("[data-bs-lesson-track-toggle]"));
 assert.match(
   helperSource,

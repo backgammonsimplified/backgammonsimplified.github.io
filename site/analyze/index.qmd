@@ -1,7 +1,7 @@
 ---
 title: "Backgammon Position Analyzer"
-description: "Analyze a backgammon position, compare checker plays and cube decisions, and understand why the strongest choice is best."
-subtitle: "OPEN ANALYSIS :: UNDERSTAND A POSITION"
+description: "Analyze a complete GNUID with GNU Backgammon at 1-ply and inspect checker or cube results."
+subtitle: "LOCAL ANALYSIS :: COMPLETE GNUID"
 page-layout: full
 toc: false
 term-lookup: false
@@ -12,117 +12,80 @@ format:
 ---
 
 :::: {.bs-page-shell}
+
+:::: {.bs-live-analyzer data-bs-live-analyzer=""}
+
 ::: {.bs-reading-column}
 
 ::: {.bs-status-panel}
-[CURRENT VERSION :: BOARD PREVIEW]{.bs-status-label}
+[LOCAL DEVELOPMENT SLICE]{.bs-status-label}
 
-Coming soon: Full engine analysis, best candidate move rankings. For now it just renders a board and match from an XGID.
+Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-ply profile through the existing local `backgammon-node` capability. This loopback adapter is not a production API.
 :::
-
-:::: {.bs-step-row aria-label="How to use the position preview"}
-::: {.bs-step}
-[01]{.bs-step-number}
-
-**Paste an XGID**
-
-Use a complete XGID copied from your backgammon software or a shared position link.
-:::
-
-::: {.bs-step}
-[02]{.bs-step-number}
-
-**Check the position**
-
-From the board and match situation, view the best candidate move.
-:::
-
-::: {.bs-step}
-[03]{.bs-step-number}
-
-**Share the link**
-
-Open the preview directly or send the encoded position URL to another player.
-:::
-::::
-
-:::
-
-:::: {.bs-tool-area}
 
 ```{=html}
-<script>
-(function () {
-  const allowedOrigin = "https://backgammon-simplified.shinyapps.io";
-  const iframeId = "bs-position-preview-frame";
-  const heightMessageType = "bs-iframe-height";
-  const requestMessageType = "bs-request-height";
+<form class="bs-analyzer-request" data-bs-analyzer-form novalidate>
+  <div class="bs-analyzer-field">
+    <label for="bs-analyzer-gnuid">Complete GNUID</label>
+    <input id="bs-analyzer-gnuid" name="gnuid" type="text" autocomplete="off" spellcheck="false" placeholder="PositionID:MatchID" aria-describedby="bs-analyzer-gnuid-help" required>
+    <p id="bs-analyzer-gnuid-help" class="bs-analyzer-field-help">Include both the 14-character Position ID and 12-character Match ID.</p>
+  </div>
 
-  function getIframe() {
-    return document.getElementById(iframeId);
-  }
+  <fieldset class="bs-analyzer-decision">
+    <legend>Decision</legend>
+    <label><input type="radio" name="decision" value="checker" checked> Checker</label>
+    <label><input type="radio" name="decision" value="cube"> Cube</label>
+  </fieldset>
 
-  window.addEventListener("message", function (event) {
-    if (event.origin !== allowedOrigin) {
-      return;
-    }
+  <fieldset class="bs-analyzer-dice" data-bs-checker-dice>
+    <legend>Checker dice</legend>
+    <label for="bs-analyzer-die-1">Die 1</label>
+    <select id="bs-analyzer-die-1" name="die1" data-bs-checker-die required>
+      <option value="">Choose</option>
+      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+    </select>
+    <label for="bs-analyzer-die-2">Die 2</label>
+    <select id="bs-analyzer-die-2" name="die2" data-bs-checker-die required>
+      <option value="">Choose</option>
+      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+    </select>
+  </fieldset>
 
-    const data = event.data;
+  <div class="bs-analyzer-profile" aria-label="Fixed analysis profile">
+    <span><strong>Engine</strong> GNU</span>
+    <span><strong>Setting</strong> 1-ply</span>
+  </div>
 
-    if (
-      !data ||
-      data.type !== heightMessageType ||
-      data.source !== "position-dashboard"
-    ) {
-      return;
-    }
+  <button class="bs-button bs-button-primary" type="submit">Analyze position</button>
+</form>
 
-    const height = Number(data.height);
-
-    if (!Number.isFinite(height) || height < 120 || height > 50000) {
-      return;
-    }
-
-    const iframe = getIframe();
-
-    if (iframe) {
-      iframe.style.height = `${Math.ceil(height) + 2}px`;
-    }
-  });
-
-  window.addEventListener("DOMContentLoaded", function () {
-    const iframe = getIframe();
-
-    if (!iframe) {
-      return;
-    }
-
-    iframe.addEventListener("load", function () {
-      iframe.contentWindow.postMessage(
-        { type: requestMessageType },
-        allowedOrigin
-      );
-    });
-  });
-})();
-</script>
+<section class="bs-analyzer-runtime-status" data-bs-analyzer-state="idle" aria-live="polite" aria-atomic="true">
+  <span class="bs-status-label" data-bs-analyzer-state-label>idle</span>
+  <p data-bs-analyzer-state-detail>Enter a complete GNUID to begin.</p>
+  <code data-bs-analyzer-key hidden></code>
+</section>
 ```
 
-::: {.bs-tool-frame}
+:::
+
+::: {.bs-analyzer-live-results}
 ```{=html}
-<iframe
-  id="bs-position-preview-frame"
-  src="https://backgammon-simplified.shinyapps.io/position-dashboard/?position=XGID%3D-B-BBBF-------a----dccb-b-%3A1%3A-1%3A1%3A65%3A0%3A3%3A0%3A5%3A8"
-  title="Backgammon Simplified position preview"
-  loading="eager"
-  scrolling="no"
-></iframe>
+<div class="bs-analysis-results-host" data-bs-analyzer-results></div>
 ```
 :::
 
-::: {.bs-external-link}
-[Open this position →](https://backgammon-simplified.shinyapps.io/position-dashboard/?position=XGID%3D-B-BBBF-------a----dccb-b-%3A1%3A-1%3A1%3A65%3A0%3A3%3A0%3A5%3A8)
-:::
 ::::
+
+::: {.bs-reading-column}
+
+## Separate XGID board preview
+
+The retained Shiny tool only previews an XGID. It does not feed the GNUID analysis form above, and this task does not convert XGID to GNUID.
+
+[Open the separate XGID preview →](https://backgammon-simplified.shinyapps.io/position-dashboard/)
+
+:::
 
 ::::

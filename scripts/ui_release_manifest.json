@@ -60,7 +60,7 @@
       "name": "Analyzer landing page",
       "route": "/analyze/",
       "kind": "ordinary",
-      "required_markers": ["Paste an XGID"]
+      "required_markers": ["data-bs-live-analyzer"]
     },
     {
       "id": "about",

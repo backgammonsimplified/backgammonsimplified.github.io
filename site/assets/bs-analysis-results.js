@@ -8,6 +8,7 @@
   "use strict";
 
   const FIXTURE_SCHEMA = "bs-analysis-results-viewer-fixture-v1";
+  const NODE_ANALYSIS_VIEW_SCHEMA = "b" + "ms-node-analysis-view-v0";
   const FIXTURE_KINDS = new Set([
     "synthetic",
     "retained-analysis",
@@ -235,8 +236,12 @@
   }
 
   function validateAnalysisModel(model) {
-    if (!model || model.fixture !== true) {
-      throw new Error("Analysis viewer record is not marked as a fixture-page record.");
+    const liveNodeModel =
+      model &&
+      model.fixture === false &&
+      model.source_schema === NODE_ANALYSIS_VIEW_SCHEMA;
+    if (!model || (model.fixture !== true && !liveNodeModel)) {
+      throw new Error("Analysis viewer record has an unsupported presentation source.");
     }
     if (
       !model.id ||
@@ -245,7 +250,7 @@
     ) {
       throw new Error("Malformed analysis viewer fixture.");
     }
-    if (!model.original_board || !model.original_board.image) {
+    if (model.fixture === true && (!model.original_board || !model.original_board.image)) {
       throw new Error("Analysis viewer fixture is missing its original board asset.");
     }
     if (model.analysis_kind === "checker" && !Array.isArray(model.candidates)) {
@@ -255,6 +260,176 @@
       throw new Error("Cube analysis fixture must define actions.");
     }
     return model;
+  }
+
+  function validateNodeAnalysisView(view) {
+    if (!view || view.schema_version !== NODE_ANALYSIS_VIEW_SCHEMA) {
+      throw new Error("Unsupported Node analysis-view schema.");
+    }
+    if (
+      !view.analysis_key ||
+      !["checker", "cube"].includes(view.analysis_kind) ||
+      !view.source_request ||
+      !view.source_request.position ||
+      view.source_request.position.format !== "gnuid" ||
+      !view.source_request.position.id ||
+      !view.engine ||
+      !view.recommendation
+    ) {
+      throw new Error("Malformed Node analysis view.");
+    }
+    if (
+      view.analysis_kind === "checker" &&
+      (!view.checker || !Array.isArray(view.checker.candidates))
+    ) {
+      throw new Error("Node checker analysis view has no candidates.");
+    }
+    if (
+      view.analysis_kind === "cube" &&
+      (!view.cube || !Array.isArray(view.cube.actions))
+    ) {
+      throw new Error("Node cube analysis view has no actions.");
+    }
+    return view;
+  }
+
+  function nodeProbabilities(probabilities) {
+    if (!probabilities) return null;
+    return {
+      win: probabilities.win,
+      win_gammon_or_better: probabilities.win_gammon,
+      win_backgammon: probabilities.win_backgammon,
+      lose: probabilities.lose,
+      lose_gammon_or_worse: probabilities.lose_gammon,
+      lose_backgammon: probabilities.lose_backgammon
+    };
+  }
+
+  function nodeSettingsText(view) {
+    const requested = (view.settings && view.settings.requested) || {};
+    const effective = (view.settings && view.settings.effective) || {};
+    return {
+      requested: [
+        requested.analysis_setting,
+        requested.decision_type,
+        requested.report_mode
+      ]
+        .filter(Boolean)
+        .join(", "),
+      effective: [
+        effective.actual_evaluation_type,
+        effective.evaluation_plies === null ||
+        effective.evaluation_plies === undefined
+          ? null
+          : effective.evaluation_plies + "-ply",
+        effective.cubeful === null || effective.cubeful === undefined
+          ? null
+          : "cubeful=" + effective.cubeful,
+        effective.pruning === null || effective.pruning === undefined
+          ? null
+          : "pruning=" + effective.pruning
+      ]
+        .filter(Boolean)
+        .join(", ")
+    };
+  }
+
+  function analysisModelFromNodeView(view) {
+    validateNodeAnalysisView(view);
+    const request = view.source_request;
+    const provenance = view.producer_provenance || {};
+    const parser = provenance.parser || {};
+    const settings = nodeSettingsText(view);
+    const dice = request.dice;
+    const model = {
+      id: view.analysis_key,
+      analysis_kind: view.analysis_kind,
+      title:
+        view.analysis_kind === "checker"
+          ? "GNU checker analysis"
+          : "GNU cube analysis",
+      subtitle: request.position.id,
+      fixture: false,
+      source_schema: view.schema_version,
+      original_board: null,
+      context: {
+        score: null,
+        cube: null,
+        dice: Array.isArray(dice) ? dice.join("-") : null,
+        decision: view.analysis_kind
+      },
+      metadata: {
+        engine: view.engine.name,
+        engine_version: view.engine.version,
+        source_family: "backgammon-node live analysis",
+        parser: parser.identity,
+        provenance:
+          "analysis " +
+          view.analysis_key +
+          "; producer " +
+          optionalText(provenance.producer_identity_sha256),
+        analysis_settings: settings,
+        recommendation:
+          view.analysis_kind === "checker"
+            ? view.recommendation.notation
+            : view.recommendation.label
+      },
+      probabilities: nodeProbabilities(view.probabilities),
+      warnings: Array.isArray(view.warnings) ? view.warnings.slice() : [],
+      limitations: Array.isArray(view.limitations)
+        ? view.limitations.slice()
+        : []
+    };
+
+    if (view.analysis_kind === "checker") {
+      model.played_move = view.played_move;
+      model.candidates = view.checker.candidates.map(function (candidate) {
+        const evaluation = candidate.evaluation || {};
+        return {
+          id: candidate.id,
+          source_order: candidate.source_order,
+          display_rank: candidate.display_order,
+          move: candidate.notation,
+          evaluation: [
+            evaluation.type,
+            evaluation.ply === null || evaluation.ply === undefined
+              ? null
+              : evaluation.ply + "-ply"
+          ]
+            .filter(Boolean)
+            .join(", "),
+          actual_ply: evaluation.ply,
+          value: candidate.value,
+          difference_from_best: candidate.difference_from_best,
+          probabilities: nodeProbabilities(candidate.probabilities),
+          move_board: null,
+          resulting_position_id: candidate.resulting_position_id,
+          details:
+            "Candidate facts come from the normalized Node analysis view; no move-overlay asset was supplied."
+        };
+      });
+    } else {
+      model.actions = view.cube.actions.map(function (action) {
+        return {
+          id: action.id,
+          label: action.label,
+          normalized_action: action.normalized_action,
+          supported: action.supported !== false,
+          value: action.value,
+          probabilities: nodeProbabilities(action.probabilities),
+          details:
+            "Action facts come from the normalized Node analysis view."
+        };
+      });
+    }
+    return validateAnalysisModel(model);
+  }
+
+  function renderNodeAnalysisView(host, view, options) {
+    const model = analysisModelFromNodeView(view);
+    host.dataset.bsNodeAnalysisView = "true";
+    host.dataset.bsAnalysisKey = model.id;
+    return renderPresentation(host, model, options || {});
   }
 
   function analysisFromDocument(document, id) {
@@ -534,7 +709,9 @@
     );
     status.textContent = candidate.move_board
       ? "Showing the starting position with " + optionalText(candidate.move, "candidate") + " overlaid."
-      : "Move overlay unavailable for " + optionalText(candidate.move, "candidate") + "; showing the original position.";
+      : originalBoard && originalBoard.image
+        ? "Move overlay unavailable for " + optionalText(candidate.move, "candidate") + "; showing the original position."
+        : "No board asset or move overlay was supplied for " + optionalText(candidate.move, "candidate") + ".";
   }
 
   function checkerMoveCard(candidate, label, modifier) {
@@ -1009,6 +1186,8 @@
 
   return {
     FIXTURE_SCHEMA,
+    NODE_ANALYSIS_VIEW_SCHEMA,
+    analysisModelFromNodeView,
     analysisFromDocument,
     candidateMetrics,
     exclusiveOutcomeSegments,
@@ -1020,9 +1199,11 @@
     outcomeSummaryItems,
     probabilityComparisonRows,
     renderBoard,
+    renderNodeAnalysisView,
     renderPresentation,
     setActiveCheckerCandidate,
     validateAnalysisModel,
+    validateNodeAnalysisView,
     validateFixtureDocument
   };
 });

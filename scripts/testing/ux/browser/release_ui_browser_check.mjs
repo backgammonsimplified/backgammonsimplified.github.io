@@ -1285,9 +1285,19 @@ export async function runReleaseUiChecks({
           }
           if (page.kind === "analyzer") {
             check(
-              (await activeTab.playwright.locator("#bs-position-preview-frame").count()) === 1,
+              (await activeTab.playwright.locator("[data-bs-live-analyzer]").count()) === 1,
               context,
-              "analyzer iframe container is present without requiring iframe success"
+              "interactive analyzer form is present"
+            );
+            check(
+              (await activeTab.playwright.locator("#bs-analyzer-gnuid").count()) === 1,
+              context,
+              "analyzer complete GNUID input is present"
+            );
+            check(
+              (await activeTab.playwright.locator("[data-bs-analysis-results]").count()) === 1,
+              context,
+              "analyzer shared results mount is present"
             );
           }
           if (page.kind === "match-predictor") {
