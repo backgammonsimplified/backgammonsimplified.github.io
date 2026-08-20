@@ -55,6 +55,26 @@ sidecar and future equivalence input. Its board URLs are accepted only after an
 exact analysis/GNU identity and move match; no analytical value is read from
 that sidecar. The Learn hosts continue to use the existing Results Viewer.
 
+## Node-direct / Canonical semantic equivalence
+
+The Task 009 comparator reads only the accepted committed Node fixtures and
+Task 008 read sets/evidence. It does not invoke GNU, Node analysis, DuckDB, or a
+Canonical writer:
+
+```bash
+.venv/bin/python scripts/analysis/validate_node_parquet_equivalence.py \
+  --output-json evidence/analyzer-k001/task-009/equivalence-result.json \
+  --output-markdown evidence/analyzer-k001/task-009/RESULT.md \
+  --verify-repeat
+```
+
+Every compared field is classified as `EQUAL`,
+`SEMANTICALLY_NEUTRAL_REPRESENTATION_DIFFERENCE`,
+`EXPLICITLY_UNAVAILABLE_ON_ONE_SIDE`, or `MISMATCH`. Native numeric values use
+exact equality with no tolerance or rounded-display fallback. The accepted
+input hashes, package/manifest identities, excluded Package A cube, complete
+candidate/action ordering, and provenance round trip all fail closed.
+
 ## Deterministic Analysis View materializer
 
 The Analyzer-owned deterministic transformation is implemented in
