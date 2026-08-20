@@ -196,6 +196,23 @@ def collect_static_proof(
         and cube.get("metadata", {}).get("recommendation") == "Double, take",
         "accepted three actions and recommendation are present in source order",
     )
+    lesson_authority_ok = all(
+        isinstance(analyses.get(analysis_id), dict)
+        and analyses[analysis_id].get("canonical_context", {}).get("package")
+        == {
+            "conformance_status": "verified-canonical-v1",
+            "manifest_sha256": PACKAGES[kind]["manifest_sha256"],
+            "package_id": PACKAGES[kind]["package_id"],
+            "profile_id": "canonical-analysis-parquet-v1",
+        }
+        for kind, analysis_id in (("checker", CHECKER_ID), ("cube", CUBE_ID))
+    )
+    _check(
+        checks,
+        "lesson-document-authority-binding",
+        lesson_authority_ok,
+        "each analysis carries its exact verified package and manifest identity",
+    )
     lesson_text = payloads["lesson_view"].decode("utf-8")
     _check(
         checks,
@@ -213,6 +230,19 @@ def collect_static_proof(
         for kind, expected in PACKAGES.items()
     )
     _check(checks, "task-008-authority-binding", authority_ok, "package and manifest identities match Task 008 evidence")
+    selected = materialization.get("selected", {})
+    selected_ok = (
+        selected.get("checker", {}).get("analysis_id") == CHECKER_ID
+        and selected.get("checker", {}).get("candidate_ids") == CHECKER_CANDIDATES
+        and selected.get("cube", {}).get("analysis_id") == CUBE_ID
+        and selected.get("cube", {}).get("cube_action_ids") == CUBE_ACTIONS
+    )
+    _check(
+        checks,
+        "task-008-selection-binding",
+        selected_ok,
+        "Task 008 selected the exact Learn analyses, candidates, and actions",
+    )
 
     equivalence = load_json_bytes(payloads["task_009_equivalence"], INPUT_HASHES["task_009_equivalence"][0])
     eq_result = equivalence.get("result", {})
@@ -478,7 +508,11 @@ def build_result(static: dict[str, Any], runtime: dict[str, Any], implementation
     return {
         "schema_version": SCHEMA,
         "task": TASK,
-        "implementation": {"starting_head": STARTING_HEAD, "proof_implementation_head": implementation_head},
+        "implementation": {
+            "starting_head": STARTING_HEAD,
+            "final_head": implementation_head,
+            "final_head_scope": "last commit containing Task 010 implementation; durable evidence is committed afterward",
+        },
         "result": {"status": "PASS" if blockers == 0 else "FAIL", "required_product_path_blockers": blockers, **gates},
         "lineage": {
             "analysis_ids": {"checker": CHECKER_ID, "cube": CUBE_ID},
@@ -505,7 +539,7 @@ def result_markdown(result: dict[str, Any], machine_hash: str) -> bytes:
         "",
         f"Task: `{TASK}`",
         f"Starting implementation head: `{STARTING_HEAD}`",
-        f"Proof implementation head: `{result['implementation']['proof_implementation_head']}`",
+        f"Final implementation head: `{result['implementation']['final_head']}`",
         "",
         "## Product-path gates",
         "",
