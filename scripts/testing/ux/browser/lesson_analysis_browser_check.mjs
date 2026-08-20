@@ -7,6 +7,23 @@ const CHECKER_KEY =
   "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d";
 const CUBE_KEY =
   "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01";
+export const CANONICAL_LESSON_ANALYSIS_SOURCE =
+  "/data/analyzer-node-k001-lesson-preview.json";
+export const CHECKER_CANDIDATE_IDS = [
+  "cebe056b9fba14bb3a4fd58aa8f3e3d5430d98045ff21850c994bd24add37745",
+  "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477",
+  "2940ef714c8cff1a3895543725738b43d64264c425968c3448c0a251a0e1542d",
+  "5fd8fc14885e320a36c7769bf3127c2662c3d9f3164418872c7696be426460c8",
+  "3c03cda00d76d9fbb7acc6d54dc78d2079fee4c1f10c946e4b2f3b8866a0027b",
+  "09806fcf119b0f5742865fd64f987cecc00a28338b429a89a8098aacca864cf0",
+  "6a2d4cbf49af863c3ca425061a616d836ef10e80429714fba0829180d2ec5837",
+  "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+];
+export const CUBE_ACTION_IDS = {
+  noDouble: "b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad",
+  take: "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f",
+  pass: "7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936"
+};
 
 export const LESSON_ANALYSIS_ROUTES = {
   cube: "/learn/cube/what-the-cube-is-asking.html",
@@ -87,6 +104,13 @@ export async function runLessonAnalysisBrowserChecks({
         check((await host.count()) === 1, cubeContext, "one real cube host mounts");
         const initial = await host.evaluate((element) => ({
           analysisId: element.querySelector("article")?.dataset.analysisId,
+          analysisSource: element.dataset.bsAnalysisSrc,
+          configuredAnalysisId: element.dataset.bsAnalysisId,
+          actionIds: {
+            noDouble: element.dataset.bsNoDoubleActionId,
+            take: element.dataset.bsDoubleTakeActionId,
+            pass: element.dataset.bsDoublePassActionId
+          },
           image: element
             .querySelector(".bs-analysis-results-board-image")
             ?.getAttribute("src"),
@@ -97,6 +121,13 @@ export async function runLessonAnalysisBrowserChecks({
           )
         }));
         check(initial.analysisId === CUBE_KEY, cubeContext, "exact cube key mounts");
+        check(
+          initial.analysisSource === CANONICAL_LESSON_ANALYSIS_SOURCE &&
+            initial.configuredAnalysisId === CUBE_KEY &&
+            JSON.stringify(initial.actionIds) === JSON.stringify(CUBE_ACTION_IDS),
+          cubeContext,
+          "cube host retains exact Canonical source and action bindings"
+        );
         check(
           initial.image === "/assets/positions/node-k001/cube/starting.svg" &&
             initial.loaded,
@@ -139,7 +170,7 @@ export async function runLessonAnalysisBrowserChecks({
             "/assets/positions/node-k001/cube/responder.svg" &&
             (await host
               .locator(
-                "button[data-bs-analysis-result-choice='double-pass']"
+                `button[data-bs-analysis-result-choice='${CUBE_ACTION_IDS.pass}']`
               )
               .getAttribute("aria-pressed")) === "true",
           cubeContext,
@@ -155,7 +186,9 @@ export async function runLessonAnalysisBrowserChecks({
               .getAttribute("src")) ===
               "/assets/positions/node-k001/cube/starting.svg" &&
             (await host
-              .locator("button[data-bs-analysis-result-choice='no-double']")
+              .locator(
+                `button[data-bs-analysis-result-choice='${CUBE_ACTION_IDS.noDouble}']`
+              )
               .getAttribute("aria-pressed")) === "true",
           cubeContext,
           "No double stays out of the responder stage and uses the original perspective"
@@ -165,9 +198,9 @@ export async function runLessonAnalysisBrowserChecks({
         const revealed = await host.evaluate((element) => ({
           active: element
             .querySelector(
-              "button[data-bs-analysis-result-choice='double-take']"
+              "button[data-bs-analysis-result-choice][aria-pressed='true']"
             )
-            ?.getAttribute("aria-pressed"),
+            ?.getAttribute("data-bs-analysis-result-choice"),
           actionCount: element.querySelectorAll(
             "button[data-bs-analysis-result-choice]"
           ).length,
@@ -184,7 +217,7 @@ export async function runLessonAnalysisBrowserChecks({
           text: element.textContent
         }));
         check(
-          revealed.shared === "true" && revealed.active === "true",
+          revealed.shared === "true" && revealed.active === CUBE_ACTION_IDS.take,
           cubeContext,
           "cube reveal invokes the shared viewer with Double, take active"
         );
@@ -234,6 +267,13 @@ export async function runLessonAnalysisBrowserChecks({
         const host = checkerTab.playwright.locator("[data-bs-checker-decision]");
         const initial = await host.evaluate((element) => ({
           analysisId: element.querySelector("article")?.dataset.analysisId,
+          analysisSource: element.dataset.bsAnalysisSrc,
+          configuredAnalysisId: element.dataset.bsAnalysisId,
+          choiceIds: Array.from(
+            element.querySelectorAll(
+              ":scope .bs-analysis-choice-row > [data-bs-analysis-choice]"
+            )
+          ).map((choice) => choice.dataset.bsAnalysisChoice),
           choices: element.querySelectorAll(
             ":scope .bs-analysis-choice-row > [data-bs-analysis-choice]"
           ).length,
@@ -242,9 +282,14 @@ export async function runLessonAnalysisBrowserChecks({
             ?.getAttribute("src")
         }));
         check(
-          initial.analysisId === CHECKER_KEY && initial.choices === 8,
+          initial.analysisId === CHECKER_KEY &&
+            initial.analysisSource === CANONICAL_LESSON_ANALYSIS_SOURCE &&
+            initial.configuredAnalysisId === CHECKER_KEY &&
+            initial.choices === 8 &&
+            JSON.stringify(initial.choiceIds) ===
+              JSON.stringify(CHECKER_CANDIDATE_IDS),
           checkerContext,
-          "exact checker key exposes all eight lesson choices"
+          "exact Canonical checker source/key exposes all eight ordered choices"
         );
         check(
           initial.image === "/assets/positions/node-k001/checker/starting.svg",
@@ -252,7 +297,11 @@ export async function runLessonAnalysisBrowserChecks({
           "prepared checker starting board loads"
         );
 
-        await host.locator("button[data-bs-analysis-choice='gnu-move-8']").click();
+        await host
+          .locator(
+            `button[data-bs-analysis-choice='${CHECKER_CANDIDATE_IDS[7]}']`
+          )
+          .click();
         const revealed = await host.evaluate((element) => ({
           active: element
             .querySelector(".bs-analysis-results-candidate.is-active")
@@ -286,7 +335,7 @@ export async function runLessonAnalysisBrowserChecks({
         check(
           revealed.shared === "true" &&
             revealed.candidateCount === 8 &&
-            revealed.active === "gnu-move-8",
+            revealed.active === CHECKER_CANDIDATE_IDS[7],
           checkerContext,
           "checker reveal uses the shared viewer and preserves eight candidates"
         );
@@ -310,10 +359,14 @@ export async function runLessonAnalysisBrowserChecks({
         }
 
         await host
-          .locator("[data-bs-analysis-candidate-id='gnu-move-2'] > summary")
+          .locator(
+            `[data-bs-analysis-candidate-id='${CHECKER_CANDIDATE_IDS[1]}'] > summary`
+          )
           .click();
         await host
-          .locator("[data-bs-analysis-candidate-id='gnu-move-3'] > summary")
+          .locator(
+            `[data-bs-analysis-candidate-id='${CHECKER_CANDIDATE_IDS[2]}'] > summary`
+          )
           .click();
         const disclosures = await host.evaluate((element) => ({
           active: element
@@ -327,13 +380,13 @@ export async function runLessonAnalysisBrowserChecks({
           ).map((candidate) => candidate.dataset.bsAnalysisCandidateId)
         }));
         check(
-          disclosures.active === "gnu-move-3" &&
+          disclosures.active === CHECKER_CANDIDATE_IDS[2] &&
             disclosures.image ===
               "/assets/positions/node-k001/checker/candidate-3.svg" &&
-            disclosures.open.includes("gnu-move-1") &&
-            disclosures.open.includes("gnu-move-2") &&
-            disclosures.open.includes("gnu-move-3") &&
-            disclosures.open.includes("gnu-move-8"),
+            disclosures.open.includes(CHECKER_CANDIDATE_IDS[0]) &&
+            disclosures.open.includes(CHECKER_CANDIDATE_IDS[1]) &&
+            disclosures.open.includes(CHECKER_CANDIDATE_IDS[2]) &&
+            disclosures.open.includes(CHECKER_CANDIDATE_IDS[7]),
           checkerContext,
           "active movement board is independent of open candidate disclosures"
         );

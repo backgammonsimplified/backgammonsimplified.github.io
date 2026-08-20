@@ -75,6 +75,26 @@ exact equality with no tolerance or rounded-display fallback. The accepted
 input hashes, package/manifest identities, excluded Package A cube, complete
 candidate/action ordering, and provenance round trip all fail closed.
 
+## Learn consumption proof
+
+Task 010 binds the rendered Learn hosts to the accepted Canonical-derived JSON,
+then uses Chromium to verify both desktop/mobile semantic surfaces and a bounded
+404 negative control. The denial proves that neither route silently falls back
+to the retained Node-direct local-authoring document:
+
+```bash
+.venv/bin/python scripts/analysis/prove_learn_canonical_consumption.py \
+  --site-root site/_site \
+  --implementation-head <full-implementation-commit> \
+  --output-json evidence/analyzer-k001/task-010/learn-consumption-result.json \
+  --output-markdown evidence/analyzer-k001/task-010/RESULT.md \
+  --verify-repeat
+```
+
+The site must first be rendered with the repository Quarto build. This proof
+reads committed Task 008/009 evidence; it does not run GNU, Node analysis,
+DuckDB, or a Canonical writer.
+
 ## Deterministic Analysis View materializer
 
 The Analyzer-owned deterministic transformation is implemented in
