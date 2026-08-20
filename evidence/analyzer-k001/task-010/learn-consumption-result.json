@@ -1,0 +1,369 @@
+{
+  "schema_version": "analyzer-learn-canonical-consumption-proof-v1",
+  "task": "prove-learn-consumption-from-server-derived-analysis-v1",
+  "implementation": {
+    "starting_head": "c69b7a599baf2f8b88491110a95df7167a09cdd3",
+    "final_head": "79ef91292d06a5bc7846f5a49a4f3329071b7d7a",
+    "final_head_scope": "last commit containing Task 010 implementation; durable evidence is committed afterward"
+  },
+  "result": {
+    "status": "PASS",
+    "required_product_path_blockers": 0,
+    "checker_learn_canonical_derived_consumption": "PASS",
+    "cube_learn_canonical_derived_consumption": "PASS",
+    "shared_results_viewer_consumption": "PASS",
+    "server_derived_source_binding": "PASS",
+    "negative_control_no_fallback_proof": "PASS",
+    "excluded_cube_rejection": "PASS",
+    "browser_presentation_only_boundaries": "PASS",
+    "task_009_equivalence_binding": "PASS",
+    "runtime_browser_proof": "PASS"
+  },
+  "lineage": {
+    "analysis_ids": {
+      "checker": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "cube": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+    },
+    "excluded_cube_id": "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414",
+    "packages": {
+      "checker": {
+        "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+        "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e"
+      },
+      "cube": {
+        "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+        "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a"
+      }
+    },
+    "inputs": {
+      "lesson_view": {
+        "path": "site/data/analyzer-node-k001-lesson-preview.json",
+        "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404",
+        "accepted_sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      },
+      "checker_read_set": {
+        "path": "evidence/analyzer-k001/task-008/checker-read-set.json",
+        "sha256": "7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb",
+        "accepted_sha256": "7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb"
+      },
+      "cube_read_set": {
+        "path": "evidence/analyzer-k001/task-008/cube-read-set.json",
+        "sha256": "3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1",
+        "accepted_sha256": "3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1"
+      },
+      "materialization_evidence": {
+        "path": "evidence/analyzer-k001/task-008/materialization-evidence.json",
+        "sha256": "8c1545c202930efe325d4d5aabe609f33f864a22b38ecd665d82dbc4ca552975",
+        "accepted_sha256": "8c1545c202930efe325d4d5aabe609f33f864a22b38ecd665d82dbc4ca552975"
+      },
+      "task_009_equivalence": {
+        "path": "evidence/analyzer-k001/task-009/equivalence-result.json",
+        "sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368",
+        "accepted_sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368"
+      }
+    }
+  },
+  "static_proof": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "accepted-hash:lesson_view",
+        "status": "PASS",
+        "detail": "site/data/analyzer-node-k001-lesson-preview.json -> 7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      },
+      {
+        "name": "accepted-hash:checker_read_set",
+        "status": "PASS",
+        "detail": "evidence/analyzer-k001/task-008/checker-read-set.json -> 7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb"
+      },
+      {
+        "name": "accepted-hash:cube_read_set",
+        "status": "PASS",
+        "detail": "evidence/analyzer-k001/task-008/cube-read-set.json -> 3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1"
+      },
+      {
+        "name": "accepted-hash:materialization_evidence",
+        "status": "PASS",
+        "detail": "evidence/analyzer-k001/task-008/materialization-evidence.json -> 8c1545c202930efe325d4d5aabe609f33f864a22b38ecd665d82dbc4ca552975"
+      },
+      {
+        "name": "accepted-hash:task_009_equivalence",
+        "status": "PASS",
+        "detail": "evidence/analyzer-k001/task-009/equivalence-result.json -> ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368"
+      },
+      {
+        "name": "checker-source-binding",
+        "status": "PASS",
+        "detail": "checker Learn host binds the accepted analysis to the Canonical-derived URL only"
+      },
+      {
+        "name": "cube-source-binding",
+        "status": "PASS",
+        "detail": "cube Learn host binds the accepted analysis and three Canonical action IDs"
+      },
+      {
+        "name": "lesson-exact-analysis-set",
+        "status": "PASS",
+        "detail": "document contains exactly checker and accepted Learn cube"
+      },
+      {
+        "name": "checker-semantic-surface",
+        "status": "PASS",
+        "detail": "accepted eight candidates and recommendation are present in source order"
+      },
+      {
+        "name": "cube-semantic-surface",
+        "status": "PASS",
+        "detail": "accepted three actions and recommendation are present in source order"
+      },
+      {
+        "name": "lesson-document-authority-binding",
+        "status": "PASS",
+        "detail": "each analysis carries its exact verified package and manifest identity"
+      },
+      {
+        "name": "excluded-cube-absent",
+        "status": "PASS",
+        "detail": "excluded Package A cube is absent from the Learn inputs"
+      },
+      {
+        "name": "task-008-authority-binding",
+        "status": "PASS",
+        "detail": "package and manifest identities match Task 008 evidence"
+      },
+      {
+        "name": "task-008-selection-binding",
+        "status": "PASS",
+        "detail": "Task 008 selected the exact Learn analyses, candidates, and actions"
+      },
+      {
+        "name": "task-009-equivalence-binding",
+        "status": "PASS",
+        "detail": "accepted Task 009 result is PASS with zero factual mismatches"
+      },
+      {
+        "name": "presentation-only-source-contract",
+        "status": "PASS",
+        "detail": "JSON fetch and shared presentation API only; no analytical runtime boundary hits"
+      },
+      {
+        "name": "no-static-fallback",
+        "status": "PASS",
+        "detail": "presentation layers contain no local-authoring fallback URL"
+      }
+    ],
+    "inputs": {
+      "lesson_view": {
+        "path": "site/data/analyzer-node-k001-lesson-preview.json",
+        "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404",
+        "accepted_sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      },
+      "checker_read_set": {
+        "path": "evidence/analyzer-k001/task-008/checker-read-set.json",
+        "sha256": "7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb",
+        "accepted_sha256": "7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb"
+      },
+      "cube_read_set": {
+        "path": "evidence/analyzer-k001/task-008/cube-read-set.json",
+        "sha256": "3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1",
+        "accepted_sha256": "3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1"
+      },
+      "materialization_evidence": {
+        "path": "evidence/analyzer-k001/task-008/materialization-evidence.json",
+        "sha256": "8c1545c202930efe325d4d5aabe609f33f864a22b38ecd665d82dbc4ca552975",
+        "accepted_sha256": "8c1545c202930efe325d4d5aabe609f33f864a22b38ecd665d82dbc4ca552975"
+      },
+      "task_009_equivalence": {
+        "path": "evidence/analyzer-k001/task-009/equivalence-result.json",
+        "sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368",
+        "accepted_sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368"
+      }
+    },
+    "packages": {
+      "checker": {
+        "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+        "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e"
+      },
+      "cube": {
+        "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+        "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a"
+      }
+    },
+    "presentation_only": {
+      "status": "PASS",
+      "files": [
+        "site/assets/bs-lesson-analysis.js",
+        "site/assets/bs-analysis-results.js"
+      ],
+      "forbidden_boundary_hits": []
+    }
+  },
+  "runtime_proof": {
+    "status": "PASS",
+    "browser": {
+      "engine": "Chromium",
+      "version": "139.0.7258.5",
+      "headless": true
+    },
+    "positive_cases": [
+      {
+        "kind": "checker",
+        "route": "/learn/cube/why-is-25-percent-the-basic-take-point.html",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "source_url": "/data/analyzer-node-k001-lesson-preview.json",
+        "shared_results_viewer": "PASS",
+        "semantic_surface": "PASS",
+        "mount_errors": 0,
+        "console_errors": 0,
+        "page_errors": 0,
+        "candidate_ids": [
+          "cebe056b9fba14bb3a4fd58aa8f3e3d5430d98045ff21850c994bd24add37745",
+          "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477",
+          "2940ef714c8cff1a3895543725738b43d64264c425968c3448c0a251a0e1542d",
+          "5fd8fc14885e320a36c7769bf3127c2662c3d9f3164418872c7696be426460c8",
+          "3c03cda00d76d9fbb7acc6d54dc78d2079fee4c1f10c946e4b2f3b8866a0027b",
+          "09806fcf119b0f5742865fd64f987cecc00a28338b429a89a8098aacca864cf0",
+          "6a2d4cbf49af863c3ca425061a616d836ef10e80429714fba0829180d2ec5837",
+          "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+        ],
+        "recommendation": "8/4 6/4",
+        "status": "PASS"
+      },
+      {
+        "kind": "cube",
+        "route": "/learn/cube/what-the-cube-is-asking.html",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+        "source_url": "/data/analyzer-node-k001-lesson-preview.json",
+        "shared_results_viewer": "PASS",
+        "semantic_surface": "PASS",
+        "mount_errors": 0,
+        "console_errors": 0,
+        "page_errors": 0,
+        "action_ids": [
+          "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f",
+          "7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936",
+          "b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad"
+        ],
+        "recommendation": "Double, take",
+        "status": "PASS"
+      },
+      {
+        "kind": "checker",
+        "route": "/learn/cube/why-is-25-percent-the-basic-take-point.html",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "source_url": "/data/analyzer-node-k001-lesson-preview.json",
+        "shared_results_viewer": "PASS",
+        "semantic_surface": "PASS",
+        "mount_errors": 0,
+        "console_errors": 0,
+        "page_errors": 0,
+        "candidate_ids": [
+          "cebe056b9fba14bb3a4fd58aa8f3e3d5430d98045ff21850c994bd24add37745",
+          "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477",
+          "2940ef714c8cff1a3895543725738b43d64264c425968c3448c0a251a0e1542d",
+          "5fd8fc14885e320a36c7769bf3127c2662c3d9f3164418872c7696be426460c8",
+          "3c03cda00d76d9fbb7acc6d54dc78d2079fee4c1f10c946e4b2f3b8866a0027b",
+          "09806fcf119b0f5742865fd64f987cecc00a28338b429a89a8098aacca864cf0",
+          "6a2d4cbf49af863c3ca425061a616d836ef10e80429714fba0829180d2ec5837",
+          "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+        ],
+        "recommendation": "8/4 6/4",
+        "status": "PASS"
+      },
+      {
+        "kind": "cube",
+        "route": "/learn/cube/what-the-cube-is-asking.html",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+        "source_url": "/data/analyzer-node-k001-lesson-preview.json",
+        "shared_results_viewer": "PASS",
+        "semantic_surface": "PASS",
+        "mount_errors": 0,
+        "console_errors": 0,
+        "page_errors": 0,
+        "action_ids": [
+          "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f",
+          "7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936",
+          "b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad"
+        ],
+        "recommendation": "Double, take",
+        "status": "PASS"
+      }
+    ],
+    "positive_data_requests": [
+      {
+        "path": "/data/analyzer-node-k001-lesson-preview.json",
+        "status": 200,
+        "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      },
+      {
+        "path": "/data/analyzer-node-k001-lesson-preview.json",
+        "status": 200,
+        "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      },
+      {
+        "path": "/data/analyzer-node-k001-lesson-preview.json",
+        "status": 200,
+        "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      },
+      {
+        "path": "/data/analyzer-node-k001-lesson-preview.json",
+        "status": 200,
+        "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+      }
+    ],
+    "positive_exact_source_bytes": "PASS",
+    "negative_control_cases": [
+      {
+        "kind": "checker",
+        "route": "/learn/cube/why-is-25-percent-the-basic-take-point.html",
+        "canonical_request_denied": true,
+        "analysis_mounted": false,
+        "shared_results_viewer_mounted": false,
+        "status": "PASS"
+      },
+      {
+        "kind": "cube",
+        "route": "/learn/cube/what-the-cube-is-asking.html",
+        "canonical_request_denied": true,
+        "analysis_mounted": false,
+        "shared_results_viewer_mounted": false,
+        "status": "PASS"
+      }
+    ],
+    "negative_control_requests": [
+      {
+        "path": "/data/analyzer-node-k001-lesson-preview.json",
+        "status": 404,
+        "sha256": null
+      },
+      {
+        "path": "/data/analyzer-node-k001-lesson-preview.json",
+        "status": 404,
+        "sha256": null
+      }
+    ],
+    "negative_control_no_fallback": "PASS",
+    "local_authoring_requests": 0
+  },
+  "determinism": {
+    "status": "PASS",
+    "method": "two complete source/runtime builds compared byte-for-byte; no clock, host, port, duration, or mutable Git lookup is recorded",
+    "repeat_count": 2
+  }
+}
