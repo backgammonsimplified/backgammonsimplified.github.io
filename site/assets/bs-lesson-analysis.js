@@ -7,11 +7,26 @@
   const fixtureRequests = new Map();
   let instanceCounter = 0;
 
+  function sharedAnalysis() {
+    if (
+      typeof globalThis !== "undefined" &&
+      globalThis.BMSAnalysisResults
+    ) {
+      return globalThis.BMSAnalysisResults;
+    }
+    if (typeof module === "object" && module.exports) {
+      return require("./bs-analysis-results.js");
+    }
+    throw new Error("The shared analysis presentation is unavailable.");
+  }
+
   function cleanToken(value) {
-    return String(value || "component")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "") || "component";
+    return (
+      String(value || "component")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "component"
+    );
   }
 
   function nextInstanceId(kind, fixtureId) {
@@ -33,21 +48,6 @@
       return fallback || "Not supplied";
     }
     return String(value);
-  }
-
-  function formatEquity(value) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) {
-      return "Not supplied";
-    }
-    const number = Number(value);
-    return (number >= 0 ? "+" : "") + number.toFixed(3);
-  }
-
-  function formatProbability(value) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) {
-      return "Not supplied";
-    }
-    return (Number(value) * 100).toFixed(1) + "%";
   }
 
   function humanize(value) {
@@ -86,9 +86,7 @@
       String(fixture.correct_first_action || "").toLowerCase() ===
       normalizedAction;
     const responder =
-      normalizedAction === "double" &&
-      accepted &&
-      actionData.responder
+      normalizedAction === "double" && accepted && actionData.responder
         ? actionData.responder
         : null;
     let responseData = null;
@@ -139,11 +137,14 @@
     const hasIdentity = Boolean(
       fixture && fixture.position_id && fixture.state_hash && fixture.analysis_id
     );
-    return !hasIdentity || Boolean(
-      candidate &&
-      candidate.position_id === fixture.position_id &&
-      candidate.state_hash === fixture.state_hash &&
-      candidate.analysis_id === fixture.analysis_id
+    return (
+      !hasIdentity ||
+      Boolean(
+        candidate &&
+          candidate.position_id === fixture.position_id &&
+          candidate.state_hash === fixture.state_hash &&
+          candidate.analysis_id === fixture.analysis_id
+      )
     );
   }
 
@@ -151,11 +152,7 @@
     if (!data || data.schema_version !== FIXTURE_SCHEMA) {
       throw new Error("Unsupported lesson analysis fixture schema.");
     }
-    if (
-      !data.fixture_status ||
-      !data.fixture_status.message ||
-      !data.asset_root
-    ) {
+    if (!data.fixture_status || !data.fixture_status.message || !data.asset_root) {
       throw new Error("Lesson analysis fixture requires status and asset root.");
     }
     return data;
@@ -165,12 +162,14 @@
     if (!fixtureRequests.has(url)) {
       fixtureRequests.set(
         url,
-        fetch(url, { credentials: "same-origin" }).then(function (response) {
-          if (!response.ok) {
-            throw new Error("Lesson analysis fixtures failed to load.");
-          }
-          return response.json();
-        }).then(validateFixtureDocument)
+        fetch(url, { credentials: "same-origin" })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Lesson analysis fixtures failed to load.");
+            }
+            return response.json();
+          })
+          .then(validateFixtureDocument)
       );
     }
     return fixtureRequests.get(url);
@@ -178,12 +177,8 @@
 
   function element(tagName, className, text) {
     const node = document.createElement(tagName);
-    if (className) {
-      node.className = className;
-    }
-    if (text !== undefined && text !== null) {
-      node.textContent = text;
-    }
+    if (className) node.className = className;
+    if (text !== undefined && text !== null) node.textContent = text;
     return node;
   }
 
@@ -199,84 +194,18 @@
       summary.setAttribute("aria-expanded", details.open ? "true" : "false");
     });
     details.append(summary, content);
-    return {
-      content: content,
-      details: details,
-      summary: summary
-    };
+    return { content: content, details: details, summary: summary };
   }
 
-  function figureFor(image, assetRoot, className) {
+  function boardFor(image, assetRoot, className) {
     const figure = element("figure", className || "bs-analysis-position");
-    const img = element("img", "bs-analysis-position-image");
-    img.src = assetUrl(assetRoot, image.image);
-    img.alt = optionalText(image.alt || image.image_alt, "Fixture position");
-    img.width = 1200;
-    img.height = 910;
-    img.loading = "eager";
-    img.decoding = "async";
-    figure.appendChild(img);
-    return { figure: figure, image: img };
-  }
-
-  function definitionList(rows, className) {
-    const list = element("dl", className || "bs-analysis-metrics");
-    rows.forEach(function (row) {
-      list.append(
-        element("dt", "", row[0]),
-        element("dd", "", row[1])
-      );
+    const board = element("div", "bs-analysis-results-board");
+    sharedAnalysis().renderBoard(board, {
+      image: assetUrl(assetRoot, image.image),
+      alt: optionalText(image.alt || image.image_alt, "Fixture position")
     });
-    return list;
-  }
-
-  function analysisRows(analysis) {
-    const rows = [
-      ["Recommendation", optionalText(analysis && analysis.recommendation)]
-    ];
-    Object.entries((analysis && analysis.equities) || {}).forEach(
-      function (entry) {
-        rows.push(["Equity — " + humanize(entry[0]), formatEquity(entry[1])]);
-      }
-    );
-    Object.entries((analysis && analysis.winning_probabilities) || {}).forEach(
-      function (entry) {
-        rows.push([
-          "Probability — " + humanize(entry[0]),
-          formatProbability(entry[1])
-        ]);
-      }
-    );
-    return rows;
-  }
-
-  function appendAnalysisDisclosure(
-    parent,
-    id,
-    analysis,
-    fixtureStatus,
-    summaryText
-  ) {
-    const section = disclosure(
-      id,
-      summaryText || "Show fixture analysis",
-      "bs-analysis-disclosure bs-analysis-disclosure--nested"
-    );
-    section.content.append(
-      definitionList(analysisRows(analysis)),
-      element(
-        "p",
-        "bs-analysis-explanation",
-        optionalText(analysis && analysis.explanation)
-      ),
-      element(
-        "p",
-        "bs-analysis-fixture-note",
-        fixtureStatus.message
-      )
-    );
-    parent.appendChild(section.details);
-    return section;
+    figure.appendChild(board);
+    return { figure: figure, board: board };
   }
 
   function choiceButton(label, value) {
@@ -302,16 +231,384 @@
       });
   }
 
+  function lessonProbabilities(probabilities) {
+    if (!probabilities) return null;
+    const win = probabilities.win;
+    const lose =
+      probabilities.lose === null || probabilities.lose === undefined
+        ? Number.isFinite(Number(win))
+          ? 1 - Number(win)
+          : null
+        : probabilities.lose;
+    return {
+      win: win,
+      win_gammon_or_better:
+        probabilities.win_gammon_or_better !== undefined
+          ? probabilities.win_gammon_or_better
+          : probabilities.win_gammon,
+      win_backgammon: probabilities.win_backgammon,
+      lose: lose,
+      lose_gammon_or_worse:
+        probabilities.lose_gammon_or_worse !== undefined
+          ? probabilities.lose_gammon_or_worse
+          : probabilities.lose_gammon,
+      lose_backgammon: probabilities.lose_backgammon
+    };
+  }
+
+  function sharedMetadata(fixture) {
+    return {
+      engine: fixture.analysis && fixture.analysis.engine,
+      engine_version: null,
+      source_family: fixture.source_kind,
+      parser: "lesson-analysis-fixture-adapter-v1",
+      provenance: fixture.analysis_id || "Lesson fixture",
+      recommendation: fixture.recommendation,
+      analysis_settings: {
+        requested: null,
+        effective: fixture.analysis && fixture.analysis.setting
+      }
+    };
+  }
+
+  function checkerViewModel(fixture, fixtures) {
+    return {
+      id: fixture.analysis_id || fixture.position_id || "lesson-checker-analysis",
+      analysis_kind: "checker",
+      title: fixture.title,
+      subtitle: fixture.prompt,
+      fixture: true,
+      original_board: {
+        image: assetUrl(fixtures.asset_root, fixture.initial.image),
+        alt: fixture.initial.alt
+      },
+      context: { score: null, cube: null, dice: null, decision: "Checker play" },
+      metadata: sharedMetadata(fixture),
+      probabilities: null,
+      candidates: fixture.candidates.map(function (candidate, index) {
+        if (!checkerCandidateIdentityMatches(fixture, candidate)) {
+          throw new Error("Checker candidate identity does not match its fixture.");
+        }
+        return {
+          id: candidate.id,
+          source_order: index + 1,
+          display_rank: candidate.rank,
+          move: candidate.move || candidate.label,
+          evaluation: optionalText(
+            fixture.analysis && fixture.analysis.setting,
+            "Fixture evaluation"
+          ),
+          value: { label: "Equity", value: candidate.equity },
+          difference_from_best:
+            candidate.equity_loss === null || candidate.equity_loss === undefined
+              ? null
+              : -Number(candidate.equity_loss),
+          probabilities: lessonProbabilities(candidate.winning_probabilities),
+          move_board: {
+            image: assetUrl(fixtures.asset_root, candidate.image),
+            alt: candidate.image_alt
+          },
+          resulting_position_id: candidate.resulting_position_id,
+          details: candidate.explanation
+        };
+      }),
+      warnings: [fixtures.fixture_status.message],
+      limitations: [
+        optionalText(
+          fixture.analysis && fixture.analysis.explanation,
+          "No additional lesson analysis explanation was supplied."
+        )
+      ]
+    };
+  }
+
+  function cubeViewModel(analysis, image, fixture, fixtures, idSuffix) {
+    const equities = (analysis && analysis.equities) || {};
+    const probabilities = lessonProbabilities(
+      analysis && analysis.winning_probabilities
+    );
+    return {
+      id: cleanToken(fixture.title + "-" + idSuffix),
+      analysis_kind: "cube",
+      title: fixture.title,
+      subtitle: analysis && analysis.explanation,
+      fixture: true,
+      original_board: {
+        image: assetUrl(fixtures.asset_root, image.image),
+        alt: image.alt
+      },
+      context: { score: null, cube: null, dice: null, decision: "Cube decision" },
+      metadata: {
+        engine: "Fixture only",
+        engine_version: null,
+        source_family: fixtures.fixture_status.kind,
+        parser: "lesson-analysis-fixture-adapter-v1",
+        provenance: "Lesson fixture",
+        recommendation: analysis && analysis.recommendation,
+        analysis_settings: { requested: null, effective: null }
+      },
+      probabilities: probabilities,
+      actions: Object.entries(equities).map(function (entry) {
+        return {
+          id: entry[0],
+          label: humanize(entry[0]),
+          normalized_action: entry[0],
+          supported: true,
+          value: { label: "Equity", value: entry[1] },
+          probabilities: probabilities,
+          details: analysis && analysis.explanation
+        };
+      }),
+      warnings: [fixtures.fixture_status.message],
+      limitations: []
+    };
+  }
+
+  function matchingActionId(model, educationalChoice) {
+    const exact = model.actions.find(function (action) {
+      return action.id === educationalChoice;
+    });
+    if (exact) return exact.id;
+    const prefixed = model.actions.find(function (action) {
+      return action.id.indexOf(educationalChoice + "_") === 0;
+    });
+    return prefixed ? prefixed.id : null;
+  }
+
+  function appendSharedDisclosure(parent, id, model, activeId, summaryText) {
+    const section = disclosure(
+      id,
+      summaryText || "Show analysis",
+      "bs-analysis-disclosure bs-analysis-disclosure--nested"
+    );
+    const host = element("div", "bs-lesson-shared-analysis");
+    host.dataset.bsSharedAnalysisConsumer = "lesson";
+    section.content.appendChild(host);
+    sharedAnalysis().renderPresentation(host, model, {
+      initialActiveId: activeId,
+      showMore: true
+    });
+    parent.appendChild(section.details);
+    return section;
+  }
+
+  function acceptedAnalysisChoice(model, choiceId) {
+    const choices = model
+      ? model.analysis_kind === "checker"
+        ? model.candidates
+        : model.actions
+      : null;
+    if (!Array.isArray(choices)) {
+      throw new Error("Accepted lesson analysis does not define choices.");
+    }
+    const choice = choices.find(function (item) {
+      return item && item.id === choiceId;
+    });
+    if (!choice) {
+      throw new Error("Accepted lesson analysis does not define the selected choice.");
+    }
+    return choice;
+  }
+
+  function acceptedLessonArticle(host, model, kind) {
+    if (!model || model.analysis_kind !== kind) {
+      throw new Error("Accepted lesson analysis has the wrong decision type.");
+    }
+    const instanceId = nextInstanceId(kind, model.id);
+    const article = element(
+      "article",
+      "bs-lesson-analysis bs-" + kind + "-analysis"
+    );
+    const heading = element(
+      "h3",
+      "bs-analysis-title",
+      host.dataset.bsLessonTitle || model.title
+    );
+    const position = element("figure", "bs-analysis-position");
+    const board = element("div", "bs-analysis-results-board");
+    const prompt = element(
+      "p",
+      "bs-analysis-prompt",
+      host.dataset.bsLessonPrompt || model.subtitle
+    );
+    const status = element(
+      "p",
+      "bs-analysis-choice-status",
+      kind === "checker"
+        ? "Choose a move to reveal the accepted analysis."
+        : "Choose the cube action you would make."
+    );
+    const result = element("div", "bs-analysis-candidate-result");
+
+    heading.id = instanceId + "-title";
+    article.setAttribute("aria-labelledby", heading.id);
+    article.dataset.bsAnalysisInstance = instanceId;
+    article.dataset.analysisId = model.id;
+    sharedAnalysis().renderBoard(board, model.original_board);
+    position.appendChild(board);
+    status.setAttribute("aria-live", "polite");
+    result.hidden = true;
+    result.dataset.bsSharedAnalysisConsumer = "lesson";
+
+    return {
+      article: article,
+      board: board,
+      heading: heading,
+      instanceId: instanceId,
+      position: position,
+      prompt: prompt,
+      result: result,
+      status: status
+    };
+  }
+
+  function revealAcceptedAnalysis(parts, model, choiceId, boardOverride) {
+    const choice = acceptedAnalysisChoice(model, choiceId);
+    sharedAnalysis().renderPresentation(parts.result, model, {
+      boardOverride: boardOverride,
+      initialActiveId: choice.id,
+      showMore: true
+    });
+    parts.position.hidden = true;
+    parts.result.hidden = false;
+    return choice;
+  }
+
+  function mountAcceptedChecker(host, model) {
+    const parts = acceptedLessonArticle(host, model, "checker");
+    const group = element("div", "bs-analysis-choice-row");
+
+    group.setAttribute("role", "group");
+    group.setAttribute("aria-label", parts.prompt.textContent);
+    model.candidates.forEach(function (candidate) {
+      const button = choiceButton(candidate.move, candidate.id);
+      button.addEventListener("click", function () {
+        const selected = revealAcceptedAnalysis(parts, model, candidate.id);
+        setPressed(group, selected.id);
+        parts.status.textContent =
+          selected.move + " selected. The accepted analysis is revealed.";
+      });
+      group.appendChild(button);
+    });
+
+    parts.article.append(
+      parts.heading,
+      parts.position,
+      parts.prompt,
+      group,
+      parts.status,
+      parts.result
+    );
+    host.replaceChildren(parts.article);
+  }
+
+  function mountAcceptedCube(host, model) {
+    const parts = acceptedLessonArticle(host, model, "cube");
+    const firstGroup = element("div", "bs-analysis-choice-row");
+    const response = element("section", "bs-analysis-responder");
+    const responseHeading = element(
+      "h4",
+      "bs-analysis-responder-title",
+      "Responder decision"
+    );
+    const responsePrompt = element(
+      "p",
+      "bs-analysis-prompt",
+      "If the cube is doubled, should the responder take or pass?"
+    );
+    const responseGroup = element("div", "bs-analysis-choice-row");
+    const doubleButton = choiceButton("Double", "double");
+    const noDoubleButton = choiceButton("No double", "no-double");
+    const takeButton = choiceButton("Take", "take");
+    const passButton = choiceButton("Pass", "pass");
+    const actionIds = {
+      noDouble: host.dataset.bsNoDoubleActionId,
+      take: host.dataset.bsDoubleTakeActionId,
+      pass: host.dataset.bsDoublePassActionId
+    };
+
+    Object.values(actionIds).forEach(function (actionId) {
+      acceptedAnalysisChoice(model, actionId);
+    });
+    firstGroup.setAttribute("role", "group");
+    firstGroup.setAttribute("aria-label", parts.prompt.textContent);
+    firstGroup.append(doubleButton, noDoubleButton);
+    response.hidden = true;
+    responseHeading.id = parts.instanceId + "-responder-title";
+    response.setAttribute("aria-labelledby", responseHeading.id);
+    responseGroup.setAttribute("role", "group");
+    responseGroup.setAttribute("aria-label", responsePrompt.textContent);
+    responseGroup.append(takeButton, passButton);
+    response.append(responseHeading, responsePrompt, responseGroup);
+
+    function revealCubeChoice(actionId, lessonChoice, boardOverride) {
+      const selected = revealAcceptedAnalysis(
+        parts,
+        model,
+        actionId,
+        boardOverride
+      );
+      parts.status.textContent =
+        lessonChoice + " selected. The accepted cube analysis is revealed.";
+      return selected;
+    }
+
+    doubleButton.addEventListener("click", function () {
+      setPressed(firstGroup, "double");
+      setPressed(responseGroup, "");
+      sharedAnalysis().renderBoard(
+        parts.board,
+        model.responder_board || model.original_board
+      );
+      response.hidden = false;
+      parts.result.hidden = true;
+      parts.position.hidden = false;
+      parts.status.textContent =
+        "Double selected. Now choose the responder's action.";
+    });
+    noDoubleButton.addEventListener("click", function () {
+      setPressed(firstGroup, "no-double");
+      response.hidden = true;
+      sharedAnalysis().renderBoard(parts.board, model.original_board);
+      revealCubeChoice(actionIds.noDouble, "No double");
+    });
+    takeButton.addEventListener("click", function () {
+      setPressed(responseGroup, "take");
+      revealCubeChoice(
+        actionIds.take,
+        "Double, take",
+        model.responder_board || model.original_board
+      );
+    });
+    passButton.addEventListener("click", function () {
+      setPressed(responseGroup, "pass");
+      revealCubeChoice(
+        actionIds.pass,
+        "Double, pass",
+        model.responder_board || model.original_board
+      );
+    });
+
+    parts.article.append(
+      parts.heading,
+      parts.position,
+      parts.prompt,
+      firstGroup,
+      response,
+      parts.status,
+      parts.result
+    );
+    host.replaceChildren(parts.article);
+  }
+
   function mountCube(host, fixtures, fixtureId) {
     const fixture = fixtures.cube_cases && fixtures.cube_cases[fixtureId];
-    if (!fixture) {
-      throw new Error("Unknown cube lesson fixture: " + fixtureId);
-    }
+    if (!fixture) throw new Error("Unknown cube lesson fixture: " + fixtureId);
 
     const instanceId = nextInstanceId("cube", fixtureId);
     const article = element("article", "bs-lesson-analysis bs-cube-analysis");
     const heading = element("h3", "bs-analysis-title", fixture.title);
-    const initialFigure = figureFor(fixture.initial, fixtures.asset_root);
+    const initialFigure = boardFor(fixture.initial, fixtures.asset_root);
     const prompt = element("p", "bs-analysis-prompt", fixture.prompt);
     const group = element("div", "bs-analysis-choice-row");
     const status = element(
@@ -336,17 +633,13 @@
     status.setAttribute("aria-live", "polite");
     firstAnswer.details.hidden = true;
 
-    function renderResponse(responder, response) {
+    function renderResponse(response) {
       const state = cubeDecisionState(fixture, "double", response);
       const responseAnswer = article.querySelector(
         "#" + instanceId + "-response-answer"
       );
-      const responseGroup = article.querySelector(
-        "[data-bs-cube-response-group]"
-      );
-      if (!responseAnswer || !responseGroup) {
-        return;
-      }
+      const responseGroup = article.querySelector("[data-bs-cube-response-group]");
+      if (!responseAnswer || !responseGroup) return;
       setPressed(responseGroup, response);
       const responseSummary = responseAnswer.querySelector(":scope > summary");
       const responseContent = responseAnswer.querySelector(
@@ -357,17 +650,20 @@
         ": " +
         (state.responseAccepted ? "fixture answer" : "review the fixture answer");
       responseContent.replaceChildren(
-        element(
-          "p",
-          "bs-analysis-answer-summary",
-          state.responseData.summary
-        )
+        element("p", "bs-analysis-answer-summary", state.responseData.summary)
       );
-      appendAnalysisDisclosure(
+      const model = cubeViewModel(
+        state.responseData.analysis,
+        { image: state.responder.image, alt: state.responder.alt },
+        fixture,
+        fixtures,
+        "response-" + response
+      );
+      appendSharedDisclosure(
         responseContent,
         instanceId + "-response-analysis",
-        state.responseData.analysis,
-        fixtures.fixture_status,
+        model,
+        matchingActionId(model, response),
         "Show response analysis"
       );
       responseAnswer.hidden = false;
@@ -388,38 +684,35 @@
         ": " +
         (state.actionAccepted ? "fixture answer" : "review the fixture answer");
       firstAnswer.content.replaceChildren(
-        element(
-          "p",
-          "bs-analysis-answer-summary",
-          state.actionData.summary
-        )
+        element("p", "bs-analysis-answer-summary", state.actionData.summary)
       );
 
       if (state.actionData.analysis) {
-        appendAnalysisDisclosure(
+        const model = cubeViewModel(
+          state.actionData.analysis,
+          fixture.initial,
+          fixture,
+          fixtures,
+          "first-" + action
+        );
+        appendSharedDisclosure(
           firstAnswer.content,
           instanceId + "-first-analysis",
-          state.actionData.analysis,
-          fixtures.fixture_status,
+          model,
+          matchingActionId(model, action),
           "Show first-decision analysis"
         );
       }
 
       if (state.responder) {
-        const responderSection = element(
-          "section",
-          "bs-analysis-responder"
-        );
+        const responderSection = element("section", "bs-analysis-responder");
         const responderHeading = element(
           "h4",
           "bs-analysis-responder-title",
           "Responder decision"
         );
-        const responderFigure = figureFor(
-          {
-            image: state.responder.image,
-            alt: state.responder.alt
-          },
+        const responderFigure = boardFor(
+          { image: state.responder.image, alt: state.responder.alt },
           fixtures.asset_root,
           "bs-analysis-position bs-analysis-position--responder"
         );
@@ -428,10 +721,7 @@
           "bs-analysis-prompt",
           state.responder.prompt
         );
-        const responseGroup = element(
-          "div",
-          "bs-analysis-choice-row"
-        );
+        const responseGroup = element("div", "bs-analysis-choice-row");
         const passButton = choiceButton("Pass", "pass");
         const takeButton = choiceButton("Take", "take");
         const responseAnswer = disclosure(
@@ -441,20 +731,17 @@
         );
 
         responderHeading.id = instanceId + "-responder-title";
-        responderSection.setAttribute(
-          "aria-labelledby",
-          responderHeading.id
-        );
+        responderSection.setAttribute("aria-labelledby", responderHeading.id);
         responseGroup.dataset.bsCubeResponseGroup = "";
         responseGroup.setAttribute("role", "group");
         responseGroup.setAttribute("aria-label", state.responder.prompt);
         responseGroup.append(passButton, takeButton);
         responseAnswer.details.hidden = true;
         passButton.addEventListener("click", function () {
-          renderResponse(state.responder, "pass");
+          renderResponse("pass");
         });
         takeButton.addEventListener("click", function () {
-          renderResponse(state.responder, "take");
+          renderResponse("take");
         });
         responderSection.append(
           responderHeading,
@@ -482,7 +769,6 @@
     rollButton.addEventListener("click", function () {
       renderFirstAction("roll");
     });
-
     article.append(
       heading,
       initialFigure.figure,
@@ -494,45 +780,23 @@
     host.replaceChildren(article);
   }
 
-  function candidateMetricRows(candidate) {
-    const rows = [
-      ["Selected move", candidate.label],
-      ["Rank", optionalText(candidate.rank)],
-      ["Equity", formatEquity(candidate.equity)],
-      ["Equity loss", formatEquity(candidate.equity_loss)]
-    ];
-    Object.entries(candidate.winning_probabilities || {}).forEach(
-      function (entry) {
-        rows.push([
-          "Probability — " + humanize(entry[0]),
-          formatProbability(entry[1])
-        ]);
-      }
-    );
-    return rows;
-  }
-
   function mountChecker(host, fixtures, fixtureId) {
     const fixture = fixtures.checker_cases && fixtures.checker_cases[fixtureId];
-    if (!fixture) {
-      throw new Error("Unknown checker lesson fixture: " + fixtureId);
-    }
+    if (!fixture) throw new Error("Unknown checker lesson fixture: " + fixtureId);
 
     const instanceId = nextInstanceId("checker", fixtureId);
-    const article = element(
-      "article",
-      "bs-lesson-analysis bs-checker-analysis"
-    );
+    const article = element("article", "bs-lesson-analysis bs-checker-analysis");
     const heading = element("h3", "bs-analysis-title", fixture.title);
-    const position = figureFor(fixture.initial, fixtures.asset_root);
+    const position = boardFor(fixture.initial, fixtures.asset_root);
     const prompt = element("p", "bs-analysis-prompt", fixture.prompt);
     const group = element("div", "bs-analysis-choice-row");
     const status = element(
       "p",
       "bs-analysis-choice-status",
-      "Choose a supplied candidate to update the position and metrics."
+      "Choose a supplied candidate to reveal the shared analysis."
     );
-    const metrics = element("div", "bs-analysis-candidate-result");
+    const result = element("div", "bs-analysis-candidate-result");
+    const model = checkerViewModel(fixture, fixtures);
 
     heading.id = instanceId + "-title";
     article.setAttribute("aria-labelledby", heading.id);
@@ -543,13 +807,8 @@
     group.setAttribute("role", "group");
     group.setAttribute("aria-label", fixture.prompt);
     status.setAttribute("aria-live", "polite");
-    metrics.appendChild(
-      element(
-        "p",
-        "bs-analysis-empty",
-        "No candidate selected. The shared starting SVG remains visible."
-      )
-    );
+    result.hidden = true;
+    result.dataset.bsSharedAnalysisConsumer = "lesson";
 
     fixture.candidates.forEach(function (candidate) {
       const button = choiceButton(candidate.label, candidate.id);
@@ -559,67 +818,19 @@
           throw new Error("Checker candidate identity does not match its fixture.");
         }
         setPressed(group, candidate.id);
-        position.image.src = assetUrl(fixtures.asset_root, selected.image);
-        position.image.alt = optionalText(
-          selected.image_alt,
-          selected.label + " fixture result"
-        );
-        metrics.replaceChildren(
-          definitionList(candidateMetricRows(selected)),
-          element(
-            "p",
-            "bs-analysis-explanation",
-            optionalText(selected.explanation)
-          )
-        );
+        sharedAnalysis().renderPresentation(result, model, {
+          initialActiveId: selected.id,
+          showMore: true
+        });
+        position.figure.hidden = true;
+        result.hidden = false;
         status.textContent =
-          selected.label +
-          " selected. The supplied position and metrics are displayed.";
+          selected.label + " selected. The shared candidate analysis is revealed.";
       });
       group.appendChild(button);
     });
 
-    const engineAnalysis = disclosure(
-      instanceId + "-engine-analysis",
-      optionalText(
-        fixture.analysis && fixture.analysis.label,
-        "Show engine analysis"
-      ),
-      "bs-analysis-disclosure"
-    );
-    engineAnalysis.content.append(
-      definitionList([
-        ["Recommendation", optionalText(fixture.recommendation)],
-        [
-          "Engine",
-          optionalText(fixture.analysis && fixture.analysis.engine)
-        ],
-        [
-          "Setting",
-          optionalText(fixture.analysis && fixture.analysis.setting)
-        ]
-      ]),
-      element(
-        "p",
-        "bs-analysis-explanation",
-        optionalText(fixture.analysis && fixture.analysis.explanation)
-      ),
-      element(
-        "p",
-        "bs-analysis-fixture-note",
-        fixtures.fixture_status.message
-      )
-    );
-
-    article.append(
-      heading,
-      position.figure,
-      prompt,
-      group,
-      status,
-      metrics,
-      engineAnalysis.details
-    );
+    article.append(heading, position.figure, prompt, group, status, result);
     host.replaceChildren(article);
   }
 
@@ -627,7 +838,7 @@
     const message = element(
       "p",
       "bs-analysis-error",
-      "This lesson analysis fixture could not be loaded."
+      "This lesson analysis could not be loaded."
     );
     message.setAttribute("role", "alert");
     message.title = String(error && error.message ? error.message : error);
@@ -639,6 +850,32 @@
       return Promise.resolve();
     }
     host.dataset.bsAnalysisMounted = "true";
+    const analysisUrl = host.dataset.bsAnalysisSrc;
+    const analysisId = host.dataset.bsAnalysisId;
+    if (analysisUrl || analysisId) {
+      if (!analysisUrl || !analysisId) {
+        showMountError(host, new Error("Analysis source and ID are required."));
+        return Promise.resolve();
+      }
+      host.setAttribute("aria-busy", "true");
+      return sharedAnalysis()
+        .fixtureLoader(analysisUrl)(analysisId)
+        .then(function (payload) {
+          if (host.hasAttribute("data-bs-cube-decision")) {
+            mountAcceptedCube(host, payload.analysis);
+          } else if (host.hasAttribute("data-bs-checker-decision")) {
+            mountAcceptedChecker(host, payload.analysis);
+          } else {
+            throw new Error("Unknown lesson analysis component type.");
+          }
+        })
+        .catch(function (error) {
+          showMountError(host, error);
+        })
+        .finally(function () {
+          host.removeAttribute("aria-busy");
+        });
+    }
     const url = host.dataset.bsFixtureSrc;
     const fixtureId = host.dataset.bsFixtureId;
     if (!url || !fixtureId) {
@@ -665,16 +902,10 @@
   }
 
   function hostsIn(rootElement) {
-    if (!rootElement) {
-      return [];
-    }
-    const selector =
-      "[data-bs-cube-decision], [data-bs-checker-decision]";
+    if (!rootElement) return [];
+    const selector = "[data-bs-cube-decision], [data-bs-checker-decision]";
     const hosts = [];
-    if (
-      typeof rootElement.matches === "function" &&
-      rootElement.matches(selector)
-    ) {
+    if (typeof rootElement.matches === "function" && rootElement.matches(selector)) {
       hosts.push(rootElement);
     }
     if (typeof rootElement.querySelectorAll === "function") {
@@ -708,13 +939,18 @@
   }
 
   const publicApi = {
+    acceptedAnalysisChoice: acceptedAnalysisChoice,
     assetUrl: assetUrl,
     checkerCandidateIdentityMatches: checkerCandidateIdentityMatches,
     checkerCandidateState: checkerCandidateState,
+    checkerViewModel: checkerViewModel,
     cubeDecisionState: cubeDecisionState,
-    formatEquity: formatEquity,
-    formatProbability: formatProbability,
+    cubeViewModel: cubeViewModel,
+    lessonProbabilities: lessonProbabilities,
+    matchingActionId: matchingActionId,
     mount: mount,
+    mountAcceptedChecker: mountAcceptedChecker,
+    mountAcceptedCube: mountAcceptedCube,
     nextInstanceId: nextInstanceId,
     resetInstanceCounter: resetInstanceCounter,
     validateFixtureDocument: validateFixtureDocument
@@ -723,7 +959,6 @@
   if (typeof module !== "undefined" && module.exports) {
     module.exports = publicApi;
   }
-
   if (typeof window !== "undefined") {
     window.BSLessonAnalysis = Object.assign(
       window.BSLessonAnalysis || {},
@@ -731,7 +966,6 @@
     );
     hookContinuousLessons();
   }
-
   if (typeof document !== "undefined") {
     document.addEventListener("DOMContentLoaded", function () {
       hookContinuousLessons();

@@ -1,0 +1,99 @@
+---
+title: "Analysis Results Viewer Preview"
+description: "Development preview for the exact Node K001 checker and cube lesson analyses plus retained viewer regression fixtures."
+subtitle: "DEVELOPMENT PREVIEW :: EXACT NODE CHECKER + CUBE"
+page-layout: full
+toc: false
+term-lookup: false
+format:
+  html:
+    title-block-style: plain
+    body-classes: "bs-editorial-page bs-title-eyebrow bs-analyze-results-fixture-page"
+---
+
+:::: {.bs-page-shell}
+::: {.bs-reading-column}
+
+::: {.bs-status-panel}
+[DEVELOPMENT PREVIEW]{.bs-status-label}
+
+The first two examples below are projected directly from the accepted Node K001 analysis-view JSON files. Backgammonboard renders the factual starting positions and supported checker movement overlays at build time. The browser does not run an engine, parse GNU output, or apply checker moves.
+:::
+
+Run `bash scripts/analysis/render-node-k001-lesson-preview.sh` after pulling this branch to materialize the local Node lesson JSON and SVG assets.
+
+:::
+
+## Exact Node checker lesson result
+
+This is the accepted checker analysis for GNUID `4PPgASTgc/ABMA:cAnqAAAAAAAE`, dice `4-2`. It preserves all exported Node candidates and the recommendation `8/4 6/4`.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+  data-analysis-fixture-url="/data/analyzer-node-k001-lesson-preview.json"
+></div>
+```
+
+## Exact Node cube lesson result
+
+This is the accepted authored cube analysis. The recommendation is `Double, take`; the action values and shared probabilities come directly from the completed Node analysis-view.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+  data-analysis-fixture-url="/data/analyzer-node-k001-lesson-preview.json"
+></div>
+```
+
+## Canonical Parquet checker regression result
+
+The existing frozen Canonical Analysis Parquet v1 checker remains on the page as a regression comparison for the shared viewer.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="b909630c811a0214b8156e068b88ebeb9a064a56bfec3ae5af8c6afe45278d07"
+  data-analysis-fixture-url="/data/analyzer-canonical-checker-preview.json"
+></div>
+```
+
+## Canonical Parquet cube regression result
+
+This is the frozen Canonical Analysis Parquet v1 cube occurrence `002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d`. It preserves the real 0-0/7 centered-cube context, the source recommendation `No double, take (25.7%)`, and the three source-native cube action equities. The source does not supply an observed action or row-local actual ply, so those remain null.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="002fc0917b230a0d4ae13c92c5f46fdfc64b6072bb248f743cd732418e085c0d"
+  data-analysis-fixture-url="/data/analyzer-canonical-cube-preview.json"
+></div>
+```
+
+## Synthetic loader failure states
+
+These deliberate development cases verify that malformed or unknown records fail visibly instead of inventing values.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="unknown-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="malformed-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+```
+
+::::

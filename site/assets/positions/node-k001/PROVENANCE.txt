@@ -1,0 +1,21 @@
+Local Node analysis authoring assets
+====================================
+
+authority: local-development-only
+canonical_authority: false
+slug: node-k001
+
+analysis_key: sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d
+analysis_kind: checker
+artifact_sha256: 0186d761a54a8e1f38a91686d960224790a3232efab487f8dc723bb390d8f1cf
+gnuid: 4PPgASTgc/ABMA:cAnqAAAAAAAE
+checker_overlays_rendered: 8
+
+analysis_key: sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01
+analysis_kind: cube
+artifact_sha256: dcb9888fc9846fc53fb86fdd733228b02acfea281d44a7798025bdaf248dd3a0
+gnuid: PAAAICMAAAAAAA:MAEAAAAAAAAE
+checker_overlays_rendered: 0
+
+All boards are build-time presentation assets.
+The browser does not run an engine, interpret a position, or apply moves.

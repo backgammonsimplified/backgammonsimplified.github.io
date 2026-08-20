@@ -969,7 +969,11 @@ private code phrase
         self.assertNotRegex(source, r"[A-Za-z]:\\")
         self.assertIn("data-bs-cube-decision", source)
         self.assertIn(
-            'data-bs-fixture-src="/data/lesson-analysis-svg-mvp.json"',
+            'data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"',
+            source,
+        )
+        self.assertIn(
+            'data-bs-analysis-id="sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"',
             source,
         )
         self.assertIn("[Back to the cube overview](index.qmd)", source)
@@ -2127,7 +2131,7 @@ private code phrase
         )
         self.assertRegex(
             config,
-            r"pre-render:\s*\n\s*-\s+python ../scripts/bs_pre_render\.py",
+            r"pre-render:\s*\n\s*-\s+bash ../scripts/project-python\.sh ../scripts/bs_pre_render\.py",
         )
 
         with mock.patch.dict(os.environ, {}, clear=True):
@@ -2253,7 +2257,7 @@ private code phrase
         )
         self.assertRegex(
             config,
-            r"post-render:\s*\n\s*-\s+python ../scripts/bs_post_render\.py",
+            r"post-render:\s*\n\s*-\s+bash ../scripts/project-python\.sh ../scripts/bs_post_render\.py",
         )
         unrelated = "https://backgammonsimplified.github.io/research/index.html"
         dirty = bs_post_render.GLOSSARY_INDEX_URL

@@ -1,0 +1,141 @@
+{
+  "registry_id": "analyzer-retrieval-workloads-v1",
+  "schema_version": "analyzer-retrieval-workload-registry-v1",
+  "workloads": [
+    {
+      "id": "AVR-001",
+      "name": "deterministic decision retrieval by canonical decision ID",
+      "query": {
+        "operation": "decision_by_id",
+        "ordering": ["canonical_decision_id"],
+        "parameters": ["canonical_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-002",
+      "name": "decision/candidate/evaluation join",
+      "query": {
+        "operation": "checker_decision_candidate_evaluation_join",
+        "ordering": ["canonical_decision_id", "candidate_source_order", "evaluation_source_order", "evaluation_id"],
+        "parameters": ["canonical_checker_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-003",
+      "name": "complete sibling candidate retrieval",
+      "query": {
+        "operation": "all_candidates_for_decision",
+        "ordering": ["candidate_source_order", "candidate_id"],
+        "parameters": ["canonical_checker_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-004",
+      "name": "factual resulting-position lookup",
+      "query": {
+        "operation": "candidate_resulting_position_by_identity",
+        "ordering": ["canonical_decision_id", "candidate_source_order", "candidate_id"],
+        "parameters": ["resulting_position_id"]
+      }
+    },
+    {
+      "id": "AVR-005",
+      "name": "occurrence/game/match/score/cube context lookup",
+      "query": {
+        "operation": "decision_occurrence_context",
+        "ordering": ["canonical_decision_id"],
+        "parameters": ["canonical_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-006",
+      "name": "cube occurrence plus complete cube actions",
+      "query": {
+        "operation": "cube_occurrence_action_join",
+        "ordering": ["action_source_order", "action_id"],
+        "parameters": ["canonical_cube_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-007",
+      "name": "mixed requested/actual-depth retrieval",
+      "query": {
+        "operation": "requested_and_row_local_actual_depths",
+        "ordering": ["canonical_decision_id", "candidate_source_order", "evaluation_source_order", "evaluation_id"],
+        "parameters": []
+      }
+    },
+    {
+      "id": "AVR-008",
+      "name": "selective actual-ply filter",
+      "query": {
+        "operation": "evaluation_by_actual_ply",
+        "ordering": ["canonical_decision_id", "candidate_source_order", "evaluation_source_order", "evaluation_id"],
+        "parameters": ["actual_ply"]
+      }
+    },
+    {
+      "id": "AVR-009",
+      "name": "one analysis-view JSON materialization read set",
+      "query": {
+        "operation": "materialize_one_decision",
+        "ordering": ["canonical_decision_id", "source_order", "stable_identity"],
+        "parameters": ["canonical_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-010",
+      "name": "deterministic batch analysis-view materialization",
+      "query": {
+        "operation": "materialize_all_decisions",
+        "ordering": ["canonical_decision_id", "source_order", "stable_identity"],
+        "parameters": []
+      }
+    },
+    {
+      "id": "AVR-011",
+      "name": "seeded bounded/random result retrieval",
+      "query": {
+        "operation": "seeded_result_sample",
+        "ordering": ["sample_sequence"],
+        "parameters": ["seed", "sample_size"]
+      }
+    },
+    {
+      "id": "AVR-012",
+      "name": "fresh-process DuckDB read",
+      "query": {
+        "operation": "fresh_process_decision_by_id",
+        "ordering": ["canonical_decision_id"],
+        "parameters": ["canonical_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-013",
+      "name": "copy-then-read validation",
+      "query": {
+        "operation": "copy_then_decision_by_id",
+        "ordering": ["canonical_decision_id"],
+        "parameters": ["canonical_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-014",
+      "name": "move-then-read validation",
+      "query": {
+        "operation": "move_copy_then_decision_by_id",
+        "ordering": ["canonical_decision_id"],
+        "parameters": ["canonical_decision_id"]
+      }
+    },
+    {
+      "id": "AVR-015",
+      "name": "realistic browser/build-time materialization batch",
+      "query": {
+        "operation": "repeatable_materialization_batch",
+        "ordering": ["batch_sequence", "canonical_decision_id", "source_order", "stable_identity"],
+        "parameters": ["batch_repetitions"]
+      }
+    }
+  ]
+}

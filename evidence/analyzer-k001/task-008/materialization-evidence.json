@@ -1,0 +1,474 @@
+{
+  "authority": {
+    "checker": {
+      "committed_marker": {
+        "batch_id": "edbe71e78777d86fd59cb6a8199c746be977c326a96eed6340cc7b52586a35cd",
+        "dataset_id": "sha256-2ea4a860090fecb6b51cc1d933b6ad678bddd278478089e21df14b68ccba5c39",
+        "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e",
+        "marker_version": "canonical-analysis-v1-committed-v2",
+        "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+        "recovered_after_publish_crash": false,
+        "sha256sums_sha256": "88c8e805c16fcb177c6bea7a6210de892042bf3e9fa29c2a7804c88904a4fff1",
+        "source_finalization": {
+          "checksums_sha256": "d666fb78d109d12e5988db22e5d11fbbf1613a82905c010495fb67d4408f3a36",
+          "finalized_sha256": "0f1d335454a42013afef7a705eb783d3f25bc4f920e922bead7f3a40ac557df6",
+          "manifest_sha256": "8b9c81eacf462060f0a5986fb5db976fbb86de90fd211e6628c1002d871558e1",
+          "record_count": 2,
+          "record_ids": [
+            "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+            "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414"
+          ],
+          "records_sha256": "d744bd8e5badb0e67658e6393b5cbc4de5cbc3e0db7c067461e3c34f281a2f3c",
+          "verified_files": [
+            {
+              "path": "batch.json",
+              "sha256": "8b9c81eacf462060f0a5986fb5db976fbb86de90fd211e6628c1002d871558e1",
+              "size_bytes": 2728
+            },
+            {
+              "path": "records/analyses.jsonl",
+              "sha256": "d744bd8e5badb0e67658e6393b5cbc4de5cbc3e0db7c067461e3c34f281a2f3c",
+              "size_bytes": 19072
+            }
+          ]
+        },
+        "source_manifests": [
+          {
+            "path": "batch.json",
+            "sha256": "8b9c81eacf462060f0a5986fb5db976fbb86de90fd211e6628c1002d871558e1"
+          },
+          {
+            "path": "SHA256SUMS.txt",
+            "sha256": "d666fb78d109d12e5988db22e5d11fbbf1613a82905c010495fb67d4408f3a36"
+          },
+          {
+            "path": "FINALIZED",
+            "sha256": "0f1d335454a42013afef7a705eb783d3f25bc4f920e922bead7f3a40ac557df6"
+          }
+        ],
+        "source_selection": null,
+        "source_type": "node_spool",
+        "top_checkpoint_manifest_sha256": null,
+        "writer_commit": "1569284972239a2627de8e5176eb47caef454fda"
+      },
+      "dataset_id": "sha256-2ea4a860090fecb6b51cc1d933b6ad678bddd278478089e21df14b68ccba5c39",
+      "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e",
+      "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+      "record_ids": [
+        "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414"
+      ],
+      "relation_counts": {
+        "candidates": 8,
+        "cube_actions": 3,
+        "cube_occurrences": 1,
+        "decisions": 1,
+        "evaluations": 8,
+        "exclusions": 0,
+        "games": 0,
+        "occurrence_contexts": 2,
+        "positions": 2,
+        "source_occurrences": 2
+      },
+      "relation_parts": {
+        "candidates": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "candidates/part-000000.parquet",
+              "rows": 8,
+              "sha256": "16f17a75be838a126466a48e6f225e7a2224a235bd467f42fe92108e73302a82",
+              "size_bytes": 4477
+            }
+          ],
+          "rows": 8
+        },
+        "cube_actions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "cube_actions/part-000000.parquet",
+              "rows": 3,
+              "sha256": "148177391053b5bfd54d409aa788ab786080409fa05990da0925a22ae2ff2f61",
+              "size_bytes": 5217
+            }
+          ],
+          "rows": 3
+        },
+        "cube_occurrences": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "cube_occurrences/part-000000.parquet",
+              "rows": 1,
+              "sha256": "c1796e6251296a5b1beda304f603ceb998671960e6674a20933aef189b85600a",
+              "size_bytes": 6887
+            }
+          ],
+          "rows": 1
+        },
+        "decisions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "decisions/part-000000.parquet",
+              "rows": 1,
+              "sha256": "0775fd777524ab1e5de6092bb5f89ba7a17d1e3bf0568d278770c8b2030e6d52",
+              "size_bytes": 5879
+            }
+          ],
+          "rows": 1
+        },
+        "evaluations": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "evaluations/part-000000.parquet",
+              "rows": 8,
+              "sha256": "03b5a2844a795bff9d5e2a04d368ba2af125296a951984a044150966d4639b24",
+              "size_bytes": 14951
+            }
+          ],
+          "rows": 8
+        },
+        "exclusions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "exclusions/part-000000.parquet",
+              "rows": 0,
+              "sha256": "4b8a3162bc12189af4c1fd436c5258f45c3f2ffca6e2ca8d1c4cde4e752878d7",
+              "size_bytes": 1053
+            }
+          ],
+          "rows": 0
+        },
+        "games": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "games/part-000000.parquet",
+              "rows": 0,
+              "sha256": "3fe4d7b45c4435f6bb42e9130c640e8f2d05127a560bfafe3437a62ecbf7b528",
+              "size_bytes": 2027
+            }
+          ],
+          "rows": 0
+        },
+        "occurrence_contexts": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "occurrence_contexts/part-000000.parquet",
+              "rows": 2,
+              "sha256": "0f72fdcb0305b485016c6542b2d0cbbad28a56a530e2532b1ee5b9311aba1d93",
+              "size_bytes": 6231
+            }
+          ],
+          "rows": 2
+        },
+        "positions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "positions/part-000000.parquet",
+              "rows": 2,
+              "sha256": "855932d49ffdcf91bd2d4b179aa43625c980e8e547e7c4b493ab55fada7808f7",
+              "size_bytes": 3572
+            }
+          ],
+          "rows": 2
+        },
+        "source_occurrences": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "source_occurrences/part-000000.parquet",
+              "rows": 2,
+              "sha256": "7d621cf29f57dc9878bd23d35e8572b0eb79aed72aaaeab07bb417bbb3a193d6",
+              "size_bytes": 9247
+            }
+          ],
+          "rows": 2
+        }
+      }
+    },
+    "cube": {
+      "committed_marker": {
+        "batch_id": "0ccf0203aaf401fb6865e199e435706d3b8b865c1787de83c23a218beddf5266",
+        "dataset_id": "sha256-b4065495bb3e4e33895512779b47ee16272f78710801c756896c78039f731d3e",
+        "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a",
+        "marker_version": "canonical-analysis-v1-committed-v2",
+        "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+        "recovered_after_publish_crash": false,
+        "sha256sums_sha256": "01109d1026a6ac1687a267eafe331bedb52507729f30a99cb4d35d386ed147c4",
+        "source_finalization": {
+          "checksums_sha256": "8d21fd963624465a841d5c9a4b3d5c4e9b8bdb3def8a3e10469647d443d322d3",
+          "finalized_sha256": "433d59b02681ee025229157d651f36c5170d3320a1b14a221d2e7f141a43f005",
+          "manifest_sha256": "45ba9454f036dfcca48a566e22c0f2caa8ac1721bab31449517c02baec63067b",
+          "record_count": 1,
+          "record_ids": [
+            "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+          ],
+          "records_sha256": "46fd92f966e6f1a1b1d92bf99832e57b89b4695c71b89493d8e972033840f6c4",
+          "verified_files": [
+            {
+              "path": "batch.json",
+              "sha256": "45ba9454f036dfcca48a566e22c0f2caa8ac1721bab31449517c02baec63067b",
+              "size_bytes": 2551
+            },
+            {
+              "path": "records/analyses.jsonl",
+              "sha256": "46fd92f966e6f1a1b1d92bf99832e57b89b4695c71b89493d8e972033840f6c4",
+              "size_bytes": 8197
+            }
+          ]
+        },
+        "source_manifests": [
+          {
+            "path": "batch.json",
+            "sha256": "45ba9454f036dfcca48a566e22c0f2caa8ac1721bab31449517c02baec63067b"
+          },
+          {
+            "path": "SHA256SUMS.txt",
+            "sha256": "8d21fd963624465a841d5c9a4b3d5c4e9b8bdb3def8a3e10469647d443d322d3"
+          },
+          {
+            "path": "FINALIZED",
+            "sha256": "433d59b02681ee025229157d651f36c5170d3320a1b14a221d2e7f141a43f005"
+          }
+        ],
+        "source_selection": null,
+        "source_type": "node_spool",
+        "top_checkpoint_manifest_sha256": null,
+        "writer_commit": "1569284972239a2627de8e5176eb47caef454fda"
+      },
+      "dataset_id": "sha256-b4065495bb3e4e33895512779b47ee16272f78710801c756896c78039f731d3e",
+      "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a",
+      "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+      "record_ids": [
+        "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+      ],
+      "relation_counts": {
+        "candidates": 0,
+        "cube_actions": 3,
+        "cube_occurrences": 1,
+        "decisions": 0,
+        "evaluations": 0,
+        "exclusions": 0,
+        "games": 0,
+        "occurrence_contexts": 1,
+        "positions": 1,
+        "source_occurrences": 1
+      },
+      "relation_parts": {
+        "candidates": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "candidates/part-000000.parquet",
+              "rows": 0,
+              "sha256": "64b3decf616bd90f00f6f227f71b884b01a92239126842ad67890d93df440a96",
+              "size_bytes": 2004
+            }
+          ],
+          "rows": 0
+        },
+        "cube_actions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "cube_actions/part-000000.parquet",
+              "rows": 3,
+              "sha256": "a0a10c2116a1588a4b5a520763a2dda77d9094405b769ead0cdb7d843bfd2175",
+              "size_bytes": 5219
+            }
+          ],
+          "rows": 3
+        },
+        "cube_occurrences": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "cube_occurrences/part-000000.parquet",
+              "rows": 1,
+              "sha256": "02e07cd804ff476dd98d0425a0aa3115418f8a6a5ad3962353fbd3713dd4e646",
+              "size_bytes": 6797
+            }
+          ],
+          "rows": 1
+        },
+        "decisions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "decisions/part-000000.parquet",
+              "rows": 0,
+              "sha256": "ae6a7c3078245bddf83ca37f54fbc58c11c6e98eabbdc663345e1337bf45e24a",
+              "size_bytes": 3437
+            }
+          ],
+          "rows": 0
+        },
+        "evaluations": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "evaluations/part-000000.parquet",
+              "rows": 0,
+              "sha256": "621f169161c114e2f0e2a6c8aa0b579abfaa602c3802e2206b5477a1b19e0abe",
+              "size_bytes": 8805
+            }
+          ],
+          "rows": 0
+        },
+        "exclusions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "exclusions/part-000000.parquet",
+              "rows": 0,
+              "sha256": "4b8a3162bc12189af4c1fd436c5258f45c3f2ffca6e2ca8d1c4cde4e752878d7",
+              "size_bytes": 1053
+            }
+          ],
+          "rows": 0
+        },
+        "games": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "games/part-000000.parquet",
+              "rows": 0,
+              "sha256": "3fe4d7b45c4435f6bb42e9130c640e8f2d05127a560bfafe3437a62ecbf7b528",
+              "size_bytes": 2027
+            }
+          ],
+          "rows": 0
+        },
+        "occurrence_contexts": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "occurrence_contexts/part-000000.parquet",
+              "rows": 1,
+              "sha256": "2b5e3182d90548f656054bcdda6601270381bef095b1663ebf5b37ab207bf48e",
+              "size_bytes": 5894
+            }
+          ],
+          "rows": 1
+        },
+        "positions": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "positions/part-000000.parquet",
+              "rows": 1,
+              "sha256": "90aa5bf1876df78ff93a18f09b7330209259c1bb4fb26f6f4edb0027f5ad913d",
+              "size_bytes": 3451
+            }
+          ],
+          "rows": 1
+        },
+        "source_occurrences": {
+          "part_count": 1,
+          "parts": [
+            {
+              "path": "source_occurrences/part-000000.parquet",
+              "rows": 1,
+              "sha256": "189dbe6f63b76a22ade5359639624ea88b40e22d04b593719f7dbb324c40e2d9",
+              "size_bytes": 8784
+            }
+          ],
+          "rows": 1
+        }
+      }
+    }
+  },
+  "config_sha256": "4693f079aa6228bd7d5e8349063e8ee4b781d82c2c19ca81930d061600e909eb",
+  "excluded_package_a_cube": {
+    "cube_action_ids": [
+      "e8f846b4c106e0804a73fe913378aa97812919f081b5ef691984ce4d61f8fb9b",
+      "e843546c3ded127498f61d65495692cf494ce8b284bbfda06d7168c40f4eaa51",
+      "38fc590dad9634b4b67036231a90b94bf3faab0fa98d882bd0dae00d830977ea"
+    ],
+    "cube_occurrence_id": "602583121061add28c9a8ac41f452ab6baead4b47928b9876adc5bdcf560d9ad",
+    "disposition": "rejected-before-materialization",
+    "logical_opportunity_id": "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414",
+    "occurrence_kind": "cube_analysis",
+    "position_id": "27f405cb778a5f880d2ecab5992a4be7d5d2d5a059835c096bbe0fa78ac25cbb",
+    "source_occurrence_id": "c0675948cf652adedae1083218040efca87237dfabca24d90a2252e6e3e6e7f0",
+    "source_record_id": "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414"
+  },
+  "outputs": {
+    "checker_analysis_view_sha256": "9f1bca861fd52e5a9aacf18fb67f541e53a786e8511c416346bfa12c3122443c",
+    "checker_read_set_sha256": "7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb",
+    "cube_analysis_view_sha256": "535c1444450b9bc673a8303937f9a24c148af53cafc8091b3f50c1ebceebed6e",
+    "cube_read_set_sha256": "3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1",
+    "golden_pair_analysis_view_sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+  },
+  "provenance_round_trip": {
+    "checker": "byte-equivalent semantic object",
+    "cube": "byte-equivalent semantic object"
+  },
+  "query_evidence": {
+    "checker_evaluations_sql_sha256": "803a1362dcb2f2f1fbb4c3d6d9756abbf5ebc5da4377086c1465938aa97d2e81",
+    "checker_selection_sql_sha256": "25c917caf3e9bb919ab8caf0bba1f60dd8612741704785fb8dc22da51d993d69",
+    "cube_actions_sql_sha256": "bc421f49566150b0608066649d2cfab01bda9457e6d3bb1df194df2c0482028b",
+    "cube_selection_sql_sha256": "8cc545762708495f9f02103a6a501bf9c113f33e460dfd27af9e7cb621b9c70a",
+    "engine": "DuckDB",
+    "excluded_actions_sql_sha256": "347985693071e6b4b3d67ce00402ebdc5e9e7a39a79faedfbec6db4c184c6dca",
+    "excluded_selection_sql_sha256": "d00e1db3d8852d6608676ad1c0e679cf83a83b88b659a0706bb66f8bfcfe26d2",
+    "ordering": "native rank NULLS LAST, stable canonical identity"
+  },
+  "schema_version": "analyzer-task-008-materialization-evidence-v1",
+  "selected": {
+    "checker": {
+      "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "candidate_ids": [
+        "cebe056b9fba14bb3a4fd58aa8f3e3d5430d98045ff21850c994bd24add37745",
+        "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477",
+        "2940ef714c8cff1a3895543725738b43d64264c425968c3448c0a251a0e1542d",
+        "5fd8fc14885e320a36c7769bf3127c2662c3d9f3164418872c7696be426460c8",
+        "3c03cda00d76d9fbb7acc6d54dc78d2079fee4c1f10c946e4b2f3b8866a0027b",
+        "09806fcf119b0f5742865fd64f987cecc00a28338b429a89a8098aacca864cf0",
+        "6a2d4cbf49af863c3ca425061a616d836ef10e80429714fba0829180d2ec5837",
+        "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+      ],
+      "decision_id": "8e8e9519d238e20fdbb550ec871f3a6a8fb915fe0091353e1ad20e73cb21acb3",
+      "evaluation_ids": [
+        "5605283e44df8961a3931a026557e2ace2581ccf07624b9666a4222c5db999d5",
+        "f3dc8dacfde2f22459efdbbfe6dd672c72b33770b18a1cdc185de4432af0c3c2",
+        "cfac350058eb00bc17fb7db3846ab6ebcd9500f6caab504eba7aadc8223b790a",
+        "25eacb7310df37fc276d02ae0a2fa681bacbfde27ba8ee3cc4d4e7550b83bb39",
+        "b5d56dae30b31d62a7d0edac69c6fe692d9ea7ad3f6ec60f01e65d28be3bacd2",
+        "445d1f6058fe6c6b13cb2340d8cd6bae358daf18d1d77b4a52a32e04a9a23cf4",
+        "0f45e065ab2ef6efde6bd9de08d12184120c1c568e35165944dd621a7c86a651",
+        "ab64cf96a489c8be46b74210b5037c3400415aadb269bb0385de4b313f4b7f53"
+      ],
+      "logical_position_id": "c9add1cd142dc640e1809cc0fc9fcf0f7f693d1afa2a79f7cb5867887978de1e",
+      "result_position_ids": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "source_occurrence_id": "740d6026d00939a9989d21c9f778f6397b343490e48f746a2b05a61f9d5cd8b6"
+    },
+    "cube": {
+      "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "cube_action_ids": [
+        "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f",
+        "7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936",
+        "b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad"
+      ],
+      "cube_occurrence_id": "215747e8305eff4e89325822fda7c967d2a242154194ff7a1b4b8ea6f34c5005",
+      "logical_position_id": "16381b1bf9673c73b94d47d16df3ced8aa0bf252ed49f94fec1e8d9737eb7e7d",
+      "source_occurrence_id": "e1c4f4aad95bb49b1a0c084c6efbc7172a4c66eb31f86b67d6dc1a92674c5ced"
+    }
+  }
+}

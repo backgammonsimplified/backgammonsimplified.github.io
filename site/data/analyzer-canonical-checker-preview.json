@@ -1,0 +1,475 @@
+{
+  "analyses": {
+    "b909630c811a0214b8156e068b88ebeb9a064a56bfec3ae5af8c6afe45278d07": {
+      "analysis_kind": "checker",
+      "candidates": [
+        {
+          "actual_ply": 4,
+          "details": null,
+          "difference_from_best": null,
+          "display_rank": 1,
+          "evaluation": "Cubeful 4-ply",
+          "evaluations": [
+            {
+              "actual_ply": 4,
+              "candidate_id": "75df929351cdb88cc746e50861d06759156560c19577f62826a84a11c184f1fc",
+              "difference_from_best": null,
+              "display_value_source": "native",
+              "evaluation_id": "21e7e8c4bc45777baa96458a1cf0764a7b05784bf91f6cc4f00594b68812ad3b",
+              "evaluation_type": "Cubeful 4-ply",
+              "native_equity_loss_display": null,
+              "native_value": {
+                "label": "Equity",
+                "semantics": "GNU native Cubeful equity",
+                "value": -1.615
+              },
+              "normalized_value": {
+                "label": "Cubeless money equity",
+                "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+                "value": 1.405
+              },
+              "probabilities": {
+                "lose": 0.838,
+                "lose_backgammon": 0.052,
+                "lose_gammon_or_worse": 0.677,
+                "win": 0.162,
+                "win_backgammon": 0.0,
+                "win_gammon_or_better": 0.0
+              },
+              "selected_for_display": true,
+              "source_order": 1
+            }
+          ],
+          "id": "75df929351cdb88cc746e50861d06759156560c19577f62826a84a11c184f1fc",
+          "move": "8/4",
+          "move_board": {
+            "alt": "The retained starting position with checker movement overlay for rank 1: 8/4.",
+            "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/candidate-1-3N0DAADqGTMABw.svg"
+          },
+          "native_equity_loss_display": null,
+          "normalized_move": "8/4",
+          "probabilities": {
+            "lose": 0.838,
+            "lose_backgammon": 0.052,
+            "lose_gammon_or_worse": 0.677,
+            "win": 0.162,
+            "win_backgammon": 0.0,
+            "win_gammon_or_better": 0.0
+          },
+          "resulting_position_id": "577f06dc5b5e6cecd41b4cec619cb5fb194e49d22851d9f6654c96b7d841efd6",
+          "source_order": 1,
+          "structured_movements": [],
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -1.615
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "GNU native Cubeful equity",
+              "value": -1.615
+            },
+            "normalized": {
+              "label": "Cubeless money equity",
+              "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+              "value": 1.405
+            }
+          }
+        },
+        {
+          "actual_ply": 4,
+          "details": "Source-native displayed equity loss: -0.002; not relabeled as canonical difference-from-best.",
+          "difference_from_best": null,
+          "display_rank": 2,
+          "evaluation": "Cubeful 4-ply",
+          "evaluations": [
+            {
+              "actual_ply": 4,
+              "candidate_id": "314f8f13c6ade610c1667c54779b3363ec14463d6650b2eb07940c920bdd6888",
+              "difference_from_best": null,
+              "display_value_source": "native",
+              "evaluation_id": "c01e2ebd612c27c2666ba7b544605df1ee316c1fba04e6bf34b25abafc38a6af",
+              "evaluation_type": "Cubeful 4-ply",
+              "native_equity_loss_display": -0.002,
+              "native_value": {
+                "label": "Equity",
+                "semantics": "GNU native Cubeful equity",
+                "value": -1.617
+              },
+              "normalized_value": {
+                "label": "Cubeless money equity",
+                "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+                "value": 1.4029999999999998
+              },
+              "probabilities": {
+                "lose": 0.838,
+                "lose_backgammon": 0.051,
+                "lose_gammon_or_worse": 0.676,
+                "win": 0.162,
+                "win_backgammon": 0.0,
+                "win_gammon_or_better": 0.0
+              },
+              "selected_for_display": true,
+              "source_order": 1
+            }
+          ],
+          "id": "314f8f13c6ade610c1667c54779b3363ec14463d6650b2eb07940c920bdd6888",
+          "move": "13/10 11/10",
+          "move_board": {
+            "alt": "The retained starting position with checker movement overlay for rank 2: 13/10 11/10.",
+            "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/candidate-2-3N0DAAD0nCUABw.svg"
+          },
+          "native_equity_loss_display": -0.002,
+          "normalized_move": "13/10 11/10",
+          "probabilities": {
+            "lose": 0.838,
+            "lose_backgammon": 0.051,
+            "lose_gammon_or_worse": 0.676,
+            "win": 0.162,
+            "win_backgammon": 0.0,
+            "win_gammon_or_better": 0.0
+          },
+          "resulting_position_id": "183b7bbe814a556e258203862124b04649aab992e7c33a93a72f1edd2fd3d006",
+          "source_order": 2,
+          "structured_movements": [],
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -1.617
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "GNU native Cubeful equity",
+              "value": -1.617
+            },
+            "normalized": {
+              "label": "Cubeless money equity",
+              "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+              "value": 1.4029999999999998
+            }
+          }
+        },
+        {
+          "actual_ply": 4,
+          "details": "Source-native displayed equity loss: -0.004; not relabeled as canonical difference-from-best.",
+          "difference_from_best": null,
+          "display_rank": 3,
+          "evaluation": "Cubeful 4-ply",
+          "evaluations": [
+            {
+              "actual_ply": 4,
+              "candidate_id": "db4817fe35ead8872f9849c28d9e57f4459df4cc259d5a63cfb22d83e254dff4",
+              "difference_from_best": null,
+              "display_value_source": "native",
+              "evaluation_id": "a77c7db8d1151d6da957bd9de9d3624cf491d787adc79564b700c75988b0b593",
+              "evaluation_type": "Cubeful 4-ply",
+              "native_equity_loss_display": -0.004,
+              "native_value": {
+                "label": "Equity",
+                "semantics": "GNU native Cubeful equity",
+                "value": -1.619
+              },
+              "normalized_value": {
+                "label": "Cubeless money equity",
+                "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+                "value": 1.404
+              },
+              "probabilities": {
+                "lose": 0.838,
+                "lose_backgammon": 0.051,
+                "lose_gammon_or_worse": 0.677,
+                "win": 0.162,
+                "win_backgammon": 0.0,
+                "win_gammon_or_better": 0.0
+              },
+              "selected_for_display": true,
+              "source_order": 1
+            }
+          ],
+          "id": "db4817fe35ead8872f9849c28d9e57f4459df4cc259d5a63cfb22d83e254dff4",
+          "move": "13/10 8/7",
+          "move_board": {
+            "alt": "The retained starting position with checker movement overlay for rank 3: 13/10 8/7.",
+            "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/candidate-3-3N0DAAD0miYABw.svg"
+          },
+          "native_equity_loss_display": -0.004,
+          "normalized_move": "13/10 8/7",
+          "probabilities": {
+            "lose": 0.838,
+            "lose_backgammon": 0.051,
+            "lose_gammon_or_worse": 0.677,
+            "win": 0.162,
+            "win_backgammon": 0.0,
+            "win_gammon_or_better": 0.0
+          },
+          "resulting_position_id": "d5db5a6c1bbe02f0178bbec995767417df5ae92d966b4d5e78e9d5bfc82b943c",
+          "source_order": 3,
+          "structured_movements": [],
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -1.619
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "GNU native Cubeful equity",
+              "value": -1.619
+            },
+            "normalized": {
+              "label": "Cubeless money equity",
+              "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+              "value": 1.404
+            }
+          }
+        },
+        {
+          "actual_ply": 4,
+          "details": "Source-native displayed equity loss: -0.010; not relabeled as canonical difference-from-best.",
+          "difference_from_best": null,
+          "display_rank": 4,
+          "evaluation": "Cubeful 4-ply",
+          "evaluations": [
+            {
+              "actual_ply": 4,
+              "candidate_id": "ec040f09e916858ab3da6f1c9bbce78f989674e5d98c79fe04fddfdc318c7b8f",
+              "difference_from_best": null,
+              "display_value_source": "native",
+              "evaluation_id": "2133143066fc16e0811e43cf29be46e83eceb27cb6a171d03cf1059a5d1f559e",
+              "evaluation_type": "Cubeful 4-ply",
+              "native_equity_loss_display": -0.01,
+              "native_value": {
+                "label": "Equity",
+                "semantics": "GNU native Cubeful equity",
+                "value": -1.625
+              },
+              "normalized_value": {
+                "label": "Cubeless money equity",
+                "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+                "value": 1.41
+              },
+              "probabilities": {
+                "lose": 0.838,
+                "lose_backgammon": 0.051,
+                "lose_gammon_or_worse": 0.683,
+                "win": 0.162,
+                "win_backgammon": 0.0,
+                "win_gammon_or_better": 0.0
+              },
+              "selected_for_display": true,
+              "source_order": 1
+            }
+          ],
+          "id": "ec040f09e916858ab3da6f1c9bbce78f989674e5d98c79fe04fddfdc318c7b8f",
+          "move": "8/7 6/3",
+          "move_board": null,
+          "native_equity_loss_display": -0.01,
+          "normalized_move": "8/7 6/3",
+          "probabilities": {
+            "lose": 0.838,
+            "lose_backgammon": 0.051,
+            "lose_gammon_or_worse": 0.683,
+            "win": 0.162,
+            "win_backgammon": 0.0,
+            "win_gammon_or_better": 0.0
+          },
+          "resulting_position_id": "1d6f16b725c77dc2d8d5ab43d251c086e8169daf2d8b780f3de2a366f9e80fe9",
+          "source_order": 4,
+          "structured_movements": [],
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -1.625
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "GNU native Cubeful equity",
+              "value": -1.625
+            },
+            "normalized": {
+              "label": "Cubeless money equity",
+              "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+              "value": 1.41
+            }
+          }
+        },
+        {
+          "actual_ply": 4,
+          "details": "Source-native displayed equity loss: -0.028; not relabeled as canonical difference-from-best.",
+          "difference_from_best": null,
+          "display_rank": 5,
+          "evaluation": "Cubeful 4-ply",
+          "evaluations": [
+            {
+              "actual_ply": 4,
+              "candidate_id": "5a6e7c583752e3b144b1b93d8a67fa191dc5485a530b4e3d970319fbca535117",
+              "difference_from_best": null,
+              "display_value_source": "native",
+              "evaluation_id": "2f708b0f223ea7c2bbddc6ea13a1c6aedf5e6f46ad3416bbdebcf638c05622d9",
+              "evaluation_type": "Cubeful 4-ply",
+              "native_equity_loss_display": -0.028,
+              "native_value": {
+                "label": "Equity",
+                "semantics": "GNU native Cubeful equity",
+                "value": -1.643
+              },
+              "normalized_value": {
+                "label": "Cubeless money equity",
+                "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+                "value": 1.4209999999999998
+              },
+              "probabilities": {
+                "lose": 0.843,
+                "lose_backgammon": 0.053,
+                "lose_gammon_or_worse": 0.682,
+                "win": 0.157,
+                "win_backgammon": 0.0,
+                "win_gammon_or_better": 0.0
+              },
+              "selected_for_display": true,
+              "source_order": 1
+            }
+          ],
+          "id": "5a6e7c583752e3b144b1b93d8a67fa191dc5485a530b4e3d970319fbca535117",
+          "move": "13/12 11/8",
+          "move_board": null,
+          "native_equity_loss_display": -0.028,
+          "normalized_move": "13/12 11/8",
+          "probabilities": {
+            "lose": 0.843,
+            "lose_backgammon": 0.053,
+            "lose_gammon_or_worse": 0.682,
+            "win": 0.157,
+            "win_backgammon": 0.0,
+            "win_gammon_or_better": 0.0
+          },
+          "resulting_position_id": "1029c81748bfacb242a5d6dea7d49855bc80edfd0107ee82bd8e5f1dca628931",
+          "source_order": 5,
+          "structured_movements": [],
+          "supported": true,
+          "value": {
+            "label": "Equity",
+            "value": -1.643
+          },
+          "values": {
+            "native": {
+              "label": "Equity",
+              "semantics": "GNU native Cubeful equity",
+              "value": -1.643
+            },
+            "normalized": {
+              "label": "Cubeless money equity",
+              "semantics": "Canonical derived cubeless money equity (cumulative-six-probabilities-money-equity-v1)",
+              "value": 1.4209999999999998
+            }
+          }
+        }
+      ],
+      "canonical_context": {
+        "logical_position_id": "c3aeb102842104c01efb857fbcd5c3f45d0cd3859b65f28d6fae3c7a470c2e3b",
+        "package": {
+          "conformance_status": "verified-canonical-v1",
+          "manifest_sha256": "effa2a8bc273be03222d8193c090f96ef3415224af228f0e45678b8e7ec498a7",
+          "package_id": "canonical-analysis-reference-2c828e118b6cf22f",
+          "profile_id": "canonical-analysis-parquet-v1"
+        },
+        "requested_analysis": {
+          "cubeful": null,
+          "profile_id": "retained-stage1-gnu-review",
+          "requested_ply": 4
+        },
+        "source_occurrence": {
+          "game_id": "b4570bca0c884e2860e0bf47178f3eb262c34db60fece6009825da5214ac4934",
+          "historical_pipeline_selected": true,
+          "line_number": null,
+          "logical_opportunity_id": "pair_10_match_a:g005:m022",
+          "match_id": "pair_10_match_a",
+          "occurrence_id": "sage-vs-gnu-stage1-match-review-artifacts-v1:game_named:pair_10_match_a:g005:m022",
+          "source_end_line": 890,
+          "source_id": "retained-stage1-analysis",
+          "source_record_id": null,
+          "source_start_line": 848
+        },
+        "state": {
+          "cube": {
+            "owner": "centered",
+            "value": 1
+          },
+          "decision": "Checker play",
+          "dice": [
+            3,
+            1
+          ],
+          "player_on_roll": "player_on_roll",
+          "score": {
+            "match_length": 7,
+            "opponent": 5,
+            "player": 2
+          }
+        }
+      },
+      "context": {
+        "cube": "1, centered",
+        "decision": "Checker play",
+        "dice": "3-1",
+        "score": "2-5 to 7"
+      },
+      "fixture": true,
+      "id": "b909630c811a0214b8156e068b88ebeb9a064a56bfec3ae5af8c6afe45278d07",
+      "limitations": [
+        "Canonical native_equity_loss_display is preserved separately and is not reinterpreted as difference-from-best.",
+        "Structured checker movement rows are not present in this Canonical package; existing verified movement-overlay SVGs are reused for matching displayed moves."
+      ],
+      "metadata": {
+        "analysis_settings": {
+          "effective": "Row-local actual depth is retained on each evaluation/action",
+          "requested": "Requested 4-ply"
+        },
+        "engine": "gnubg",
+        "engine_version": null,
+        "parser": "canonical-parquet-readset-v1",
+        "played_move": "13/12 11/8",
+        "provenance": "package canonical-analysis-reference-2c828e118b6cf22f; occurrence sage-vs-gnu-stage1-match-review-artifacts-v1:game_named:pair_10_match_a:g005:m022; source hash c12c240df48fc31f2f3463e70c75af29247a482f8aafe9d165de311aa0040c42",
+        "recommendation": "8/4",
+        "source_family": "game_named"
+      },
+      "original_board": {
+        "alt": "The retained checker position before any candidate movement overlay.",
+        "image": "/assets/positions/real-analysis/checker-sage-gnu-disagreement-001/starting.svg"
+      },
+      "probabilities": {
+        "lose": 0.838,
+        "lose_backgammon": 0.052,
+        "lose_gammon_or_worse": 0.677,
+        "win": 0.162,
+        "win_backgammon": 0.0,
+        "win_gammon_or_better": 0.0
+      },
+      "subtitle": "Verified Canonical Analysis Parquet v1 values with retained build-time board assets",
+      "title": "Canonical Parquet checker analysis",
+      "warnings": [
+        "Analysis values and canonical identities come from the verified Canonical Parquet package.",
+        "Board SVGs are retained build-time presentation assets for this exact GNU position; the browser does not read Parquet or calculate moves."
+      ]
+    }
+  },
+  "fixture_status": {
+    "kind": "canonical-analysis",
+    "label": "Canonical Parquet analysis",
+    "message": "Analysis values are materialized from the verified frozen Canonical Analysis Parquet v1 reference package."
+  },
+  "materialization": {
+    "contract": "analyzer-analysis-view-read-set-v1",
+    "deterministic_order": "canonical decision ID; source order; stable identity",
+    "package": {
+      "conformance_status": "verified-canonical-v1",
+      "manifest_sha256": "effa2a8bc273be03222d8193c090f96ef3415224af228f0e45678b8e7ec498a7",
+      "package_id": "canonical-analysis-reference-2c828e118b6cf22f",
+      "profile_id": "canonical-analysis-parquet-v1"
+    }
+  },
+  "schema_version": "bs-analysis-results-viewer-fixture-v1"
+}

@@ -60,15 +60,20 @@ Prerequisite: Basic doubling-cube rules
 
 ## The position
 
-This checker interaction uses a retained GNU 4-ply review. Select a candidate
-to compare its resulting board, equity, equity loss, and winning probabilities.
+Before comparing the cube choices, use this exact checker decision to practise
+reading equity and outcome probabilities. Choose a move, then compare it with
+the accepted top move and the other source-ranked candidates.
 
+<!-- bs-local-node-analysis:node-k001-checker:start -->
 <div
   class="bs-lesson-analysis-host"
   data-bs-checker-decision
-  data-bs-fixture-src="/data/checker-sage-gnu-disagreement-001.json"
-  data-bs-fixture-id="checker-sage-gnu-disagreement-001"
+  data-bs-analysis-src="/data/analyzer-node-k001-lesson-preview.json"
+  data-bs-analysis-id="sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+  data-bs-lesson-title="Choose a checker play"
+  data-bs-lesson-prompt="With 4-2 to play, which candidate would you choose?"
 ></div>
+<!-- bs-local-node-analysis:node-k001-checker:end -->
 
 <details class="bs-analyzer-embed">
 <summary>Explore this position in the analyzer</summary>

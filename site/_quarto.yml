@@ -2,11 +2,11 @@ project:
   type: website
   output-dir: _site
   pre-render:
-  - python ../scripts/bs_pre_render.py
-  - python ../scripts/page_publication.py validate-source
+  - bash ../scripts/project-python.sh ../scripts/bs_pre_render.py
+  - bash ../scripts/project-python.sh ../scripts/page_publication.py validate-source
   post-render:
-  - python ../scripts/bs_post_render.py
-  - python ../scripts/page_publication.py apply
+  - bash ../scripts/project-python.sh ../scripts/bs_post_render.py
+  - bash ../scripts/project-python.sh ../scripts/page_publication.py apply
   resources:
     - assets/logo.svg
     - "assets/icons/**"
@@ -18,6 +18,12 @@ project:
     - "assets/positions/**"
     - data/lesson-analysis-svg-mvp.json
     - data/checker-sage-gnu-disagreement-001.json
+    - data/analyzer-analysis-results-fixtures.json
+    - data/analyzer-retained-checker-preview.json
+    - data/analyzer-canonical-checker-preview.json
+    - data/analyzer-canonical-cube-preview.json
+    - data/analyzer-node-k001-lesson-preview.json
+    - data/analyzer-node-k001-local-authoring-preview.json
     - "data/engine-benchmark/**"
     - "engine-benchmark/**/figures/**"
     - "engine-benchmark/**/tables/**"
@@ -80,6 +86,7 @@ format:
       - assets/bs-components.css
       - assets/bs-learn.css
       - assets/bs-lesson-analysis.css
+      - assets/bs-analysis-results.css
     include-after-body:
       - includes/bs-scripts.html
     include-in-header:

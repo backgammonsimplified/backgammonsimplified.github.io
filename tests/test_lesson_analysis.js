@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const analysis = require("../site/assets/bs-lesson-analysis.js");
+const shared = require("../site/assets/bs-analysis-results.js");
 
 const root = path.resolve(__dirname, "..");
 const fixtures = JSON.parse(
@@ -17,6 +18,12 @@ const realFixtures = JSON.parse(
     "utf8"
   )
 );
+const goldenAnalyses = JSON.parse(
+  fs.readFileSync(
+    path.join(root, "site/data/analyzer-node-k001-lesson-preview.json"),
+    "utf8"
+  )
+);
 
 assert.equal(
   analysis.validateFixtureDocument(fixtures),
@@ -24,6 +31,65 @@ assert.equal(
   "the checked-in fixture document is accepted"
 );
 assert.equal(analysis.validateFixtureDocument(realFixtures), realFixtures);
+
+const goldenChecker = shared.analysisFromDocument(
+  goldenAnalyses,
+  "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+).analysis;
+const goldenCube = shared.analysisFromDocument(
+  goldenAnalyses,
+  "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01"
+).analysis;
+assert.equal(goldenChecker.metadata.recommendation, "8/4 6/4");
+assert.equal(goldenChecker.candidates.length, 8);
+assert.deepEqual(
+  goldenChecker.candidates.map((candidate) => candidate.source_order),
+  [1, 2, 3, 4, 5, 6, 7, 8]
+);
+assert.equal(
+  analysis.acceptedAnalysisChoice(
+    goldenChecker,
+    "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+  ).move,
+  "24/20 6/4"
+);
+assert.match(
+  analysis.acceptedAnalysisChoice(
+    goldenChecker,
+    "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2"
+  ).move_board.image,
+  /node-k001\/checker\/candidate-8\.svg$/
+);
+assert.equal(goldenCube.metadata.recommendation, "Double, take");
+assert.match(
+  goldenCube.original_board.image,
+  /node-k001\/cube\/starting\.svg$/
+);
+assert.match(
+  goldenCube.responder_board.image,
+  /node-k001\/cube\/responder\.svg$/
+);
+assert.deepEqual(
+  goldenCube.actions.map((action) => [action.id, action.value.value]),
+  [
+    ["5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f", 0.998032],
+    ["7ace038e9967b27f4c954b1a9b813f991f963e054e3994d6796d3cfd4c27a936", 1.0],
+    ["b0b5a1bdb5eebe7e4dd2ead2e48b22827ff870401381fe21a6f4d3eb0308e1ad", 0.637873]
+  ]
+);
+assert.equal(
+  analysis.acceptedAnalysisChoice(
+    goldenCube,
+    "5134e196c229cf5b7b36ce230fe26eedbb75ab8e1851010d6316008c233cfa0f"
+  ).probabilities,
+  null
+);
+assert.equal(goldenCube.context.decision, "Cube decision");
+assert.equal(goldenCube.context.dice, null);
+assert.throws(
+  () => analysis.acceptedAnalysisChoice(goldenCube, "roll"),
+  /does not define/
+);
 
 const doubleTake = fixtures.cube_cases["cube-double-take"];
 const rollReview = analysis.cubeDecisionState(doubleTake, "roll");
@@ -112,11 +178,53 @@ assert.throws(
   /does not define/
 );
 
-assert.equal(analysis.formatEquity(0.093), "+0.093");
-assert.equal(analysis.formatEquity(-1), "-1.000");
-assert.equal(analysis.formatEquity(null), "Not supplied");
-assert.equal(analysis.formatProbability(0.58), "58.0%");
-assert.equal(analysis.formatProbability(null), "Not supplied");
+const checkerModel = analysis.checkerViewModel(checker, fixtures);
+assert.equal(checkerModel.analysis_kind, "checker");
+assert.equal(checkerModel.candidates.length, 3);
+assert.equal(checkerModel.candidates[1].value.value, 0.093);
+assert.equal(checkerModel.candidates[1].difference_from_best, -0);
+assert.equal(checkerModel.candidates[2].probabilities.win_gammon_or_better, null);
+assert.match(checkerModel.candidates[0].move_board.image, /candidate-1\.svg$/);
+assert.equal(shared.validateAnalysisModel(checkerModel), checkerModel);
+
+const retainedCheckerModel = analysis.checkerViewModel(realChecker, realFixtures);
+assert.equal(retainedCheckerModel.candidates[0].move, "8/4");
+assert.equal(retainedCheckerModel.candidates[1].difference_from_best, -0.002);
+assert.equal(
+  retainedCheckerModel.candidates[0].probabilities.lose_gammon_or_worse,
+  0.677
+);
+assert.match(
+  retainedCheckerModel.candidates[0].move_board.alt,
+  /starting position with checker movement overlay/
+);
+assert.equal(shared.validateAnalysisModel(retainedCheckerModel), retainedCheckerModel);
+
+const cubeModel = analysis.cubeViewModel(
+  doubleTake.actions.double.analysis,
+  doubleTake.initial,
+  doubleTake,
+  fixtures,
+  "first-double"
+);
+assert.equal(cubeModel.analysis_kind, "cube");
+assert.deepEqual(
+  cubeModel.actions.map((action) => action.id),
+  ["roll", "double_take"]
+);
+assert.equal(cubeModel.probabilities.lose, 0.37);
+assert.equal(cubeModel.probabilities.win_gammon_or_better, 0.14);
+assert.equal(analysis.matchingActionId(cubeModel, "double"), "double_take");
+assert.equal(shared.validateAnalysisModel(cubeModel), cubeModel);
+
+assert.deepEqual(analysis.lessonProbabilities({ win: 0.58 }), {
+  win: 0.58,
+  win_gammon_or_better: undefined,
+  win_backgammon: undefined,
+  lose: 0.42000000000000004,
+  lose_gammon_or_worse: undefined,
+  lose_backgammon: undefined
+});
 
 assert.equal(
   analysis.assetUrl(fixtures.asset_root, fixtures.cube_cases["cube-roll"].initial.image),

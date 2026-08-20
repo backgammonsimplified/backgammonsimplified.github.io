@@ -22,14 +22,6 @@
   margin: 0 auto 1rem;
 }
 
-.bs-analysis-position-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid color-mix(in srgb, var(--bs-border, #d9d2c6) 78%, white);
-  background: var(--bs-body-bg, #fffdf8);
-}
-
 .bs-analysis-prompt {
   margin: 0.85rem 0 0.65rem;
   font-size: 1.05rem;
@@ -63,9 +55,7 @@
   outline-offset: 3px;
 }
 
-.bs-analysis-choice-status,
-.bs-analysis-fixture-note,
-.bs-analysis-empty {
+.bs-analysis-choice-status {
   color: var(--bs-muted, #6c6a66);
 }
 
@@ -93,8 +83,7 @@
   padding: 0.25rem 0.15rem 0.5rem;
 }
 
-.bs-analysis-answer-summary,
-.bs-analysis-explanation {
+.bs-analysis-answer-summary {
   margin: 0.5rem 0 0.75rem;
 }
 
@@ -108,32 +97,8 @@
   margin-top: 0;
 }
 
-.bs-analysis-metrics {
-  display: grid;
-  grid-template-columns: minmax(9rem, max-content) minmax(0, 1fr);
-  gap: 0.35rem 0.8rem;
-  margin: 0.5rem 0 0.9rem;
-}
-
-.bs-analysis-metrics dt {
-  font-weight: 600;
-}
-
-.bs-analysis-metrics dd {
-  min-width: 0;
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
 .bs-analysis-candidate-result {
   min-height: 5rem;
-}
-
-.bs-analysis-fixture-note {
-  margin: 0.75rem 0 0;
-  padding: 0.6rem 0.75rem;
-  border-left: 3px solid var(--bs-border, #d9d2c6);
-  font-size: 0.9rem;
 }
 
 .bs-analysis-error {
@@ -150,14 +115,5 @@
   .bs-analysis-choice {
     flex: 1 1 7rem;
     min-width: 0;
-  }
-
-  .bs-analysis-metrics {
-    grid-template-columns: 1fr;
-    gap: 0.1rem;
-  }
-
-  .bs-analysis-metrics dd {
-    margin-bottom: 0.45rem;
   }
 }

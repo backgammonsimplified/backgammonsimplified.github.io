@@ -1,0 +1,607 @@
+{
+  "analyses": [
+    {
+      "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "canonical_decision_id": "8e8e9519d238e20fdbb550ec871f3a6a8fb915fe0091353e1ad20e73cb21acb3",
+      "canonical_provenance": {
+        "adapter": "canonical-parquet-readset-v1",
+        "producer": {
+          "analysis_producer_identity": {
+            "configuration": {
+              "configuration_hash": "375b0cbf77d6a2e9961c2a25c8b957f28278582728089510496b55d38383ea01",
+              "engine": "gnu",
+              "engine_version": "1.08.003-mingw 32-Bit 20240428",
+              "invocation_identity": "gnubg-cli-command-file-windows-v1",
+              "model_or_weights_identity": "gnubg.wd:sha256:bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b;gnubg_os0.bd:sha256:38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49;gnubg_ts0.bd:sha256:9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f;met/Kazaross-XG2.xml:sha256:7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3",
+              "options": {
+                "actual_evaluation_type": "evaluation",
+                "beavers": 0,
+                "cubeful": true,
+                "deterministic": true,
+                "evaluation_plies": 1,
+                "jacoby": false,
+                "move_filter": "1:0:0:8:0.160",
+                "node_producer_base_commit": "ca475237d6e5be96f3ebcc2a68eca70c6ad39908",
+                "node_producer_version": "0.1.0/windows-gnu-v1",
+                "noise": 0.0,
+                "output_digits": 6,
+                "output_mwc": false,
+                "output_winpc": false,
+                "platform_runtime_identity": "windows-native-mingw32-x86",
+                "pruning": false,
+                "runtime_executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+                "threads": 1,
+                "variation": "standard"
+              },
+              "parser_version": "gnu-text-parser-v1",
+              "profile": "gnu-1.08.003-mingw-20240428-1ply-cubeful-noiseless-windows"
+            },
+            "node_producer": {
+              "base_commit": "ca475237d6e5be96f3ebcc2a68eca70c6ad39908",
+              "execution_source": "src/backgammon_node/windows_gnu.py",
+              "execution_source_sha256": "3d234362ccb587cf53a7581cebf76de11fe1a917fd107c89c86923de94f7b53f",
+              "package_name": "backgammon-node",
+              "package_version": "0.1.0",
+              "version": "0.1.0/windows-gnu-v1"
+            },
+            "parser": {
+              "identity": "gnu-text-parser-v1",
+              "implementation": "backgammon-engine-kit",
+              "package_version": "0.3.0",
+              "source_commit": "5dd21daf166f6284c0224ac35a4a5495cb00a0ff"
+            },
+            "producer": {
+              "engine_name": "gnu",
+              "engine_version": "1.08.003-mingw 32-Bit 20240428",
+              "executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+              "platform_runtime_identity": "windows-native-mingw32-x86",
+              "version_build": "GNU Backgammon 1.08.003-mingw 32-Bit 20240428"
+            },
+            "producer_identity_sha256": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+            "resources": [
+              {
+                "name": "gnubg.wd",
+                "sha256": "bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b"
+              },
+              {
+                "name": "gnubg_os0.bd",
+                "sha256": "38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49"
+              },
+              {
+                "name": "gnubg_ts0.bd",
+                "sha256": "9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f"
+              },
+              {
+                "name": "met/Kazaross-XG2.xml",
+                "sha256": "7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3"
+              }
+            ],
+            "schema_version": "b\u006ds-windows-gnu-producer-v1"
+          },
+          "branch": "left-brain",
+          "commit": "fb6a121474517c29b66d959d579a9282a61280b2",
+          "materializer": {
+            "branch": "left-brain",
+            "commit": "fb6a121474517c29b66d959d579a9282a61280b2",
+            "package_name": "backgammon-node",
+            "package_version": "0.1.0",
+            "pr": 1,
+            "repository": "backgammonsimplified/backgammon-node"
+          },
+          "pr": 1,
+          "repository": "backgammonsimplified/backgammon-node"
+        },
+        "settings": {
+          "analysis_setting": "1ply",
+          "configuration_identity": "375b0cbf77d6a2e9961c2a25c8b957f28278582728089510496b55d38383ea01",
+          "decision_types": [
+            "checker",
+            "cube"
+          ],
+          "invocation_identity": "gnubg-cli-command-file-windows-v1",
+          "model_or_weights_identity": "gnubg.wd:sha256:bb045bb416c70706ba34ad64595af2b43cac3722560b6ab01829eb719417153b;gnubg_os0.bd:sha256:38089567e87a681682bb4ff53f30d781af215fc04debbdff3f61b6db68547a49;gnubg_ts0.bd:sha256:9eac8a2c697dae8a09f2e5653022084b9e725df6c32950cb5299b273fc64500f;met/Kazaross-XG2.xml:sha256:7a232b171744b8db34306d11cff79a5974541328bb033b6bf16c012e8f7a3cc3",
+          "options": {
+            "actual_evaluation_type": "evaluation",
+            "beavers": 0,
+            "cubeful": true,
+            "deterministic": true,
+            "evaluation_plies": 1,
+            "jacoby": false,
+            "move_filter": "1:0:0:8:0.160",
+            "node_producer_base_commit": "ca475237d6e5be96f3ebcc2a68eca70c6ad39908",
+            "node_producer_version": "0.1.0/windows-gnu-v1",
+            "noise": 0.0,
+            "output_digits": 6,
+            "output_mwc": false,
+            "output_winpc": false,
+            "platform_runtime_identity": "windows-native-mingw32-x86",
+            "pruning": false,
+            "runtime_executable_sha256": "04a2512f550afeb47a3fe32357e042e79280668f52678b5d72f27dc29a45b0a3",
+            "threads": 1,
+            "variation": "standard"
+          },
+          "parser_identity": "gnu-text-parser-v1",
+          "producer_identity": "b785713f755b9059dd7187ff07aec7a47372ccb393f7bd026a60acf7550f1cbf",
+          "profile": "gnu-1.08.003-mingw-20240428-1ply-cubeful-noiseless-windows"
+        },
+        "source": {
+          "dataset_id": "sha256-2ea4a860090fecb6b51cc1d933b6ad678bddd278478089e21df14b68ccba5c39",
+          "gnu_id_native": "4PPgASTgc/ABMA:cAnqAAAAAAAE",
+          "gnu_match_id_native": "cAnqAAAAAAAE",
+          "gnu_position_id_native": "4PPgASTgc/ABMA",
+          "parser_status": "complete",
+          "parser_warnings_json": "[\"GNU hint output does not identify a previously played move; is_played_move remains null\",\"resulting Position IDs were not generated; resulting_position_id remains null\"]",
+          "raw_block_sha256": "7adaed404861befc3bcbf1c4efc4bfe439245789266e8bef9f648228a8d0e49e",
+          "source_path": "records/analyses.jsonl",
+          "source_record_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+          "source_schema_version": "b\u006ds-node-canonical-spool-record-v0"
+        },
+        "source_manifests": [
+          {
+            "path": "batch.json",
+            "sha256": "8b9c81eacf462060f0a5986fb5db976fbb86de90fd211e6628c1002d871558e1"
+          },
+          {
+            "path": "SHA256SUMS.txt",
+            "sha256": "d666fb78d109d12e5988db22e5d11fbbf1613a82905c010495fb67d4408f3a36"
+          },
+          {
+            "path": "FINALIZED",
+            "sha256": "0f1d335454a42013afef7a705eb783d3f25bc4f920e922bead7f3a40ac557df6"
+          }
+        ],
+        "writer": {
+          "commit": "1569284972239a2627de8e5176eb47caef454fda",
+          "compression": "zstd",
+          "compression_level": 3,
+          "pyarrow_version": "25.0.0",
+          "repository": "backgammonsimplified/backgammon-engine-benchmarker",
+          "rows_per_shard": 100000
+        }
+      },
+      "checker_candidates": [
+        {
+          "candidate_id": "cebe056b9fba14bb3a4fd58aa8f3e3d5430d98045ff21850c994bd24add37745",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 1,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 1: 8/4 6/4.",
+            "image": "/assets/positions/node-k001/checker/candidate-1.svg"
+          },
+          "native_move": "8/4 6/4",
+          "normalized_move": "8/4 6/4",
+          "resulting_position_id": null,
+          "source_order": 1,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 2,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 2: 24/20 13/11.",
+            "image": "/assets/positions/node-k001/checker/candidate-2.svg"
+          },
+          "native_move": "24/20 13/11",
+          "normalized_move": "24/20 13/11",
+          "resulting_position_id": null,
+          "source_order": 2,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "2940ef714c8cff1a3895543725738b43d64264c425968c3448c0a251a0e1542d",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 3,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 3: 24/22 24/20.",
+            "image": "/assets/positions/node-k001/checker/candidate-3.svg"
+          },
+          "native_move": "24/22 24/20",
+          "normalized_move": "24/22 24/20",
+          "resulting_position_id": null,
+          "source_order": 3,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "5fd8fc14885e320a36c7769bf3127c2662c3d9f3164418872c7696be426460c8",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 4,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 4: 24/18.",
+            "image": "/assets/positions/node-k001/checker/candidate-4.svg"
+          },
+          "native_move": "24/18",
+          "normalized_move": "24/18",
+          "resulting_position_id": null,
+          "source_order": 4,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "3c03cda00d76d9fbb7acc6d54dc78d2079fee4c1f10c946e4b2f3b8866a0027b",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 5,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 5: 13/11 13/9.",
+            "image": "/assets/positions/node-k001/checker/candidate-5.svg"
+          },
+          "native_move": "13/11 13/9",
+          "normalized_move": "13/11 13/9",
+          "resulting_position_id": null,
+          "source_order": 5,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "09806fcf119b0f5742865fd64f987cecc00a28338b429a89a8098aacca864cf0",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 6,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 6: 24/22 13/9.",
+            "image": "/assets/positions/node-k001/checker/candidate-6.svg"
+          },
+          "native_move": "24/22 13/9",
+          "normalized_move": "24/22 13/9",
+          "resulting_position_id": null,
+          "source_order": 6,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "6a2d4cbf49af863c3ca425061a616d836ef10e80429714fba0829180d2ec5837",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 7,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 7: 24/20 8/6.",
+            "image": "/assets/positions/node-k001/checker/candidate-7.svg"
+          },
+          "native_move": "24/20 8/6",
+          "normalized_move": "24/20 8/6",
+          "resulting_position_id": null,
+          "source_order": 7,
+          "structured_movements": [],
+          "supported": true
+        },
+        {
+          "candidate_id": "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2",
+          "details": "Build-time movement overlay for this exact Canonical move; reconstruction_status=not_available_from_source; Canonical result_position_id is explicitly null.",
+          "display_rank": 8,
+          "move_board": {
+            "alt": "Exact Node checker position with movement overlay for rank 8: 24/20 6/4.",
+            "image": "/assets/positions/node-k001/checker/candidate-8.svg"
+          },
+          "native_move": "24/20 6/4",
+          "normalized_move": "24/20 6/4",
+          "resulting_position_id": null,
+          "source_order": 8,
+          "structured_movements": [],
+          "supported": true
+        }
+      ],
+      "checker_evaluations": [
+        {
+          "actual_ply": 1,
+          "candidate_id": "cebe056b9fba14bb3a4fd58aa8f3e3d5430d98045ff21850c994bd24add37745",
+          "difference_from_best": null,
+          "display_value_source": "native",
+          "evaluation_id": "5605283e44df8961a3931a026557e2ace2581ccf07624b9666a4222c5db999d5",
+          "evaluation_type": "1-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": 0.025296
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.494833,
+            "lose_backgammon": 0.00627,
+            "lose_gammon_or_worse": 0.131013,
+            "win": 0.505167,
+            "win_backgammon": 0.004389,
+            "win_gammon_or_better": 0.140466
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 1,
+          "candidate_id": "44f91cbe042d6b615184f62d32d59337e3a35f709b875f11958bfdc2bf421477",
+          "difference_from_best": -0.169639,
+          "display_value_source": "native",
+          "evaluation_id": "f3dc8dacfde2f22459efdbbfe6dd672c72b33770b18a1cdc185de4432af0c3c2",
+          "evaluation_type": "1-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.144343
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.531534,
+            "lose_backgammon": 0.00638,
+            "lose_gammon_or_worse": 0.152369,
+            "win": 0.468466,
+            "win_backgammon": 0.004577,
+            "win_gammon_or_better": 0.114991
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 0,
+          "candidate_id": "2940ef714c8cff1a3895543725738b43d64264c425968c3448c0a251a0e1542d",
+          "difference_from_best": -0.204445,
+          "display_value_source": "native",
+          "evaluation_id": "cfac350058eb00bc17fb7db3846ab6ebcd9500f6caab504eba7aadc8223b790a",
+          "evaluation_type": "0-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.179149
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.538823,
+            "lose_backgammon": 0.005208,
+            "lose_gammon_or_worse": 0.147844,
+            "win": 0.461177,
+            "win_backgammon": 0.00309,
+            "win_gammon_or_better": 0.100439
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 0,
+          "candidate_id": "5fd8fc14885e320a36c7769bf3127c2662c3d9f3164418872c7696be426460c8",
+          "difference_from_best": -0.213283,
+          "display_value_source": "native",
+          "evaluation_id": "25eacb7310df37fc276d02ae0a2fa681bacbfde27ba8ee3cc4d4e7550b83bb39",
+          "evaluation_type": "0-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.187987
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.538555,
+            "lose_backgammon": 0.005658,
+            "lose_gammon_or_worse": 0.156015,
+            "win": 0.461445,
+            "win_backgammon": 0.003132,
+            "win_gammon_or_better": 0.100813
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 0,
+          "candidate_id": "3c03cda00d76d9fbb7acc6d54dc78d2079fee4c1f10c946e4b2f3b8866a0027b",
+          "difference_from_best": -0.221191,
+          "display_value_source": "native",
+          "evaluation_id": "b5d56dae30b31d62a7d0edac69c6fe692d9ea7ad3f6ec60f01e65d28be3bacd2",
+          "evaluation_type": "0-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.195895
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.546222,
+            "lose_backgammon": 0.011572,
+            "lose_gammon_or_worse": 0.158389,
+            "win": 0.453778,
+            "win_backgammon": 0.005774,
+            "win_gammon_or_better": 0.120179
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 0,
+          "candidate_id": "09806fcf119b0f5742865fd64f987cecc00a28338b429a89a8098aacca864cf0",
+          "difference_from_best": -0.233366,
+          "display_value_source": "native",
+          "evaluation_id": "445d1f6058fe6c6b13cb2340d8cd6bae358daf18d1d77b4a52a32e04a9a23cf4",
+          "evaluation_type": "0-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.20807
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.546846,
+            "lose_backgammon": 0.00881,
+            "lose_gammon_or_worse": 0.157139,
+            "win": 0.453154,
+            "win_backgammon": 0.004539,
+            "win_gammon_or_better": 0.108647
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 0,
+          "candidate_id": "6a2d4cbf49af863c3ca425061a616d836ef10e80429714fba0829180d2ec5837",
+          "difference_from_best": -0.255198,
+          "display_value_source": "native",
+          "evaluation_id": "0f45e065ab2ef6efde6bd9de08d12184120c1c568e35165944dd621a7c86a651",
+          "evaluation_type": "0-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.229902
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.553196,
+            "lose_backgammon": 0.005842,
+            "lose_gammon_or_worse": 0.153773,
+            "win": 0.446804,
+            "win_backgammon": 0.003175,
+            "win_gammon_or_better": 0.101817
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        },
+        {
+          "actual_ply": 0,
+          "candidate_id": "96d18ebbdcf54e9eb07265464db5b9e2100c5c0c6ae6c46e90a8a3a2258862d2",
+          "difference_from_best": -0.259544,
+          "display_value_source": "native",
+          "evaluation_id": "ab64cf96a489c8be46b74210b5037c3400415aadb269bb0385de4b313f4b7f53",
+          "evaluation_type": "0-ply",
+          "native_equity_loss_display": null,
+          "native_value": {
+            "label": "Equity",
+            "semantics": "GNU native Cubeful equity",
+            "value": -0.234248
+          },
+          "normalized_value": {
+            "label": "Cubeless money equity",
+            "semantics": "Canonical derived cubeless money equity",
+            "value": null
+          },
+          "probabilities": {
+            "lose": 0.548262,
+            "lose_backgammon": 0.009572,
+            "lose_gammon_or_worse": 0.169014,
+            "win": 0.451738,
+            "win_backgammon": 0.003993,
+            "win_gammon_or_better": 0.10325
+          },
+          "selected_for_display": true,
+          "source_order": 1
+        }
+      ],
+      "context": {
+        "cube": {
+          "owner": "centered",
+          "value": 1
+        },
+        "decision": "Checker play",
+        "dice": [
+          4,
+          2
+        ],
+        "player_on_roll": "player_on_roll",
+        "score": {
+          "match_length": 7,
+          "opponent": 0,
+          "player": 0
+        }
+      },
+      "decision_kind": "checker",
+      "limitations": [
+        "Source-native difference-from-best is preserved; normalized and lexical values remain explicit null where unavailable.",
+        "Canonical structured movement and result-position facts are unavailable; empty movement arrays and null result IDs survive the read-set round trip while matching build-time overlays remain presentation-only."
+      ],
+      "logical_position_id": "c9add1cd142dc640e1809cc0fc9fcf0f7f693d1afa2a79f7cb5867887978de1e",
+      "position": {
+        "original_board": {
+          "alt": "Exact Node checker lesson starting position.",
+          "image": "/assets/positions/node-k001/checker/starting.svg"
+        },
+        "position_id": "c9add1cd142dc640e1809cc0fc9fcf0f7f693d1afa2a79f7cb5867887978de1e"
+      },
+      "presentation": {
+        "fixture": true,
+        "played_move": null,
+        "recommendation": "8/4 6/4",
+        "subtitle": "Verified Canonical Analysis Parquet v1 values with retained build-time board assets",
+        "title": "Canonical Parquet checker analysis"
+      },
+      "probabilities": {
+        "lose": 0.494833,
+        "lose_backgammon": 0.00627,
+        "lose_gammon_or_worse": 0.131013,
+        "win": 0.505167,
+        "win_backgammon": 0.004389,
+        "win_gammon_or_better": 0.140466
+      },
+      "provenance": {
+        "engine": "gnu",
+        "engine_version": "1.08.003-mingw 32-Bit 20240428",
+        "parser": "gnu-text-parser-v1",
+        "source_family": "node_spool",
+        "source_hash": "d744bd8e5badb0e67658e6393b5cbc4de5cbc3e0db7c067461e3c34f281a2f3c"
+      },
+      "requested_analysis": {
+        "cubeful": null,
+        "profile_id": "gnu-1.08.003-mingw-20240428-1ply-cubeful-noiseless-windows",
+        "requested_ply": 1
+      },
+      "source_occurrence": {
+        "game_id": null,
+        "historical_pipeline_selected": null,
+        "line_number": 1,
+        "logical_opportunity_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "match_id": null,
+        "occurrence_id": "740d6026d00939a9989d21c9f778f6397b343490e48f746a2b05a61f9d5cd8b6",
+        "source_end_line": 1,
+        "source_id": "sha256-2ea4a860090fecb6b51cc1d933b6ad678bddd278478089e21df14b68ccba5c39",
+        "source_record_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "source_start_line": 1
+      },
+      "warnings": [
+        "Analysis values and canonical identities come from the verified Canonical Parquet package.",
+        "Board SVGs are retained build-time presentation assets for this exact GNU position; the browser does not read Parquet or calculate moves.",
+        "GNU hint output does not identify a previously played move; is_played_move remains null",
+        "resulting Position IDs were not generated; resulting_position_id remains null"
+      ]
+    }
+  ],
+  "fixture_status": {
+    "kind": "canonical-analysis",
+    "label": "Canonical Parquet analysis",
+    "message": "Analysis values are materialized from the verified frozen Canonical Analysis Parquet v1 reference package."
+  },
+  "package": {
+    "conformance_status": "verified-canonical-v1",
+    "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e",
+    "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+    "profile_id": "canonical-analysis-parquet-v1"
+  },
+  "schema_version": "analyzer-analysis-view-read-set-v1"
+}

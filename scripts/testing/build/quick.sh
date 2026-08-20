@@ -21,6 +21,7 @@ git diff --check
 printf '\n[2/5] JavaScript syntax\n'
 node --check site/assets/bs-learn.js
 node --check site/assets/bs-learn-scroll.js
+node --check site/assets/bs-analysis-results.js
 node --check site/assets/bs-lesson-analysis.js
 node --check scripts/testing/ux/browser/release_ui_browser_check.mjs
 node --check scripts/testing/ux/browser/lesson_analysis_browser_check.mjs
@@ -39,16 +40,24 @@ node tests/test_lesson_analysis_browser_check.mjs
 node tests/test_comprehensive_quality_browser_check.mjs
 node tests/test_runtime_performance_baseline.mjs
 node tests/test_isolated_browser_tab.mjs
+node tests/test_analysis_results_viewer.js
+node tests/test_analysis_view_materializer.js
 
 printf '\n[4/5] Focused Python contracts\n'
 "${PYTHON_COMMAND[@]}" -m unittest \
   tests.test_release_ui_checks \
   tests.test_lesson_analysis \
+  tests.test_node_analysis_authoring \
   tests.test_real_checker_analysis \
   tests.test_publication_identity \
   tests.test_environment_setup \
   tests.test_static_inventory \
   tests.test_quality_reports \
+  tests.test_analysis_parquet_intake \
+  tests.test_accepted_node_canonical_materialization \
+  tests.test_analysis_view_materializer \
+  tests.test_retrieval_workloads \
+  tests.test_learn_canonical_consumption \
   -v
 
 printf '\n[5/5] Existing rendered-site representative audit\n'

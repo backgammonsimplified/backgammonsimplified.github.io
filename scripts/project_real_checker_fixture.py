@@ -125,7 +125,10 @@ def build_projection(fixture_dir: Path) -> dict:
                 "move": view_candidate["move"],
                 "rank": rank,
                 "image": candidate_asset_name(rank, view_candidate["resulting_position_id"]),
-                "image_alt": f"Resulting position for rank {rank}: {view_candidate['move']}.",
+                "image_alt": (
+                    "The retained starting position with checker movement overlay "
+                    f"for rank {rank}: {view_candidate['move']}."
+                ),
                 "resulting_position_id": view_candidate["resulting_position_id"],
                 "position_id": view["position_id"],
                 "state_hash": view["state_hash"],
