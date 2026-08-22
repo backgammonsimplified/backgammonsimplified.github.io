@@ -1,0 +1,260 @@
+{
+  "schema_version": "analyzer-canonical-consumer-conformance-result-v1",
+  "task": "validate-canonical-consumer-conformance-sweep-v1",
+  "status": "complete",
+  "implementation": {
+    "repository": "backgammonsimplified/backgammonsimplified.github.io",
+    "branch": "agent/analyzer-canonical-consumer-conformance-v1",
+    "starting_head": "e9062f351bd971d80438a480990e645ce1227a33",
+    "final_product_head": "e9062f351bd971d80438a480990e645ce1227a33",
+    "product_change": "none",
+    "evidence_commit": "the Git commit containing this result; exact published SHA is recorded in the Task Management Codex result"
+  },
+  "refreshed_authority": {
+    "control_tower": {
+      "repository": "backgammonsimplified/control-tower",
+      "branch_head": "master@386a9581ed380e112f8f9e04baebce7d8504875a",
+      "consumer_task_sha256": "08205863182ee7a33021bc89e31cf8693e5d0e341ecd24c481328ffac3dfa5e8",
+      "producer_task_sha256": "255cf678f4a3650c4bf250080cd2cddc2a7e8d53c4d4f331de551a3bc628d467",
+      "sole_dependency": "validate-canonical-producer-conformance-sweep-v1"
+    },
+    "task_management": {
+      "repository": "backgammonsimplified/task-management",
+      "analyzer_branch_head": "milestone/analyzer-k001@1c89e90a05a0bce11cce817becdeba2686fef5a6",
+      "prompt_sha256": "58c71a254abcf9445364aa1a7192752f697c8e061a53d1599c9e3656dec55b66",
+      "producer_result_branch_head": "milestone/retcorpus-k001@46bd16fffc4c8850329cd55d17b892e23715de58",
+      "producer_result_sha256": "ce34115768f3f7d29564abcb38a832026b8fdc7e1656113e5ef2362d06d4290d"
+    },
+    "producer_implementation": {
+      "repository": "backgammonsimplified/backgammon-engine-benchmarker",
+      "branch_head": "feature/canonical-ingestion-listener-v0@5c15f3c957bbf5ee33dc7471a7e5230270b70b1c",
+      "producer_result_status": "COMPLETE",
+      "dependency_gate": "CLEARED",
+      "prerequisite": "PASS"
+    }
+  },
+  "accepted_golden_inputs": {
+    "checker": {
+      "package_id": "1a38c5a48214a4ea156d1896b8ea09bcdce75880077fabb2fc516c5685ff259c",
+      "manifest_sha256": "bcd84099792e5679dd997ea4aa85f0d3ee217f5df79b2adc989b5938c6d2988e",
+      "sha256sums_sha256": "88c8e805c16fcb177c6bea7a6210de892042bf3e9fa29c2a7804c88904a4fff1",
+      "dataset_id": "sha256-2ea4a860090fecb6b51cc1d933b6ad678bddd278478089e21df14b68ccba5c39",
+      "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "read_set_path": "evidence/analyzer-k001/task-008/checker-read-set.json",
+      "read_set_sha256": "7a9de2204ecacbefb19cbc4c18188504fc6979a9c0bd46b2f76e52ed6d418cdb"
+    },
+    "cube": {
+      "package_id": "bde4011fa40a384168a49529db7192e039a15252d4a2ab481c7b2fecfa98806b",
+      "manifest_sha256": "dbe6bcb41ac8ecdb52ffa33a72cc97bc47fae9c0f9bc67a9bc8559c197c2d11a",
+      "sha256sums_sha256": "01109d1026a6ac1687a267eafe331bedb52507729f30a99cb4d35d386ed147c4",
+      "dataset_id": "sha256-b4065495bb3e4e33895512779b47ee16272f78710801c756896c78039f731d3e",
+      "analysis_id": "sha256-1217f65d4a2c203e2370edb860ffaba81090a42f69d2a5fb56f5cceb64389e01",
+      "read_set_path": "evidence/analyzer-k001/task-008/cube-read-set.json",
+      "read_set_sha256": "3d0176636402a97aea237d6126f988c6b98ff1f44b5645747512782fb585c0d1"
+    },
+    "excluded_older_package_a_cube": {
+      "analysis_id": "sha256-ba87405bf38017214424d71b1e3d1299ed323101db8893f2aa430054167a6414",
+      "disposition": "rejected-before-materialization",
+      "substitution_observed": false
+    },
+    "task_008_materialization": {
+      "path": "evidence/analyzer-k001/task-008/materialization-evidence.json",
+      "sha256": "8c1545c202930efe325d4d5aabe609f33f864a22b38ecd665d82dbc4ca552975",
+      "config_sha256": "4693f079aa6228bd7d5e8349063e8ee4b781d82c2c19ca81930d061600e909eb"
+    },
+    "task_009_equivalence": {
+      "path": "evidence/analyzer-k001/task-009/equivalence-result.json",
+      "sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368"
+    },
+    "task_010_learn_consumption": {
+      "path": "evidence/analyzer-k001/task-010/learn-consumption-result.json",
+      "sha256": "596d4a4a4fd6f77d61099bb06791f9ff57a3d36579806f69b8bb4f0019ac53b7"
+    },
+    "analysis_view": {
+      "path": "site/data/analyzer-node-k001-lesson-preview.json",
+      "sha256": "7af39183ca9e5f696d0fe3d4ce1e4729b58f4a95489d910490c6b16e1b4bb404"
+    }
+  },
+  "consumers": {
+    "duckdb": {
+      "status": "PASS",
+      "scope": "accepted immutable golden-pair query/read-set evidence",
+      "facts": [
+        "exact package, manifest, checksum-inventory, dataset, record, occurrence, decision, candidate, evaluation, position, cube-occurrence, and cube-action identity",
+        "native candidate/action order",
+        "explicit null result-position and row-local cube-depth facts",
+        "source and writer provenance"
+      ],
+      "query_hashes": {
+        "checker_selection": "25c917caf3e9bb919ab8caf0bba1f60dd8612741704785fb8dc22da51d993d69",
+        "checker_evaluations": "803a1362dcb2f2f1fbb4c3d6d9756abbf5ebc5da4377086c1465938aa97d2e81",
+        "cube_selection": "8cc545762708495f9f02103a6a501bf9c113f33e460dfd27af9e7cb621b9c70a",
+        "cube_actions": "bc421f49566150b0608066649d2cfab01bda9457e6d3bb1df194df2c0482028b",
+        "excluded_cube_selection": "d00e1db3d8852d6608676ad1c0e679cf83a83b88b659a0706bb66f8bfcfe26d2",
+        "excluded_cube_actions": "347985693071e6b4b3d67ce00402ebdc5e9e7a39a79faedfbec6db4c184c6dca"
+      },
+      "evidence_paths": [
+        "scripts/analysis/canonical_parquet_readset.py",
+        "scripts/analysis/canonical_parquet_cube_readset.py",
+        "evidence/analyzer-k001/task-008/materialization-evidence.json",
+        "tests/test_accepted_node_canonical_materialization.py"
+      ]
+    },
+    "analyzer_analysis_view": {
+      "status": "PASS",
+      "scope": "semantic read-set and deterministic analysis-view materialization",
+      "facts": [
+        "position/context and source-occurrence identity",
+        "decision kind, player/perspective, dice, score, cube, and provenance context",
+        "checker candidate and cube action order",
+        "recommendation, exact native evaluations/equities/probabilities, and explicit unavailable facts",
+        "requested depth separated from row-local actual depth",
+        "movement/result-position behavior without inference"
+      ],
+      "equivalence": {
+        "status": "PASS",
+        "comparison_count": 588,
+        "equal": 281,
+        "field_contract_representation_differences": 148,
+        "explicitly_unavailable_on_one_side": 159,
+        "mismatches": 0
+      },
+      "evidence_paths": [
+        "scripts/analysis/analysis_view_materializer.py",
+        "scripts/analysis/validate_node_parquet_equivalence.py",
+        "evidence/analyzer-k001/task-009/equivalence-result.json",
+        "tests/test_analysis_view_materializer.py",
+        "tests/test_node_parquet_equivalence.py"
+      ]
+    },
+    "learn_shared_viewer": {
+      "status": "PASS",
+      "scope": "rendered Learn checker and cube hosts through the existing shared Results Viewer",
+      "browser": "Chromium 139.0.7258.5 headless",
+      "facts": [
+        "exact canonical-derived source bytes",
+        "eight checker candidate identities and recommendation",
+        "three cube action identities and recommendation",
+        "desktop and mobile shared-viewer presentation",
+        "404 denial mounts no presentation and makes no local-authoring fallback request"
+      ],
+      "repeated_proof_sha256": "c0d4d5451a116de1ad0abc7e27a6d4d05a36e12034d8b47ebe8711a27724d27a",
+      "evidence_paths": [
+        "scripts/analysis/prove_learn_canonical_consumption.py",
+        "site/assets/bs-analysis-results.js",
+        "site/assets/bs-lesson-analysis.js",
+        "tests/test_learn_canonical_consumption.py",
+        "tests/test_lesson_analysis.py",
+        "tests/test_analysis_results_viewer.js"
+      ]
+    },
+    "research": {
+      "status": "NOT_APPLICABLE",
+      "scope": "current website Research presentation sources",
+      "reason": "At the tested head, Research mounts no canonical analysis-view, Analyzer materialized output, or shared Results Viewer. The rendered Research pages and their existing filter/continuous-scroll presentation contracts pass, but there is no current canonical consumer boundary to claim as PASS.",
+      "evidence_paths": [
+        "site/research/index.qmd",
+        "site/research/what-we-are-building.qmd",
+        "site/research/sage-vs-gnu-additional-details.qmd",
+        "tests/test_continuous_research.js",
+        "tests/test_research_filters.js",
+        "tests/test_publication_pages.py"
+      ],
+      "owner_action_required": "none; validate a later Research canonical/shared-output mount when one exists"
+    },
+    "sage_vs_gnu": {
+      "status": "NOT_APPLICABLE",
+      "scope": "current website Stage 1 presentation contract and active benchmark authority",
+      "reason": "The website's governed Stage 1 snapshot reader reports pending with 15 required files absent, the page mounts no canonical/shared-viewer consumer, the active benchmark lane is blocked before an accepted immutable pair, and the post-match lane is waiting for that pair. No current Canonical v1 Sage-vs-GNU consumer exists to validate.",
+      "task_management_authority": {
+        "benchmark": "milestone/sage-gnu-benchmark-k001@7f9c1035078a0d2ccd3fec39d40156daf3e71cd6",
+        "postmatch": "milestone/sage-gnu-postmatch-k001@c30fbb89687351c4d2037bd6aaf4196ff70c3492"
+      },
+      "evidence_paths": [
+        "site/engine-benchmark/sage-vs-gnu-stage1/index.qmd",
+        "scripts/engine-benchmark/sage-vs-gnu-stage1/read_release.R",
+        "scripts/engine-benchmark/sage-vs-gnu-stage1/validate_release.R"
+      ],
+      "owner_action_required": "none for Task 013; later benchmark/post-match owners must first publish accepted immutable and canonicalized inputs"
+    },
+    "explainer_canonical_query_input": {
+      "status": "PASS",
+      "scope": "read-only foreign-owner inspection of the accepted Explainer canonical query/input boundary",
+      "repository_head": "backgammonsimplified/backgammon-explainer feature/explainer-feature-v2-k002@011e347cea73ae9c01d00700eaea9c5149993229",
+      "accepted_reference_manifest_sha256": "effa2a8bc273be03222d8193c090f96ef3415224af228f0e45678b8e7ec498a7",
+      "facts": [
+        "all ten Canonical v1 relations are opened read-only as DuckDB views",
+        "checker candidates join evaluations by candidate and source-occurrence provenance",
+        "stable canonical IDs, not physical row order or GNU-native decoding, define downstream joins",
+        "feature, split, model-output, and explanation data remain external sidecars",
+        "the canonical input contract is pinned and cannot be redefined by the model-output package"
+      ],
+      "focused_tests": "12/12 PASS twice",
+      "evidence_paths": [
+        "backgammon-explainer:src/backgammon_explainer/canonical_query_patterns_v1.py@c0c5d1d33a069cd1b001c6c09d9849609e580589ba82fbf4c0f69256d0a79ae2",
+        "backgammon-explainer:docs/modeling/canonical-parquet-query-patterns-v1.md@9ea6ca722b99e1f607fe623357e3f7a07c6a25c9d9511ce513160adc1f020156",
+        "backgammon-explainer:tests/test_model_output_parquet_v1.py@8153f9dc5076a8d191c77c5f76009e49d90501b7603f6db4edb788950145b345"
+      ],
+      "foreign_repository_mutation": "none"
+    }
+  },
+  "negative_controls": {
+    "status": "PASS",
+    "controls": [
+      {"name": "wrong-package-or-manifest-binding", "status": "PASS", "evidence": "verified package requires exact manifest identity and accepted Task 008 package authorities"},
+      {"name": "excluded-older-package-a-cube-substitution", "status": "PASS", "evidence": "substitution is rejected and the excluded analysis ID is absent from output"},
+      {"name": "candidate-reorder", "status": "PASS", "evidence": "Task 009 comparator reports factual mismatch and fails closed"},
+      {"name": "native-equity-factual-drift", "status": "PASS", "evidence": "Task 009 comparator uses exact numeric equality and fails closed"},
+      {"name": "illegal-unavailable-fact-backfill", "status": "PASS", "evidence": "missing is not reinterpreted as null and cube row-local depth remains unavailable"},
+      {"name": "local-authoring-fallback", "status": "PASS", "evidence": "static mutation test and rendered 404 denial make zero local-authoring requests"},
+      {"name": "shared-viewer-bypass", "status": "PASS", "evidence": "both Learn hosts mount exactly one shared Results Viewer presentation"},
+      {"name": "explainer-canonical-contract-redefinition", "status": "PASS", "evidence": "model-output contract test rejects invented-v2"},
+      {"name": "explainer-derived-relation-injection", "status": "PASS", "evidence": "unsafe external split relation name is rejected"}
+    ],
+    "shared_artifacts_mutated": false
+  },
+  "determinism": {
+    "status": "PASS",
+    "substantive_repeat_count": 2,
+    "equivalence_run_1_sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368",
+    "equivalence_run_2_sha256": "ed8d97b1de56a190f08751a5ce158b98066f26d11aa61673cac50ca549b55368",
+    "learn_run_1_sha256": "c0d4d5451a116de1ad0abc7e27a6d4d05a36e12034d8b47ebe8711a27724d27a",
+    "learn_run_2_sha256": "c0d4d5451a116de1ad0abc7e27a6d4d05a36e12034d8b47ebe8711a27724d27a",
+    "explainer_focused_test_runs": ["12/12 PASS", "12/12 PASS"],
+    "volatile_fields_in_semantic_payload": []
+  },
+  "summary": {
+    "required_factual_mismatches": 0,
+    "unclassified_mismatches": 0,
+    "applicable_consumer_failures": 0,
+    "foreign_owner_blockers": 0,
+    "canonical_writes": "NONE",
+    "golden_engine_rerun": "NO",
+    "second_results_viewer_or_contract": "NO",
+    "benchmark_isolation": "PASS",
+    "prompt_012_executed": "NO",
+    "remaining_issue": "none"
+  },
+  "validation": [
+    {"command": "focused Python consumer contracts", "result": "80 PASS, 1 environment-inapplicable skip"},
+    {"command": "focused JavaScript Analyzer/Results Viewer/Learn/Research contracts", "result": "PASS"},
+    {"command": "validate_node_parquet_equivalence.py --verify-repeat, executed twice", "result": "PASS; 588 comparisons; 0 mismatches; cross-run byte identity"},
+    {"command": "prove_learn_canonical_consumption.py --verify-repeat, executed twice", "result": "PASS; desktop/mobile Chromium; positive and 404 no-fallback controls; cross-run byte identity"},
+    {"command": "Explainer tests.test_model_output_parquet_v1, executed twice read-only", "result": "12/12 PASS each run"},
+    {"command": "Quarto development render with temporary writable cache", "result": "PASS; 28/28 pages"},
+    {"command": "learn_glossary.py check-rendered and release_ui_static_check.py", "result": "PASS; rendered UI pages=29, findings=0"},
+    {"command": "complete Python unittest discovery", "result": "211 PASS, 1 pre-existing historical publication-identity failure, 3 skips"},
+    {"command": "scripts/testing/build/quick.sh", "result": "82 PASS, 1 pre-existing historical publication-identity failure, 1 skip; JavaScript phases PASS"},
+    {"command": "git diff --check", "result": "PASS"}
+  ],
+  "known_pre_existing_debt": {
+    "status": "nonblocking",
+    "name": "historical publication-identity scanner debt",
+    "paths": [
+      "evidence/analyzer-k001/task-009/RESULT.md",
+      "evidence/analyzer-k001/task-009/equivalence-result.json",
+      "scripts/analysis/validate_node_parquet_equivalence.py"
+    ],
+    "disposition": "preserved; accepted historical Task 009 evidence was not rewritten"
+  }
+}
