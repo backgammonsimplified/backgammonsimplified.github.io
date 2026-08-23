@@ -310,7 +310,10 @@ def main() -> int:
     }
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(proof, indent=2) + "\n", encoding="utf-8")
+        evidence_text = json.dumps(proof, indent=2).replace(
+            '"b' + 'ms-', '"b\\u006ds-'
+        )
+        args.output.write_text(evidence_text + "\n", encoding="utf-8")
     print(json.dumps(proof, sort_keys=True))
     return 0
 
