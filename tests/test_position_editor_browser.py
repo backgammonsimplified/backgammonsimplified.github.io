@@ -242,6 +242,16 @@ def main() -> int:
                 else None,
             )
             open_editor(width_page, args.url)
+            width_page.get_by_role("button", name="Analyze this position").click()
+            width_page.wait_for_function(
+                "document.querySelector('[data-bs-live-analyzer]').dataset.bsAnalyzerState === 'complete'"
+            )
+            shared_count = width_page.locator(
+                "[data-bs-analyzer-results] [data-bs-shared-analysis-presentation]"
+            ).count()
+            candidate_count = width_page.locator(
+                "[data-bs-analyzer-results] .bs-analysis-results-candidate"
+            ).count()
             dimensions = width_page.evaluate(
                 "({client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth})"
             )
@@ -250,6 +260,7 @@ def main() -> int:
             assert dimensions["scroll"] <= dimensions["client"]
             assert board_box and board_box["width"] >= (260 if width >= 390 else 248)
             assert nav_count == 1
+            assert shared_count == 1 and candidate_count >= 1
             responsive.append(
                 {
                     "width": width,
@@ -257,6 +268,8 @@ def main() -> int:
                     "page_client_width": dimensions["client"],
                     "board_width": round(board_box["width"], 2),
                     "navigation_present": nav_count == 1,
+                    "shared_viewer_present": shared_count == 1,
+                    "candidate_count": candidate_count,
                 }
             )
             width_context.close()

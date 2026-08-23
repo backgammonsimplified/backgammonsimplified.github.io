@@ -59,28 +59,36 @@
       "page_scroll_width": 1440,
       "page_client_width": 1440,
       "board_width": 566.61,
-      "navigation_present": true
+      "navigation_present": true,
+      "shared_viewer_present": true,
+      "candidate_count": 8
     },
     {
       "width": 768,
       "page_scroll_width": 768,
       "page_client_width": 768,
       "board_width": 600.56,
-      "navigation_present": true
+      "navigation_present": true,
+      "shared_viewer_present": true,
+      "candidate_count": 8
     },
     {
       "width": 390,
       "page_scroll_width": 390,
       "page_client_width": 390,
       "board_width": 338.75,
-      "navigation_present": true
+      "navigation_present": true,
+      "shared_viewer_present": true,
+      "candidate_count": 8
     },
     {
       "width": 320,
       "page_scroll_width": 320,
       "page_client_width": 320,
       "board_width": 268.75,
-      "navigation_present": true
+      "navigation_present": true,
+      "shared_viewer_present": true,
+      "candidate_count": 8
     }
   ],
   "page_errors": [],

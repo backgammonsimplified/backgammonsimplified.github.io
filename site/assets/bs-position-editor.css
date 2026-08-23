@@ -384,6 +384,13 @@
 
 .bs-analyzer-submit-row > .bs-button { min-height: 48px; }
 
+.bs-analyze-page .bs-analyzer-runtime-status code {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-all;
+}
+
 @media (min-width: 1150px) {
   .bs-editor-board-shell { grid-template-rows: 58px minmax(430px, min(46vw, 650px)) 58px; }
 }
