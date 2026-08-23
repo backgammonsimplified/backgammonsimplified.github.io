@@ -1,0 +1,207 @@
+{
+  "schema_version": "analyzer-task-016-server-request-lookup-result-v1",
+  "task": "prototype-analyzer-analysis-request-and-lookup-v1",
+  "status": "PASS",
+  "implementation": {
+    "repository": "backgammonsimplified/backgammonsimplified.github.io",
+    "branch": "agent/analyzer-server-request-lookup-v1",
+    "starting_head": "9336e4dc2c3b747d0ad336e6a0820e7588100085",
+    "final_product_head": "f2f4e7015d4bd0c0d53dd6d03cf8793a7cae2ba2",
+    "evidence_publication": "the commit containing this evidence"
+  },
+  "node_authority": {
+    "repository": "backgammonsimplified/backgammon-node",
+    "branch": "left-brain",
+    "head": "acc1e3ae44a71b18438d048d810294701ad1ed73",
+    "pr": 1,
+    "package_version": "0.1.0",
+    "execution_host": "mannitol"
+  },
+  "execution_environment": {
+    "implementation_host": "laptop-2",
+    "environment": "WSL",
+    "lane_session": "analyzer-k001",
+    "target_server_host": "mannitol"
+  },
+  "transport": {
+    "disposition": "loopback same-origin development adapter using the approved WSL -> Neotame -> Mannitol SSH control route to fixed, token-validated commands",
+    "production_api": false,
+    "browser_ssh_or_server_path_access": false,
+    "request_fields_in_remote_command_text": false,
+    "credentials_or_auth_material_in_git_browser_or_evidence": false,
+    "worker_observer": "stdin-delivered development proof harness launches one niced accepted Node CLI worker and observes Node public lifecycle states; it owns no queue, engine, parser, identity, cache, cancellation, or publication logic"
+  },
+  "existing_completed_server_lookup": {
+    "status": "PASS",
+    "analysis_key": "sha256-a7b55f2d72d95d769c7c7428198242c3bfbd16ca92e596a51fce0aa72d7b9782",
+    "source": "accepted non-golden Task 012 GNU checker record",
+    "lookup_disposition": "already_complete",
+    "native_execution_during_lookup": 0,
+    "historical_native_execution_count": 1,
+    "result_sha256": "83acb0ffc28ec7c2383bfd64dc3c89fa6d7e0dd5c8a786a151cf2e456130b6da",
+    "analysis_view_sha256": "b9b893df796dc05c68c0aa0016ca6afd97d177c41f26fafda5a9de12cf8d3bee",
+    "accepted_status_sha256_before_and_after": "c358edfcd8ce4390145b343de984cf6d4604658a1c281ec25ed5822d04a51b5c",
+    "shared_viewer_candidate_count": 8,
+    "shared_presentation_count": 1
+  },
+  "missing_request": {
+    "status": "PASS",
+    "source": "position basis retained in the accepted Node cube analysis-view fixture; composed as a distinct non-golden Task 016 request",
+    "request": {
+      "schema_version": "b\u006ds-analysis-submission-v2",
+      "engine": "gnu",
+      "decision_type": "cube",
+      "analysis_setting": "1ply",
+      "position": {
+        "format": "gnuid",
+        "id": "PAAAICMAAAAAAA:cAngAAAAAAAE"
+      },
+      "dice": null
+    },
+    "not_accepted_k001_golden_request": true,
+    "not_sourced_from_active_benchmark_lane": true,
+    "analysis_key": "sha256-298393d5bd857e4d1a14f759450efe495d5cfe8654d841a7106c1171a2655a4b",
+    "first_native_execution_count": 1,
+    "repeat_native_execution_count": 1,
+    "repeat_disposition": "explicit cache-hit UI state from Node duplicate submission",
+    "same_analysis_key_on_repeat": true,
+    "same_result_sha256_on_repeat": true,
+    "same_analysis_view_sha256_on_repeat": true,
+    "result_sha256": "05524c6883490f280aa93e9f598e7497d6500c2a5c7f4e77cd98680617505c37",
+    "analysis_view_sha256": "f5a04ad2d69e2fcad089d2fad8277d2ace4f53aa70bb5d6b829e67c19d432e6e"
+  },
+  "status_and_browser": {
+    "status": "PASS",
+    "route": "/analyze/",
+    "lookup_route_form": "/analyze/?analysis_key=<accepted-analysis-key>",
+    "first_request_states_observed": [
+      "idle",
+      "invalid",
+      "submitting",
+      "queued",
+      "running",
+      "complete"
+    ],
+    "repeat_states_observed": [
+      "submitting",
+      "cache-hit",
+      "complete"
+    ],
+    "node_terminal_failure_states_supported": [
+      "failed",
+      "timed_out",
+      "unsupported",
+      "configuration_mismatch",
+      "cancelled"
+    ],
+    "shared_viewer": "site/assets/bs-analysis-results.js renderNodeAnalysisView",
+    "shared_cube_action_count": 3,
+    "shared_presentation_count_first": 1,
+    "shared_presentation_count_repeat": 1,
+    "browser_page_errors": [],
+    "browser_console_errors": [],
+    "headless_browser_proof_output_sha256": "c8619407900be05a8e9113ccb39f76c66aff74dac1efa4c6e9744215e79c34b5"
+  },
+  "failure_path": {
+    "status": "PASS",
+    "input": "incomplete GNUID",
+    "display_state": "invalid",
+    "adapter_submission_count": 0,
+    "native_execution_count": 0,
+    "analysis_presentation_count": 0,
+    "fabricated_analysis_data": false
+  },
+  "proof_iteration_disposition": {
+    "isolated_task_runtime_only": true,
+    "records_deleted_or_forced": false,
+    "note": "Earlier bounded non-golden proof candidates were preserved in the isolated Task 016 Node runtime when two failed closed on inconsistent checker dice context and three completed before the lifecycle observer/final fixture choice was settled. The selected completion/repeat counts above apply only to the final missing request."
+  },
+  "fresh_display_boundary": {
+    "result_retrieved_from": "Node public status/result authority",
+    "analysis_view_materialized_by": "accepted Node CLI into the Node-owned Task 016 runtime",
+    "waited_for_parquet": false,
+    "parquet_or_serving_index_dependency": false,
+    "analyzer_second_durable_result_cache": false
+  },
+  "boundaries": {
+    "browser_engine_execution": false,
+    "laptop_worker_execution": false,
+    "analyzer_second_durable_analysis_cache": false,
+    "d1_writes": "NONE",
+    "canonical_writer_added": false,
+    "corpus_modified": false,
+    "benchmark_outputs_read": false,
+    "benchmark_runtime_or_artifacts_mutated": false,
+    "golden_rerun": false,
+    "node_source_modified": false,
+    "cancellation_owner_changed": false,
+    "second_results_viewer_or_schema": false
+  },
+  "benchmark_and_load_preflight": {
+    "status": "PASS",
+    "logical_cpus": 40,
+    "native_engine_process_count_before_selected_execution": 0,
+    "native_engine_process_count_after_proof": 0,
+    "selected_worker_nice_value": 10,
+    "task_runtime_isolated_from_benchmark_lane": true
+  },
+  "validation": [
+    {
+      "command": "python3 -m py_compile scripts/analyzer_local_preview.py scripts/analyzer_server_worker_observer.py tests/test_analyzer_server_browser.py; node --check site/assets/bs-analyzer-live.js; bash -n scripts/preview-analyzer-local.sh",
+      "result": "PASS"
+    },
+    {
+      "command": "node tests/test_analyzer_live.js; python3 -m unittest -v tests.test_analyzer_local_preview",
+      "result": "PASS; JavaScript lifecycle/shared-viewer contract and 10 adapter/server transport tests"
+    },
+    {
+      "command": ".venv/bin/python tests/test_analyzer_server_browser.py --url http://127.0.0.1:8871/analyze/ --browser-executable <repository Playwright Chromium> --output <temporary proof>",
+      "result": "PASS; accepted lookup, missing server request, queued/running/complete, repeat cache hit, one native attempt, shared viewer, invalid-input failure, zero browser errors"
+    },
+    {
+      "command": "XDG_CACHE_HOME=<temporary cache> BS_SKIP_SOCIAL_CARDS=1 BS_PUBLICATION_MODE=development quarto render site",
+      "result": "PASS; 28/28 pages"
+    },
+    {
+      "command": ".venv/bin/python scripts/testing/build/release_ui_static_check.py",
+      "result": "PASS; pages=29; findings=0"
+    },
+    {
+      "command": "bash scripts/testing/build/quick.sh",
+      "result": "EXPECTED HISTORICAL FAILURE ONLY; JavaScript phases PASS; 84 Python tests run: 81 pass, 1 accepted publication-identity scanner failure, 2 skips"
+    },
+    {
+      "command": "bash scripts/testing/ux/quick.sh",
+      "result": "PASS; UX helper syntax and source contracts"
+    },
+    {
+      "command": ".venv/bin/python -m unittest -v $(rg --files tests -g 'test_*.py' | sort)",
+      "result": "EXPECTED HISTORICAL FAILURE ONLY; 219 tests run: 215 pass, 1 accepted publication-identity scanner failure, 3 environment/negative-control skips"
+    },
+    {
+      "command": "publication-identity finding-map comparison against accepted Task 013 debt",
+      "result": "PASS; exact same three non-exception paths; no Task 016 finding"
+    },
+    {
+      "command": "git diff --check 9336e4dc2c3b747d0ad336e6a0820e7588100085...<final website head>",
+      "result": "PASS"
+    }
+  ],
+  "known_pre_existing_debt": {
+    "status": "nonblocking",
+    "name": "historical publication-identity scanner debt",
+    "finding_paths": [
+      "evidence/analyzer-k001/task-009/RESULT.md",
+      "evidence/analyzer-k001/task-009/equivalence-result.json",
+      "scripts/analysis/validate_node_parquet_equivalence.py"
+    ],
+    "task_016_new_finding_count": 0
+  },
+  "remote_publication": {
+    "product_checkpoint": "origin/agent/analyzer-server-request-lookup-v1@f2f4e7015d4bd0c0d53dd6d03cf8793a7cae2ba2",
+    "product_checkpoint_verified_with_ls_remote": true,
+    "evidence_checkpoint": "the published commit containing this evidence; exact final remote SHA is also recorded in the Task Management result"
+  },
+  "working_tree_disposition": "clean after evidence publication and remote verification",
+  "required_blockers": 0
+}
