@@ -1,0 +1,69 @@
+{
+  "schema_version": "analyzer-task-017-production-browser-double-v1",
+  "transport": "bounded production HTTPS protocol double",
+  "invalid_input": {
+    "submissions": 0
+  },
+  "first_request": {
+    "states": [
+      "configuring",
+      "idle",
+      "invalid",
+      "submitting",
+      "queued",
+      "queued",
+      "running",
+      "complete"
+    ],
+    "shared_presentation_count": 1,
+    "candidate_count": 8
+  },
+  "repeat_request": {
+    "states": [
+      "submitting",
+      "cache-hit",
+      "complete"
+    ],
+    "shared_presentation_count": 1
+  },
+  "existing_lookup": {
+    "shared_presentation_count": 1
+  },
+  "requests": [
+    {
+      "schema_version": "bms-analysis-submission-v2",
+      "engine": "gnu",
+      "decision_type": "checker",
+      "analysis_setting": "1ply",
+      "position": {
+        "format": "gnuid",
+        "id": "4HPwATDgc/ABMA:cAnqAAAAAAAE"
+      },
+      "dice": [4, 2]
+    },
+    {
+      "schema_version": "bms-analysis-submission-v2",
+      "engine": "gnu",
+      "decision_type": "checker",
+      "analysis_setting": "1ply",
+      "position": {
+        "format": "gnuid",
+        "id": "4HPwATDgc/ABMA:cAnqAAAAAAAE"
+      },
+      "dice": [4, 2]
+    }
+  ],
+  "keys": [
+    "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+    "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d"
+  ],
+  "page_errors": [],
+  "console_errors": [],
+  "rendered_public_gate": {
+    "state": "unavailable",
+    "submit_disabled": true,
+    "api_requests": [],
+    "page_errors": [],
+    "console_errors": []
+  }
+}

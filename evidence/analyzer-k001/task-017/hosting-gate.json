@@ -1,0 +1,27 @@
+{
+  "schema_version": "analyzer-task-017-hosting-gate-v1",
+  "inspected_on": "2026-08-23",
+  "repository": "backgammonsimplified/backgammonsimplified.github.io",
+  "github_pages": {
+    "status": "built",
+    "build_type": "legacy",
+    "source_branch": "gh-pages",
+    "source_path": "/",
+    "https_enforced": true
+  },
+  "checked_in_deployment": {
+    "publisher": "quarto publish gh-pages",
+    "application_runtime_workflow": false,
+    "public_api_runtime": false
+  },
+  "node_inner_bridge": {
+    "authority": "backgammon-node left-brain@acc1e3ae44a71b18438d048d810294701ad1ed73",
+    "server_held_secret_required": true,
+    "safe_for_direct_public_browser_use": false,
+    "complete_public_result_gateway": false
+  },
+  "hosting_deployment_compatibility": "BLOCKED",
+  "missing_dependency": "A named owner and deployable Internet-facing HTTPS application runtime with exact-origin CORS, capacity-based abuse controls, runtime-only secret delivery, Node submission/status/result integration, monitoring, and rollback.",
+  "public_configuration_enabled": false,
+  "development_ssh_promoted": false
+}

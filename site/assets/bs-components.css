@@ -634,7 +634,8 @@
 
 .bs-analyzer-runtime-status[data-bs-analyzer-state="invalid"],
 .bs-analyzer-runtime-status[data-bs-analyzer-state="failed"],
-.bs-analyzer-runtime-status[data-bs-analyzer-state="unsupported"] {
+.bs-analyzer-runtime-status[data-bs-analyzer-state="unsupported"],
+.bs-analyzer-runtime-status[data-bs-analyzer-state="unavailable"] {
   border-left-color: var(--bs-danger, #9f2f24);
 }
 

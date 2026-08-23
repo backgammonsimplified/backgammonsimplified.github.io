@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://backgammonsimplified.github.io/contracts/analyzer-public-api-v1.schema.json",
+  "title": "Backgammon Simplified Analyzer public API v1",
+  "$defs": {
+    "analysis_key": {
+      "type": "string",
+      "pattern": "^sha256-[0-9a-f]{64}$"
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "engine", "decision_type", "analysis_setting", "position", "dice"],
+      "properties": {
+        "schema_version": {"const": "bms-analysis-submission-v2"},
+        "engine": {"const": "gnu"},
+        "decision_type": {"enum": ["checker", "cube"]},
+        "analysis_setting": {"const": "1ply"},
+        "position": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format", "id"],
+          "properties": {
+            "format": {"const": "gnuid"},
+            "id": {"type": "string", "pattern": "^[A-Za-z0-9+/]{14}:[A-Za-z0-9+/]{12}$"}
+          }
+        },
+        "dice": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {"type": "integer", "minimum": 1, "maximum": 6}
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"decision_type": {"const": "checker"}}},
+          "then": {
+            "properties": {
+              "dice": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {"type": "integer", "minimum": 1, "maximum": 6}
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"decision_type": {"const": "cube"}}},
+          "then": {"properties": {"dice": {"type": "null"}}}
+        }
+      ]
+    },
+    "submit_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "analysis_key", "status", "cache_hit"],
+      "properties": {
+        "schema_version": {"const": "bms-analyzer-public-submit-v1"},
+        "analysis_key": {"$ref": "#/$defs/analysis_key"},
+        "status": {"enum": ["queued", "running", "complete"]},
+        "cache_hit": {"type": "boolean"}
+      }
+    },
+    "status_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "analysis_key", "status", "cache_hit"],
+      "properties": {
+        "schema_version": {"const": "bms-analyzer-public-status-v1"},
+        "analysis_key": {"$ref": "#/$defs/analysis_key"},
+        "status": {"enum": ["queued", "running", "complete", "cancelled", "failed", "timed_out", "unsupported", "configuration_mismatch"]},
+        "cache_hit": {"type": "boolean"}
+      }
+    },
+    "result_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "analysis_key", "status", "analysis_view"],
+      "properties": {
+        "schema_version": {"const": "bms-analyzer-public-result-v1"},
+        "analysis_key": {"$ref": "#/$defs/analysis_key"},
+        "status": {"const": "complete"},
+        "analysis_view": {
+          "type": "object",
+          "required": ["schema_version", "analysis_key"],
+          "properties": {
+            "schema_version": {"const": "bms-node-analysis-view-v0"},
+            "analysis_key": {"$ref": "#/$defs/analysis_key"}
+          }
+        }
+      }
+    },
+    "error_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "error"],
+      "properties": {
+        "schema_version": {"const": "bms-analyzer-public-error-v1"},
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "message"],
+          "properties": {
+            "code": {"enum": ["malformed_request", "request_too_large", "unsupported_capability", "unknown_analysis", "rate_limited", "cancelled", "failed", "timed_out", "unsupported", "configuration_mismatch", "node_unavailable", "service_unavailable"]},
+            "message": {"type": "string", "minLength": 1, "maxLength": 120}
+          }
+        }
+      }
+    }
+  }
+}

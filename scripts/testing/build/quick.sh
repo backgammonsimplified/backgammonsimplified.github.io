@@ -59,6 +59,7 @@ printf '\n[4/5] Focused Python contracts\n'
   tests.test_accepted_node_canonical_materialization \
   tests.test_analysis_view_materializer \
   tests.test_analyzer_local_preview \
+  tests.test_analyzer_production_boundary \
   tests.test_retrieval_workloads \
   tests.test_learn_canonical_consumption \
   -v

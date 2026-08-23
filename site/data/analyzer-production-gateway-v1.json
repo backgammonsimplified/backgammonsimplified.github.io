@@ -1,0 +1,8 @@
+{
+  "schema_version": "bms-analyzer-gateway-config-v1",
+  "enabled": false,
+  "gateway_origin": null,
+  "api_base_path": "/v1/analyzer",
+  "allowed_site_origin": "https://backgammonsimplified.github.io",
+  "max_request_bytes": 2048
+}

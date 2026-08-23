@@ -30,3 +30,9 @@ transitions so short-lived `running` states remain visible over a higher-latency
 control route. It has no engine, parser, identity, queue, cache, cancellation,
 or result-publication logic. Do not present this SSH transport as a production
 API, and do not put credentials, headers, or private keys in its configuration.
+
+The browser permits these adapter endpoints only on an explicit loopback
+hostname. Public origins instead load the strict, secret-free production config
+at `site/data/analyzer-production-gateway-v1.json`. That config is fail-closed
+and disabled until the separately owned HTTPS runtime and abuse-control gates
+in `docs/analyzer-production-request-boundary-v1.md` are commissioned.

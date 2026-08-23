@@ -1,7 +1,7 @@
 ---
 title: "Backgammon Position Analyzer"
 description: "Analyze a complete GNUID with GNU Backgammon at 1-ply and inspect checker or cube results."
-subtitle: "SERVER-BACKED PROTOTYPE :: COMPLETE GNUID"
+subtitle: "NODE-OWNED ANALYSIS :: COMPLETE GNUID"
 page-layout: full
 toc: false
 term-lookup: false
@@ -18,9 +18,9 @@ format:
 ::: {.bs-reading-column}
 
 ::: {.bs-status-panel}
-[SERVER NODE DEVELOPMENT SLICE]{.bs-status-label}
+[PUBLIC GATEWAY DEPLOYMENT PENDING]{.bs-status-label}
 
-Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-ply profile through the accepted `backgammon-node` capability. The browser stays on this loopback adapter while Node owns server lookup, queueing, execution, status, and result publication. This prototype transport is not a production API.
+Enter a complete GNU Position ID and Match ID. The Analyzer client accepts only the fixed GNU / 1-ply profile, and Node owns request identity, reuse, queueing, execution, status, and completed results. Public requests remain disabled until a separately operated HTTPS gateway and abuse-control policy are commissioned. The loopback adapter remains available for development only.
 :::
 
 ```{=html}
@@ -58,12 +58,12 @@ Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-p
     <span><strong>Setting</strong> 1-ply</span>
   </div>
 
-  <button class="bs-button bs-button-primary" type="submit">Analyze position</button>
+  <button class="bs-button bs-button-primary" type="submit" disabled>Analyze position</button>
 </form>
 
 <section class="bs-analyzer-runtime-status" data-bs-analyzer-state="idle" aria-live="polite" aria-atomic="true">
   <span class="bs-status-label" data-bs-analyzer-state-label>idle</span>
-  <p data-bs-analyzer-state-detail>Enter a complete GNUID to begin.</p>
+  <p data-bs-analyzer-state-detail>Checking the public Analyzer gateway.</p>
   <code data-bs-analyzer-key hidden></code>
 </section>
 ```

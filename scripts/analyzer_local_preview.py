@@ -31,6 +31,7 @@ LOCAL_AUTHORITY = "loopback-development-adapter"
 SERVER_CONFIG_SCHEMA = "b" + "ms-analyzer-server-transport-v1"
 SUBMISSION_SCHEMA = "b" + "ms-analysis-submission-v2"
 NODE_VIEW_SCHEMA = "b" + "ms-node-analysis-view-v0"
+MAX_REQUEST_BYTES = 2_048
 ANALYSIS_KEY = re.compile(r"^sha256-[0-9a-f]{64}$")
 GNU_ID = re.compile(r"^[A-Za-z0-9+/]{14}:[A-Za-z0-9+/]{12}$")
 SAFE_REMOTE_VALUE = re.compile(r"^[A-Za-z0-9_./:=@,+-]+$")
@@ -65,19 +66,37 @@ def load_json(path: Path) -> dict[str, Any]:
 def normalize_product_request(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise AdapterError("malformed_request", "The analysis request must be a JSON object.")
+    if set(value) != {
+        "schema_version",
+        "engine",
+        "decision_type",
+        "analysis_setting",
+        "position",
+        "dice",
+    }:
+        raise AdapterError("malformed_request", "The analysis request has unsupported fields.")
+    if value.get("schema_version") != SUBMISSION_SCHEMA:
+        raise AdapterError("malformed_request", "The analysis request schema is unsupported.")
     if value.get("engine") != "gnu" or value.get("analysis_setting") != "1ply":
         raise AdapterError(
             "unsupported_capability",
             "This local product slice supports only GNU at 1-ply.",
             422,
         )
-    gnuid = value.get("gnuid")
-    if not isinstance(gnuid, str) or GNU_ID.fullmatch(gnuid.strip()) is None:
+    position = value.get("position")
+    if not isinstance(position, dict) or set(position) != {"format", "id"}:
+        raise AdapterError("malformed_request", "The position must be a complete GNUID.")
+    gnuid = position.get("id")
+    if (
+        position.get("format") != "gnuid"
+        or not isinstance(gnuid, str)
+        or GNU_ID.fullmatch(gnuid) is None
+    ):
         raise AdapterError(
             "malformed_request",
             "Enter a complete GNU Position ID and Match ID separated by a colon.",
         )
-    decision = value.get("decision")
+    decision = value.get("decision_type")
     if decision not in {"checker", "cube"}:
         raise AdapterError("malformed_request", "Choose a checker or cube decision.")
     dice = value.get("dice")
@@ -101,7 +120,7 @@ def normalize_product_request(value: Any) -> dict[str, Any]:
         "engine": "gnu",
         "decision_type": decision,
         "analysis_setting": "1ply",
-        "position": {"format": "gnuid", "id": gnuid.strip()},
+        "position": {"format": "gnuid", "id": gnuid},
         "dice": dice if decision == "checker" else None,
     }
 
@@ -774,7 +793,7 @@ class AnalyzerHandler(SimpleHTTPRequestHandler):
             length = int(self.headers.get("Content-Length", "0"))
         except ValueError:
             length = 0
-        if length < 1 or length > 16_384:
+        if length < 1 or length > MAX_REQUEST_BYTES:
             self._error(AdapterError("malformed_request", "The request body size is invalid."))
             return
         try:

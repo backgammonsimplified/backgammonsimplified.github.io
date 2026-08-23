@@ -25,6 +25,7 @@ project:
     - data/analyzer-canonical-cube-preview.json
     - data/analyzer-node-k001-lesson-preview.json
     - data/analyzer-node-k001-local-authoring-preview.json
+    - data/analyzer-production-gateway-v1.json
     - "data/engine-benchmark/**"
     - "engine-benchmark/**/figures/**"
     - "engine-benchmark/**/tables/**"

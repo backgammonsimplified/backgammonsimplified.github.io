@@ -16,6 +16,21 @@ SPEC.loader.exec_module(ADAPTER)
 NON_GOLDEN = "4HPwATDgc/ABMA:cAnqAAAAAAAE"
 
 
+def product_request(
+    gnuid=NON_GOLDEN, decision="checker", dice=None, **changes
+):
+    value = {
+        "schema_version": ADAPTER.SUBMISSION_SCHEMA,
+        "engine": "gnu",
+        "decision_type": decision,
+        "analysis_setting": "1ply",
+        "position": {"format": "gnuid", "id": gnuid},
+        "dice": [4, 2] if dice is None and decision == "checker" else dice,
+    }
+    value.update(changes)
+    return value
+
+
 def server_config():
     return {
         "schema_version": ADAPTER.SERVER_CONFIG_SCHEMA,
@@ -62,51 +77,27 @@ def subprocess_result(returncode, stdout):
 class AnalyzerLocalPreviewTests(unittest.TestCase):
     def test_normalizes_fixed_gnu_checker_and_cube_requests(self):
         checker = ADAPTER.normalize_product_request(
-            {
-                "gnuid": NON_GOLDEN,
-                "decision": "checker",
-                "dice": [4, 2],
-                "engine": "gnu",
-                "analysis_setting": "1ply",
-            }
+            product_request()
         )
         self.assertEqual(checker["schema_version"], "b" + "ms-analysis-submission-v2")
         self.assertEqual(checker["position"], {"format": "gnuid", "id": NON_GOLDEN})
         self.assertEqual(checker["dice"], [4, 2])
         cube = ADAPTER.normalize_product_request(
-            {
-                "gnuid": "4HPwATDgc/ABMA:cAngAAAAAAAE",
-                "decision": "cube",
-                "dice": None,
-                "engine": "gnu",
-                "analysis_setting": "1ply",
-            }
+            product_request(
+                gnuid="4HPwATDgc/ABMA:cAngAAAAAAAE",
+                decision="cube",
+                dice=None,
+            )
         )
         self.assertIsNone(cube["dice"])
 
     def test_rejects_incomplete_gnuid_checker_dice_and_cube_dice(self):
         invalid = [
-            {
-                "gnuid": "4HPwATDgc/ABMA",
-                "decision": "cube",
-                "dice": None,
-                "engine": "gnu",
-                "analysis_setting": "1ply",
-            },
-            {
-                "gnuid": NON_GOLDEN,
-                "decision": "checker",
-                "dice": [0, 7],
-                "engine": "gnu",
-                "analysis_setting": "1ply",
-            },
-            {
-                "gnuid": NON_GOLDEN,
-                "decision": "cube",
-                "dice": [4, 2],
-                "engine": "gnu",
-                "analysis_setting": "1ply",
-            },
+            product_request(gnuid="4HPwATDgc/ABMA", decision="cube", dice=None),
+            product_request(dice=[0, 7]),
+            product_request(decision="cube", dice=[4, 2]),
+            product_request(command="uname"),
+            product_request(position={"format": "gnuid", "id": NON_GOLDEN, "path": "/srv/private"}),
         ]
         for request in invalid:
             with self.subTest(request=request), self.assertRaises(ADAPTER.AdapterError):
@@ -115,13 +106,7 @@ class AnalyzerLocalPreviewTests(unittest.TestCase):
     def test_submit_consumes_node_cache_disposition(self):
         with tempfile.TemporaryDirectory() as temporary:
             coordinator = ADAPTER.NodeCoordinator(Path(temporary), ["fake-node"])
-            request = {
-                "gnuid": NON_GOLDEN,
-                "decision": "checker",
-                "dice": [4, 2],
-                "engine": "gnu",
-                "analysis_setting": "1ply",
-            }
+            request = product_request()
             key = "sha256-" + "1" * 64
             with mock.patch.object(
                 coordinator,
@@ -187,13 +172,7 @@ class AnalyzerLocalPreviewTests(unittest.TestCase):
             json.dumps({"analysis_key": key, "status": "queued", "cache_hit": False})
             + "\n",
         )
-        request = {
-            "gnuid": NON_GOLDEN,
-            "decision": "checker",
-            "dice": [3, 1],
-            "engine": "gnu",
-            "analysis_setting": "1ply",
-        }
+        request = product_request(dice=[3, 1])
         with mock.patch.object(coordinator.transport, "run", return_value=completed) as run, mock.patch.object(
             coordinator, "_launch_worker"
         ) as launch:
@@ -306,7 +285,8 @@ class AnalyzerLocalPreviewTests(unittest.TestCase):
         self.assertIn("renderNodeAnalysisView", page_script)
         self.assertNotIn("createElement(\"table\")", page_script)
         self.assertNotIn("gnubg", page_script.lower())
-        self.assertNotIn("ssh", page_script.lower())
+        self.assertNotIn("control_command", page_script.lower())
+        self.assertNotIn("subprocess", page_script.lower())
         self.assertIn('"backgammon_node.cli"', observer)
         self.assertNotIn("from backgammon_node", observer)
 
