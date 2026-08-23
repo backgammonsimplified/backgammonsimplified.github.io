@@ -1,7 +1,7 @@
 ---
 title: "Backgammon Position Analyzer"
 description: "Analyze a complete GNUID with GNU Backgammon at 1-ply and inspect checker or cube results."
-subtitle: "LOCAL ANALYSIS :: COMPLETE GNUID"
+subtitle: "SERVER-BACKED PROTOTYPE :: COMPLETE GNUID"
 page-layout: full
 toc: false
 term-lookup: false
@@ -18,9 +18,9 @@ format:
 ::: {.bs-reading-column}
 
 ::: {.bs-status-panel}
-[LOCAL DEVELOPMENT SLICE]{.bs-status-label}
+[SERVER NODE DEVELOPMENT SLICE]{.bs-status-label}
 
-Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-ply profile through the existing local `backgammon-node` capability. This loopback adapter is not a production API.
+Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-ply profile through the accepted `backgammon-node` capability. The browser stays on this loopback adapter while Node owns server lookup, queueing, execution, status, and result publication. This prototype transport is not a production API.
 :::
 
 ```{=html}

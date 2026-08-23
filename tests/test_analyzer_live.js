@@ -76,4 +76,64 @@ assert.throws(
   /Unsupported Node analysis-view schema/
 );
 
-console.log("interactive Analyzer normalization and shared-viewer mapping passed");
+assert.match(checkerView.analysis_key, live.ANALYSIS_KEY);
+assert.equal(live.LOOKUP_ROOT, "/__bs_local_analysis/lookup/");
+
+function fakeSurface() {
+  const label = { textContent: "" };
+  const detail = { textContent: "" };
+  const key = { textContent: "", hidden: true };
+  const results = { replaceChildren() {} };
+  return {
+    dataset: {},
+    querySelector(selector) {
+      return {
+        "[data-bs-analyzer-state-label]": label,
+        "[data-bs-analyzer-state-detail]": detail,
+        "[data-bs-analyzer-key]": key,
+        "[data-bs-analyzer-results]": results
+      }[selector];
+    }
+  };
+}
+
+(async function () {
+  const surface = fakeSurface();
+  const states = [];
+  const payloads = [
+    { ok: true, status: "queued" },
+    { ok: true, status: "running" },
+    { ok: true, status: "complete", analysis_view: checkerView }
+  ];
+  live.setState(surface, "queued", "queued");
+  await live.pollUntilComplete(surface, checkerView.analysis_key, {
+    pollInterval: 1,
+    fetchJson: async function () {
+      states.push(surface.dataset.bsAnalyzerState);
+      return payloads.shift();
+    },
+    renderNodeAnalysisView: function (_target, value) {
+      assert.equal(value.analysis_key, checkerView.analysis_key);
+    }
+  });
+  assert.deepEqual(states, ["queued", "queued", "running"]);
+  assert.equal(surface.dataset.bsAnalyzerState, "complete");
+
+  const lookupSurface = fakeSurface();
+  const lookupStates = [];
+  await live.loadAnalysisKey(lookupSurface, checkerView.analysis_key, {
+    pollInterval: 1,
+    fetchJson: async function () {
+      lookupStates.push(lookupSurface.dataset.bsAnalyzerState);
+      return { ok: true, status: "complete", analysis_view: checkerView };
+    },
+    renderNodeAnalysisView: function () {}
+  });
+  assert.deepEqual(lookupStates, ["looking-up", "already-complete"]);
+  assert.equal(lookupSurface.dataset.bsAnalyzerState, "complete");
+
+  console.log("interactive Analyzer server lifecycle and shared-viewer mapping passed");
+})().catch(function (error) {
+  console.error(error);
+  process.exitCode = 1;
+});

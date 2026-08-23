@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 PORT="${1:-8765}"
 ANALYZER_PYTHON="${BS_ANALYZER_PYTHON:-${REPO_ROOT}/.venv/bin/python}"
+SERVER_CONFIG="${BS_ANALYZER_SERVER_CONFIG:-}"
 
 if [[ ! -x "${ANALYZER_PYTHON}" ]]; then
   printf 'ERROR: Set BS_ANALYZER_PYTHON to Python with backgammon-node 0.1.0 installed.\n' >&2
@@ -27,4 +28,15 @@ if [[ "${ANALYZER_PYTHON}" == *.exe ]]; then
   export WSLENV="${NODE_RUNTIME_VARIABLE}${WSLENV:+:${WSLENV}}"
 fi
 
-exec "${ANALYZER_PYTHON}" scripts/analyzer_local_preview.py --port "${PORT}"
+server_args=()
+if [[ -n "${SERVER_CONFIG}" ]]; then
+  [[ -f "${SERVER_CONFIG}" ]] || {
+    printf 'ERROR: BS_ANALYZER_SERVER_CONFIG is not a readable file.\n' >&2
+    exit 2
+  }
+  server_args+=(--server-config "${SERVER_CONFIG}")
+fi
+
+exec "${ANALYZER_PYTHON}" scripts/analyzer_local_preview.py \
+  --port "${PORT}" \
+  "${server_args[@]}"

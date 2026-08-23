@@ -8,8 +8,17 @@
   "use strict";
 
   const GNU_ID = /^[A-Za-z0-9+/]{14}:[A-Za-z0-9+/]{12}$/;
+  const ANALYSIS_KEY = /^sha256-[0-9a-f]{64}$/;
   const SUBMIT_URL = "/__bs_local_analysis/submit";
   const STATUS_ROOT = "/__bs_local_analysis/status/";
+  const LOOKUP_ROOT = "/__bs_local_analysis/lookup/";
+  const FAILURE_STATES = [
+    "failed",
+    "timed_out",
+    "unsupported",
+    "configuration_mismatch",
+    "cancelled"
+  ];
 
   function normalizeInput(value) {
     const decision = String(value.decision || "").trim().toLowerCase();
@@ -58,11 +67,11 @@
     try {
       payload = await response.json();
     } catch (_error) {
-      throw new Error("The local analysis adapter returned an unreadable response.");
+      throw new Error("The Analyzer development adapter returned an unreadable response.");
     }
     if (!response.ok || payload.ok === false) {
       const detail = payload.error && payload.error.message;
-      const error = new Error(detail || "The local analysis adapter rejected the request.");
+      const error = new Error(detail || "The Analyzer development adapter rejected the request.");
       error.code = payload.error && payload.error.code;
       throw error;
     }
@@ -120,14 +129,16 @@
         setState(
           surface,
           "complete",
-          options && options.cacheHit
-            ? "Complete. Node reused the existing result."
-            : "Complete. The Node result is shown below.",
+          options && options.existingLookup
+            ? "Complete. The accepted server Node result is shown below."
+            : options && options.cacheHit
+              ? "Complete. Node reused the existing result."
+              : "Complete. The server Node result is shown below.",
           analysisKey
         );
         return payload;
       }
-      if (["failed", "timed_out", "unsupported", "configuration_mismatch"].includes(payload.status)) {
+      if (FAILURE_STATES.includes(payload.status)) {
         const error = new Error(
           (payload.error && payload.error.message) ||
             "The Node analysis did not complete."
@@ -135,8 +146,50 @@
         error.code = payload.status;
         throw error;
       }
-      setState(surface, "running", "GNU 1-ply analysis is running locally.", analysisKey);
+      if (payload.status === "queued") {
+        setState(surface, "queued", "The server Node request is queued.", analysisKey);
+      } else if (payload.status === "running") {
+        setState(surface, "running", "GNU 1-ply analysis is running on the server Node.", analysisKey);
+      } else {
+        const error = new Error("The server Node returned an unsupported lifecycle state.");
+        error.code = "configuration_mismatch";
+        throw error;
+      }
       await wait(interval);
+    }
+  }
+
+  async function loadAnalysisKey(surface, analysisKey, options) {
+    const key = String(analysisKey || "").trim();
+    const results = surface.querySelector("[data-bs-analyzer-results]");
+    const load = (options && options.fetchJson) || fetchJson;
+    if (!ANALYSIS_KEY.test(key)) {
+      const error = new Error("The server analysis key is invalid.");
+      setState(surface, "invalid", error.message);
+      return { ok: false, error: error };
+    }
+    results.replaceChildren();
+    try {
+      setState(surface, "looking-up", "Looking up the accepted server Node result.", key);
+      const payload = await load(LOOKUP_ROOT + encodeURIComponent(key), {
+        credentials: "same-origin"
+      });
+      if (payload.status === "complete") {
+        setState(surface, "already-complete", "Node found an already completed server result.", key);
+      }
+      return await pollUntilComplete(
+        surface,
+        key,
+        Object.assign({}, options || {}, { existingLookup: true })
+      );
+    } catch (error) {
+      setState(
+        surface,
+        FAILURE_STATES.includes(error.code) ? error.code : "failed",
+        error.message,
+        key
+      );
+      return { ok: false, error: error };
     }
   }
 
@@ -157,7 +210,7 @@
     button.disabled = true;
     results.replaceChildren();
     try {
-      setState(surface, "starting", "Submitting to the local Node capability.");
+      setState(surface, "submitting", "Looking up or submitting through the server Node boundary.");
       const submitted = await load(SUBMIT_URL, {
         method: "POST",
         credentials: "same-origin",
@@ -171,11 +224,25 @@
           "Node found the completed analysis and skipped engine execution.",
           submitted.analysis_key
         );
-      } else {
+      } else if (submitted.status === "queued") {
+        setState(
+          surface,
+          "queued",
+          "Node accepted the request and placed it in the server queue.",
+          submitted.analysis_key
+        );
+      } else if (submitted.status === "running") {
         setState(
           surface,
           "running",
-          "Node accepted the request; GNU 1-ply analysis is running locally.",
+          "GNU 1-ply analysis is running on the server Node.",
+          submitted.analysis_key
+        );
+      } else if (submitted.status === "complete") {
+        setState(
+          surface,
+          "already-complete",
+          "Node found an already completed server result.",
           submitted.analysis_key
         );
       }
@@ -187,9 +254,11 @@
     } catch (error) {
       setState(
         surface,
-        error.code === "unsupported_capability" || error.code === "unsupported"
+        error.code === "unsupported_capability"
           ? "unsupported"
-          : "failed",
+          : FAILURE_STATES.includes(error.code)
+            ? error.code
+            : "failed",
         error.message
       );
       return { ok: false, error: error };
@@ -212,7 +281,15 @@
     });
     decisionChanged(form);
     setState(surface, "idle", "Enter a complete GNUID to begin.");
-    return { submit: function () { return submitSurface(surface, options); } };
+    const controller = {
+      lookup: function (key) { return loadAnalysisKey(surface, key, options); },
+      submit: function () { return submitSurface(surface, options); }
+    };
+    if (typeof globalThis.location !== "undefined") {
+      const key = new URLSearchParams(globalThis.location.search).get("analysis_key");
+      if (key) controller.lookup(key);
+    }
+    return controller;
   }
 
   function mountAll() {
@@ -230,11 +307,14 @@
   }
 
   return {
+    ANALYSIS_KEY: ANALYSIS_KEY,
     GNU_ID: GNU_ID,
+    LOOKUP_ROOT: LOOKUP_ROOT,
     STATUS_ROOT: STATUS_ROOT,
     SUBMIT_URL: SUBMIT_URL,
     decisionChanged: decisionChanged,
     fetchJson: fetchJson,
+    loadAnalysisKey: loadAnalysisKey,
     mount: mount,
     mountAll: mountAll,
     normalizeInput: normalizeInput,
