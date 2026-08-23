@@ -13,6 +13,7 @@ project:
     - "assets/social/generated/*.png"
     - assets/bs-glossary.js
     - assets/bs-analyzer-live.js
+    - assets/bs-position-editor.js
     - assets/bs-glossary-lookup.json
     - assets/bs-learn-sequence.json
     - assets/bs-research-sequence.json
@@ -88,6 +89,7 @@ format:
       - assets/bs-learn.css
       - assets/bs-lesson-analysis.css
       - assets/bs-analysis-results.css
+      - assets/bs-position-editor.css
     include-after-body:
       - includes/bs-scripts.html
     include-in-header:

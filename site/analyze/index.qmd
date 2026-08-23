@@ -1,7 +1,7 @@
 ---
 title: "Backgammon Position Analyzer"
-description: "Analyze a complete GNUID with GNU Backgammon at 1-ply and inspect checker or cube results."
-subtitle: "SERVER-BACKED PROTOTYPE :: COMPLETE GNUID"
+description: "Build a backgammon position on an interactive board and analyze the resulting complete GNUID with GNU Backgammon."
+subtitle: "INTERACTIVE POSITION EDITOR :: GNU / 1-PLY"
 page-layout: full
 toc: false
 term-lookup: false
@@ -18,57 +18,136 @@ format:
 ::: {.bs-reading-column}
 
 ::: {.bs-status-panel}
-[SERVER NODE DEVELOPMENT SLICE]{.bs-status-label}
+[INTERACTIVE ANALYZER DEVELOPMENT SLICE]{.bs-status-label}
 
-Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-ply profile through the accepted `backgammon-node` capability. The browser stays on this loopback adapter while Node owns server lookup, queueing, execution, status, and result publication. This prototype transport is not a production API.
+Build the position directly on the board. The editor creates a complete GNU Position ID and Match ID, then submits the accepted GNU / 1-ply request through the existing development-only Analyzer lifecycle. Engine analysis remains on Node; completed analysis still uses the shared Results Viewer.
+:::
+
 :::
 
 ```{=html}
-<form class="bs-analyzer-request" data-bs-analyzer-form novalidate>
-  <div class="bs-analyzer-field">
-    <label for="bs-analyzer-gnuid">Complete GNUID</label>
-    <input id="bs-analyzer-gnuid" name="gnuid" type="text" autocomplete="off" spellcheck="false" placeholder="PositionID:MatchID" aria-describedby="bs-analyzer-gnuid-help" required>
-    <p id="bs-analyzer-gnuid-help" class="bs-analyzer-field-help">Include both the 14-character Position ID and 12-character Match ID.</p>
+<form class="bs-analyzer-request bs-position-workspace-form" data-bs-analyzer-form novalidate>
+  <div class="bs-position-editor" data-bs-position-editor>
+    <section class="bs-editor-board-panel" aria-labelledby="bs-editor-board-heading">
+      <header class="bs-editor-section-heading">
+        <div><span class="bs-status-label">POSITION</span><h2 id="bs-editor-board-heading">Edit the board</h2></div>
+        <span class="bs-editor-turn-pill" data-bs-editor-turn-summary>Navy on roll</span>
+      </header>
+
+      <div class="bs-editor-toolbar" aria-label="Board actions">
+        <button type="button" class="bs-button" data-bs-editor-action="start">Starting position</button>
+        <button type="button" class="bs-button" data-bs-editor-action="clear">Clear board</button>
+        <button type="button" class="bs-button" data-bs-editor-action="undo">Undo</button>
+        <button type="button" class="bs-button" data-bs-editor-action="flip">Flip view</button>
+        <button type="button" class="bs-button" data-bs-editor-action="remove">Remove selected</button>
+      </div>
+
+      <fieldset class="bs-editor-placement-side">
+        <legend>Checker to place from an off tray</legend>
+        <label><input type="radio" name="placement-side" value="player_0" checked> <span class="bs-player-dot bs-player-dot--player_0"></span> Copper</label>
+        <label><input type="radio" name="placement-side" value="player_1"> <span class="bs-player-dot bs-player-dot--player_1"></span> Navy</label>
+      </fieldset>
+
+      <p class="bs-editor-instructions" id="bs-editor-instructions">Drag a checker, or select one and then select a point, bar, or off tray. With no checker selected, choosing a point places the selected colour from its off tray. Keyboard: <kbd>Enter</kbd> or <kbd>Space</kbd> selects and places; <kbd>Delete</kbd> removes a focused checker.</p>
+
+      <div class="bs-editor-board-shell">
+        <div class="bs-editor-off bs-editor-off--navy" data-bs-editor-off="player_1"></div>
+        <div class="bs-editor-board" data-bs-editor-board aria-describedby="bs-editor-instructions"></div>
+        <div class="bs-editor-off bs-editor-off--copper" data-bs-editor-off="player_0"></div>
+      </div>
+
+      <div class="bs-editor-board-meta" aria-label="Checker totals">
+        <span><i class="bs-player-dot bs-player-dot--player_0"></i> Copper: <strong data-bs-editor-total="player_0">15</strong></span>
+        <span><i class="bs-player-dot bs-player-dot--player_1"></i> Navy: <strong data-bs-editor-total="player_1">15</strong></span>
+      </div>
+      <p class="bs-editor-announcement" data-bs-editor-announcement aria-live="polite" aria-atomic="true"></p>
+    </section>
+
+    <section class="bs-editor-controls" aria-labelledby="bs-editor-controls-heading">
+      <header class="bs-editor-section-heading"><div><span class="bs-status-label">POSITION FACTS</span><h2 id="bs-editor-controls-heading">Decision and match state</h2></div></header>
+
+      <fieldset class="bs-analyzer-decision">
+        <legend>Decision</legend>
+        <label><input type="radio" name="decision" value="checker" checked> Checker</label>
+        <label><input type="radio" name="decision" value="cube"> Cube</label>
+      </fieldset>
+
+      <fieldset class="bs-analyzer-decision">
+        <legend>Player on roll</legend>
+        <label><input type="radio" name="on_roll" value="player_0"> Copper</label>
+        <label><input type="radio" name="on_roll" value="player_1" checked> Navy</label>
+      </fieldset>
+
+      <fieldset class="bs-analyzer-dice" data-bs-checker-dice>
+        <legend>Checker dice</legend>
+        <label for="bs-analyzer-die-1">Die 1</label>
+        <select id="bs-analyzer-die-1" name="die1" data-bs-checker-die required>
+          <option value="">Choose</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        </select>
+        <label for="bs-analyzer-die-2">Die 2</label>
+        <select id="bs-analyzer-die-2" name="die2" data-bs-checker-die required>
+          <option value="">Choose</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        </select>
+      </fieldset>
+
+      <div class="bs-editor-control-grid">
+        <label for="bs-editor-cube-value">Cube value
+          <select id="bs-editor-cube-value" name="cube_value">
+            <option>1</option><option>2</option><option>4</option><option>8</option><option>16</option><option>32</option><option>64</option><option>128</option><option>256</option><option>512</option><option>1024</option><option>2048</option><option>4096</option><option>8192</option><option>16384</option><option>32768</option>
+          </select>
+        </label>
+        <label for="bs-editor-cube-owner">Cube owner
+          <select id="bs-editor-cube-owner" name="cube_owner"><option value="centered">Centered</option><option value="player_0">Copper</option><option value="player_1">Navy</option></select>
+        </label>
+        <label for="bs-editor-match-length">Match length <span>(0 = unlimited)</span>
+          <input id="bs-editor-match-length" name="match_length" type="number" inputmode="numeric" min="0" max="32767" step="1">
+        </label>
+        <label for="bs-editor-score-player-0">Copper score
+          <input id="bs-editor-score-player-0" name="score_player_0" type="number" inputmode="numeric" min="0" max="32767" step="1">
+        </label>
+        <label for="bs-editor-score-player-1">Navy score
+          <input id="bs-editor-score-player-1" name="score_player_1" type="number" inputmode="numeric" min="0" max="32767" step="1">
+        </label>
+      </div>
+
+      <div class="bs-editor-rules">
+        <label><input type="checkbox" name="crawford"> Crawford game</label>
+        <label><input type="checkbox" name="jacoby"> Jacoby rule</label>
+      </div>
+
+      <section class="bs-editor-identifier" aria-labelledby="bs-editor-identifier-heading">
+        <h3 id="bs-editor-identifier-heading">Complete GNUID</h3>
+        <textarea data-bs-editor-identifier-output rows="2" readonly spellcheck="false" aria-label="Generated complete GNUID"></textarea>
+        <button type="button" class="bs-button" data-bs-editor-action="copy">Copy GNUID</button>
+      </section>
+
+      <section class="bs-editor-import" aria-labelledby="bs-editor-import-heading">
+        <h3 id="bs-editor-import-heading">Import complete GNUID</h3>
+        <label class="visually-hidden" for="bs-editor-import-value">Complete GNUID to import</label>
+        <input id="bs-editor-import-value" data-bs-editor-import type="text" autocomplete="off" spellcheck="false" placeholder="PositionID:MatchID">
+        <button type="button" class="bs-button" data-bs-editor-action="import">Load into editor</button>
+      </section>
+
+      <div class="bs-editor-errors" data-bs-editor-errors role="alert" hidden></div>
+    </section>
   </div>
 
-  <fieldset class="bs-analyzer-decision">
-    <legend>Decision</legend>
-    <label><input type="radio" name="decision" value="checker" checked> Checker</label>
-    <label><input type="radio" name="decision" value="cube"> Cube</label>
-  </fieldset>
+  <input id="bs-analyzer-gnuid" name="gnuid" type="hidden">
 
-  <fieldset class="bs-analyzer-dice" data-bs-checker-dice>
-    <legend>Checker dice</legend>
-    <label for="bs-analyzer-die-1">Die 1</label>
-    <select id="bs-analyzer-die-1" name="die1" data-bs-checker-die required>
-      <option value="">Choose</option>
-      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-      <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-    </select>
-    <label for="bs-analyzer-die-2">Die 2</label>
-    <select id="bs-analyzer-die-2" name="die2" data-bs-checker-die required>
-      <option value="">Choose</option>
-      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-      <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-    </select>
-  </fieldset>
-
-  <div class="bs-analyzer-profile" aria-label="Fixed analysis profile">
-    <span><strong>Engine</strong> GNU</span>
-    <span><strong>Setting</strong> 1-ply</span>
+  <div class="bs-analyzer-submit-row">
+    <div class="bs-analyzer-profile" aria-label="Fixed analysis profile">
+      <span><strong>Engine</strong> GNU</span><span><strong>Setting</strong> 1-ply</span><span><strong>Transport</strong> development only</span>
+    </div>
+    <button class="bs-button bs-button-primary" type="submit">Analyze this position</button>
   </div>
-
-  <button class="bs-button bs-button-primary" type="submit">Analyze position</button>
 </form>
 
 <section class="bs-analyzer-runtime-status" data-bs-analyzer-state="idle" aria-live="polite" aria-atomic="true">
   <span class="bs-status-label" data-bs-analyzer-state-label>idle</span>
-  <p data-bs-analyzer-state-detail>Enter a complete GNUID to begin.</p>
+  <p data-bs-analyzer-state-detail>Edit the board and position facts, then analyze.</p>
   <code data-bs-analyzer-key hidden></code>
 </section>
 ```
-
-:::
 
 ::: {.bs-analyzer-live-results}
 ```{=html}
@@ -80,11 +159,7 @@ Enter a complete GNU Position ID and Match ID. Analysis uses the fixed GNU / 1-p
 
 ::: {.bs-reading-column}
 
-## Separate XGID board preview
-
-The retained Shiny tool only previews an XGID. It does not feed the GNUID analysis form above, and this task does not convert XGID to GNUID.
-
-[Open the separate XGID preview →](https://backgammon-simplified.shinyapps.io/position-dashboard/)
+The editor permits structurally valid analysis positions; it does not judge move legality or reconstruct game history. The complete GNUID is generated locally from factual board and match state. GNU still performs all checker and cube analysis through the accepted Node request boundary.
 
 :::
 

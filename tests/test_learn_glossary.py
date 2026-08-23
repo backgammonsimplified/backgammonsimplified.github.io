@@ -540,10 +540,9 @@ private code phrase
         analyze = (learn_glossary.SITE_ROOT / "analyze" / "index.qmd").read_text(
             encoding="utf-8"
         )
-        self.assertIn(
-            "](https://backgammon-simplified.shinyapps.io/",
-            analyze,
-        )
+        self.assertIn("data-bs-position-editor", analyze)
+        self.assertIn("data-bs-analyzer-results", analyze)
+        self.assertNotIn("shinyapps.io", analyze)
         self.assertIn("bs-analyze-page", analyze)
         self.assertIn("term-lookup: false", analyze)
 

@@ -280,7 +280,7 @@
       submitSurface(surface, options);
     });
     decisionChanged(form);
-    setState(surface, "idle", "Enter a complete GNUID to begin.");
+    setState(surface, "idle", "Edit the board and position facts, then analyze.");
     const controller = {
       lookup: function (key) { return loadAnalysisKey(surface, key, options); },
       submit: function () { return submitSurface(surface, options); }

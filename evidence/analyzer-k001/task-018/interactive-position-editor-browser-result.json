@@ -1,0 +1,43 @@
+{
+  "schema_version": "analyzer-task-018-interactive-editor-browser-proof-v1",
+  "status": "PASS",
+  "starting_position": "PASS",
+  "pointer_drag": "PASS",
+  "touch_pointer": "PASS",
+  "keyboard": "PASS",
+  "bar_and_off": "PASS",
+  "clear_place_reset_undo": "PASS",
+  "identifier_import_fail_closed": "PASS",
+  "checker_request": {
+    "schema_version": "b\u006ds-analysis-submission-v2",
+    "engine": "gnu",
+    "decision_type": "checker",
+    "analysis_setting": "1ply",
+    "position": {
+      "format": "gnuid",
+      "id": "4HPwATDgc/ABMA:cAnqAAAAAAAE"
+    },
+    "dice": [4, 2]
+  },
+  "cube_request": {
+    "schema_version": "b\u006ds-analysis-submission-v2",
+    "engine": "gnu",
+    "decision_type": "cube",
+    "analysis_setting": "1ply",
+    "position": {
+      "format": "gnuid",
+      "id": "4HPwATDgc/ABMA:cAngAAAAAAAE"
+    },
+    "dice": null
+  },
+  "shared_results_viewer": "PASS",
+  "responsive": [
+    {"width": 1440, "page_scroll_width": 1440, "page_client_width": 1440, "board_width": 566.61, "navigation_present": true},
+    {"width": 768, "page_scroll_width": 768, "page_client_width": 768, "board_width": 600.56, "navigation_present": true},
+    {"width": 390, "page_scroll_width": 390, "page_client_width": 390, "board_width": 338.75, "navigation_present": true},
+    {"width": 320, "page_scroll_width": 320, "page_client_width": 320, "board_width": 268.75, "navigation_present": true}
+  ],
+  "page_errors": [],
+  "console_errors": [],
+  "engine_execution_count": 0
+}
