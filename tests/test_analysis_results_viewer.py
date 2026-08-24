@@ -132,8 +132,10 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
         self.assertIn('"vs best"', script)
         self.assertIn("details.open = true", script)
         self.assertNotIn("other.open = false", script)
-        self.assertIn("candidate.move_board || originalBoard", script)
-        self.assertNotIn("candidate.result_board", script)
+        self.assertIn('mode === "result"', script)
+        self.assertIn("activeCandidate.result_board", script)
+        self.assertIn("activeCandidate.move_board", script)
+        self.assertIn("No candidate board was inferred", script)
         self.assertIn("shell.append(boardSection, analysisSection)", script)
         self.assertIn("article.append(header, presentation.element)", script)
         self.assertIn(".bs-analysis-results-shell", css)
@@ -158,14 +160,16 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
 
         self.assertIn("bs-analysis-results-checker-decision", script)
         self.assertIn("bs-analysis-results-checker-summary", script)
-        self.assertIn('checkerMoveCard(topCandidate, "Top move", "top")', script)
+        self.assertIn('checkerMoveCard(topCandidate, "Recommended candidate", "top"', script)
         self.assertIn(
-            'checkerMoveCard(selectedCandidate, "Selected move", "selected")',
+            '"Selected candidate",',
             script,
         )
         self.assertIn("showCheckerDecision(decision, topCandidate, candidate)", script)
         self.assertIn("selectedCandidate.id === topCandidate.id", script)
-        self.assertIn("candidate.move_board || originalBoard", script)
+        self.assertIn("boardExplorer.setCandidate(candidate)", script)
+        self.assertIn('"Movement + result"', script)
+        self.assertIn('"Original"', script)
 
         sticky_block = css.split(
             ".bs-analysis-results-checker-decision {", 1

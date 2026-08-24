@@ -65,6 +65,14 @@ assert.equal(checkerModel.analysis_kind, "checker");
 assert.equal(checkerModel.original_board, null);
 assert.equal(checkerModel.candidates.length, checkerView.checker.candidates.length);
 assert.equal(checkerModel.candidates[0].move, checkerView.checker.candidates[0].notation);
+assert.equal(checkerModel.recommended_id, checkerView.recommendation.id);
+assert.equal(checkerModel.original_position_id, checkerView.source_request.position.id);
+assert.equal(checkerModel.candidates[0].preview.status, "unavailable");
+assert.deepEqual(checkerModel.candidates[0].structured_movements, []);
+assert.equal(
+  checkerModel.candidates[1].comparison_to_recommended.value_difference,
+  checkerView.checker.candidates[1].difference_from_best
+);
 assert.equal(checkerModel.metadata.parser, "gnu-text-parser-v1");
 assert.equal(cubeModel.analysis_kind, "cube");
 assert.equal(cubeModel.actions.length, cubeView.cube.actions.length);

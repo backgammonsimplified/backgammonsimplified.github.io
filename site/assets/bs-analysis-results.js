@@ -71,7 +71,11 @@
     return number >= 0 && number <= 1 ? number : null;
   }
 
-  function probabilityComparisonRows(topProbabilities, selectedProbabilities) {
+  function probabilityComparisonRows(
+    topProbabilities,
+    selectedProbabilities,
+    preparedDifferences
+  ) {
     return PROBABILITY_COMPARISON_ROWS.map(function (definition) {
       const top = numericProbability(
         topProbabilities && topProbabilities[definition[0]]
@@ -79,7 +83,19 @@
       const selected = numericProbability(
         selectedProbabilities && selectedProbabilities[definition[0]]
       );
-      const difference = top === null || selected === null ? null : selected - top;
+      const prepared =
+        preparedDifferences &&
+        preparedDifferences[definition[0]] !== null &&
+        preparedDifferences[definition[0]] !== undefined &&
+        !Number.isNaN(Number(preparedDifferences[definition[0]]))
+          ? Number(preparedDifferences[definition[0]])
+          : null;
+      const difference =
+        prepared !== null
+          ? prepared
+          : top === null || selected === null
+            ? null
+            : selected - top;
       return {
         key: definition[0],
         label: definition[1],
@@ -253,10 +269,16 @@
     if (model.fixture === true && (!model.original_board || !model.original_board.image)) {
       throw new Error("Analysis viewer fixture is missing its original board asset.");
     }
-    if (model.analysis_kind === "checker" && !Array.isArray(model.candidates)) {
+    if (
+      model.analysis_kind === "checker" &&
+      (!Array.isArray(model.candidates) || model.candidates.length === 0)
+    ) {
       throw new Error("Checker analysis fixture must define candidates.");
     }
-    if (model.analysis_kind === "cube" && !Array.isArray(model.actions)) {
+    if (
+      model.analysis_kind === "cube" &&
+      (!Array.isArray(model.actions) || model.actions.length === 0)
+    ) {
       throw new Error("Cube analysis fixture must define actions.");
     }
     return model;
@@ -303,6 +325,10 @@
       lose_gammon_or_worse: probabilities.lose_gammon,
       lose_backgammon: probabilities.lose_backgammon
     };
+  }
+
+  function nodeProbabilityDifferences(probabilities) {
+    return nodeProbabilities(probabilities);
   }
 
   function nodeSettingsText(view) {
@@ -352,6 +378,8 @@
       fixture: false,
       source_schema: view.schema_version,
       original_board: null,
+      original_position_id: request.position.id,
+      recommended_id: view.recommendation.id,
       context: {
         score: null,
         cube: null,
@@ -403,7 +431,28 @@
           difference_from_best: candidate.difference_from_best,
           probabilities: nodeProbabilities(candidate.probabilities),
           move_board: null,
+          result_board: null,
           resulting_position_id: candidate.resulting_position_id,
+          structured_movements: Array.isArray(candidate.movement_steps)
+            ? candidate.movement_steps.slice()
+            : [],
+          comparison_to_recommended: {
+            rank_difference: null,
+            value_difference: candidate.difference_from_best,
+            probability_differences: nodeProbabilityDifferences(
+              candidate.probability_differences_from_best
+            )
+          },
+          preview: {
+            status: "unavailable",
+            kind: null,
+            movement_steps: Array.isArray(candidate.movement_steps)
+              ? candidate.movement_steps.slice()
+              : [],
+            resulting_position_id: candidate.resulting_position_id,
+            message:
+              "This Node analysis view does not supply a verified movement or resulting-board asset. No candidate board was inferred."
+          },
           details:
             "Candidate facts come from the normalized Node analysis view; no move-overlay asset was supplied."
         };
@@ -417,9 +466,18 @@
           supported: action.supported !== false,
           value: action.value,
           probabilities: nodeProbabilities(action.probabilities),
+          display_rank: action.display_order,
+          actual_ply:
+            view.cube.actual_ply === null || view.cube.actual_ply === undefined
+              ? null
+              : view.cube.actual_ply,
+          comparison_to_recommended: null,
           details:
             "Action facts come from the normalized Node analysis view."
         };
+      });
+      model.actions.forEach(function (action) {
+        action.is_recommended = action.id === model.recommended_id;
       });
     }
     return validateAnalysisModel(model);
@@ -480,6 +538,20 @@
 
   function renderBoard(container, board, fallbackText) {
     container.replaceChildren();
+    if (board && typeof board.render === "function") {
+      const rendered = board.render();
+      if (rendered) {
+        rendered.classList && rendered.classList.add("bs-analysis-results-board-rendered");
+        rendered.setAttribute && rendered.setAttribute("role", "img");
+        rendered.setAttribute && rendered.setAttribute(
+          "aria-label",
+          optionalText(board.alt, "Analyzed backgammon position")
+        );
+        rendered.setAttribute && rendered.setAttribute("inert", "");
+        container.appendChild(rendered);
+        return;
+      }
+    }
     if (!board || !board.image) {
       const missing = element(
         "div",
@@ -505,6 +577,28 @@
       { once: true }
     );
     container.appendChild(image);
+  }
+
+  function copyText(value, status, label) {
+    const text =
+      value === null || value === undefined || value === "" ? "" : String(value);
+    if (!text) return Promise.resolve(false);
+    const announce = function () {
+      if (status) status.textContent = (label || "Identifier") + " copied.";
+      return true;
+    };
+    if (
+      typeof navigator !== "undefined" &&
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      return navigator.clipboard.writeText(text).then(announce, function () {
+        if (status) status.textContent = "Copy failed. Select the identifier and copy it manually.";
+        return false;
+      });
+    }
+    if (status) status.textContent = "Clipboard access is unavailable. Select the identifier and copy it manually.";
+    return Promise.resolve(false);
   }
 
   function outcomePanel(probabilities) {
@@ -634,7 +728,26 @@
     };
   }
 
-  function candidateSummary(candidate) {
+  function recommendedCheckerCandidate(model) {
+    return (
+      model.candidates.find(function (candidate) {
+        return model.recommended_id && candidate.id === model.recommended_id;
+      }) ||
+      model.candidates.find(function (candidate) {
+        return (
+          model.metadata &&
+          model.metadata.recommendation &&
+          candidate.move === model.metadata.recommendation
+        );
+      }) ||
+      model.candidates.find(function (candidate) {
+        return Number(candidate.display_rank) === 1;
+      }) ||
+      model.candidates[0]
+    );
+  }
+
+  function candidateSummary(candidate, isRecommended) {
     const summary = element("summary", "bs-analysis-results-candidate-summary");
     summary.dataset.bsAnalysisResultChoice = candidate.id;
     summary.setAttribute("aria-current", "false");
@@ -652,6 +765,15 @@
     );
     selectedIndicator.setAttribute("aria-hidden", "true");
     depth.appendChild(selectedIndicator);
+    if (isRecommended) {
+      const recommended = element(
+        "span",
+        "bs-analysis-results-recommended-badge",
+        "Engine recommended"
+      );
+      recommended.setAttribute("aria-label", "Engine-recommended candidate");
+      depth.appendChild(recommended);
+    }
     identity.append(
       element(
         "span",
@@ -697,24 +819,189 @@
         optionalText(candidate.details)
       )
     );
+    if (candidate.resulting_position_id) {
+      const identity = element("p", "bs-analysis-results-candidate-identity-fact");
+      identity.append(
+        element("strong", "", "Result identity: "),
+        element("code", "", candidate.resulting_position_id)
+      );
+      body.appendChild(identity);
+    }
     return body;
   }
 
-  function showCheckerCandidate(candidate, board, originalBoard, status) {
-    const boardView = candidate.move_board || originalBoard;
-    renderBoard(
-      board,
-      boardView,
-      "Move-overlay board not supplied for this candidate"
-    );
-    status.textContent = candidate.move_board
-      ? "Showing the starting position with " + optionalText(candidate.move, "candidate") + " overlaid."
-      : originalBoard && originalBoard.image
-        ? "Move overlay unavailable for " + optionalText(candidate.move, "candidate") + "; showing the original position."
-        : "No board asset or move overlay was supplied for " + optionalText(candidate.move, "candidate") + ".";
+  function movementLocation(value) {
+    if (value === null || value === undefined) return "unknown";
+    if (String(value).toLowerCase() === "off") return "off";
+    if (String(value).toLowerCase() === "bar") return "bar";
+    return "point " + String(value);
   }
 
-  function checkerMoveCard(candidate, label, modifier) {
+  function movementFacts(candidate, container, status) {
+    container.replaceChildren();
+    container.appendChild(
+      element("h4", "bs-analysis-results-preview-facts-title", "Prepared candidate facts")
+    );
+    const movements = Array.isArray(candidate.structured_movements)
+      ? candidate.structured_movements
+      : candidate.preview && Array.isArray(candidate.preview.movement_steps)
+        ? candidate.preview.movement_steps
+        : [];
+    if (movements.length) {
+      const list = element("ol", "bs-analysis-results-movement-steps");
+      movements.forEach(function (movement) {
+        const die =
+          movement.die === null || movement.die === undefined
+            ? "die not supplied"
+            : "die " + movement.die;
+        list.appendChild(
+          element(
+            "li",
+            "",
+            movementLocation(movement.from) +
+              " to " +
+              movementLocation(movement.to) +
+              " (" +
+              die +
+              ")"
+          )
+        );
+      });
+      container.appendChild(list);
+    } else {
+      container.appendChild(
+        element(
+          "p",
+          "bs-analysis-results-preview-note",
+          candidate.move_board
+            ? "A verified combined movement/result board is available; atomic movement steps were not supplied."
+            : "Structured movement steps were not supplied."
+        )
+      );
+    }
+    if (candidate.resulting_position_id) {
+      const identity = element("div", "bs-analysis-results-result-identity");
+      const value = element("code", "", candidate.resulting_position_id);
+      const copy = element("button", "bs-button bs-analysis-results-copy", "Copy result ID");
+      copy.type = "button";
+      copy.addEventListener("click", function () {
+        copyText(candidate.resulting_position_id, status, "Result identifier");
+      });
+      identity.append(
+        element("span", "", "Result identity"),
+        value,
+        copy
+      );
+      container.appendChild(identity);
+    } else {
+      container.appendChild(
+        element(
+          "p",
+          "bs-analysis-results-preview-note",
+          "A resulting-position identity was not supplied."
+        )
+      );
+    }
+    if (!candidate.move_board && !candidate.result_board) {
+      const unavailable = element(
+        "p",
+        "bs-analysis-results-preview-unavailable",
+        (candidate.preview && candidate.preview.message) ||
+          "A verified candidate board was not supplied. The original position is shown; no resulting board was inferred."
+      );
+      unavailable.setAttribute("role", "status");
+      container.appendChild(unavailable);
+    }
+  }
+
+  function checkerBoardExplorer(board, toolbar, facts, originalBoard, status) {
+    let activeCandidate = null;
+    let mode = "original";
+    const original = element("button", "bs-button", "Original");
+    const movement = element("button", "bs-button", "Movement + result");
+    const result = element("button", "bs-button", "Result");
+    [original, movement, result].forEach(function (button) {
+      button.type = "button";
+      button.setAttribute("aria-pressed", "false");
+    });
+    original.dataset.bsPreviewMode = "original";
+    movement.dataset.bsPreviewMode = "movement";
+    result.dataset.bsPreviewMode = "result";
+    toolbar.append(original, movement, result);
+
+    function boardForMode() {
+      if (!activeCandidate || mode === "original") return originalBoard;
+      if (mode === "result") return activeCandidate.result_board;
+      return activeCandidate.move_board;
+    }
+
+    function refresh(message) {
+      [original, movement, result].forEach(function (button) {
+        button.setAttribute(
+          "aria-pressed",
+          button.dataset.bsPreviewMode === mode ? "true" : "false"
+        );
+      });
+      renderBoard(
+        board,
+        boardForMode(),
+        mode === "original"
+          ? "Original analyzed board is unavailable"
+          : "Prepared candidate board is unavailable"
+      );
+      if (message) status.textContent = message;
+    }
+
+    function setMode(nextMode) {
+      if (nextMode === "movement" && (!activeCandidate || !activeCandidate.move_board)) {
+        return false;
+      }
+      if (nextMode === "result" && (!activeCandidate || !activeCandidate.result_board)) {
+        return false;
+      }
+      mode = nextMode;
+      refresh(
+        nextMode === "original"
+          ? "Showing the original analyzed position."
+          : nextMode === "movement"
+            ? "Showing the prepared movement overlay and resulting checker state for " +
+              optionalText(activeCandidate.move, "the selected candidate") + "."
+            : "Showing the prepared resulting board for " +
+              optionalText(activeCandidate.move, "the selected candidate") + "."
+      );
+      return true;
+    }
+
+    original.addEventListener("click", function () { setMode("original"); });
+    movement.addEventListener("click", function () { setMode("movement"); });
+    result.addEventListener("click", function () { setMode("result"); });
+
+    return {
+      setCandidate: function (candidate) {
+        activeCandidate = candidate;
+        movement.hidden = !candidate.move_board;
+        result.hidden = !candidate.result_board;
+        movement.textContent = candidate.result_board
+          ? "Movement overlay"
+          : "Movement + result";
+        mode = candidate.move_board
+          ? "movement"
+          : candidate.result_board
+            ? "result"
+            : "original";
+        movementFacts(candidate, facts, status);
+        refresh(
+          candidate.move_board || candidate.result_board
+            ? "Selected " + optionalText(candidate.move, "candidate") + ". Prepared candidate board shown."
+            : "Selected " + optionalText(candidate.move, "candidate") + ". Candidate board unavailable; original position shown."
+        );
+      },
+      setMode: setMode,
+      getMode: function () { return mode; }
+    };
+  }
+
+  function checkerMoveCard(candidate, label, modifier, comparison) {
     const card = element(
       "section",
       "bs-analysis-results-decision-card bs-analysis-results-decision-card--" +
@@ -745,23 +1032,42 @@
         "Equity " + metrics.equity
       )
     );
-    card.append(heading, identity, outcomePanel(candidate && candidate.probabilities));
+    const facts = definitionList(
+      [
+        ["Evaluation", optionalText(candidate && candidate.evaluation)],
+        [
+          "vs recommended",
+          comparison && comparison.value_difference !== null && comparison.value_difference !== undefined
+            ? formatNumber(comparison.value_difference)
+            : modifier === "top"
+              ? "+0.000"
+              : optionalText(candidate && candidate.difference_from_best)
+        ]
+      ],
+      "bs-analysis-results-decision-facts"
+    );
+    card.append(
+      heading,
+      identity,
+      facts,
+      outcomePanel(candidate && candidate.probabilities)
+    );
     return card;
   }
 
-  function probabilityComparisonTable(topCandidate, selectedCandidate) {
+  function probabilityComparisonTable(topCandidate, selectedCandidate, itemKind) {
     const table = element("table", "bs-analysis-results-comparison-table");
     const caption = element(
       "caption",
       "bs-analysis-results-comparison-caption",
-      "Top move versus selected move probabilities"
+      "Recommended versus selected " + (itemKind || "candidate") + " probabilities"
     );
     const head = element("thead", "");
     const headerRow = element("tr", "");
     const body = element("tbody", "");
     const outcomeHeader = element("th", "", "Outcome");
-    const topHeader = element("th", "", "Top move");
-    const selectedHeader = element("th", "", "Selected move");
+    const topHeader = element("th", "", "Recommended");
+    const selectedHeader = element("th", "", "Selected");
     outcomeHeader.scope = "col";
     topHeader.scope = "col";
     selectedHeader.scope = "col";
@@ -770,15 +1076,18 @@
 
     probabilityComparisonRows(
       topCandidate && topCandidate.probabilities,
-      selectedCandidate && selectedCandidate.probabilities
+      selectedCandidate && selectedCandidate.probabilities,
+      selectedCandidate &&
+        selectedCandidate.comparison_to_recommended &&
+        selectedCandidate.comparison_to_recommended.probability_differences
     ).forEach(function (row) {
       const tableRow = element("tr", "");
       const label = element("th", "", row.label);
       const top = element("td", "", row.topDisplay);
       const selected = element("td", "");
       label.scope = "row";
-      top.dataset.label = "Top move";
-      selected.dataset.label = "Selected move";
+      top.dataset.label = "Recommended";
+      selected.dataset.label = "Selected";
       selected.appendChild(
         element("span", "bs-analysis-results-comparison-value", row.selectedDisplay)
       );
@@ -799,12 +1108,21 @@
   }
 
   function showCheckerDecision(decision, topCandidate, selectedCandidate) {
-    decision.replaceChildren(checkerMoveCard(topCandidate, "Top move", "top"));
+    decision.replaceChildren(
+      checkerMoveCard(topCandidate, "Recommended candidate", "top", {
+        value_difference: 0
+      })
+    );
     if (!selectedCandidate || selectedCandidate.id === topCandidate.id) return;
 
     const selected = element("div", "bs-analysis-results-selected-comparison");
     selected.append(
-      checkerMoveCard(selectedCandidate, "Selected move", "selected"),
+      checkerMoveCard(
+        selectedCandidate,
+        "Selected candidate",
+        "selected",
+        selectedCandidate.comparison_to_recommended
+      ),
       probabilityComparisonTable(topCandidate, selectedCandidate)
     );
     decision.appendChild(selected);
@@ -813,8 +1131,7 @@
   function setActiveCheckerCandidate(
     choiceGroup,
     candidate,
-    board,
-    originalBoard,
+    boardExplorer,
     status,
     decision,
     topCandidate
@@ -827,28 +1144,33 @@
         const summary = details.querySelector(":scope > summary");
         if (summary) summary.setAttribute("aria-current", active ? "true" : "false");
       });
-    showCheckerCandidate(candidate, board, originalBoard, status);
+    boardExplorer.setCandidate(candidate);
     showCheckerDecision(decision, topCandidate, candidate);
   }
 
-  function renderChecker(model, board, choiceGroup, status, decision, options) {
+  function renderChecker(
+    model,
+    choiceGroup,
+    status,
+    decision,
+    boardExplorer,
+    options
+  ) {
     const candidatesById = new Map();
-    const topCandidate =
-      model.candidates.find(function (candidate) {
-        return Number(candidate.display_rank) === 1;
-      }) || model.candidates[0];
+    const summaries = [];
+    const topCandidate = recommendedCheckerCandidate(model);
     model.candidates.forEach(function (candidate) {
       const details = element("details", "bs-analysis-results-candidate");
       details.dataset.bsAnalysisCandidateId = candidate.id;
-      const summary = candidateSummary(candidate);
+      const summary = candidateSummary(candidate, candidate.id === topCandidate.id);
       details.append(summary, candidateDetails(candidate));
       candidatesById.set(candidate.id, { candidate: candidate, details: details });
+      summaries.push(summary);
       summary.addEventListener("click", function () {
         setActiveCheckerCandidate(
           choiceGroup,
           candidate,
-          board,
-          model.original_board,
+          boardExplorer,
           status,
           decision,
           topCandidate
@@ -858,6 +1180,34 @@
       if (candidate.id === topCandidate.id) {
         details.open = true;
       }
+    });
+
+    summaries.forEach(function (summary, index) {
+      summary.addEventListener("keydown", function (event) {
+        let next = null;
+        if (["ArrowDown", "ArrowRight"].includes(event.key)) {
+          next = (index + 1) % summaries.length;
+        } else if (["ArrowUp", "ArrowLeft"].includes(event.key)) {
+          next = (index - 1 + summaries.length) % summaries.length;
+        } else if (event.key === "Home") {
+          next = 0;
+        } else if (event.key === "End") {
+          next = summaries.length - 1;
+        }
+        if (next === null) return;
+        event.preventDefault();
+        const target = model.candidates[next];
+        summaries[next].focus();
+        candidatesById.get(target.id).details.open = true;
+        setActiveCheckerCandidate(
+          choiceGroup,
+          target,
+          boardExplorer,
+          status,
+          decision,
+          topCandidate
+        );
+      });
     });
 
     if (topCandidate) {
@@ -870,8 +1220,7 @@
       setActiveCheckerCandidate(
         choiceGroup,
         active.candidate,
-        board,
-        model.original_board,
+        boardExplorer,
         status,
         decision,
         topCandidate
@@ -892,13 +1241,25 @@
         setActiveCheckerCandidate(
           choiceGroup,
           selected.candidate,
-          board,
-          model.original_board,
+          boardExplorer,
           status,
           decision,
           topCandidate
         );
         return true;
+      },
+      reset: function () {
+        return this.activate(topCandidate.id);
+      },
+      setPreviewMode: boardExplorer.setMode,
+      getPreviewMode: boardExplorer.getMode,
+      getActiveId: function () {
+        const active = Array.from(
+          choiceGroup.querySelectorAll("[data-bs-analysis-candidate-id]")
+        ).find(function (details) {
+          return details.classList.contains("is-active");
+        });
+        return active ? active.dataset.bsAnalysisCandidateId : null;
       }
     };
   }
@@ -935,7 +1296,98 @@
       });
   }
 
-  function renderCube(model, board, choiceGroup, status, options) {
+  function recommendedCubeAction(model) {
+    return (
+      model.actions.find(function (action) {
+        return model.recommended_id && action.id === model.recommended_id;
+      }) ||
+      model.actions.find(function (action) {
+        return (
+          model.metadata &&
+          model.metadata.recommendation &&
+          action.label === model.metadata.recommendation
+        );
+      }) ||
+      model.actions.find(function (action) {
+        return Number(action.display_rank) === 1;
+      }) ||
+      model.actions[0]
+    );
+  }
+
+  function cubeActionCard(action, label, modifier) {
+    const card = element(
+      "section",
+      "bs-analysis-results-decision-card bs-analysis-results-decision-card--" + modifier
+    );
+    const heading = element("div", "bs-analysis-results-decision-card-heading");
+    heading.append(
+      element("span", "bs-analysis-results-decision-label", label),
+      element(
+        "span",
+        "bs-analysis-results-decision-rank",
+        action && action.display_rank ? "Rank " + action.display_rank : "Rank not supplied"
+      )
+    );
+    const identity = element("div", "bs-analysis-results-decision-card-identity");
+    identity.append(
+      element(
+        "strong",
+        "bs-analysis-results-decision-move",
+        optionalText(action && action.label, "Unnamed cube action")
+      ),
+      element(
+        "span",
+        "bs-analysis-results-decision-equity",
+        "Value " + (action && action.value ? formatNumber(action.value.value) : "Not supplied")
+      )
+    );
+    card.append(
+      heading,
+      identity,
+      definitionList(
+        [
+          ["Action", optionalText(action && action.normalized_action)],
+          [
+            "vs recommended",
+            action &&
+            action.comparison_to_recommended &&
+            action.comparison_to_recommended.value_difference !== null &&
+            action.comparison_to_recommended.value_difference !== undefined
+              ? formatNumber(action.comparison_to_recommended.value_difference)
+              : modifier === "top"
+                ? "+0.000"
+                : "Not supplied"
+          ]
+        ],
+        "bs-analysis-results-decision-facts"
+      )
+    );
+    return card;
+  }
+
+  function showCubeDecision(decision, recommended, selected, probabilities) {
+    decision.replaceChildren(cubeActionCard(recommended, "Recommended action", "top"));
+    if (!selected || selected.id === recommended.id) return;
+    const comparison = element("div", "bs-analysis-results-selected-comparison");
+    comparison.appendChild(cubeActionCard(selected, "Selected action", "selected"));
+    if (recommended.probabilities || selected.probabilities || probabilities) {
+      comparison.appendChild(
+        probabilityComparisonTable(
+          Object.assign({}, recommended, {
+            probabilities: recommended.probabilities || probabilities
+          }),
+          Object.assign({}, selected, {
+            probabilities: selected.probabilities || probabilities
+          }),
+          "cube action"
+        )
+      );
+    }
+    decision.appendChild(comparison);
+  }
+
+  function renderCube(model, board, choiceGroup, status, decision, options) {
     const presentationBoard =
       (options && options.boardOverride) || model.original_board;
     const sharedOutcomes = element("div", "bs-analysis-results-cube-outcomes");
@@ -947,6 +1399,8 @@
     sharedOutcomes.appendChild(outcomePanel(model.probabilities));
     choiceGroup.appendChild(sharedOutcomes);
     const actionsById = new Map();
+    const buttons = [];
+    const recommended = recommendedCubeAction(model);
 
     function activate(action) {
       setPressed(choiceGroup, action.id);
@@ -962,6 +1416,7 @@
         action.details,
         "No additional explanation was supplied for this action."
       );
+      showCubeDecision(decision, recommended, action, model.probabilities);
     }
 
     model.actions.forEach(function (action) {
@@ -974,7 +1429,7 @@
         : "Not supplied";
       const button = selectionButton(
         action.label,
-        secondary,
+        action.id === recommended.id ? secondary + " · Engine recommended" : secondary,
         trailing,
         action.id,
         action.supported
@@ -983,13 +1438,30 @@
         activate(action);
       });
       actionsById.set(action.id, action);
+      buttons.push(button);
       choiceGroup.appendChild(button);
     });
     choiceGroup.appendChild(actionDetail);
 
-    if (options && options.initialActiveId && actionsById.has(options.initialActiveId)) {
-      activate(actionsById.get(options.initialActiveId));
-    }
+    buttons.forEach(function (button, index) {
+      button.addEventListener("keydown", function (event) {
+        let next = null;
+        if (["ArrowDown", "ArrowRight"].includes(event.key)) next = (index + 1) % buttons.length;
+        else if (["ArrowUp", "ArrowLeft"].includes(event.key)) next = (index - 1 + buttons.length) % buttons.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = buttons.length - 1;
+        if (next === null) return;
+        event.preventDefault();
+        buttons[next].focus();
+        activate(model.actions[next]);
+      });
+    });
+
+    const initial =
+      options && options.initialActiveId && actionsById.has(options.initialActiveId)
+        ? actionsById.get(options.initialActiveId)
+        : recommended;
+    if (initial) activate(initial);
 
     return {
       activate: function (actionId) {
@@ -997,20 +1469,32 @@
         if (!action) return false;
         activate(action);
         return true;
+      },
+      reset: function () { return this.activate(recommended.id); },
+      getActiveId: function () {
+        const active = buttons.find(function (button) {
+          return button.getAttribute("aria-pressed") === "true";
+        });
+        return active ? active.dataset.bsAnalysisResultChoice : null;
       }
     };
   }
 
   function buildPresentation(model, options) {
     const presentation = element("div", "bs-analysis-results-presentation");
+    const explorerHeader = element("header", "bs-analysis-results-explorer-header");
+    const explorerCopy = element("div", "bs-analysis-results-explorer-copy");
+    const explorerActions = element("div", "bs-analysis-results-explorer-actions");
     const shell = element("div", "bs-analysis-results-shell");
     const boardSection = element("section", "bs-analysis-results-board-section");
     const boardHeading = element(
       "h3",
       "bs-analysis-results-section-title",
-      "Position"
+      "Candidate board"
     );
+    const boardToolbar = element("div", "bs-analysis-results-preview-toolbar");
     const board = element("div", "bs-analysis-results-board");
+    const previewFacts = element("section", "bs-analysis-results-preview-facts");
     const analysisSection = element("section", "bs-analysis-results-main");
     const choicesHeading = element(
       "h3",
@@ -1018,7 +1502,7 @@
       model.analysis_kind === "checker" ? "Moves" : "Cube actions"
     );
     const choiceGroup = element("div", "bs-analysis-results-choices");
-    const checkerDecision = element(
+    const decision = element(
       "section",
       "bs-analysis-results-checker-summary"
     );
@@ -1026,14 +1510,53 @@
       "p",
       "bs-analysis-results-choice-status",
       model.analysis_kind === "checker"
-        ? "The top move is open. Opening another move keeps previous analysis open."
-        : "Choose an action to inspect its supplied details."
+        ? "The engine-recommended candidate is selected. Use arrow keys in the candidate list to compare alternatives."
+        : "The engine-recommended action is selected. Use arrow keys to compare alternatives."
     );
     const more = element("details", "bs-analysis-results-more");
     const moreSummary = element("summary", "", "More information");
     const moreContent = element("div", "bs-analysis-results-more-content");
 
     presentation.dataset.bsSharedAnalysisPresentation = "true";
+    presentation.dataset.bsResultExplorer = model.analysis_kind;
+    explorerCopy.append(
+      element("span", "bs-status-label", "RESULT EXPLORER"),
+      element(
+        "h2",
+        "bs-analysis-results-explorer-title",
+        model.analysis_kind === "checker"
+          ? "Explore checker candidates"
+          : "Explore cube actions"
+      ),
+      element(
+        "p",
+        "bs-analysis-results-explorer-intro",
+        "The recommendation and comparisons below use supplied analysis facts only."
+      )
+    );
+    const reset = element("button", "bs-button", "Reset to recommended");
+    reset.type = "button";
+    reset.dataset.bsResetComparison = "true";
+    explorerActions.appendChild(reset);
+    if (model.id) {
+      const copyAnalysis = element("button", "bs-button", "Copy analysis ID");
+      copyAnalysis.type = "button";
+      copyAnalysis.addEventListener("click", function () {
+        copyText(model.id, status, "Analysis identifier");
+      });
+      explorerActions.appendChild(copyAnalysis);
+    }
+    if (options && typeof options.onReturnToEditor === "function") {
+      const edit = element("button", "bs-button bs-button-primary", "Edit original position");
+      edit.type = "button";
+      edit.dataset.bsReturnToEditor = "true";
+      edit.addEventListener("click", function () {
+        options.onReturnToEditor();
+        status.textContent = "Returned to the original analyzed position in the editor. Edit and resubmit when ready.";
+      });
+      explorerActions.appendChild(edit);
+    }
+    explorerHeader.append(explorerCopy, explorerActions);
     choiceGroup.setAttribute("role", "group");
     choiceGroup.setAttribute(
       "aria-label",
@@ -1042,28 +1565,43 @@
         : "Cube actions"
     );
     status.setAttribute("aria-live", "polite");
-    renderBoard(
-      board,
-      (options && options.boardOverride) || model.original_board
-    );
+    status.setAttribute("aria-atomic", "true");
+    const originalBoard =
+      (options && options.boardOverride) || model.original_board;
+    renderBoard(board, originalBoard);
 
     let controls;
     if (model.analysis_kind === "checker") {
-      checkerDecision.setAttribute("aria-label", "Checker move comparison");
+      decision.setAttribute("aria-label", "Checker candidate comparison");
+      const boardExplorer = checkerBoardExplorer(
+        board,
+        boardToolbar,
+        previewFacts,
+        originalBoard,
+        status
+      );
       controls = renderChecker(
         model,
-        board,
         choiceGroup,
         status,
-        checkerDecision,
+        decision,
+        boardExplorer,
         options
       );
     } else {
-      controls = renderCube(model, board, choiceGroup, status, options);
+      decision.setAttribute("aria-label", "Cube action comparison");
+      controls = renderCube(model, board, choiceGroup, status, decision, options);
     }
+    reset.addEventListener("click", function () {
+      if (controls && controls.reset) controls.reset();
+      status.textContent = "Comparison reset to the engine recommendation.";
+    });
 
-    boardSection.append(boardHeading, board);
-    analysisSection.append(choicesHeading, choiceGroup, status);
+    boardSection.append(boardHeading);
+    if (model.analysis_kind === "checker") boardSection.appendChild(boardToolbar);
+    boardSection.appendChild(board);
+    if (model.analysis_kind === "checker") boardSection.appendChild(previewFacts);
+    analysisSection.append(decision, choicesHeading, choiceGroup, status);
 
     if (!options || options.showMore !== false) {
       moreSummary.setAttribute("aria-label", "More information about this analysis");
@@ -1090,11 +1628,11 @@
         "div",
         "bs-analysis-results-checker-decision"
       );
-      decisionSurface.append(boardSection, checkerDecision);
-      presentation.append(decisionSurface, analysisSection);
+      decisionSurface.append(boardSection, decision);
+      presentation.append(explorerHeader, decisionSurface, analysisSection);
     } else {
       shell.append(boardSection, analysisSection);
-      presentation.appendChild(shell);
+      presentation.append(explorerHeader, shell);
     }
     return { element: presentation, controls: controls };
   }

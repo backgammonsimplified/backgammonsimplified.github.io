@@ -332,6 +332,11 @@ assert.equal(
   retainedChecker.candidates[0].move
 );
 assert.equal(findByClass(checkerDecision, "bs-analysis-results-comparison-table"), null);
+assert.ok(findByClass(checkerHost, "bs-analysis-results-recommended-badge"));
+assert.match(
+  findByClass(checkerHost, "bs-analysis-results-preview-facts").textContent,
+  /verified combined movement\/result board/
+);
 
 const candidateDetails = checkerHost.querySelectorAll(
   "[data-bs-analysis-candidate-id]"
@@ -361,16 +366,42 @@ const comparisonTable = findByClass(
   "bs-analysis-results-comparison-table"
 );
 assert.ok(comparisonTable);
-assert.match(comparisonTable.textContent, /Top move/);
-assert.match(comparisonTable.textContent, /Selected move/);
+assert.match(comparisonTable.textContent, /Recommended/);
+assert.match(comparisonTable.textContent, /Selected/);
+
+assert.equal(checkerControls.setPreviewMode("original"), true);
+assert.equal(checkerControls.getPreviewMode(), "original");
+assert.equal(
+  findByClass(checkerHost, "bs-analysis-results-board-image").src,
+  retainedChecker.original_board.image
+);
+assert.equal(checkerControls.setPreviewMode("movement"), true);
 
 assert.equal(checkerControls.activate(retainedChecker.candidates[0].id), true);
 assert.equal(findByClass(checkerDecision, "bs-analysis-results-comparison-table"), null);
 
 const cubeHost = new FakeElement("div");
-viewer.renderPresentation(cubeHost, cube, {});
+const cubeControls = viewer.renderPresentation(cubeHost, cube, {});
 assert.equal(findByClass(cubeHost, "bs-analysis-results-checker-decision"), null);
 assert.equal(findByClass(cubeHost, "bs-analysis-results-comparison-table"), null);
+assert.equal(cubeControls.activate("roll"), true);
+assert.ok(findByClass(cubeHost, "bs-analysis-results-comparison-table"));
+assert.match(cubeHost.textContent, /Recommended action/);
+assert.match(cubeHost.textContent, /Selected action/);
+assert.equal(cubeControls.reset(), true);
+assert.equal(findByClass(cubeHost, "bs-analysis-results-comparison-table"), null);
+
+const syntheticCheckerHost = new FakeElement("div");
+const syntheticCheckerControls = viewer.renderPresentation(
+  syntheticCheckerHost,
+  checker,
+  {}
+);
+assert.equal(syntheticCheckerControls.getPreviewMode(), "result");
+assert.equal(
+  findByClass(syntheticCheckerHost, "bs-analysis-results-board-image").src,
+  checker.candidates[0].result_board.image
+);
 
 const goldenCheckerHost = new FakeElement("div");
 const goldenCheckerControls = viewer.renderPresentation(
@@ -410,10 +441,8 @@ assert.equal(
   findByClass(goldenCubeHost, "bs-analysis-results-checker-decision"),
   null
 );
-assert.equal(
-  findByClass(goldenCubeHost, "bs-analysis-results-comparison-table"),
-  null
-);
+assert.equal(findByClass(goldenCubeHost, "bs-analysis-results-comparison-table"), null);
+assert.match(goldenCubeHost.textContent, /Recommended action/);
 assert.match(
   findByClass(goldenCubeHost, "bs-analysis-results-board-image").src,
   /node-k001\/cube\/responder\.svg$/

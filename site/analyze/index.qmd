@@ -1,7 +1,7 @@
 ---
 title: "Backgammon Position Analyzer"
-description: "Build a backgammon position on an interactive board and analyze the resulting complete GNUID with GNU Backgammon."
-subtitle: "INTERACTIVE POSITION EDITOR :: GNU / 1-PLY"
+description: "Build a backgammon position, analyze its complete GNUID, and explore the engine recommendation against factual alternatives."
+subtitle: "POSITION EDITOR + RESULT EXPLORER :: GNU / 1-PLY"
 page-layout: full
 toc: false
 term-lookup: false
@@ -20,7 +20,7 @@ format:
 ::: {.bs-status-panel}
 [INTERACTIVE ANALYZER DEVELOPMENT SLICE]{.bs-status-label}
 
-Build the position directly on the board. The editor creates a complete GNU Position ID and Match ID, then submits the accepted GNU / 1-ply request through the existing development-only Analyzer lifecycle. Engine analysis remains on Node; completed analysis still uses the shared Results Viewer.
+Build the position directly on the board, submit the accepted GNU / 1-ply request, then explore the recommendation and alternatives in the shared Results Viewer. Engine analysis remains on Node. Candidate boards appear only when a project-owned materializer supplied a verified movement/result asset.
 :::
 
 :::
@@ -159,7 +159,7 @@ Build the position directly on the board. The editor creates a complete GNU Posi
 
 ::: {.bs-reading-column}
 
-The editor permits structurally valid analysis positions; it does not judge move legality or reconstruct game history. The complete GNUID is generated locally from factual board and match state. GNU still performs all checker and cube analysis through the accepted Node request boundary.
+The editor permits structurally valid analysis positions; it does not judge move legality or reconstruct game history. The complete GNUID is generated locally from factual board and match state. GNU still performs all checker and cube analysis through the accepted Node request boundary. The result explorer never parses checker notation, generates moves, or invents a resulting position.
 
 :::
 

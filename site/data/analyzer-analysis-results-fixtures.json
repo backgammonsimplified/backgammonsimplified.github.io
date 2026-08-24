@@ -12,6 +12,7 @@
       "title": "Checker analysis viewer fixture",
       "subtitle": "Synthetic checker candidates with cached result boards",
       "fixture": true,
+      "recommended_id": "checker-candidate-1",
       "original_board": {
         "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg",
         "alt": "Synthetic starting backgammon position used only to exercise the checker results viewer."
@@ -57,6 +58,10 @@
             "lose_gammon_or_worse": 0.05,
             "lose_backgammon": 0.01
           },
+          "structured_movements": [
+            {"order": 1, "from": 13, "to": 8, "die": 5},
+            {"order": 2, "from": 6, "to": 3, "die": 3}
+          ],
           "result_board": {
             "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/candidate-2.svg",
             "alt": "Synthetic resulting board for checker candidate one."
@@ -79,6 +84,10 @@
             "lose_gammon_or_worse": null,
             "lose_backgammon": null
           },
+          "structured_movements": [
+            {"order": 1, "from": 8, "to": 3, "die": 5},
+            {"order": 2, "from": 6, "to": 3, "die": 3}
+          ],
           "result_board": {
             "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/candidate-3.svg",
             "alt": "Synthetic resulting board for checker candidate two."
@@ -89,11 +98,15 @@
           "id": "checker-candidate-3",
           "source_order": 3,
           "display_rank": 3,
-          "move": "24/16",
+          "move": "bar/24 6/5",
           "evaluation": "0-ply-shaped fixture",
           "value": {"label": "Equity", "value": null},
           "difference_from_best": null,
           "probabilities": null,
+          "structured_movements": [
+            {"order": 1, "from": "bar", "to": 24, "die": 1},
+            {"order": 2, "from": 6, "to": 5, "die": 1}
+          ],
           "result_board": null,
           "details": "Result board asset deliberately unavailable to exercise a visible degraded state."
         }
@@ -112,6 +125,7 @@
       "title": "Cube analysis viewer fixture",
       "subtitle": "Synthetic cube actions with flat outcome presentation",
       "fixture": true,
+      "recommended_id": "double-take",
       "original_board": {
         "image": "/assets/positions/lesson-analysis-svg-mvp/opening-fixture/starting.svg",
         "alt": "Synthetic starting backgammon position used only to exercise the cube results viewer."

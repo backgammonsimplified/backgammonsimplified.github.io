@@ -180,6 +180,133 @@ def map_probabilities(value: Any, path: str) -> dict[str, Any] | None:
     }
 
 
+def probability_differences(
+    selected: dict[str, Any] | None,
+    recommended: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Prepare display-only factual deltas without creating analysis authority."""
+    if selected is None or recommended is None:
+        return None
+    return {
+        key: (
+            None
+            if selected.get(key) is None or recommended.get(key) is None
+            else round(float(selected[key]) - float(recommended[key]), 12)
+        )
+        for key in (
+            "win",
+            "win_gammon_or_better",
+            "win_backgammon",
+            "lose",
+            "lose_gammon_or_worse",
+            "lose_backgammon",
+        )
+    }
+
+
+def recommendation_by_text(
+    rows: list[dict[str, Any]],
+    recommendation: str | None,
+    text_fields: tuple[str, ...],
+) -> dict[str, Any]:
+    if recommendation is not None:
+        for row in rows:
+            if any(row.get(field) == recommendation for field in text_fields):
+                return row
+    ranked = sorted(
+        rows,
+        key=lambda row: (
+            row.get("display_rank") is None,
+            row.get("display_rank") or 10**9,
+            row.get("source_order") or 10**9,
+            row["id"],
+        ),
+    )
+    return ranked[0]
+
+
+def prepare_checker_exploration(
+    candidates: list[dict[str, Any]], recommendation: str | None
+) -> str:
+    recommended = recommendation_by_text(candidates, recommendation, ("move", "normalized_move"))
+    for candidate in candidates:
+        explicit_difference = candidate.get("difference_from_best")
+        native_difference = candidate.get("native_equity_loss_display")
+        value_difference = (
+            explicit_difference
+            if explicit_difference is not None
+            else native_difference
+        )
+        if candidate["id"] == recommended["id"]:
+            value_difference = 0.0
+        candidate["comparison_to_recommended"] = {
+            "rank_difference": (
+                None
+                if candidate.get("display_rank") is None
+                or recommended.get("display_rank") is None
+                else candidate["display_rank"] - recommended["display_rank"]
+            ),
+            "value_difference": value_difference,
+            "value_difference_source": (
+                "difference_from_best"
+                if explicit_difference is not None
+                else "native_equity_loss_display"
+                if native_difference is not None
+                else "recommended_identity"
+                if candidate["id"] == recommended["id"]
+                else None
+            ),
+            "probability_differences": probability_differences(
+                candidate.get("probabilities"), recommended.get("probabilities")
+            ),
+        }
+        candidate["preview"] = {
+            "kind": "prepared-movement-and-result" if candidate.get("move_board") else None,
+            "message": (
+                "The verified board asset applies the prepared candidate movement and displays the resulting checker state."
+                if candidate.get("move_board")
+                else "No verified candidate board asset was supplied; consumers must not infer a resulting board."
+            ),
+            "movement_steps": candidate.get("structured_movements", []),
+            "resulting_position_id": candidate.get("resulting_position_id"),
+            "status": "available" if candidate.get("move_board") else "unavailable",
+        }
+    return recommended["id"]
+
+
+def prepare_cube_exploration(
+    actions: list[dict[str, Any]], recommendation: str | None
+) -> str:
+    for action in actions:
+        action.setdefault("display_rank", action.get("source_order"))
+    recommended = recommendation_by_text(
+        actions,
+        recommendation,
+        ("label", "native_action", "normalized_action"),
+    )
+    recommended_value = recommended.get("value", {}).get("value")
+    for action in actions:
+        selected_value = action.get("value", {}).get("value")
+        action["comparison_to_recommended"] = {
+            "rank_difference": (
+                None
+                if action.get("display_rank") is None
+                or recommended.get("display_rank") is None
+                else action["display_rank"] - recommended["display_rank"]
+            ),
+            "value_difference": (
+                None
+                if selected_value is None or recommended_value is None
+                else round(float(selected_value) - float(recommended_value), 12)
+            ),
+            "probability_differences": probability_differences(
+                action.get("probabilities"), recommended.get("probabilities")
+            ),
+        }
+        action["is_recommended"] = action["id"] == recommended["id"]
+    return recommended["id"]
+
+
 def map_value(value: Any, path: str) -> dict[str, Any]:
     source = require_object(value, path)
     require_keys(source, ("label", "value", "semantics"), path)
@@ -570,7 +697,13 @@ def map_cube(source: dict[str, Any], path: str) -> tuple[list[dict[str, Any]], d
     )
 
 
-def materialize_analysis(source: dict[str, Any], package: dict[str, Any], path: str) -> dict[str, Any]:
+def materialize_analysis(
+    source: dict[str, Any],
+    package: dict[str, Any],
+    path: str,
+    *,
+    prepare_exploration: bool = False,
+) -> dict[str, Any]:
     validate_common_analysis(source, path)
     decision_id = source["canonical_decision_id"]
     analysis_id = source.get("analysis_id", decision_id)
@@ -629,10 +762,18 @@ def materialize_analysis(source: dict[str, Any], package: dict[str, Any], path: 
     }
     if source["decision_kind"] == "checker":
         candidates, probabilities = map_checker(source, path)
+        if prepare_exploration:
+            analysis["recommended_id"] = prepare_checker_exploration(
+                candidates, presentation["recommendation"]
+            )
         analysis["candidates"] = candidates
         analysis["probabilities"] = probabilities
     else:
         actions, probabilities, cube_occurrence = map_cube(source, path)
+        if prepare_exploration:
+            analysis["recommended_id"] = prepare_cube_exploration(
+                actions, presentation["recommendation"]
+            )
         analysis["actions"] = actions
         analysis["cube_occurrence"] = cube_occurrence
         analysis["probabilities"] = probabilities
@@ -665,7 +806,9 @@ def validate_package(package: Any) -> dict[str, Any]:
     }
 
 
-def materialize_document(read_set: dict[str, Any]) -> dict[str, Any]:
+def materialize_document(
+    read_set: dict[str, Any], *, prepare_exploration: bool = False
+) -> dict[str, Any]:
     require_keys(read_set, ("schema_version", "package", "fixture_status", "analyses"), "read_set")
     if read_set["schema_version"] != READ_SET_SCHEMA:
         raise MaterializationError(f"Unsupported read-set schema: {read_set['schema_version']!r}")
@@ -689,7 +832,12 @@ def materialize_document(read_set: dict[str, Any]) -> dict[str, Any]:
     for index, item in enumerate(rows):
         path = f"analyses[{index}]"
         source = require_object(item, path)
-        analysis = materialize_analysis(source, package, path)
+        analysis = materialize_analysis(
+            source,
+            package,
+            path,
+            prepare_exploration=prepare_exploration,
+        )
         if analysis["id"] in analyses:
             raise MaterializationError(f"Duplicate analysis ID: {analysis['id']}")
         analyses[analysis["id"]] = analysis
@@ -709,7 +857,12 @@ def materialize_document(read_set: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def materialize_subset(read_set: dict[str, Any], decision_ids: list[str]) -> dict[str, Any]:
+def materialize_subset(
+    read_set: dict[str, Any],
+    decision_ids: list[str],
+    *,
+    prepare_exploration: bool = False,
+) -> dict[str, Any]:
     selected = set(decision_ids)
     subset = dict(read_set)
     subset["analyses"] = [
@@ -719,7 +872,10 @@ def materialize_subset(read_set: dict[str, Any], decision_ids: list[str]) -> dic
     if len(subset["analyses"]) != len(selected):
         found = {item.get("canonical_decision_id") for item in subset["analyses"]}
         raise MaterializationError(f"Unknown canonical decision ID(s): {sorted(selected - found)}")
-    return materialize_document(subset)
+    return materialize_document(
+        subset,
+        prepare_exploration=prepare_exploration,
+    )
 
 
 def main() -> int:
@@ -727,21 +883,40 @@ def main() -> int:
     parser.add_argument("read_set", type=Path, help="semantic Analyzer read-set JSON")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--decision-id", action="append", default=[])
+    parser.add_argument(
+        "--prepare-exploration",
+        action="store_true",
+        help="add deterministic candidate/action comparison and preview disposition facts",
+    )
     parser.add_argument("--verify-repeat", action="store_true")
     args = parser.parse_args()
     try:
         read_set = load_json(args.read_set.resolve())
         result = (
-            materialize_subset(read_set, args.decision_id)
+            materialize_subset(
+                read_set,
+                args.decision_id,
+                prepare_exploration=args.prepare_exploration,
+            )
             if args.decision_id
-            else materialize_document(read_set)
+            else materialize_document(
+                read_set,
+                prepare_exploration=args.prepare_exploration,
+            )
         )
         payload = stable_json_bytes(result)
         if args.verify_repeat:
             repeated = stable_json_bytes(
-                materialize_subset(read_set, args.decision_id)
+                materialize_subset(
+                    read_set,
+                    args.decision_id,
+                    prepare_exploration=args.prepare_exploration,
+                )
                 if args.decision_id
-                else materialize_document(read_set)
+                else materialize_document(
+                    read_set,
+                    prepare_exploration=args.prepare_exploration,
+                )
             )
             if payload != repeated:
                 raise MaterializationError("Repeat materialization was not byte-identical")

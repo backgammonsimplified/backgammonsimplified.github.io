@@ -632,12 +632,24 @@
       renderValidation();
     }
 
+    function notifyChange() {
+      if (typeof CustomEvent === "function") {
+        surface.dispatchEvent(
+          new CustomEvent("bs-position-editor-change", {
+            bubbles: true,
+            detail: { gnuid: gnuidInput.value || null }
+          })
+        );
+      }
+    }
+
     function update(mutator, message) {
       history.push(snapshot());
       if (history.length > 100) history.shift();
       mutator(state);
       selected = null;
       sync();
+      notifyChange();
       announce(message);
     }
 
@@ -743,7 +755,7 @@
         if (action === "flip") update(function (value) { value.view_flipped = !value.view_flipped; }, "Board view flipped. Factual point numbers are unchanged.");
         if (action === "undo") {
           const previous = history.pop();
-          if (previous) { state = previous; selected = null; sync(); announce("Last editor change undone."); }
+          if (previous) { state = previous; selected = null; sync(); notifyChange(); announce("Last editor change undone."); }
         }
         if (action === "remove") {
           if (selected) move(selected.player, selected.slot, "off:" + selected.player, "Selected checker moved to its off tray.");
@@ -759,6 +771,7 @@
             selected = null;
             input.removeAttribute("aria-invalid");
             sync();
+            notifyChange();
             announce("Complete GNUID imported into the editor.");
           } catch (error) {
             announce("Could not import GNUID: " + error.message);
@@ -778,12 +791,12 @@
     announce("Interactive position editor ready. Choose a checker, then choose its destination.");
     return {
       getState: function () { return snapshot(); },
-      setState: function (value) { state = clone(value); selected = null; sync(); },
+      setState: function (value) { state = clone(value); selected = null; sync(); notifyChange(); },
       move: move,
       select: select,
       serializeGnuid: function () { return encodeGnuid(state); },
       serializeRequest: function () { return serializeRequest(state); },
-      undo: function () { const previous = history.pop(); if (previous) { state = previous; sync(); } }
+      undo: function () { const previous = history.pop(); if (previous) { state = previous; sync(); notifyChange(); } }
     };
   }
 

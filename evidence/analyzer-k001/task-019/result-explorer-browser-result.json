@@ -1,0 +1,79 @@
+{
+  "schema_version": "analyzer-task-019-result-explorer-browser-proof-v1",
+  "status": "PASS",
+  "checker_candidates": 8,
+  "recommended_identification": "PASS",
+  "candidate_selection": "PASS",
+  "original_board": "PASS",
+  "prepared_movement_and_result_board": "PASS",
+  "separate_result_board": "PASS",
+  "bar_movement_fact": "PASS",
+  "missing_preview_fail_closed": "PASS",
+  "comparison_deltas": "PASS",
+  "cube_exploration": "PASS",
+  "editor_result_round_trip": "PASS",
+  "pointer": "PASS",
+  "touch": "PASS",
+  "keyboard": "PASS",
+  "accessibility_state": "PASS",
+  "malformed_fail_closed": "PASS",
+  "deterministic_repeated_render": "PASS",
+  "responsive": [
+    {
+      "width": 1440,
+      "client_width": 1440,
+      "scroll_width": 1440,
+      "explorer_width": 960
+    },
+    {
+      "width": 768,
+      "client_width": 768,
+      "scroll_width": 768,
+      "explorer_width": 666
+    },
+    {
+      "width": 390,
+      "client_width": 390,
+      "scroll_width": 390,
+      "explorer_width": 308
+    },
+    {
+      "width": 320,
+      "client_width": 320,
+      "scroll_width": 320,
+      "explorer_width": 238
+    }
+  ],
+  "page_errors": [],
+  "console_errors": [],
+  "submissions": [
+    {
+      "gnuid": "4HPwATDgc/ABMA:cAnqAAAAAAAE",
+      "decision": "checker",
+      "dice": [
+        4,
+        2
+      ],
+      "engine": "gnu",
+      "analysis_setting": "1ply"
+    },
+    {
+      "gnuid": "4HPwATDgc/ABMA:cAnqAAAAAAAE",
+      "decision": "checker",
+      "dice": [
+        4,
+        2
+      ],
+      "engine": "gnu",
+      "analysis_setting": "1ply"
+    },
+    {
+      "gnuid": "4HPwATDgc/ABMA:cAngAAAAAAAE",
+      "decision": "cube",
+      "dice": null,
+      "engine": "gnu",
+      "analysis_setting": "1ply"
+    }
+  ],
+  "engine_execution_count": 0
+}

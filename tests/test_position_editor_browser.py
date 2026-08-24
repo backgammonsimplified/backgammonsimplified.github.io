@@ -255,7 +255,9 @@ def main() -> int:
             dimensions = width_page.evaluate(
                 "({client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth})"
             )
-            board_box = width_page.locator(".bs-editor-board-shell").bounding_box()
+            board_box = width_page.locator(
+                "[data-bs-position-editor] .bs-editor-board-shell"
+            ).bounding_box()
             nav_count = width_page.locator("nav.navbar").count()
             assert dimensions["scroll"] <= dimensions["client"]
             assert board_box and board_box["width"] >= (260 if width >= 390 else 248)

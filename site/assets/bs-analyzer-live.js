@@ -102,6 +102,42 @@
     if (group) group.hidden = !checker;
   }
 
+  function originalBoardSnapshot(surface, gnuid) {
+    const source = surface.querySelector(".bs-editor-board-shell");
+    if (!source || typeof source.cloneNode !== "function") return null;
+    const snapshot = source.cloneNode(true);
+    snapshot.querySelectorAll("[id]").forEach(function (node) {
+      node.removeAttribute("id");
+    });
+    snapshot.querySelectorAll("button,[tabindex],input,select,textarea").forEach(function (node) {
+      node.setAttribute("tabindex", "-1");
+      node.setAttribute("aria-hidden", "true");
+    });
+    snapshot.classList.add("bs-analysis-results-editor-snapshot");
+    return {
+      alt: "Original analyzed position " + gnuid,
+      render: function () { return snapshot.cloneNode(true); }
+    };
+  }
+
+  function returnToEditor(surface) {
+    const form = surface.querySelector("[data-bs-analyzer-form]");
+    if (!form) return;
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+    const focusTarget = form.querySelector("[data-bs-editor-board] [data-slot]") ||
+      form.querySelector("button, input, select, textarea");
+    if (focusTarget && typeof focusTarget.focus === "function") {
+      focusTarget.focus({ preventScroll: true });
+    }
+  }
+
+  function resultViewerOptions(surface, options) {
+    return {
+      boardOverride: options && options.originalBoardSnapshot,
+      onReturnToEditor: function () { returnToEditor(surface); }
+    };
+  }
+
   function wait(milliseconds) {
     return new Promise(function (resolve) {
       setTimeout(resolve, milliseconds);
@@ -125,7 +161,7 @@
         if (!payload.analysis_view || typeof render !== "function") {
           throw new Error("The shared Results Viewer could not mount the completed analysis.");
         }
-        render(results, payload.analysis_view, {});
+        render(results, payload.analysis_view, resultViewerOptions(surface, options));
         setState(
           surface,
           "complete",
@@ -207,6 +243,8 @@
       return { ok: false, error: error };
     }
 
+    const boardSnapshot = originalBoardSnapshot(surface, request.gnuid);
+
     button.disabled = true;
     results.replaceChildren();
     try {
@@ -249,7 +287,10 @@
       return await pollUntilComplete(
         surface,
         submitted.analysis_key,
-        Object.assign({}, options || {}, { cacheHit: submitted.cache_hit })
+        Object.assign({}, options || {}, {
+          cacheHit: submitted.cache_hit,
+          originalBoardSnapshot: boardSnapshot
+        })
       );
     } catch (error) {
       setState(
@@ -278,6 +319,15 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       submitSurface(surface, options);
+    });
+    form.addEventListener("bs-position-editor-change", function () {
+      if (surface.dataset.bsAnalyzerState === "complete") {
+        setState(
+          surface,
+          "edited",
+          "The editor has changed since the displayed analysis. Resubmit to analyze the edited position."
+        );
+      }
     });
     decisionChanged(form);
     setState(surface, "idle", "Edit the board and position facts, then analyze.");
@@ -318,7 +368,10 @@
     mount: mount,
     mountAll: mountAll,
     normalizeInput: normalizeInput,
+    originalBoardSnapshot: originalBoardSnapshot,
     pollUntilComplete: pollUntilComplete,
+    resultViewerOptions: resultViewerOptions,
+    returnToEditor: returnToEditor,
     setState: setState,
     submitSurface: submitSurface
   };

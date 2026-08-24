@@ -117,7 +117,9 @@ class RealCheckerAnalysisTests(unittest.TestCase):
         self.assertNotIn("apply_board_moves", browser)
         self.assertIn("move_board", browser)
         self.assertIn("assetUrl(fixtures.asset_root, candidate.image)", browser)
-        self.assertIn("candidate.move_board || originalBoard", shared)
+        self.assertIn("activeCandidate.move_board", shared)
+        self.assertIn("boardExplorer.setCandidate(candidate)", shared)
+        self.assertIn("No candidate board was inferred", shared)
         self.assertIn("sharedAnalysis().renderPresentation", browser)
 
 

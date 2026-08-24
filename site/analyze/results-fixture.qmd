@@ -76,6 +76,28 @@ This is the frozen Canonical Analysis Parquet v1 cube occurrence `002fc0917b230a
 ></div>
 ```
 
+## Synthetic result-exploration mechanics
+
+These explicit synthetic records exercise a separately prepared result board,
+missing optional candidate facts, and unsupported cube actions. They are UI
+mechanics only and are not engine conclusions.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="checker-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="cube-ui-demo"
+  data-analysis-fixture-url="/data/analyzer-analysis-results-fixtures.json"
+></div>
+```
+
 ## Synthetic loader failure states
 
 These deliberate development cases verify that malformed or unknown records fail visibly instead of inventing values.

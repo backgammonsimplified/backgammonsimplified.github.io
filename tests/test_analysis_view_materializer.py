@@ -26,14 +26,18 @@ class AnalysisViewMaterializerTests(unittest.TestCase):
 
     def test_output_is_byte_deterministic_and_sorted_by_canonical_identity(self) -> None:
         first = materializer.stable_json_bytes(
-            materializer.materialize_document(copy.deepcopy(self.read_set))
+            materializer.materialize_document(
+                copy.deepcopy(self.read_set), prepare_exploration=True
+            )
         )
         reversed_input = copy.deepcopy(self.read_set)
         reversed_input["analyses"].reverse()
         reversed_input["analyses"][1]["checker_candidates"].reverse()
         reversed_input["analyses"][1]["checker_evaluations"].reverse()
         second = materializer.stable_json_bytes(
-            materializer.materialize_document(reversed_input)
+            materializer.materialize_document(
+                reversed_input, prepare_exploration=True
+            )
         )
         self.assertEqual(first, second)
         payload = json.loads(first)
@@ -43,7 +47,9 @@ class AnalysisViewMaterializerTests(unittest.TestCase):
         )
 
     def test_checker_preserves_occurrence_position_depth_values_and_source_order(self) -> None:
-        output = materializer.materialize_document(self.read_set)
+        output = materializer.materialize_document(
+            self.read_set, prepare_exploration=True
+        )
         checker = output["analyses"]["synthetic-checker-decision-001"]
         canonical = checker["canonical_context"]
         self.assertEqual(canonical["logical_position_id"], "synthetic-logical-position-001")
@@ -64,15 +70,36 @@ class AnalysisViewMaterializerTests(unittest.TestCase):
         )
         self.assertEqual([row["actual_ply"] for row in checker["candidates"]], [4, 2, None])
         first = checker["candidates"][0]
+        self.assertEqual(checker["recommended_id"], first["id"])
         self.assertEqual(first["value"], {"label": "Equity", "value": -1.615})
         self.assertEqual(first["values"]["native"]["semantics"], "GNU Cubeful equity")
         self.assertEqual(first["values"]["normalized"]["value"], -0.8075)
         self.assertEqual(first["resulting_position_id"], "synthetic-result-position-001")
+        self.assertEqual(first["preview"]["status"], "available")
+        self.assertEqual(first["preview"]["kind"], "prepared-movement-and-result")
+        self.assertEqual(first["comparison_to_recommended"]["value_difference"], 0.0)
+        self.assertEqual(
+            checker["candidates"][1]["comparison_to_recommended"]["value_difference"],
+            -0.002,
+        )
+        self.assertEqual(
+            checker["candidates"][1]["comparison_to_recommended"][
+                "probability_differences"
+            ]["win"],
+            0.0,
+        )
         self.assertEqual(len(first["evaluations"]), 1)
         self.assertIsNone(checker["candidates"][2]["move_board"])
+        self.assertEqual(checker["candidates"][2]["preview"]["status"], "unavailable")
+        self.assertEqual(
+            checker["candidates"][2]["structured_movements"][0],
+            {"die": 3, "from": 13, "order": 1, "to": 10},
+        )
 
     def test_cube_occurrence_is_distinct_from_complete_actions(self) -> None:
-        cube = materializer.materialize_document(self.read_set)["analyses"][
+        cube = materializer.materialize_document(
+            self.read_set, prepare_exploration=True
+        )["analyses"][
             "synthetic-cube-decision-001"
         ]
         self.assertEqual(cube["cube_occurrence"]["observed_action_normalized"], "roll")
@@ -83,6 +110,12 @@ class AnalysisViewMaterializerTests(unittest.TestCase):
         self.assertFalse(cube["actions"][-1]["supported"])
         self.assertIsNone(cube["actions"][-1]["value"]["value"])
         self.assertTrue(all(row["actual_ply"] is None for row in cube["actions"]))
+        self.assertEqual(cube["recommended_id"], "synthetic-cube-action-double-take")
+        self.assertTrue(cube["actions"][1]["is_recommended"])
+        self.assertEqual(
+            cube["actions"][0]["comparison_to_recommended"]["value_difference"],
+            -0.064,
+        )
 
     def test_missing_is_not_reinterpreted_as_null(self) -> None:
         malformed = copy.deepcopy(self.read_set)
@@ -161,6 +194,7 @@ class AnalysisViewMaterializerTests(unittest.TestCase):
                 "--output",
                 str(output),
                 "--verify-repeat",
+                "--prepare-exploration",
             ]
             first = subprocess.run(command, check=False, capture_output=True, text=True)
             self.assertEqual(first.returncode, 0, first.stderr)
