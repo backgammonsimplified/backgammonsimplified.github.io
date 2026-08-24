@@ -359,9 +359,11 @@ inputs, not a new analytical run or authority source.
 ## Analysis enrichment and frozen HADD materialization
 
 Task 021 adds a stricter, non-browser preparation boundary after an accepted
-completed factual result. It consumes explicit project-owned ordered movement
-facts keyed by the exact source analysis/candidate identities. It never parses
-raw GNU output and never lets JavaScript apply checker moves.
+completed factual result. It consumes the accepted complete GNUID, checker
+dice, candidate identities, and normalized candidate notation already exposed
+by the completed Node analysis-view. No per-candidate movement is authored in
+configuration. It never parses raw GNU output and never lets JavaScript apply
+checker moves.
 
 The checked development proof is configured in
 `task-021-analysis-enrichment.json` and runs as:
@@ -385,7 +387,8 @@ installed into the ignored project-local `.r-library`.
 The preparation path is:
 
 ```text
-completed Node analysis-view + explicit ordered movement facts
+completed Node analysis-view + stable analysis-level configuration
+-> bounded Analyzer GNU notation grammar + unique legal-play resolution
 -> backgammonboard move application and overlay rendering
 -> backgammoncalculator complete GNUID derivation and round-trip verification
 -> separate movement and resulting-board SVGs
@@ -395,13 +398,23 @@ completed Node analysis-view + explicit ordered movement facts
 -> existing shared Results Viewer
 ```
 
-Every prepared candidate carries the source identity, mover-relative movement
-steps, derived hit/bar/bearoff effects, stable-player result board state,
-complete resulting GNUID, and explicit display perspectives. Repeated semantic
-JSON and SVG generation must be byte-identical. Missing movement/result facts
-leave that preview unavailable; if any candidate in a decision lacks the
-required resulting position, no partial HADD sidecar is generated for that
-decision.
+The bounded grammar accepts GNU point, bar, off, hit (`*`), chained-path, and
+two-through-four repetition forms. It expands the accepted notation only after
+enumerating the legal plays for the accepted position/dice and requiring one
+exact normalized notation match and one resulting board. This deterministic
+preparer is aligned with the frozen project-owned
+`candidate-board-reconstruction-v1` implementation; the accepted board and
+calculator packages then independently verify its source board, ordered atomic
+steps, stable-player result board, and complete resulting GNUID.
+
+Every prepared candidate carries the source identity, source-preparation
+provenance, mover-relative movement steps, derived hit/bar/bearoff effects,
+stable-player result board state, complete resulting GNUID, and explicit
+display perspectives. Repeated semantic JSON and SVG generation must be
+byte-identical. Unsupported, illegal, or ambiguous notation leaves that
+candidate preview unavailable without a guessed board. If any candidate in a
+decision lacks the required resulting position, no partial HADD sidecar is
+generated for that decision.
 
 The frozen sidecar records the completed analysis key as
 `source_occurrence_id`; the Analyzer materialization receipt additionally binds

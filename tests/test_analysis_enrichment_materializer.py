@@ -6,8 +6,10 @@ import json
 import math
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.analysis import analysis_enrichment_materializer as enrichment
+from scripts.analysis import checker_movement_preparer
 from scripts.analysis import hadd_sidecar
 
 
@@ -33,6 +35,15 @@ class AnalysisEnrichmentMaterializerTests(unittest.TestCase):
         facts = self.view["analysis_enrichment"]
         self.assertEqual(facts["board_commit"], enrichment.BOARD_COMMIT)
         self.assertEqual(facts["calculator_commit"], enrichment.CALCULATOR_COMMIT)
+        self.assertEqual(
+            facts["movement_preparer_version"],
+            checker_movement_preparer.PREPARER_VERSION,
+        )
+        self.assertEqual(
+            facts["structured_movement_source"],
+            "accepted_normalized_gnu_candidate_notation",
+        )
+        self.assertFalse(facts["configured_per_candidate_movement_facts"])
         self.assertEqual(facts["engine_execution_count"], 0)
         self.assertFalse(facts["public_deployment"])
         self.assertEqual(
@@ -86,7 +97,7 @@ class AnalysisEnrichmentMaterializerTests(unittest.TestCase):
                 result_ids.add(candidate["resulting_position_id"])
         self.assertEqual(len(result_ids), 8)
 
-    def test_two_step_and_collapsed_move_are_explicit_without_browser_parsing(self) -> None:
+    def test_two_step_and_compact_move_are_atomic_without_browser_parsing(self) -> None:
         first = self.analysis["candidates"][0]
         collapsed = self.analysis["candidates"][3]
         self.assertEqual(
@@ -98,8 +109,18 @@ class AnalysisEnrichmentMaterializerTests(unittest.TestCase):
         )
         self.assertEqual(
             collapsed["structured_movements"],
-            [{"order": 1, "from": 24, "to": 18, "die": None}],
+            [
+                {"order": 1, "from": 24, "to": 20, "die": 4},
+                {"order": 2, "from": 20, "to": 18, "die": 2},
+            ],
         )
+        for candidate in self.analysis["candidates"]:
+            preparation = candidate["movement_preparation"]
+            self.assertEqual(preparation["legality_status"], "unique_legal_play")
+            self.assertEqual(
+                preparation["source_fact_kind"],
+                "accepted_normalized_gnu_candidate_notation",
+            )
         viewer = (ROOT / "site/assets/bs-analysis-results.js").read_text(encoding="utf-8")
         self.assertNotIn("parseCheckerNotation", viewer)
         self.assertNotIn("applyBoardMoves", viewer)
@@ -197,36 +218,58 @@ class AnalysisEnrichmentMaterializerTests(unittest.TestCase):
             )
         self.assertGreater(unchanged, 0)
 
-    def test_malformed_structured_movement_facts_fail_closed(self) -> None:
+    def test_config_cannot_reintroduce_per_candidate_movement_authority(self) -> None:
         cases = []
-        wrong_order = copy.deepcopy(self.config)
-        wrong_order["analysis_enrichment"]["checker_analyses"][0]["candidates"][0]["movement_steps"][0]["order"] = 2
-        cases.append((wrong_order, "consecutive"))
-        wrong_location = copy.deepcopy(self.config)
-        wrong_location["analysis_enrichment"]["checker_analyses"][0]["candidates"][0]["movement_steps"][0]["from"] = 0
-        cases.append((wrong_location, "point 1..24"))
-        wrong_die = copy.deepcopy(self.config)
-        wrong_die["analysis_enrichment"]["checker_analyses"][0]["candidates"][0]["movement_steps"][0]["die"] = 7
-        cases.append((wrong_die, "null or 1..6"))
+        manual = copy.deepcopy(self.config)
+        manual["analysis_enrichment"]["checker_analyses"][0]["candidates"] = [
+            {"candidate_id": "manual", "movement_steps": []}
+        ]
+        cases.append((manual, "per-candidate movement facts are not accepted"))
+        empty_prefix = copy.deepcopy(self.config)
+        empty_prefix["analysis_enrichment"]["checker_analyses"][0][
+            "candidate_concept_id_prefix"
+        ] = ""
+        cases.append((empty_prefix, "non-empty string"))
         duplicate = copy.deepcopy(self.config)
-        duplicate["analysis_enrichment"]["checker_analyses"][0]["candidates"].append(
-            copy.deepcopy(duplicate["analysis_enrichment"]["checker_analyses"][0]["candidates"][0])
+        duplicate["analysis_enrichment"]["checker_analyses"].append(
+            copy.deepcopy(duplicate["analysis_enrichment"]["checker_analyses"][0])
         )
-        cases.append((duplicate, "Duplicate enrichment candidate"))
+        cases.append((duplicate, "Duplicate enrichment analysis"))
         for config, message in cases:
             with self.subTest(message=message), self.assertRaisesRegex(
                 enrichment.EnrichmentError, message
             ):
                 enrichment.enrichment_index(config)
 
-    def test_missing_candidate_facts_leave_preview_and_hadd_unavailable(self) -> None:
-        partial = copy.deepcopy(self.config)
-        partial["analysis_enrichment"]["checker_analyses"][0]["candidates"].pop()
-        document, manifest = enrichment.prepare_base(partial, ROOT)
+    def test_unsupported_candidate_notation_leaves_preview_and_hadd_unavailable(self) -> None:
+        actual = checker_movement_preparer.prepare_movements
+
+        def fail_one(position_id, dice, notation):
+            if notation == "24/20 6/4":
+                raise checker_movement_preparer.MovementPreparationError("unsupported proof")
+            return actual(position_id, dice, notation)
+
+        with patch.object(
+            checker_movement_preparer, "prepare_movements", side_effect=fail_one
+        ):
+            document, manifest = enrichment.prepare_base(self.config, ROOT)
         analysis = next(iter(document["analyses"].values()))
         self.assertEqual(analysis["candidates"][-1]["preview"]["status"], "unavailable")
         self.assertIsNone(enrichment.hadd_request(document, {}))
         self.assertEqual(len(manifest["analyses"][0]["candidates"]), 7)
+        self.assertEqual(len(manifest["analyses"][0]["preparation_failures"]), 1)
+
+    def test_retained_result_requires_no_per_candidate_authored_semantics(self) -> None:
+        configured = self.config["analysis_enrichment"]["checker_analyses"][0]
+        self.assertEqual(
+            set(configured), {"analysis_id", "candidate_concept_id_prefix"}
+        )
+        config_text = CONFIG_PATH.read_text(encoding="utf-8")
+        self.assertNotIn('"movement_steps"', config_text)
+        self.assertNotIn('"source_notation"', config_text)
+        _, manifest = enrichment.prepare_base(self.config, ROOT)
+        self.assertEqual(len(manifest["analyses"][0]["candidates"]), 8)
+        self.assertEqual(manifest["analyses"][0]["preparation_failures"], [])
 
     def test_inconsistent_receipt_result_board_and_perspective_fail_closed(self) -> None:
         _, manifest = enrichment.prepare_base(self.config, ROOT)

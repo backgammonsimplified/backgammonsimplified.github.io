@@ -79,6 +79,48 @@ checker_state_from_display <- function(display) {
   )
 }
 
+mover_relative_board <- function(state, mover) {
+  stopifnot(mover %in% c("white", "black"))
+  points <- as.integer(state$points)
+  if (identical(mover, "white")) {
+    player_points <- pmax(points, 0L)
+    opponent_points <- rev(pmax(-points, 0L))
+    opponent <- "black"
+  } else {
+    player_points <- rev(pmax(-points, 0L))
+    opponent_points <- pmax(points, 0L)
+    opponent <- "white"
+  }
+  list(
+    perspective = "decision_player",
+    opponent_points_1_to_24_and_bar = as.list(c(
+      as.integer(opponent_points), as.integer(state$bar[[opponent]])
+    )),
+    player_points_1_to_24_and_bar = as.list(c(
+      as.integer(player_points), as.integer(state$bar[[mover]])
+    )),
+    opponent_borne_off = as.integer(state$off[[opponent]]),
+    player_borne_off = as.integer(state$off[[mover]])
+  )
+}
+
+verify_prepared_relative_board <- function(actual, expected, path) {
+  stopifnot(
+    identical(expected$perspective, "decision_player"),
+    identical(
+      as.integer(unlist(actual$opponent_points_1_to_24_and_bar, use.names = FALSE)),
+      as.integer(unlist(expected$opponent_points_1_to_24_and_bar, use.names = FALSE))
+    ),
+    identical(
+      as.integer(unlist(actual$player_points_1_to_24_and_bar, use.names = FALSE)),
+      as.integer(unlist(expected$player_points_1_to_24_and_bar, use.names = FALSE))
+    ),
+    identical(actual$opponent_borne_off, as.integer(expected$opponent_borne_off)),
+    identical(actual$player_borne_off, as.integer(expected$player_borne_off))
+  )
+  invisible(path)
+}
+
 calculator_result_position <- function(starting_gnuid, display) {
   value <- backgammoncalculator::position_from_gnuid(starting_gnuid)
   state <- checker_state_from_display(display)
@@ -152,6 +194,11 @@ for (analysis in manifest$analyses) {
   )
   save_svg(starting_plot, file.path(output_dir, "starting.svg"))
   starting_position <- attr(starting_plot, "backgammon_position")
+  source_dice <- as.integer(unlist(source$source_request$dice, use.names = FALSE))
+  stopifnot(
+    length(source_dice) == 2L,
+    identical(sort(source_dice), sort(as.integer(starting_position$dice)))
+  )
   prepared <- list()
 
   for (candidate_index in seq_along(analysis$candidates)) {
@@ -193,7 +240,37 @@ for (analysis in manifest$analyses) {
       label = rep(candidate$source_notation, length(movements))
     )
     render_position <- backgammonboard:::as_render_position(starting_position)
+    source_preparation <- candidate$source_preparation
+    stopifnot(
+      identical(
+        source_preparation$preparer_version,
+        manifest$authority$movement_preparer_version
+      ),
+      identical(
+        source_preparation$source_reconstruction_version,
+        manifest$authority$source_reconstruction_version
+      ),
+      identical(
+        source_preparation$source_explainer_commit,
+        manifest$authority$source_explainer_commit
+      ),
+      identical(source_preparation$source_fact_kind, "accepted_normalized_gnu_candidate_notation"),
+      identical(source_preparation$normalized_notation, candidate$source_notation),
+      identical(source_preparation$legality_status, "unique_legal_play"),
+      identical(source_preparation$perspective, "decision_player_mover_relative"),
+      identical(source_preparation$movement_steps, movements)
+    )
+    verify_prepared_relative_board(
+      mover_relative_board(render_position, render_position$on_roll),
+      source_preparation$source_board,
+      paste0(candidate_id, ".source_board")
+    )
     applied <- backgammonboard:::apply_board_moves(render_position, moves)
+    verify_prepared_relative_board(
+      mover_relative_board(applied, render_position$on_roll),
+      source_preparation$result_board,
+      paste0(candidate_id, ".result_board")
+    )
     display <- backgammonboard:::position_after_application(starting_position, applied)
     result <- calculator_result_position(starting_gnuid, display)
     message(paste0("Derived result ", result$complete_gnuid))
@@ -238,6 +315,7 @@ for (analysis in manifest$analyses) {
       candidate_concept_id = required_scalar_text(candidate$candidate_concept_id, "candidate_concept_id"),
       source_notation = candidate$source_notation,
       movement_steps = movements,
+      source_preparation = source_preparation,
       applied_effects = applied_rows,
       source_player = starting_position$on_roll,
       source_position_id = starting_gnuid,
@@ -276,7 +354,10 @@ receipt <- list(
     board_repository = "backgammonsimplified/backgammonboard",
     board_commit = manifest$authority$board_commit,
     calculator_repository = "backgammonsimplified/backgammoncalculator",
-    calculator_commit = manifest$authority$calculator_commit
+    calculator_commit = manifest$authority$calculator_commit,
+    movement_preparer_version = manifest$authority$movement_preparer_version,
+    source_reconstruction_version = manifest$authority$source_reconstruction_version,
+    source_explainer_commit = manifest$authority$source_explainer_commit
   ),
   engine_execution_count = 0L,
   deterministic = TRUE,

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Materialize verified candidate previews and frozen HADD sidecars.
 
-The input is an explicitly selected, already-completed Node analysis view plus
-project-owned ordered movement facts.  This process never runs an analysis
-engine, parses raw GNU output, ranks candidates, or executes in the browser.
+The input is an explicitly selected, already-completed Node analysis view.
+Accepted normalized candidate notation is resolved to a unique legal play by
+the Analyzer-side preparer before project-owned board/calculator verification.
+This process never runs an analysis engine, parses raw GNU output, ranks
+candidates, or executes movement semantics in the browser.
 """
 
 from __future__ import annotations
@@ -21,9 +23,11 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from scripts.analysis import checker_movement_preparer
     from scripts.analysis import hadd_sidecar
     from scripts.analysis import materialize_node_analysis as node_materializer
 except ModuleNotFoundError:  # Direct execution from scripts/analysis.
+    import checker_movement_preparer
     import hadd_sidecar
     import materialize_node_analysis as node_materializer
 
@@ -148,32 +152,18 @@ def enrichment_index(config: dict[str, Any]) -> dict[str, dict[str, Any]]:
         analysis_id = require_text(row.get("analysis_id"), f"{path}.analysis_id")
         if analysis_id in result:
             raise EnrichmentError(f"Duplicate enrichment analysis identity: {analysis_id}")
-        candidates: dict[str, dict[str, Any]] = {}
-        for candidate_index, candidate_raw in enumerate(require_list(row.get("candidates"), f"{path}.candidates")):
-            candidate_path = f"{path}.candidates[{candidate_index}]"
-            candidate = require_object(candidate_raw, candidate_path)
-            candidate_id = require_text(candidate.get("candidate_id"), f"{candidate_path}.candidate_id")
-            if candidate_id in candidates:
-                raise EnrichmentError(f"Duplicate enrichment candidate identity: {candidate_id}")
-            movements = [
-                validate_step(value, index + 1, f"{candidate_path}.movement_steps[{index}]")
-                for index, value in enumerate(require_list(candidate.get("movement_steps"), f"{candidate_path}.movement_steps"))
-            ]
-            if not movements:
-                raise EnrichmentError(f"{candidate_path}.movement_steps must not be empty")
-            candidates[candidate_id] = {
-                "candidate_id": candidate_id,
-                "candidate_concept_id": require_text(
-                    candidate.get("candidate_concept_id"),
-                    f"{candidate_path}.candidate_concept_id",
-                ),
-                "source_notation": require_text(
-                    candidate.get("source_notation"),
-                    f"{candidate_path}.source_notation",
-                ),
-                "movement_steps": movements,
-            }
-        result[analysis_id] = {"analysis_id": analysis_id, "candidates": candidates}
+        if set(row) != {"analysis_id", "candidate_concept_id_prefix"}:
+            raise EnrichmentError(
+                f"{path} must contain only analysis_id and candidate_concept_id_prefix; "
+                "per-candidate movement facts are not accepted configuration authority"
+            )
+        result[analysis_id] = {
+            "analysis_id": analysis_id,
+            "candidate_concept_id_prefix": require_text(
+                row.get("candidate_concept_id_prefix"),
+                f"{path}.candidate_concept_id_prefix",
+            ),
+        }
     return result
 
 
@@ -196,24 +186,63 @@ def prepare_base(config: dict[str, Any], root: Path) -> tuple[dict[str, Any], di
         }
         if len(source_by_id) != len(source["checker"]["candidates"]):
             raise EnrichmentError("Completed result contains duplicate candidate IDs")
+        request = require_object(source.get("source_request"), "completed_result.source_request")
+        position = require_object(request.get("position"), "completed_result.source_request.position")
+        complete_gnuid = require_text(position.get("id"), "completed_result.source_request.position.id")
+        if COMPLETE_GNUID.fullmatch(complete_gnuid) is None:
+            raise EnrichmentError("Completed checker result requires one complete GNUID")
+        dice_raw = require_list(request.get("dice"), "completed_result.source_request.dice")
+        if len(dice_raw) != 2 or any(
+            isinstance(die, bool) or not isinstance(die, int) or die not in range(1, 7)
+            for die in dice_raw
+        ):
+            raise EnrichmentError("Completed checker result requires two dice from 1 through 6")
+        dice = (dice_raw[0], dice_raw[1])
+        projected_by_id = {
+            candidate["id"]: candidate
+            for candidate in document["analyses"][analysis_id]["candidates"]
+        }
         prepared_rows = []
-        for candidate_id, facts in enrichment["candidates"].items():
-            source_candidate = source_by_id.get(candidate_id)
-            if source_candidate is None:
-                raise EnrichmentError(f"Structured movement refers to unknown candidate: {candidate_id}")
-            if source_candidate.get("notation") != facts["source_notation"]:
-                raise EnrichmentError(f"Candidate notation identity differs: {candidate_id}")
-            projected = next(
-                candidate
-                for candidate in document["analyses"][analysis_id]["candidates"]
-                if candidate["id"] == candidate_id
+        preparation_failures: list[dict[str, str]] = []
+        for candidate_id, source_candidate in source_by_id.items():
+            notation = require_text(
+                source_candidate.get("notation"),
+                f"completed_result.candidate[{candidate_id}].notation",
             )
-            prepared_rows.append(
-                {
-                    **facts,
-                    "display_rank": projected["display_rank"],
-                }
-            )
+            try:
+                preparation = checker_movement_preparer.prepare_movements(
+                    complete_gnuid.split(":", 1)[0], dice, notation
+                )
+                movements = [
+                    validate_step(
+                        value,
+                        index + 1,
+                        f"prepared[{candidate_id}].movement_steps[{index}]",
+                    )
+                    for index, value in enumerate(preparation["movement_steps"])
+                ]
+                if not movements:
+                    raise EnrichmentError("unique legal play did not contain a checker step")
+                prepared_rows.append(
+                    {
+                        "candidate_id": candidate_id,
+                        "candidate_concept_id": (
+                            enrichment["candidate_concept_id_prefix"] + candidate_id
+                        ),
+                        "source_notation": notation,
+                        "movement_steps": movements,
+                        "source_preparation": preparation,
+                        "display_rank": projected_by_id[candidate_id]["display_rank"],
+                    }
+                )
+            except (checker_movement_preparer.MovementPreparationError, EnrichmentError) as error:
+                preparation_failures.append(
+                    {
+                        "candidate_id": candidate_id,
+                        "reason_code": "unsupported_or_nonunique_candidate_notation",
+                        "detail": str(error),
+                    }
+                )
         model = document["analyses"][analysis_id]
         recommendation = source.get("recommendation", {})
         recommended_id = recommendation.get("id")
@@ -246,10 +275,15 @@ def prepare_base(config: dict[str, Any], root: Path) -> tuple[dict[str, Any], di
                 "movement_steps": [],
                 "resulting_position_id": None,
                 "message": (
-                    "Accepted structured movement/result facts were not supplied; "
-                    "no movement or resulting board was guessed."
+                    "Accepted candidate notation could not be resolved to one verified "
+                    "legal play; no movement or resulting board was guessed."
                 ),
             }
+        failure_by_id = {item["candidate_id"]: item for item in preparation_failures}
+        for candidate in model["candidates"]:
+            failure = failure_by_id.get(candidate["id"])
+            if failure is not None:
+                candidate["preview"]["reason_code"] = failure["reason_code"]
         render_analyses.append(
             {
                 "analysis_id": analysis_id,
@@ -260,6 +294,9 @@ def prepare_base(config: dict[str, Any], root: Path) -> tuple[dict[str, Any], di
                     prepared_rows,
                     key=lambda item: (item["display_rank"], item["candidate_id"]),
                 ),
+                "preparation_failures": sorted(
+                    preparation_failures, key=lambda item: item["candidate_id"]
+                ),
             }
         )
     render_manifest = {
@@ -268,6 +305,11 @@ def prepare_base(config: dict[str, Any], root: Path) -> tuple[dict[str, Any], di
         "authority": {
             "board_commit": BOARD_COMMIT,
             "calculator_commit": CALCULATOR_COMMIT,
+            "movement_preparer_version": checker_movement_preparer.PREPARER_VERSION,
+            "source_reconstruction_version": (
+                checker_movement_preparer.SOURCE_RECONSTRUCTION_VERSION
+            ),
+            "source_explainer_commit": checker_movement_preparer.SOURCE_EXPLAINER_COMMIT,
         },
         "analyses": render_analyses,
     }
@@ -317,7 +359,16 @@ def validate_receipt(
     if receipt.get("engine_execution_count") != 0 or receipt.get("deterministic") is not True:
         raise EnrichmentError("Candidate preview receipt changed the zero-engine deterministic boundary")
     authority = require_object(receipt.get("authority"), "receipt.authority")
-    if authority.get("board_commit") != BOARD_COMMIT or authority.get("calculator_commit") != CALCULATOR_COMMIT:
+    if (
+        authority.get("board_commit") != BOARD_COMMIT
+        or authority.get("calculator_commit") != CALCULATOR_COMMIT
+        or authority.get("movement_preparer_version")
+        != checker_movement_preparer.PREPARER_VERSION
+        or authority.get("source_reconstruction_version")
+        != checker_movement_preparer.SOURCE_RECONSTRUCTION_VERSION
+        or authority.get("source_explainer_commit")
+        != checker_movement_preparer.SOURCE_EXPLAINER_COMMIT
+    ):
         raise EnrichmentError("Candidate preview receipt authority differs")
     expected_analyses = {item["analysis_id"]: item for item in manifest["analyses"]}
     found: dict[tuple[str, str], dict[str, Any]] = {}
@@ -339,6 +390,8 @@ def validate_receipt(
                 candidate.get("candidate_concept_id") != expected_candidate["candidate_concept_id"]
                 or candidate.get("source_notation") != expected_candidate["source_notation"]
                 or candidate.get("movement_steps") != expected_candidate["movement_steps"]
+                or candidate.get("source_preparation")
+                != expected_candidate["source_preparation"]
             ):
                 raise EnrichmentError("Candidate receipt changed accepted source/movement identity")
             result_id = candidate.get("resulting_position_id")
@@ -404,6 +457,7 @@ def attach_previews(
                     },
                     "movement_effects": copy.deepcopy(receipt["applied_effects"]),
                     "resulting_board_state": copy.deepcopy(receipt["resulting_board_state"]),
+                    "movement_preparation": copy.deepcopy(receipt["source_preparation"]),
                     "preview": {
                         "status": "available",
                         "kind": "prepared-movement-and-result",
@@ -411,9 +465,13 @@ def attach_previews(
                         "movement_effects": copy.deepcopy(receipt["applied_effects"]),
                         "resulting_position_id": receipt["resulting_position_id"],
                         "perspective": copy.deepcopy(receipt["perspective"]),
+                        "source_preparation": copy.deepcopy(
+                            receipt["source_preparation"]
+                        ),
                         "message": (
-                            "Ordered movement, movement overlay, complete resulting GNUID, "
-                            "and resulting board were prepared and cross-verified at build time."
+                            "Accepted notation was resolved to one legal ordered play; its "
+                            "movement overlay, complete resulting GNUID, and resulting board "
+                            "were cross-verified at build time."
                         ),
                     },
                 }
@@ -606,12 +664,32 @@ def materialize(
                 "new_training_refits": 0,
             },
         }
+    checker_candidate_count = sum(
+        len(analysis.get("candidates", []))
+        for analysis in document["analyses"].values()
+        if analysis.get("analysis_kind") == "checker"
+    )
+    prepared_candidate_count = len(receipt_index)
     document["analysis_enrichment"] = {
         "schema_version": CONFIG_SCHEMA,
-        "status": "available",
+        "status": (
+            "available"
+            if prepared_candidate_count == checker_candidate_count
+            else "partial"
+        ),
         "candidate_preview_receipt_sha256": sha256_bytes(stable_bytes(receipt)),
         "board_commit": BOARD_COMMIT,
         "calculator_commit": CALCULATOR_COMMIT,
+        "structured_movement_source": "accepted_normalized_gnu_candidate_notation",
+        "movement_preparer_version": checker_movement_preparer.PREPARER_VERSION,
+        "source_reconstruction_version": (
+            checker_movement_preparer.SOURCE_RECONSTRUCTION_VERSION
+        ),
+        "source_explainer_commit": checker_movement_preparer.SOURCE_EXPLAINER_COMMIT,
+        "configured_per_candidate_movement_facts": False,
+        "checker_candidate_count": checker_candidate_count,
+        "prepared_candidate_count": prepared_candidate_count,
+        "unavailable_candidate_count": checker_candidate_count - prepared_candidate_count,
         "engine_execution_count": 0,
         "public_deployment": False,
         "calculated_cubeful": "CUBEFUL_CALCULATION_AUTHORITY_BLOCKED",
