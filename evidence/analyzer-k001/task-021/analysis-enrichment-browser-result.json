@@ -1,0 +1,54 @@
+{
+  "accessibility": "PASS",
+  "candidate_count": 8,
+  "candidate_preview_modes": [
+    "original",
+    "movement",
+    "result"
+  ],
+  "console_errors": [],
+  "deterministic_rerendering": "PASS",
+  "engine_execution_count": 0,
+  "hadd_sidecar_package_identity_sha256": "be1c47d34adee7292ea751c49d377df8beb3ea7428dde31d7fbe8d433fb3d54c",
+  "keyboard": "PASS",
+  "malformed_hadd": "PASS",
+  "missing_hadd": "PASS",
+  "missing_preview": "PASS",
+  "page_errors": [],
+  "pointer": "PASS",
+  "responsive": [
+    {
+      "client_width": 1440,
+      "scroll_width": 1440,
+      "width": 1440
+    },
+    {
+      "client_width": 768,
+      "scroll_width": 768,
+      "width": 768
+    },
+    {
+      "client_width": 390,
+      "scroll_width": 390,
+      "width": 390
+    },
+    {
+      "client_width": 320,
+      "scroll_width": 320,
+      "width": 320
+    }
+  ],
+  "selected_candidate_ids": [
+    "gnu-move-1",
+    "gnu-move-2",
+    "gnu-move-3",
+    "gnu-move-4",
+    "gnu-move-5",
+    "gnu-move-6",
+    "gnu-move-7",
+    "gnu-move-8"
+  ],
+  "source_analysis_key": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+  "status": "PASS",
+  "touch": "PASS"
+}

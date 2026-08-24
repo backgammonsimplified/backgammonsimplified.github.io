@@ -355,3 +355,58 @@ config and output say `local-development-only`; the command refuses a Canonical
 status. It consumes completed artifacts only and never starts GNU or another
 analysis engine. The K001 checker/cube files in `tests/fixtures/` are regression
 inputs, not a new analytical run or authority source.
+
+## Analysis enrichment and frozen HADD materialization
+
+Task 021 adds a stricter, non-browser preparation boundary after an accepted
+completed factual result. It consumes explicit project-owned ordered movement
+facts keyed by the exact source analysis/candidate identities. It never parses
+raw GNU output and never lets JavaScript apply checker moves.
+
+The checked development proof is configured in
+`task-021-analysis-enrichment.json` and runs as:
+
+```bash
+BACKGAMMONBOARD_REPO=/exact/backgammonboard \
+BACKGAMMONCALCULATOR_REPO=/exact/backgammoncalculator \
+EXPLAINER_REPO=/exact/backgammon-explainer \
+  bash scripts/analysis/materialize-analysis-enrichment.sh \
+    scripts/analysis/task-021-analysis-enrichment.json
+```
+
+The wrapper requires the exact accepted board, calculator, and Explainer
+commits before installing or invoking anything.
+
+Set `ANALYZER_ENRICHMENT_R_DEPENDENCY_LIBS` to a colon-separated R library
+path when the board/calculator package dependencies are not installed in the
+default R libraries. The exact authority packages themselves are always
+installed into the ignored project-local `.r-library`.
+
+The preparation path is:
+
+```text
+completed Node analysis-view + explicit ordered movement facts
+-> backgammonboard move application and overlay rendering
+-> backgammoncalculator complete GNUID derivation and round-trip verification
+-> separate movement and resulting-board SVGs
+-> next-player-on-roll factual HADD request
+-> frozen Explainer compact runtime
+-> existing Task 020 complete validator/join
+-> existing shared Results Viewer
+```
+
+Every prepared candidate carries the source identity, mover-relative movement
+steps, derived hit/bar/bearoff effects, stable-player result board state,
+complete resulting GNUID, and explicit display perspectives. Repeated semantic
+JSON and SVG generation must be byte-identical. Missing movement/result facts
+leave that preview unavailable; if any candidate in a decision lacks the
+required resulting position, no partial HADD sidecar is generated for that
+decision.
+
+The frozen sidecar records the completed analysis key as
+`source_occurrence_id`; the Analyzer materialization receipt additionally binds
+the exact source artifact SHA-256 to the model, runtime, feature, perspective,
+and sidecar package identities. HADD remains value/probability/conditional-logit
+explanation evidence only. Native engine recommendation remains factual,
+Pairwise Ridge remains the sole Explainer recommendation authority, and
+calculated cubeful remains `CUBEFUL_CALCULATION_AUTHORITY_BLOCKED`.

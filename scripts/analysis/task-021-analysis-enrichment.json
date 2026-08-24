@@ -1,0 +1,125 @@
+{
+  "schema_version": "bs-local-node-analysis-authoring-v1",
+  "authority": "local-development-only",
+  "slug": "analyzer-task-021",
+  "output": {
+    "analysis_view": "site/data/analyzer-task-021-enrichment.json",
+    "public_analysis_view": "/data/analyzer-task-021-enrichment.json",
+    "assets": "site/assets/positions/analyzer-task-021",
+    "public_asset_root": "/assets/positions/analyzer-task-021",
+    "hadd_sidecar": "evidence/analyzer-k001/task-021/generated-hadd-sidecar.json",
+    "hadd_generation_request": "evidence/analyzer-k001/task-021/generated-hadd-request.json",
+    "materialization_receipt": "evidence/analyzer-k001/task-021/analysis-enrichment-receipt.json"
+  },
+  "fixture_status": {
+    "kind": "retained-analysis",
+    "label": "Accepted completed Node analysis with deterministic enrichment",
+    "message": "The accepted Node K001 completed checker result is enriched at build time with project-owned movement/result verification and the frozen accepted HADD runtime."
+  },
+  "analyses": [
+    {
+      "artifact": "tests/fixtures/node-k001-checker-analysis-view.json",
+      "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+      "display_id": "task-021-enriched-checker",
+      "kind": "checker",
+      "asset_subdir": "checker",
+      "presentation": {
+        "title": "Accepted checker analysis — enriched",
+        "subtitle": "Eight accepted GNU candidates with verified movement, result positions, and optional HADD evidence",
+        "decision": "Checker play",
+        "original_board_alt": "Accepted Node checker analysis starting position.",
+        "candidate_alt": "Accepted checker position with movement overlay for rank {rank}: {notation}.",
+        "overlay_details": "Movement and result assets are prepared from explicit structured facts and verified project-owned semantics.",
+        "unsupported_details": "No preview is inferred when accepted structured facts are unavailable."
+      }
+    }
+  ],
+  "analysis_enrichment": {
+    "schema_version": "bs-analyzer-analysis-enrichment-materialization-v1",
+    "authority": {
+      "backgammonboard_commit": "e3a989788758d30a0be065490d29ec48a88a05c0",
+      "backgammoncalculator_commit": "a385a963ed01a6eac083dae7a1b246b1c150b3eb",
+      "explainer_commit": "58522bb078ecda273a11476c60f1875a2255b285",
+      "explainer_package_identity_sha256": "f40ba9417896383a94e48012843eb0f45e177430e746cd01080f8243c5751424"
+    },
+    "checker_analyses": [
+      {
+        "analysis_id": "sha256-52e8ef0da2e4090a81f0ab726370811812c20f76f31730c5e6d132e63b774f3d",
+        "candidates": [
+          {
+            "candidate_id": "gnu-move-1",
+            "candidate_concept_id": "node-k001-checker-gnu-move-1",
+            "source_notation": "8/4 6/4",
+            "movement_steps": [
+              {"order": 1, "from": 8, "to": 4, "die": 4},
+              {"order": 2, "from": 6, "to": 4, "die": 2}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-2",
+            "candidate_concept_id": "node-k001-checker-gnu-move-2",
+            "source_notation": "24/20 13/11",
+            "movement_steps": [
+              {"order": 1, "from": 24, "to": 20, "die": 4},
+              {"order": 2, "from": 13, "to": 11, "die": 2}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-3",
+            "candidate_concept_id": "node-k001-checker-gnu-move-3",
+            "source_notation": "24/22 24/20",
+            "movement_steps": [
+              {"order": 1, "from": 24, "to": 22, "die": 2},
+              {"order": 2, "from": 24, "to": 20, "die": 4}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-4",
+            "candidate_concept_id": "node-k001-checker-gnu-move-4",
+            "source_notation": "24/18",
+            "movement_steps": [
+              {"order": 1, "from": 24, "to": 18, "die": null}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-5",
+            "candidate_concept_id": "node-k001-checker-gnu-move-5",
+            "source_notation": "13/11 13/9",
+            "movement_steps": [
+              {"order": 1, "from": 13, "to": 11, "die": 2},
+              {"order": 2, "from": 13, "to": 9, "die": 4}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-6",
+            "candidate_concept_id": "node-k001-checker-gnu-move-6",
+            "source_notation": "24/22 13/9",
+            "movement_steps": [
+              {"order": 1, "from": 24, "to": 22, "die": 2},
+              {"order": 2, "from": 13, "to": 9, "die": 4}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-7",
+            "candidate_concept_id": "node-k001-checker-gnu-move-7",
+            "source_notation": "24/20 8/6",
+            "movement_steps": [
+              {"order": 1, "from": 24, "to": 20, "die": 4},
+              {"order": 2, "from": 8, "to": 6, "die": 2}
+            ]
+          },
+          {
+            "candidate_id": "gnu-move-8",
+            "candidate_concept_id": "node-k001-checker-gnu-move-8",
+            "source_notation": "24/20 6/4",
+            "movement_steps": [
+              {"order": 1, "from": 24, "to": 20, "die": 4},
+              {"order": 2, "from": 6, "to": 4, "die": 2}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "learn_bindings": []
+}

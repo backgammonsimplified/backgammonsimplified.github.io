@@ -24,6 +24,23 @@ Run `bash scripts/analysis/render-node-k001-lesson-preview.sh` after pulling thi
 
 :::
 
+## Enriched accepted checker lifecycle
+
+This is the same accepted completed Node checker result, passed through the
+deterministic Analyzer enrichment boundary. Every candidate retains its native
+rank, evaluation, probabilities, and recommendation while adding verified
+structured movement, a movement overlay, a complete resulting GNUID, a
+resulting board, and frozen HADD probabilities/value/explanation evidence.
+
+```{=html}
+<div
+  class="bs-analysis-results-host"
+  data-bs-analysis-results
+  data-analysis-id="task-021-enriched-checker"
+  data-analysis-fixture-url="/data/analyzer-task-021-enrichment.json"
+></div>
+```
+
 ## Exact Node checker lesson result
 
 This is the accepted checker analysis for GNUID `4PPgASTgc/ABMA:cAnqAAAAAAAE`, dice `4-2`. It preserves all exported Node candidates and the recommendation `8/4 6/4`.
