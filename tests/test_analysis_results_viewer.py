@@ -165,7 +165,15 @@ class AnalysisResultsViewerContractTests(unittest.TestCase):
             '"Selected candidate",',
             script,
         )
-        self.assertIn("showCheckerDecision(decision, topCandidate, candidate)", script)
+        self.assertIn(
+            "showCheckerDecision(decision, topCandidate, candidate, model, haddDecision)",
+            script,
+        )
+        self.assertIn("bs-analysis-results-hadd-surface", script)
+        self.assertIn(
+            "analysisSection.append(choicesHeading, choiceGroup, haddDecision, status)",
+            script,
+        )
         self.assertIn("selectedCandidate.id === topCandidate.id", script)
         self.assertIn("boardExplorer.setCandidate(candidate)", script)
         self.assertIn('"Movement + result"', script)

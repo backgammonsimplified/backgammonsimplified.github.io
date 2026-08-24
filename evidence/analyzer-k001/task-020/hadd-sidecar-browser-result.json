@@ -1,0 +1,43 @@
+{
+  "accessibility": "PASS",
+  "console_errors": [],
+  "deterministic_repeated_rendering": "PASS",
+  "engine_execution_count": 0,
+  "keyboard": "PASS",
+  "page_errors": [],
+  "pointer": "PASS",
+  "responsive": [
+    {
+      "client_width": 1440,
+      "scroll_width": 1440,
+      "table_client_width": 1248,
+      "table_scroll_width": 1248,
+      "width": 1440
+    },
+    {
+      "client_width": 768,
+      "scroll_width": 768,
+      "table_client_width": 735,
+      "table_scroll_width": 782,
+      "width": 768
+    },
+    {
+      "client_width": 390,
+      "scroll_width": 390,
+      "table_client_width": 359,
+      "table_scroll_width": 782,
+      "width": 390
+    },
+    {
+      "client_width": 320,
+      "scroll_width": 320,
+      "table_client_width": 289,
+      "table_scroll_width": 782,
+      "width": 320
+    }
+  ],
+  "sidecar_package_identity_sha256": "2d8c3475ee377fc826879a83d80b13017e01f931794d965c1a3cc178b0a8a720",
+  "sidecar_schema": "explainer-hadd-derived-facts-sidecar-v1",
+  "status": "PASS",
+  "touch": "PASS"
+}

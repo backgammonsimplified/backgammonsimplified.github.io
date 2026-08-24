@@ -3,3 +3,6 @@ LICENSES/*.txt text eol=lf whitespace=-blank-at-eof,-trailing-space
 
 # Preserve the approved project-owned SVG byte content.
 site/assets/icons/favicon.svg text eol=lf whitespace=-trailing-space
+
+# Preserve accepted immutable Explainer HADD fixture bytes, including EOF whitespace.
+tests/fixtures/hadd-integration/*.json text eol=lf whitespace=-blank-at-eof,-trailing-space

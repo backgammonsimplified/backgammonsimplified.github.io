@@ -31,6 +31,9 @@
     ["lose_gammon_or_worse", "Lose gammon or worse"],
     ["lose_backgammon", "Lose backgammon"]
   ];
+  const HADD_HEADS = ["q_win", "q_wg", "q_wbg", "q_lg", "q_lbg"];
+  const HADD_ARCHITECTURE = "ridge-ranking-hadd-value-explanation-sidecar-v1";
+  const HADD_PERSPECTIVE = "normalized_static_post_move_next_player_on_roll";
 
   function optionalText(value, fallback) {
     return value === null || value === undefined || value === ""
@@ -1055,7 +1058,12 @@
     return card;
   }
 
-  function probabilityComparisonTable(topCandidate, selectedCandidate, itemKind) {
+  function probabilityComparisonTable(
+    topCandidate,
+    selectedCandidate,
+    itemKind,
+    preparedDifferences
+  ) {
     const table = element("table", "bs-analysis-results-comparison-table");
     const caption = element(
       "caption",
@@ -1077,9 +1085,10 @@
     probabilityComparisonRows(
       topCandidate && topCandidate.probabilities,
       selectedCandidate && selectedCandidate.probabilities,
-      selectedCandidate &&
+      preparedDifferences ||
+      (selectedCandidate &&
         selectedCandidate.comparison_to_recommended &&
-        selectedCandidate.comparison_to_recommended.probability_differences
+        selectedCandidate.comparison_to_recommended.probability_differences)
     ).forEach(function (row) {
       const tableRow = element("tr", "");
       const label = element("th", "", row.label);
@@ -1107,13 +1116,237 @@
     return table;
   }
 
-  function showCheckerDecision(decision, topCandidate, selectedCandidate) {
+  function usablePreparedHadd(model) {
+    const hadd = model && model.hadd;
+    if (
+      !hadd ||
+      hadd.status !== "available" ||
+      hadd.selected_architecture !== HADD_ARCHITECTURE ||
+      hadd.position_perspective !== HADD_PERSPECTIVE ||
+      !hadd.authority ||
+      hadd.authority.hadd_ranking_authorized !== false ||
+      hadd.authority.calculated_cubeful !== "CUBEFUL_CALCULATION_AUTHORITY_BLOCKED" ||
+      !hadd.model ||
+      !hadd.feature_system ||
+      !Array.isArray(hadd.ab_explanations)
+    ) {
+      return null;
+    }
+    const complete = model.candidates.every(function (candidate) {
+      const facts = candidate.hadd_derived_facts;
+      return (
+        facts &&
+        facts.position_id === candidate.resulting_position_id &&
+        facts.position_perspective === HADD_PERSPECTIVE &&
+        facts.probabilities &&
+        Number.isFinite(Number(facts.probability_derived_cubeless)) &&
+        facts.conditional_logit_evidence &&
+        JSON.stringify(facts.conditional_logit_evidence.heads) === JSON.stringify(HADD_HEADS) &&
+        facts.conditional_logit_evidence.additive_scale === "conditional_logit_only"
+      );
+    });
+    return complete ? hadd : null;
+  }
+
+  function haddCandidateCard(candidate, label) {
+    const facts = candidate.hadd_derived_facts;
+    const card = element("section", "bs-analysis-results-hadd-card");
+    card.append(
+      element("span", "bs-analysis-results-decision-label", label),
+      element("strong", "bs-analysis-results-hadd-move", optionalText(candidate.move)),
+      definitionList(
+        [
+          ["HADD value", formatNumber(facts.probability_derived_cubeless)],
+          ["Position perspective", "next player on roll"]
+        ],
+        "bs-analysis-results-hadd-facts"
+      ),
+      element("h5", "bs-analysis-results-hadd-probability-title", "HADD probabilities"),
+      outcomePanel(facts.probabilities)
+    );
+    return card;
+  }
+
+  function orientedHaddExplanation(hadd, candidateA, candidateB) {
+    for (const explanation of hadd.ab_explanations) {
+      if (
+        explanation.candidate_a_id === candidateA.id &&
+        explanation.candidate_b_id === candidateB.id &&
+        explanation.difference_order === "A-minus-B"
+      ) {
+        return { explanation: explanation, multiplier: 1 };
+      }
+      if (
+        explanation.candidate_a_id === candidateB.id &&
+        explanation.candidate_b_id === candidateA.id &&
+        explanation.difference_order === "A-minus-B"
+      ) {
+        return { explanation: explanation, multiplier: -1 };
+      }
+    }
+    return null;
+  }
+
+  function haddContributionTable(oriented) {
+    const details = element("details", "bs-analysis-results-hadd-explanation");
+    const changed = oriented.explanation.per_feature_conditional_logit_difference.filter(
+      function (row) {
+        return row.conditional_logit_contributions.some(function (value) {
+          return value !== 0;
+        });
+      }
+    );
+    details.appendChild(
+      element(
+        "summary",
+        "bs-analysis-results-hadd-explanation-summary",
+        "Why the resulting positions differ according to HADD (" +
+          changed.length +
+          " changed features)"
+      )
+    );
+    const intro = element(
+      "p",
+      "bs-analysis-results-hadd-explanation-note",
+      "Each row is an exact conditional-logit contribution difference in selected-minus-recommended (A-minus-B) order. Unchanged features cancel to exact zero and are omitted."
+    );
+    const logitDifferences = definitionList(
+      HADD_HEADS.map(function (head, index) {
+        return [
+          head + " exact difference",
+          formatNumber(
+            oriented.multiplier *
+              oriented.explanation.conditional_logit_difference[index]
+          )
+        ];
+      }),
+      "bs-analysis-results-hadd-facts"
+    );
+    const tableWrap = element("div", "bs-analysis-results-hadd-table-wrap");
+    const table = element("table", "bs-analysis-results-comparison-table bs-analysis-results-hadd-table");
+    const caption = element(
+      "caption",
+      "bs-analysis-results-comparison-caption",
+      "Exact selected-minus-recommended conditional-logit feature contributions"
+    );
+    const head = element("thead", "");
+    const header = element("tr", "");
+    header.appendChild(element("th", "", "Feature"));
+    HADD_HEADS.forEach(function (name) {
+      header.appendChild(element("th", "", name));
+    });
+    head.appendChild(header);
+    const body = element("tbody", "");
+    changed.forEach(function (row) {
+      const tr = element("tr", "");
+      const label = element("th", "", row.feature_id.replaceAll("_", " "));
+      label.scope = "row";
+      tr.appendChild(label);
+      row.conditional_logit_contributions.forEach(function (value) {
+        tr.appendChild(element("td", "", formatNumber(oriented.multiplier * value)));
+      });
+      body.appendChild(tr);
+    });
+    table.append(caption, head, body);
+    tableWrap.appendChild(table);
+    details.append(intro, logitDifferences, tableWrap);
+    return details;
+  }
+
+  function haddComparisonPanel(model, topCandidate, selectedCandidate) {
+    const hadd = usablePreparedHadd(model);
+    if (!hadd || !topCandidate || !selectedCandidate) return null;
+    const panel = element("section", "bs-analysis-results-hadd");
+    panel.setAttribute("aria-label", "HADD derived resulting-position facts");
+    panel.append(
+      element("h4", "bs-analysis-results-hadd-title", "HADD derived resulting-position facts"),
+      element(
+        "p",
+        "bs-analysis-results-hadd-authority",
+        "The engine recommendation above is native factual output. Pairwise Ridge remains the sole Explainer ranking authority where surfaced. HADD did not select either candidate; it supplies model-derived resulting-position probabilities, cubeless value, and conditional-logit explanation evidence."
+      )
+    );
+    const cards = element("div", "bs-analysis-results-hadd-cards");
+    cards.appendChild(haddCandidateCard(topCandidate, "Recommended candidate result"));
+    if (selectedCandidate.id !== topCandidate.id) {
+      cards.appendChild(haddCandidateCard(selectedCandidate, "Selected candidate result"));
+    }
+    panel.appendChild(cards);
+    if (selectedCandidate.id !== topCandidate.id) {
+      const oriented = orientedHaddExplanation(hadd, selectedCandidate, topCandidate);
+      if (oriented) {
+        const preparedProbabilityDifferences = {};
+        Object.keys(oriented.explanation.probability_differences).forEach(
+          function (key) {
+            preparedProbabilityDifferences[key] =
+              oriented.multiplier *
+              oriented.explanation.probability_differences[key];
+          }
+        );
+        preparedProbabilityDifferences.lose =
+          selectedCandidate.hadd_derived_facts.probabilities.lose -
+          topCandidate.hadd_derived_facts.probabilities.lose;
+        panel.append(
+          element(
+            "p",
+            "bs-analysis-results-hadd-output-difference",
+            "Selected-minus-recommended HADD value difference: " +
+              formatNumber(
+                oriented.multiplier *
+                  oriented.explanation.probability_derived_cubeless_difference
+              )
+          ),
+          probabilityComparisonTable(
+            { probabilities: topCandidate.hadd_derived_facts.probabilities },
+            { probabilities: selectedCandidate.hadd_derived_facts.probabilities },
+            "HADD resulting-position",
+            preparedProbabilityDifferences
+          ),
+          haddContributionTable(oriented)
+        );
+      }
+      panel.appendChild(
+        element(
+          "p",
+          "bs-analysis-results-hadd-nonlinear-note",
+          "Probability and HADD value differences are nonlinear outputs after the sigmoid and probability hierarchy. They are separate from the additive conditional-logit feature evidence and do not have a simple additive feature decomposition."
+        )
+      );
+    }
+    panel.appendChild(
+      element(
+        "p",
+        "bs-analysis-results-hadd-model",
+        "HADD model " + optionalText(hadd.model.source_model_id) +
+          "; runtime " + optionalText(hadd.model.runtime_id) +
+          "; feature system " + optionalText(hadd.feature_system.feature_set_identity) + "."
+      )
+    );
+    return panel;
+  }
+
+  function showCheckerDecision(
+    decision,
+    topCandidate,
+    selectedCandidate,
+    model,
+    haddDecision
+  ) {
     decision.replaceChildren(
       checkerMoveCard(topCandidate, "Recommended candidate", "top", {
         value_difference: 0
       })
     );
-    if (!selectedCandidate || selectedCandidate.id === topCandidate.id) return;
+    if (!selectedCandidate) return;
+
+    const hadd = haddComparisonPanel(model, topCandidate, selectedCandidate);
+    if (haddDecision) {
+      haddDecision.replaceChildren();
+      if (hadd) haddDecision.appendChild(hadd);
+    }
+    if (selectedCandidate.id === topCandidate.id) {
+      return;
+    }
 
     const selected = element("div", "bs-analysis-results-selected-comparison");
     selected.append(
@@ -1134,7 +1367,9 @@
     boardExplorer,
     status,
     decision,
-    topCandidate
+    topCandidate,
+    model,
+    haddDecision
   ) {
     choiceGroup
       .querySelectorAll("[data-bs-analysis-candidate-id]")
@@ -1145,7 +1380,7 @@
         if (summary) summary.setAttribute("aria-current", active ? "true" : "false");
       });
     boardExplorer.setCandidate(candidate);
-    showCheckerDecision(decision, topCandidate, candidate);
+    showCheckerDecision(decision, topCandidate, candidate, model, haddDecision);
   }
 
   function renderChecker(
@@ -1153,6 +1388,7 @@
     choiceGroup,
     status,
     decision,
+    haddDecision,
     boardExplorer,
     options
   ) {
@@ -1173,7 +1409,9 @@
           boardExplorer,
           status,
           decision,
-          topCandidate
+          topCandidate,
+          model,
+          haddDecision
         );
       });
       choiceGroup.appendChild(details);
@@ -1205,7 +1443,9 @@
           boardExplorer,
           status,
           decision,
-          topCandidate
+          topCandidate,
+          model,
+          haddDecision
         );
       });
     });
@@ -1223,7 +1463,9 @@
         boardExplorer,
         status,
         decision,
-        topCandidate
+        topCandidate,
+        model,
+        haddDecision
       );
     } else {
       decision.appendChild(
@@ -1244,7 +1486,9 @@
           boardExplorer,
           status,
           decision,
-          topCandidate
+          topCandidate,
+          model,
+          haddDecision
         );
         return true;
       },
@@ -1506,6 +1750,10 @@
       "section",
       "bs-analysis-results-checker-summary"
     );
+    const haddDecision = element(
+      "div",
+      "bs-analysis-results-hadd-surface"
+    );
     const status = element(
       "p",
       "bs-analysis-results-choice-status",
@@ -1585,6 +1833,7 @@
         choiceGroup,
         status,
         decision,
+        haddDecision,
         boardExplorer,
         options
       );
@@ -1601,7 +1850,11 @@
     if (model.analysis_kind === "checker") boardSection.appendChild(boardToolbar);
     boardSection.appendChild(board);
     if (model.analysis_kind === "checker") boardSection.appendChild(previewFacts);
-    analysisSection.append(decision, choicesHeading, choiceGroup, status);
+    if (model.analysis_kind === "checker") {
+      analysisSection.append(choicesHeading, choiceGroup, haddDecision, status);
+    } else {
+      analysisSection.append(decision, choicesHeading, choiceGroup, status);
+    }
 
     if (!options || options.showMore !== false) {
       moreSummary.setAttribute("aria-label", "More information about this analysis");
@@ -1732,6 +1985,7 @@
     fixtureLoader,
     formatNumber,
     formatProbability,
+    haddComparisonPanel,
     mount,
     mountAll,
     outcomeSummaryItems,
@@ -1740,6 +1994,7 @@
     renderNodeAnalysisView,
     renderPresentation,
     setActiveCheckerCandidate,
+    usablePreparedHadd,
     validateAnalysisModel,
     validateNodeAnalysisView,
     validateFixtureDocument

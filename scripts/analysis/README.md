@@ -132,6 +132,43 @@ read sets under `evidence/analyzer-k001/task-008/` are deterministic projections
 of the exact commissioned immutable packages; Canonical Parquet remains the
 analytical authority.
 
+### Optional compact HADD derived-facts sidecar
+
+Task 020 adds a read-only, build-time adapter for the frozen
+`explainer-hadd-derived-facts-sidecar-v1` contract. The sidecar is discovered
+only when an author explicitly supplies `--hadd-sidecar PATH`; no filename,
+directory, or row-order discovery exists. The adapter reads the complete JSON
+with duplicate-key rejection and verifies the exact contract descriptor,
+selected architecture, model/runtime/compact-artifact identities, feature
+system and ordered feature hash, target perspective, deterministic package
+identity, probability hierarchy/value, and conditional-logit reconstruction.
+
+Every record then joins by `(decision_id, candidate_id)`,
+`candidate_concept_id`, and the exact invariant
+`candidate.resulting_position_id == record.result_position_id == record.position_id`.
+The complete decision must join without duplicates or gaps. Any missing,
+malformed, incompatible, partial, wrong, or ambiguous sidecar leaves the native
+factual Analyzer document intact and marks HADD unavailable; no partial HADD
+record or fallback value is emitted.
+
+```bash
+.venv/bin/python scripts/analysis/analysis_view_materializer.py \
+  path/to/analyzer-analysis-view-read-set-v1.json \
+  --hadd-sidecar path/to/actual-derived-facts-sidecar.json \
+  --prepare-exploration \
+  --verify-repeat \
+  --output /tmp/analyzer-analysis-view-with-hadd.json
+```
+
+The shared browser viewer only presents this prepared projection. Native engine
+facts remain factual authority; pairwise Ridge remains the sole Explainer
+recommendation/ranking authority where surfaced. HADD is labeled as
+resulting-position probabilities, probability-derived cubeless position value,
+and exact five-head conditional-logit contribution evidence. Probability/value
+differences are nonlinear outputs and are never presented as additive feature
+decompositions. Calculated cubeful remains
+`CUBEFUL_CALCULATION_AUTHORITY_BLOCKED`.
+
 ## Retrieval/materializer workloads
 
 `retrieval_workloads_v1.json` freezes the query meaning and ordering for

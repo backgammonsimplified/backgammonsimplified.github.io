@@ -17,6 +17,11 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.analysis import hadd_sidecar
+except ModuleNotFoundError:  # Direct script execution from scripts/analysis.
+    import hadd_sidecar
+
 
 READ_SET_SCHEMA = "analyzer-analysis-view-read-set-v1"
 VIEWER_SCHEMA = "bs-analysis-results-viewer-fixture-v1"
@@ -540,6 +545,11 @@ def map_checker(source: dict[str, Any], path: str) -> tuple[list[dict[str, Any]]
             "structured_movements": sorted(mapped_movements, key=lambda item: item["order"]),
             "supported": candidate["supported"],
         }
+        if "candidate_concept_id" in candidate:
+            candidates_by_id[candidate_id]["candidate_concept_id"] = require_optional_text(
+                candidate["candidate_concept_id"],
+                f"{item_path}.candidate_concept_id",
+            )
 
     evaluations_by_candidate: dict[str, list[dict[str, Any]]] = {
         candidate_id: [] for candidate_id in candidates_by_id
@@ -878,6 +888,39 @@ def materialize_subset(
     )
 
 
+def materialize_with_optional_hadd(
+    read_set: dict[str, Any],
+    sidecar: dict[str, Any] | None,
+    *,
+    decision_ids: list[str] | None = None,
+    prepare_exploration: bool = False,
+) -> dict[str, Any]:
+    """Materialize factual content, then atomically attach an optional sidecar.
+
+    HADD incompatibility is deliberately not a factual materialization error.
+    The complete factual document is returned with an explicit unavailable
+    disposition and no HADD candidate fields.
+    """
+    factual = (
+        materialize_subset(
+            read_set,
+            decision_ids,
+            prepare_exploration=prepare_exploration,
+        )
+        if decision_ids
+        else materialize_document(
+            read_set,
+            prepare_exploration=prepare_exploration,
+        )
+    )
+    if sidecar is None:
+        return factual
+    try:
+        return hadd_sidecar.attach_sidecar(factual, sidecar)
+    except hadd_sidecar.HaddSidecarError as error:
+        return hadd_sidecar.unavailable(factual, str(error))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("read_set", type=Path, help="semantic Analyzer read-set JSON")
@@ -888,36 +931,44 @@ def main() -> int:
         action="store_true",
         help="add deterministic candidate/action comparison and preview disposition facts",
     )
+    parser.add_argument(
+        "--hadd-sidecar",
+        type=Path,
+        help=(
+            "optional explicitly identified explainer-hadd-derived-facts-sidecar-v1; "
+            "missing, malformed, incompatible, or unjoinable input fails closed for HADD only"
+        ),
+    )
     parser.add_argument("--verify-repeat", action="store_true")
     args = parser.parse_args()
     try:
         read_set = load_json(args.read_set.resolve())
-        result = (
-            materialize_subset(
-                read_set,
-                args.decision_id,
-                prepare_exploration=args.prepare_exploration,
-            )
-            if args.decision_id
-            else materialize_document(
-                read_set,
-                prepare_exploration=args.prepare_exploration,
-            )
+        sidecar = None
+        sidecar_error = None
+        if args.hadd_sidecar is not None:
+            try:
+                sidecar = hadd_sidecar.load_sidecar(args.hadd_sidecar.resolve())
+            except hadd_sidecar.HaddSidecarError as error:
+                sidecar_error = str(error)
+        result = materialize_with_optional_hadd(
+            read_set,
+            sidecar,
+            decision_ids=args.decision_id,
+            prepare_exploration=args.prepare_exploration,
         )
+        if sidecar_error is not None:
+            result = hadd_sidecar.unavailable(result, sidecar_error)
         payload = stable_json_bytes(result)
         if args.verify_repeat:
-            repeated = stable_json_bytes(
-                materialize_subset(
-                    read_set,
-                    args.decision_id,
-                    prepare_exploration=args.prepare_exploration,
-                )
-                if args.decision_id
-                else materialize_document(
-                    read_set,
-                    prepare_exploration=args.prepare_exploration,
-                )
+            repeated_result = materialize_with_optional_hadd(
+                read_set,
+                sidecar,
+                decision_ids=args.decision_id,
+                prepare_exploration=args.prepare_exploration,
             )
+            if sidecar_error is not None:
+                repeated_result = hadd_sidecar.unavailable(repeated_result, sidecar_error)
+            repeated = stable_json_bytes(repeated_result)
             if payload != repeated:
                 raise MaterializationError("Repeat materialization was not byte-identical")
         write_atomic(args.output.resolve(), payload)

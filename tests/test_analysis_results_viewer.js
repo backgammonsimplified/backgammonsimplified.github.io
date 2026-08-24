@@ -22,6 +22,15 @@ const golden = JSON.parse(
     "utf8"
   )
 );
+const haddSidecar = JSON.parse(
+  fs.readFileSync(
+    path.join(
+      root,
+      "tests/fixtures/hadd-integration/actual-4ply-canonical-pair-sidecar-v1.json"
+    ),
+    "utf8"
+  )
+);
 
 class FakeElement {
   constructor(tagName) {
@@ -379,6 +388,59 @@ assert.equal(checkerControls.setPreviewMode("movement"), true);
 
 assert.equal(checkerControls.activate(retainedChecker.candidates[0].id), true);
 assert.equal(findByClass(checkerDecision, "bs-analysis-results-comparison-table"), null);
+
+const haddChecker = JSON.parse(JSON.stringify(retainedChecker));
+haddChecker.candidates = haddChecker.candidates.slice(0, 2);
+haddChecker.candidates.forEach((candidate, index) => {
+  const record = haddSidecar.records[index];
+  candidate.id = record.candidate_id;
+  candidate.candidate_concept_id = record.candidate_concept_id;
+  candidate.resulting_position_id = record.result_position_id;
+  candidate.hadd_derived_facts = {
+    position_id: record.position_id,
+    position_perspective: record.position_perspective,
+    probabilities: {
+      ...record.cumulative_probabilities,
+      lose: record.lose_probability
+    },
+    probability_derived_cubeless: record.probability_derived_cubeless,
+    conditional_logit_evidence: record.conditional_logit_evidence
+  };
+});
+haddChecker.recommended_id = haddChecker.candidates[1].id;
+haddChecker.hadd = {
+  status: "available",
+  selected_architecture: "ridge-ranking-hadd-value-explanation-sidecar-v1",
+  position_perspective: "normalized_static_post_move_next_player_on_roll",
+  authority: {
+    hadd_ranking_authorized: false,
+    calculated_cubeful: "CUBEFUL_CALCULATION_AUTHORITY_BLOCKED"
+  },
+  model: haddSidecar.model,
+  feature_system: haddSidecar.feature_system,
+  ab_explanations: haddSidecar.ab_explanations
+};
+assert.equal(viewer.usablePreparedHadd(haddChecker), haddChecker.hadd);
+const haddHost = new FakeElement("div");
+const haddControls = viewer.renderPresentation(haddHost, haddChecker, {});
+assert.ok(findByClass(haddHost, "bs-analysis-results-hadd"));
+assert.match(haddHost.textContent, /HADD derived resulting-position facts/);
+assert.match(haddHost.textContent, /Pairwise Ridge remains the sole Explainer ranking authority/);
+assert.match(haddHost.textContent, /HADD did not select either candidate/);
+assert.match(haddHost.textContent, /model-derived resulting-position probabilities/);
+assert.equal(haddControls.activate(haddChecker.candidates[0].id), true);
+assert.match(haddHost.textContent, /selected-minus-recommended \(A-minus-B\)/);
+assert.match(haddHost.textContent, /nonlinear outputs/);
+assert.ok(findByClass(haddHost, "bs-analysis-results-hadd-table"));
+assert.match(haddHost.textContent, /q_win/);
+assert.match(haddHost.textContent, /opponent point 01 checkers/);
+
+const incompatibleHadd = JSON.parse(JSON.stringify(haddChecker));
+incompatibleHadd.hadd.position_perspective = "wrong";
+const incompatibleHost = new FakeElement("div");
+viewer.renderPresentation(incompatibleHost, incompatibleHadd, {});
+assert.equal(findByClass(incompatibleHost, "bs-analysis-results-hadd"), null);
+assert.ok(findByClass(incompatibleHost, "bs-analysis-results-decision-card--top"));
 
 const cubeHost = new FakeElement("div");
 const cubeControls = viewer.renderPresentation(cubeHost, cube, {});
