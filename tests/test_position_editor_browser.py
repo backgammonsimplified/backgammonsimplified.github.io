@@ -160,8 +160,25 @@ def main() -> int:
         assert editor_state(page)["players"]["player_0"]["off"] == 1
         page.get_by_role("button", name="Clear board").click()
         assert editor_state(page)["players"]["player_0"]["off"] == 15
+        assert page.input_value("#bs-analyzer-gnuid") == ""
+        assert page.locator("[data-bs-editor-errors]").get_by_text(
+            "completed games are outside the supported analysis state", exact=False
+        ).count() == 2
         page.locator('[data-slot="point_4"]').click(position={"x": 8, "y": 80})
         assert editor_state(page)["players"]["player_0"]["points"][3] == 1
+        page.check('input[name="placement-side"][value="player_1"]')
+        page.locator('[data-slot="point_21"]').click(position={"x": 8, "y": 80})
+        assert editor_state(page)["players"]["player_1"]["points"][20] == 1
+        assert page.input_value("#bs-analyzer-gnuid")
+        navy_checker = page.locator(
+            '[data-slot="point_21"] .bs-editor-checker--player_1'
+        ).last
+        navy_checker.focus()
+        page.keyboard.press("Delete")
+        assert editor_state(page)["players"]["player_1"]["off"] == 15
+        assert page.input_value("#bs-analyzer-gnuid") == ""
+        page.get_by_role("button", name="Undo").click()
+        assert editor_state(page)["players"]["player_1"]["points"][20] == 1
         page.get_by_role("button", name="Starting position").click()
         assert page.input_value("#bs-analyzer-gnuid") == "4HPwATDgc/ABMA:cAnqAAAAAAAE"
 
@@ -311,6 +328,8 @@ def main() -> int:
         "keyboard": "PASS",
         "bar_and_off": "PASS",
         "clear_place_reset_undo": "PASS",
+        "terminal_clear_fail_closed": "PASS",
+        "both_sides_place_remove": "PASS",
         "identifier_import_fail_closed": "PASS",
         "checker_request": canonical_checker,
         "cube_request": canonical_cube,

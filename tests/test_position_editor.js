@@ -17,7 +17,8 @@ assert.ok(cleared.players.player_0.points.every((count) => count === 0));
 assert.ok(cleared.players.player_1.points.every((count) => count === 0));
 assert.equal(cleared.players.player_0.off, 15);
 assert.equal(cleared.players.player_1.off, 15);
-assert.deepEqual(editor.validateState(cleared, { requireDecision: true }), []);
+assert.equal(editor.validateState(cleared, { requireDecision: true }).filter((message) => /all 15 checkers borne off/.test(message)).length, 2);
+assert.throws(() => editor.encodeGnuid(cleared), /all 15 checkers borne off/);
 
 const moved = copy(start);
 editor.moveCheckerState(moved, "player_0", "point_1", "point_2");

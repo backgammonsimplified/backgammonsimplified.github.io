@@ -251,6 +251,9 @@
       }
       const total = counts.reduce(function (sum, count) { return sum + count; }, 0);
       if (total !== 15) errors.push((player === "player_0" ? "Copper" : "Navy") + " must have exactly 15 checkers; currently " + total + ".");
+      if (record.off === 15) {
+        errors.push((player === "player_0" ? "Copper" : "Navy") + " has all 15 checkers borne off. Put at least one checker on a point or bar; completed games are outside the supported analysis state.");
+      }
     });
     if (state.players.player_0 && state.players.player_1 && Array.isArray(state.players.player_0.points) && Array.isArray(state.players.player_1.points)) {
       for (let point = 0; point < 24; point += 1) {

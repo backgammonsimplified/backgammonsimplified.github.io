@@ -7,6 +7,8 @@
   "keyboard": "PASS",
   "bar_and_off": "PASS",
   "clear_place_reset_undo": "PASS",
+  "terminal_clear_fail_closed": "PASS",
+  "both_sides_place_remove": "PASS",
   "identifier_import_fail_closed": "PASS",
   "checker_request": {
     "schema_version": "b\u006ds-analysis-submission-v2",
